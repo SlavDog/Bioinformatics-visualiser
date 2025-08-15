@@ -47,7 +47,7 @@ def extract_codes(filename: str) -> list[str]:
     return code_list
 
 
-def find_successor_links(html: str, code: str, by_prerequisites = True) -> list[str]:
+def find_successor_codes(html: str, code: str, by_prerequisites = True) -> list[str]:
     """
     Find all successor subject codes from the desired section
     of the MUNI subject catalogue HTML page.
@@ -58,6 +58,10 @@ def find_successor_links(html: str, code: str, by_prerequisites = True) -> list[
         by_prerequisites (bool, optional): Defaults to True. Determines whether
             successors are taken from the "Nachází se v prerekvizitách" 
             section (True) or the "Navazující předměty" section (False).
+    
+    Returns:
+        list[str]:
+            All successor subject codes.
     """
     result = []
     section_title = 'Nachází se v prerekvizitách jiných předmětů'
@@ -73,17 +77,17 @@ def find_successor_links(html: str, code: str, by_prerequisites = True) -> list[
         return []
     section = match.group(1)
 
-    pattern = re.compile(r'<a href="(/(?:auth/)?predmet/[^"]+)"><b>(?:[^<]+)</b>(?:.*?)</a><br\s*/>\s*\n?(.*?)(?=&nbsp;)', re.IGNORECASE)
+    pattern = re.compile(r'<a href="(?:/(?:auth/)?predmet/[^"]+)"><b>([^<]+)</b>(?:.*?)</a><br\s*/>\s*\n?(.*?)(?=&nbsp;)', re.IGNORECASE)
     if not by_prerequisites:
-        pattern = re.compile(r'<a href="(/(?:auth/)?predmet/[^"]+)"><b>(?:[^<]+)</b>(?:.*?)</a>', re.IGNORECASE)
+        pattern = re.compile(r'<a href="(?:/(?:auth/)?predmet/[^"]+)"><b>([^<]+)</b>(?:.*?)</a>', re.IGNORECASE)
         return pattern.findall(section)
     
     found_subjects_with_prerequisites = pattern.findall(section)
 
-    for link, formula in found_subjects_with_prerequisites:
+    for successor_subject, formula in found_subjects_with_prerequisites:
         formula = re.sub(r"<a[^>]*>([^<]*)</a>", r"\1", formula)
         if parse_and_evaluate_formula(code, formula):
-            result.append(link)
+            result.append(successor_subject)
     return result
     
 
@@ -202,13 +206,11 @@ def build_successor_dict(by_prerequisites: bool, subject_codes: list[str]) \
         response = requests.get(f"https://is.muni.cz" + link)
         if response.status_code == 200:
             html = response.text
-            links = find_successor_links(html, code, by_prerequisites)
+            codes = find_successor_codes(html, code, by_prerequisites)
 
-            if links:
-                print(f"{code} has children: {links}")
-            result[code] = []
-            for succ_link in links:
-                result[code].append(transform_link_to_code(succ_link))
+            if codes:
+                print(f"{code} has children: {codes}")
+            result[code] = codes
 
         else:
             print("Failed to fetch page:", response.status_code)
