@@ -58,6 +58,22 @@ def extract_codes(filename: str) -> list[str]:
     return code_list
 
 
+def extract_order(filename: str, spec: str) -> list[list[str]]:
+    result = []
+    with open(filename, "r", encoding='utf-8') as source:
+        data = json.load(source)
+        for i, semester in enumerate(data["spec"][spec]["plan"].values()):
+            result.append([])
+            for subject in semester:
+                if "choice" in subject:
+                    if "tv" == subject["choice"] or "core" == subject["choice"]:
+                        continue
+                    for choice_subject_code in data["choices"][subject["choice"]]["list"]:
+                        result[i].append(choice_subject_code)
+                else:
+                    result[i].append(subject["code"])
+
+
 def find_successor_codes(html: str, code: str, by_prerequisites = True) -> list[str]:
     """
     Find all successor subject codes from the desired section
