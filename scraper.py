@@ -4,7 +4,18 @@ import requests
 import time
 from typing import Any
 from sympy import Symbol, simplify_logic
+from bs4 import BeautifulSoup
 
+class SubjectInfo:
+    def __init__(self, name: str, faculty: str, code: str, language: str, completion: str, successors: list[str]):
+        self.name = name
+        self.faculty = faculty
+        self.code = code
+        self.language = language
+        self.completion = completion
+        self.successors = successors
+        self.has_successors = False
+        self.has_parent = False
 
 SubjectSuccessors = dict[str, list[str]]
 
@@ -77,7 +88,7 @@ def find_successor_codes(html: str, code: str, by_prerequisites = True) -> list[
         return []
     section = match.group(1)
 
-    pattern = re.compile(r'<a href="(?:/(?:auth/)?predmet/[^"]+)"><b>([^<]+)</b>(?:.*?)</a><br\s*/>\s*\n?(.*?)(?=&nbsp;)', re.IGNORECASE)
+    pattern = re.compile(r'<a href="/(?:auth/)?predmet/[^"]+"><b>([^<>]+)</b>.*?</a><br\s*/>\s*\n?(.*?)(?=&nbsp;)', re.IGNORECASE)
     if not by_prerequisites:
         pattern = re.compile(r'<a href="(?:/(?:auth/)?predmet/[^"]+)"><b>([^<]+)</b>(?:.*?)</a>', re.IGNORECASE)
         return pattern.findall(section)
@@ -85,9 +96,13 @@ def find_successor_codes(html: str, code: str, by_prerequisites = True) -> list[
     found_subjects_with_prerequisites = pattern.findall(section)
 
     for successor_subject, formula in found_subjects_with_prerequisites:
-        formula = re.sub(r"<a[^>]*>([^<]*)</a>", r"\1", formula)
-        if parse_and_evaluate_formula(code, formula):
+        formula = BeautifulSoup(formula, "html.parser").get_text() # clean from HTML tags
+        try: 
+            parse_and_evaluate_formula(code, formula)
             result.append(successor_subject)
+        except:
+            print(f"Couldn't evaluate prerequisite formula {formula} for subject {successor_subject}. Skipping.")
+            
     return result
     
 
@@ -111,18 +126,19 @@ def parse_and_evaluate_formula(code: str, formula: str) -> bool:
             True if the subject with the given code is required for the
             successor subject, False otherwise.
     """
-    # ignore all program prerequisites by replacing 
-    # the whole "program(...)" with a single placeholder
-    formula = re.sub(r"(?:!)?program\([^)]*\)", "PROG", formula)
+    # ignore all program, faculty and study major prerequisites
+    formula = re.sub(re.compile(r"(?:!)?program\([^)]*\)", re.IGNORECASE), "PROG", formula)
+    formula = re.sub(re.compile(r"(?:!)?typ_studia\([^)]*\)", re.IGNORECASE), "STUD", formula)
+    formula = re.sub(re.compile(r"(?:!)?fakulta\([^)]*\)", re.IGNORECASE), "FAC", formula)
 
     # remove NOW(...) wrapper, keep only the inner expression
-    formula = re.sub(r"NOW\(([^)]*)\)", r"\1", formula)
+    formula = re.sub(re.compile(r"NOW\(([^)]*)\)", re.IGNORECASE), r"\1", formula)
 
     # replace ANY(...) or NOWANY(...) with equivalent OR expression
     # (the replace_any function is automatically called by re.sub 
     # with the match object as an argument)
-    formula = re.sub(r"NOWANY\(([^)]*)\)", replace_any, formula)
-    formula = re.sub(r"ANY\(([^)]*)\)", replace_any, formula)
+    formula = re.sub(re.compile(r"NOWANY\(([^)]*)\)", re.IGNORECASE), replace_any, formula)
+    formula = re.sub(re.compile(r"ANY\(([^)]*)\)", re.IGNORECASE), replace_any, formula)
 
     formula = formula.replace("&&", "&").replace("||", "|").replace("!", "~")
     
@@ -133,8 +149,8 @@ def parse_and_evaluate_formula(code: str, formula: str) -> bool:
         formula = formula.replace(subject_code, f"a{i}")
 
     expr = simplify_logic(formula)
-    return not expr.has(~symbols_dict[code.replace("PřF:", "")
-                                          .capitalize()])
+    code = re.sub(r"^[^:]*:(.*)", r"\1", code).capitalize()
+    return not expr.has(~symbols_dict[code])
 
 
 def replace_any(match):
@@ -196,8 +212,7 @@ def build_successor_dict(by_prerequisites: bool, subject_codes: list[str]) \
         subject_codes (list[str]): List of subject codes that should be included.
 
     Returns:
-        SubjectSuccessors: A dictionary with subject codes as keys and lists of
-        successor codes as values.
+        
     """
     result: SubjectSuccessors = {}
     for code in subject_codes:
@@ -206,18 +221,38 @@ def build_successor_dict(by_prerequisites: bool, subject_codes: list[str]) \
         response = requests.get(f"https://is.muni.cz" + link)
         if response.status_code == 200:
             html = response.text
-            codes = find_successor_codes(html, code, by_prerequisites)
-
-            if codes:
-                print(f"{code} has children: {codes}")
-            result[code] = codes
-
+            result[code] = get_subject(html, code, by_prerequisites)
         else:
             print("Failed to fetch page:", response.status_code)
 
         time.sleep(1)
 
     return result
+
+def get_subject(html: str, code: str, by_prerequisites: bool) \
+        -> tuple[str, str, str, str]:
+    code = re.sub(r"^[^:]*:(.*)", r"\1", code)
+    name_match = re.search(re.compile(rf"<H2>{code}\s([^<]+)", re.IGNORECASE), html)
+    name = name_match.group(1).strip()
+    print(f"{code} - {name}")
+
+    faculty_match = re.search(re.compile(r"</H2>\s*\n\s*<b>([^<]+)</b>", re.IGNORECASE), html)
+    faculty = faculty_match.group(1).strip()
+
+    language = "Čeština"
+    language_match = re.search(re.compile(r"<DT>\s*<B>Vyučovací jazyk</B>\s*</DT>\s*\n\s*<DD>([^<]+)</DD>"), html)
+    if language_match:
+        language = language_match.group(1).strip()
+    
+    completion_match = re.search(re.compile(r"Ukončení:\s*(z|k|zk|SZk|SDzk)\.", re.IGNORECASE), html)
+    completion = completion_match.group(1)
+    print(f"    {faculty} / {language} / {completion}")
+
+
+    successor_codes = find_successor_codes(html, code, by_prerequisites)
+    print(f"    {successor_codes}")
+
+    return SubjectInfo(name, faculty, code, language, completion, successor_codes)
 
 
 def merge_dictionaries(first_dictionary: SubjectSuccessors,
@@ -233,9 +268,9 @@ def merge_dictionaries(first_dictionary: SubjectSuccessors,
         SubjectSuccessors: The merged dictionary containing combined successor lists.
     """
     for key in second_dictionary:
-        for child in second_dictionary[key]:
-            if child not in first_dictionary[key]:
-                first_dictionary[key].append(child)
+        for child in second_dictionary[key].successors:
+            if child not in first_dictionary[key].successors:
+                first_dictionary[key].successors.append(child)
 
     return first_dictionary
 
@@ -252,10 +287,15 @@ def clean_dict(data: SubjectSuccessors) -> SubjectSuccessors:
     """
     for key in data:
         result = []
-        for child in data[key]:
+        for child in data[key].successors:
             if child in data:
                 result.append(child)
-        data[key] = result
+        data[key].successors = [child for child in data[key].successors if child in data]
+        
+        if data[key].successors:
+            data[key].has_successors = True
+            for successor in data[key].successors:
+                data[successor].has_parent = True
     return data
 
 
@@ -282,10 +322,13 @@ def build_final_json(data: SubjectSuccessors) -> None:
 def build_aux(current: int, visited: list[bool], result: Any, data: Any):
     visited[current] = True
     children = []
-    for child in data[current]:
+    for child in data[current].successors:
         if not visited[child]:
             children.append(build_aux(child, visited, result, data))
-    return {"code": current, "children": children}
+    return {"code": current, "name": data[current].name, 
+            "faculty" : data[current].faculty, "children": children,
+            "language" : data[current].language, "completion" : data[current].completion,
+            "has_successors" : data[current].has_successors, "has_parent" : data[current].has_parent}
 
 
 def main() -> None:
