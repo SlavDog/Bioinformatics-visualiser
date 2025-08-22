@@ -1,4 +1,4 @@
-function Subject({ code, name, faculty, language, completion, credits, style }) {
+const Subject = ({ code, name, faculty, language, completion, credits, style }) => {
     return (
         <div className="subject" style={style}>
             <div className="topSubjectContainer">
