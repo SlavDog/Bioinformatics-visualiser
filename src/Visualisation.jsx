@@ -5,18 +5,28 @@ import Subject from './Subject';
 function Visualisation() {
     const columnWidth = 400;
     const rowHeight = 250;
+    const padding = 100;
+    let maxX = 0;
+    let maxY = 0;
     
     const positions = {}
     Object.entries(subjectOrderData).forEach(([semester, courses]) => {
         courses.forEach((course, i) => {
-            positions[course] = {
-                x: parseInt(semester - 1) * columnWidth,
-                y: i * rowHeight
-            };
+            const x = padding + parseInt(semester - 1) * columnWidth;
+            const y = padding + i * rowHeight;
+            positions[course] = { x, y}
+            if (x + columnWidth > maxX) {maxX = x + columnWidth}
+            if (y + rowHeight > maxY) {maxY = y + rowHeight}
+
         });
     });
     return (
-        <div className="visualisationBox">
+        <div className="visualisationBox" 
+                style = {{
+                    width: maxX,
+                    height: maxY 
+                }}
+        >
             {Object.entries(subjectInfoData).map(([code, course]) => {
                 const pos = positions[code];
                 if (!pos) return null;

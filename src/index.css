@@ -65,8 +65,17 @@ body {
 }
 
 .visualisationBox {
+  background-color: rgb(199, 199, 199);
+  position: relative;
+  width: 100%;   /* nebo explicitně šířku podle potřeby */
+  height: 100%;  /* nebo min-height pokud obsah roste */
+  display: flex;
+}
+
+.scrollableBox {
   width: 90vw;
-  padding: 20px;
-  background-color: rgb(59, 59, 59);
-  height: 80vh;
+  height: 90vh;
+  overflow: auto;
+  margin: 20px auto;
+  user-select: none;
 }
