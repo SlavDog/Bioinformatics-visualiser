@@ -1,12 +1,10 @@
-import Subject from './Subject.jsx'
-import subjectData from './order.json';
+import Visualisation from './Visualisation.jsx'
 
 function App() {
-  for (let i = 0; i < 6; i++) {
-    console.log(subjectData[i])    
-  }
   return (
-    <Subject></Subject>
+    <>
+      <Visualisation></Visualisation>
+    </>
   );
 }
 
