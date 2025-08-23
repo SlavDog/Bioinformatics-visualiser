@@ -7,7 +7,7 @@ from sympy import Symbol, simplify_logic
 from bs4 import BeautifulSoup
 
 class SubjectInfo:
-    def __init__(self, name: str, faculty: str, code: str, language: str, completion: str, successors: list[str]):
+    def __init__(self, name: str, faculty: str, code: str, language: str, completion: str, successors: list[str], credit: str):
         self.name = name
         self.faculty = faculty
         self.code = code
@@ -16,6 +16,7 @@ class SubjectInfo:
         self.successors = successors
         self.has_successors = False
         self.has_parent = False
+        self.credits = credit
 
 SubjectSuccessors = dict[str, list[str]]
 
@@ -72,6 +73,7 @@ def extract_order(filename: str, spec: str) -> list[list[str]]:
                         result[i].append(choice_subject_code)
                 else:
                     result[i].append(subject["code"])
+    return result
 
 
 def find_successor_codes(html: str, code: str, by_prerequisites = True) -> list[str]:
@@ -104,10 +106,11 @@ def find_successor_codes(html: str, code: str, by_prerequisites = True) -> list[
         return []
     section = match.group(1)
 
-    pattern = re.compile(r'<a href="/(?:auth/)?predmet/[^"]+"><b>([^<>]+)</b>.*?</a><br\s*/>\s*\n?(.*?)(?=&nbsp;)', re.IGNORECASE)
     if not by_prerequisites:
         pattern = re.compile(r'<a href="(?:/(?:auth/)?predmet/[^"]+)"><b>([^<]+)</b>(?:.*?)</a>', re.IGNORECASE)
         return pattern.findall(section)
+    
+    pattern = re.compile(r'<a href="/(?:auth/)?predmet/[^"]+"><b>([^<>]+)</b>.*?</a><br\s*/>\s*\n?(.*?)(?=&nbsp;)', re.IGNORECASE)
     
     found_subjects_with_prerequisites = pattern.findall(section)
 
@@ -216,7 +219,7 @@ def transform_link_to_code(link: str) -> str:
         raise ValueError("Incorrect link format!")
 
 
-def build_successor_dict(by_prerequisites: bool, subject_codes: list[str]) \
+def build_successor_dict(subject_codes: list[str]) \
         -> SubjectSuccessors:
     """
     Build a dictionary mapping subject codes to their successor codes.
@@ -237,7 +240,7 @@ def build_successor_dict(by_prerequisites: bool, subject_codes: list[str]) \
         response = requests.get(f"https://is.muni.cz" + link)
         if response.status_code == 200:
             html = response.text
-            result[code] = get_subject(html, code, by_prerequisites)
+            result[code] = get_subject(html, code)
         else:
             print("Failed to fetch page:", response.status_code)
 
@@ -245,7 +248,7 @@ def build_successor_dict(by_prerequisites: bool, subject_codes: list[str]) \
 
     return result
 
-def get_subject(html: str, code: str, by_prerequisites: bool) \
+def get_subject(html: str, code: str) \
         -> tuple[str, str, str, str]:
     code = re.sub(r"^[^:]*:(.*)", r"\1", code)
     name_match = re.search(re.compile(rf"<H2>{code}\s([^<]+)", re.IGNORECASE), html)
@@ -264,31 +267,40 @@ def get_subject(html: str, code: str, by_prerequisites: bool) \
     completion = completion_match.group(1)
     print(f"    {faculty} / {language} / {completion}")
 
+    credit_match = re.search(re.compile(r"[0-9]/[0-9](?:/[0-9])?\.\s([0-9][0-9]?)\skr\.\s(\(plus ukončení\)\.)?", re.IGNORECASE), html)
+    credit = credit_match.group(1)
+    if (credit_match.group(2)):
+        credit += " + u."
+    print(f"    {credit} kr.")
 
-    successor_codes = find_successor_codes(html, code, by_prerequisites)
-    print(f"    {successor_codes}")
 
-    return SubjectInfo(name, faculty, code, language, completion, successor_codes)
+    successor_codes = set(find_successor_codes(html, code, False)) \
+                          .union(find_successor_codes(html, code, True))
+    print(f"    {successor_codes if successor_codes else "{}"}")
+
+    return SubjectInfo(name, transform_faculty(faculty),
+                       code, transform_language(language),
+                       completion, list(successor_codes), credit)
 
 
-def merge_dictionaries(first_dictionary: SubjectSuccessors,
-                second_dictionary: SubjectSuccessors) -> SubjectSuccessors:
-    """
-    Merge successor lists for each subject from two dictionaries.
+def transform_faculty(full_faculty_name: str) -> str:
+    match full_faculty_name:
+        case "Fakulta informatiky":
+            return "FI"
+        case "Přírodovědecká fakulta":
+            return "PřF"
+        case _:
+            return "Unknown faculty"
 
-    Parameters:
-        first_dictionary (SubjectSuccessors): The first dictionary.
-        second_dictionary (SubjectSuccessors): The second dictionary.
 
-    Returns:
-        SubjectSuccessors: The merged dictionary containing combined successor lists.
-    """
-    for key in second_dictionary:
-        for child in second_dictionary[key].successors:
-            if child not in first_dictionary[key].successors:
-                first_dictionary[key].successors.append(child)
-
-    return first_dictionary
+def transform_language(full_language_name: str) -> str:
+    match full_language_name:
+        case "Čeština":
+            return "CZE"
+        case "Angličtina":
+            return "ENG"
+        case _:
+            return "Unknown language"
 
 
 def clean_dict(data: SubjectSuccessors) -> SubjectSuccessors:
@@ -316,50 +328,32 @@ def clean_dict(data: SubjectSuccessors) -> SubjectSuccessors:
 
 
 def build_final_json(data: SubjectSuccessors) -> None:
-    """
-    Build and save a final JSON file from the given subject successors dictionary.
-
-    Parameters:
-        data (SubjectSuccessors): A dictionary mapping subject codes to lists of successor codes.
-
-    Returns:
-        None
-    """
-    result = {"code": "root", "children": []}
-    visited = {key : False for key in data}
-    for key in data:
-        if not visited[key]:
-            result["children"].append(build_aux(key, visited, result, data))
-
-    with open("./public/final_tree.json", "w", encoding="utf-8") as f:
+    result = {}
+    for subject in data:
+        result[subject] = {"name": data[subject].name, 
+            "faculty" : data[subject].faculty, "successors": data[subject].successors,
+            "language" : data[subject].language, "completion" : data[subject].completion,
+            "has_successors" : data[subject].has_successors, "has_parent" : data[subject].has_parent,
+            "credits" : data[subject].credits, "link": transform_code_to_link(subject)
+        }
+    with open("./src/final_tree.json", "w", encoding="utf-8") as f:
         json.dump(result, f, indent=4, ensure_ascii=False)
 
-
-def build_aux(current: int, visited: list[bool], result: Any, data: Any):
-    visited[current] = True
-    children = []
-    for child in data[current].successors:
-        if not visited[child]:
-            children.append(build_aux(child, visited, result, data))
-    return {"code": current, "name": data[current].name, 
-            "faculty" : data[current].faculty, "children": children,
-            "language" : data[current].language, "completion" : data[current].completion,
-            "has_successors" : data[current].has_successors, "has_parent" : data[current].has_parent}
 
 
 def main() -> None:
     print("Extracting names from input JSON file.")
     codes = extract_codes("bc_bio_cz.json")
-    print("Building the prerequisites JSON.")
-    prerequisite_successors = build_successor_dict(True, codes)
-    print("Building the successor JSON.")
-    normal_successors = build_successor_dict(False, codes)
-    print("Merging JSONs.")
-    merged_successors = merge_dictionaries(prerequisite_successors, normal_successors)
-    print("Cleaning the merged JSON.")
-    cleaned_successors = clean_dict(merged_successors)
-    print("Building the final JSON file.")
+    order = extract_order("bc_bio_cz.json", "apl")
+    print("Building the prerequisites dictionary.")
+    successors = build_successor_dict(codes)
+    print("Cleaning the unneccessary subjects.")
+    cleaned_successors = clean_dict(successors)
+
+    print("Building the final JSON files.")
     build_final_json(cleaned_successors)
+    with open("./src/order.json", "w", encoding="utf-8") as f:
+        json.dump({i + 1: order[i] for i in range(len(order))}, f, indent=4, ensure_ascii=False)
 
 
 if __name__ == "__main__":
