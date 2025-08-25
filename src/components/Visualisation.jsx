@@ -34,7 +34,16 @@ for (let i = 0; i < ITERATIONS; i++) {
                 count++;
             }
         });
-        yValues[code] = sum / count;
+        Object.entries(newSubjectInfoData).forEach(([otherCode, otherCourse]) => {
+            if (otherCourse.successors.includes(code) && yValues[otherCode] !== undefined) {
+                sum += yValues[otherCode];
+                count++;
+            }
+        });
+
+        if (count > 0) {
+            yValues[code] = sum / count;
+        }
     });
 }
 
@@ -101,8 +110,8 @@ const Visualisation = () => {
                         position: "absolute",
                         left: positions[code].x,
                         top: positions[code].y,
-                        width: {subjectWidth},
-                        height: {subjectHeight}
+                        width: subjectWidth,
+                        height: subjectHeight
                     }}
                 />)
             })}
