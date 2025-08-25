@@ -1,17 +1,18 @@
-const Subject = ({ code, name, faculty, language, completion, credits, style }) => {
+const Subject = ({ code, course, style }) => {
+    const link = "https://is.muni.cz" + course.link;
     return (
         <div className="subject" style={style}>
             <div className="topSubjectContainer">
                 <p className="subjectCode">{code}</p>
-                <p className="subjectName">{name}</p>
-                <p className="subjectInfo">{faculty} / {language} / {completion}</p>
+                <a className="subjectName" draggable="false" href={link}>{course.name}</a>
+                <p className="subjectInfo">{course.faculty} / {course.language} / {course.completion}</p>
             </div>
             <div className="bottomSubjectLine">
                 <div className="iconContainer">
                     <div className="circle"></div>
                     <div className="circle"></div>
                 </div>
-                <p className="subjectCredits">{credits} kr.</p>
+                <p className="subjectCredits">{course.credits} kr.</p>
             </div>
         </div>
     );
