@@ -341,15 +341,15 @@ def build_final_json(data: SubjectSuccessors, codes_to_sem) -> None:
             "credits" : data[subject].credits, "link": transform_code_to_link(subject),
             "semester" : semester
         }
-    with open("./src/data/final_tree.json", "w", encoding="utf-8") as f:
+    with open("./src/final_tree.json", "w", encoding="utf-8") as f:
         json.dump(result, f, indent=4, ensure_ascii=False)
 
 
 
 def main() -> None:
     print("Extracting names from input JSON file.")
-    codes = extract_codes("bc_bio_cz.json")
-    sem_to_codes, codes_to_sem = extract_order("bc_bio_cz.json", "apl")
+    codes = extract_codes("./data/bc_bio_cz.json")
+    sem_to_codes, codes_to_sem = extract_order("./data/bc_bio_cz.json", "apl")
     print("Building the prerequisites dictionary.")
     successors = build_successor_dict(codes)
     print("Cleaning the unneccessary subjects.")
