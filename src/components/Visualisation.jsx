@@ -11,9 +11,12 @@ const padding = 25;
 let maxX = 0;
 let maxY = 0;
 const edgeYOffsets = {};
+const edgeXOffsets = {};
 
 
-const newSubjectInfoData = addHelperNodesAndOffsets(subjectInfoData, subjectOrderData, edgeYOffsets);
+const newSubjectInfoData = addHelperNodesAndOffsets(subjectInfoData, subjectOrderData, 
+                                                    edgeYOffsets, edgeXOffsets);
+console.log(edgeXOffsets);
 const yValues = {}
 Object.keys(subjectOrderData).forEach((semester) =>
     Object.values(subjectOrderData[semester]).forEach((code, i) => yValues[code] = i)
@@ -73,13 +76,14 @@ const Visualisation = () => {
                         const endY = end.y + subjectHeight / 2;
                         const midX = (startX + endX) / 2;
 
-                        let offset = edgeYOffsets[`${startCode}-${endCode}`]
+                        let yOffset = edgeYOffsets[`${startCode}-${endCode}`];
+                        let xOffset = edgeXOffsets[`${startCode}-${endCode}`];
 
                         const path = `
-                            M ${startX} ${startY + offset}
-                            L ${midX + offset} ${startY + offset}
-                            L ${midX + offset} ${endY + offset}
-                            L ${endX} ${endY + offset}
+                            M ${startX} ${startY + yOffset}
+                            L ${midX + xOffset} ${startY + yOffset}
+                            L ${midX + xOffset} ${endY + yOffset}
+                            L ${endX} ${endY + yOffset}
                         `;
                         return (<path key={`${startCode}-${endCode}-${i}`} d={path}
                             stroke="black" fill="transparent" strokeWidth="2" />);

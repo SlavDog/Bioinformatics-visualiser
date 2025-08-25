@@ -37,7 +37,30 @@ function createHelperNode(infoData, orderData, prevNodeCode, currentNodeCode, se
 }
 
 
-export function addHelperNodesAndOffsets(originalInfoData, orderData, edgeYOffsets) {
+function fillEdgeXOffsets(edgeXOffsets, infoData, orderData) {
+    const numberOfSuccsBySemester = Array(Object.keys(orderData).length).fill(0);
+    Object.values(infoData).forEach(course => {
+        course.successors.forEach((successorCode) => {
+            if (infoData[successorCode].semester != "null") {
+                numberOfSuccsBySemester[course.semester - 1] += 1;
+            }
+        });
+    });
+    Object.entries(orderData).forEach(([semester, subjects]) => {
+        let i = 0;
+        subjects.forEach(parentCode => {
+           infoData[parentCode].successors.forEach(successorCode => {
+                ensureOffset(edgeXOffsets, `${parentCode}-${successorCode}`,
+                    (i - (numberOfSuccsBySemester[semester] - 1) / 2) * 12);
+                i += 1;
+           })
+        });
+    });
+}
+
+
+export function addHelperNodesAndOffsets(originalInfoData, orderData,
+                                         edgeYOffsets, edgeXOffsets) {
     const newSubjectInfoData = structuredClone(originalInfoData)
     Object.entries(originalInfoData).forEach(([parentCode, course]) => {
         const newSuccessors = [...course.successors];
@@ -50,7 +73,8 @@ export function addHelperNodesAndOffsets(originalInfoData, orderData, edgeYOffse
                         (i - (newSuccessors.length - 1) / 2) * 12);
 
             // Create helper nodes in layers between connected subjects from distant semesters
-            if (parentSemester != null && succSemester != null && parentSemester + 1 != succSemester) {
+            if (parentSemester != null && succSemester != null
+                && parentSemester + 1 != succSemester && parentSemester < succSemester) {
                 newSubjectInfoData[parentCode].successors = newSubjectInfoData[parentCode].successors
                     .filter(item => item !== successorCode);
                 let prevNode = parentCode;
@@ -66,5 +90,7 @@ export function addHelperNodesAndOffsets(originalInfoData, orderData, edgeYOffse
             }
         })
     });
+
+    fillEdgeXOffsets(edgeXOffsets, newSubjectInfoData, orderData);
     return newSubjectInfoData;
 }
