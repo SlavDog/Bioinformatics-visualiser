@@ -2,7 +2,7 @@
   background-color: rgb(73, 73, 73);
   padding: 16px;
   width: 250px;
-  height: 150px;
+  height: 125px;
   border: 3px solid transparent;
   border-radius: 14px; /* funguje správně */
   display: flex;
