@@ -1,7 +1,7 @@
-import subjectOrderData from './order.json';
-import subjectInfoData from './final_tree.json'
+import subjectOrderData from '../data/order.json';
+import subjectInfoData from '../data/final_tree.json'
 import Subject from './Subject';
-import {addHelperNodesAndOffsets} from './utils/helperFunctions'
+import {addHelperNodesAndOffsets} from '../utils/helperFunctions'
 
 const columnWidth = 400;
 const rowHeight = 175;
@@ -10,7 +10,6 @@ const subjectWidth = 250;
 const padding = 25;
 let maxX = 0;
 let maxY = 0;
-const colors = ["red", "blue", "green", "orange", "purple", "brown", "black", "gray", "magenta"];
 const edgeYOffsets = {};
 
 
@@ -32,11 +31,7 @@ for (let i = 0; i < ITERATIONS; i++) {
                 count++;
             }
         });
-        console.log(code, sum, count);
-        console.log(yValues[code]);
         yValues[code] = sum / count;
-        console.log(yValues[code]);
-        console.log("--------");
     });
 }
 

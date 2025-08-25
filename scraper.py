@@ -341,7 +341,7 @@ def build_final_json(data: SubjectSuccessors, codes_to_sem) -> None:
             "credits" : data[subject].credits, "link": transform_code_to_link(subject),
             "semester" : semester
         }
-    with open("./src/final_tree.json", "w", encoding="utf-8") as f:
+    with open("./src/data/final_tree.json", "w", encoding="utf-8") as f:
         json.dump(result, f, indent=4, ensure_ascii=False)
 
 
@@ -357,7 +357,7 @@ def main() -> None:
 
     print("Building the final JSON files.")
     build_final_json(cleaned_successors, codes_to_sem)
-    with open("./src/order.json", "w", encoding="utf-8") as f:
+    with open("./src/data/order.json", "w", encoding="utf-8") as f:
         json.dump({i + 1: sem_to_codes[i] for i in range(len(sem_to_codes))}, f, indent=4, ensure_ascii=False)
 
 
