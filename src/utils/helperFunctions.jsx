@@ -59,6 +59,25 @@ function fillEdgeXOffsets(edgeXOffsets, infoData, orderData) {
 }
 
 
+function createSuccessingHelperNodes(parentCode, parentSemester,
+                                     successorCode, succSemester,
+                                     subjectInfoData, orderData,
+                                     edgeYOffsets, offset) {
+    subjectInfoData[parentCode].successors = subjectInfoData[parentCode].successors
+        .filter(item => item !== successorCode);
+    let prevNode = parentCode;
+    
+    for (let i = parentSemester + 1; i < succSemester; i++) {
+        let helperNodeCode = `HELPER_${successorCode}_${i}`;
+        createHelperNode(subjectInfoData, orderData, prevNode, helperNodeCode, i);
+        ensureOffset(edgeYOffsets, `${prevNode}-${helperNodeCode}`, offset);
+        prevNode = helperNodeCode;
+    }
+    subjectInfoData[prevNode].successors.push(successorCode);
+    ensureOffset(edgeYOffsets, `${prevNode}-${successorCode}`, offset);
+}
+
+
 export function addHelperNodesAndOffsets(originalInfoData, orderData,
                                          edgeYOffsets, edgeXOffsets) {
     const newSubjectInfoData = structuredClone(originalInfoData)
@@ -74,19 +93,11 @@ export function addHelperNodesAndOffsets(originalInfoData, orderData,
 
             // Create helper nodes in layers between connected subjects from distant semesters
             if (parentSemester != null && succSemester != null
-                && parentSemester + 1 != succSemester && parentSemester < succSemester) {
-                newSubjectInfoData[parentCode].successors = newSubjectInfoData[parentCode].successors
-                    .filter(item => item !== successorCode);
-                let prevNode = parentCode;
-                
-                for (let i = parentSemester + 1; i < succSemester; i++) {
-                    let helperNodeCode = `HELPER_${successorCode}_${i}`;
-                    createHelperNode(newSubjectInfoData, orderData, prevNode, helperNodeCode, i);
-                    ensureOffset(edgeYOffsets, `${prevNode}-${helperNodeCode}`, offset);
-                    prevNode = helperNodeCode;
-                }
-                newSubjectInfoData[prevNode].successors.push(successorCode);
-                ensureOffset(edgeYOffsets, `${prevNode}-${successorCode}`, offset);
+                    && parentSemester + 1 != succSemester 
+                    && parentSemester < succSemester) {
+                createSuccessingHelperNodes(parentCode, parentSemester, successorCode,
+                                            succSemester, newSubjectInfoData, orderData,
+                                            edgeYOffsets, offset);
             }
         })
     });

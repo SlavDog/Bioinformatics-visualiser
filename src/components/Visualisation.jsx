@@ -16,10 +16,11 @@ const edgeXOffsets = {};
 
 const newSubjectInfoData = addHelperNodesAndOffsets(subjectInfoData, subjectOrderData, 
                                                     edgeYOffsets, edgeXOffsets);
-console.log(edgeXOffsets);
 const yValues = {}
 Object.keys(subjectOrderData).forEach((semester) =>
-    Object.values(subjectOrderData[semester]).forEach((code, i) => yValues[code] = i)
+    Object.values(subjectOrderData[semester]).forEach((code, i) => 
+        yValues[code] = i
+    )
 );
 
 const ITERATIONS = 5;
