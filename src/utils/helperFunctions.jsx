@@ -85,9 +85,9 @@ export function addHelperNodesAndOffsets(originalInfoData, orderData,
         const newSuccessors = [...course.successors];
         newSuccessors.forEach((successorCode, i) => {
             if (!originalInfoData[successorCode]) {return;}
+
             let succSemester = parseSemester(originalInfoData[successorCode].semester);
             let parentSemester = parseSemester(course.semester);
-
             const offset = ensureOffset(edgeYOffsets, `${parentCode}-${successorCode}`,
                         (i - (newSuccessors.length - 1) / 2) * 12);
 

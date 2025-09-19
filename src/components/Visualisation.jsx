@@ -23,18 +23,22 @@ Object.keys(subjectOrderData).forEach((semester) =>
     )
 );
 
-const ITERATIONS = 5;
+const ITERATIONS = 10;
 for (let i = 0; i < ITERATIONS; i++) {
     Object.entries(newSubjectInfoData).forEach(([code, course]) => {
         if (course.successors.length == 0) return;
         let sum = 0;
         let count = 0;
+
+        // Add childrens' positions
         course.successors.forEach((succ) => {
             if (yValues[succ] !== undefined) {
                 sum += yValues[succ];
                 count++;
             }
         });
+
+        // Add parents' positions
         Object.entries(newSubjectInfoData).forEach(([otherCode, otherCourse]) => {
             if (otherCourse.successors.includes(code) && yValues[otherCode] !== undefined) {
                 sum += yValues[otherCode];
@@ -51,7 +55,6 @@ for (let i = 0; i < ITERATIONS; i++) {
 Object.values(subjectOrderData).forEach((semester) => {
     semester.sort((a, b) => yValues[a] - yValues[b]);
 })
-console.log(subjectOrderData);
 
 const positions = {}
 Object.entries(subjectOrderData).forEach(([semester, courses]) => {
@@ -85,7 +88,8 @@ const Visualisation = () => {
                         const endX = end.x + subjectWidth / 2;
                         const endY = end.y + subjectHeight / 2;
                         const midX = (startX + endX) / 2;
-
+                        if (startX > endX) { return null; }
+                        
                         let yOffset = edgeYOffsets[`${startCode}-${endCode}`];
                         let xOffset = edgeXOffsets[`${startCode}-${endCode}`];
 
