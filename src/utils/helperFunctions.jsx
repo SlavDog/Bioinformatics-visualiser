@@ -31,6 +31,7 @@ function createHelperNode(infoData, orderData, prevNodeCode, currentNodeCode, se
             semester: semester,
             successors: []
         };
+    if (!orderData[semester].includes(currentNodeCode))
         orderData[semester].push(currentNodeCode);
     }
     infoData[prevNodeCode].successors.push(currentNodeCode);
@@ -151,12 +152,12 @@ export function getPositions(newSubjectInfoData, subjectOrderData, padding,
     console.log(newOrder);
 
     const positions = {}
-    Object.entries(newOrder).forEach(([semester, courses]) => {
+    Object.entries(subjectOrderData).forEach(([semester, courses]) => {
         courses.forEach((course, i) => {
-            console.log(semester, course);
             const x = parseInt(semester - 1) * columnWidth  + (columnWidth - subjectWidth - 2 * subjectPadding) / 2;
             const y = i * rowHeight + (rowHeight - subjectHeight - 2 * subjectPadding) / 2;
             positions[course] = { x, y };
+
             if (x + columnWidth + subjectPadding * 2 > maxX) {maxX = x + columnWidth}
             if (y + rowHeight + subjectPadding * 2 > maxY) {maxY = y + rowHeight}
         });
