@@ -108,7 +108,9 @@ export function addHelperNodesAndGetOffsets(originalInfoData, orderData) {
     return [newSubjectInfoData, edgeXOffsets, edgeYOffsets];
 }
 
-export function getPositions(newSubjectInfoData, subjectOrderData, padding, columnWidth, rowHeight) {
+export function getPositions(newSubjectInfoData, subjectOrderData, padding,
+                             columnWidth, rowHeight, subjectWidth,
+                             subjectHeight, subjectPadding) {
     let maxX = 0;
     let maxY = 0;
     Object.values(subjectOrderData).forEach((semester) => {
@@ -151,12 +153,12 @@ export function getPositions(newSubjectInfoData, subjectOrderData, padding, colu
     const positions = {}
     Object.entries(newOrder).forEach(([semester, courses]) => {
         courses.forEach((course, i) => {
-            const x = padding + parseInt(semester - 1) * columnWidth;
-            const y = padding + i * rowHeight;
-            positions[course] = { x, y }
-
-            if (x + columnWidth > maxX) {maxX = x + columnWidth}
-            if (y + rowHeight > maxY) {maxY = y + rowHeight}
+            console.log(semester, course);
+            const x = parseInt(semester - 1) * columnWidth  + (columnWidth - subjectWidth - 2 * subjectPadding) / 2;
+            const y = i * rowHeight + (rowHeight - subjectHeight - 2 * subjectPadding) / 2;
+            positions[course] = { x, y };
+            if (x + columnWidth + subjectPadding * 2 > maxX) {maxX = x + columnWidth}
+            if (y + rowHeight + subjectPadding * 2 > maxY) {maxY = y + rowHeight}
         });
     });
 
