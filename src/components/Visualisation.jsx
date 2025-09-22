@@ -1,74 +1,30 @@
 import subjectOrderData from '../data/order.json';
 import subjectInfoData from '../data/final_tree.json'
 import Subject from './Subject';
-import {addHelperNodesAndOffsets} from '../utils/helperFunctions'
+import Connections from './Connections';
+import { useState, useEffect } from 'react';
+import {addHelperNodesAndGetOffsets, getPositions} from '../utils/helperFunctions'
 
 const columnWidth = 400;
 const rowHeight = 175;
 const subjectHeight = 125;
 const subjectWidth = 250;
 const padding = 25;
-let maxX = 0;
-let maxY = 0;
-const edgeYOffsets = {};
-const edgeXOffsets = {};
-
-
-const newSubjectInfoData = addHelperNodesAndOffsets(subjectInfoData, subjectOrderData, 
-                                                    edgeYOffsets, edgeXOffsets);
-const yValues = {}
-Object.keys(subjectOrderData).forEach((semester) =>
-    Object.values(subjectOrderData[semester]).forEach((code, i) => 
-        yValues[code] = i
-    )
-);
-
-const ITERATIONS = 10;
-for (let i = 0; i < ITERATIONS; i++) {
-    Object.entries(newSubjectInfoData).forEach(([code, course]) => {
-        if (course.successors.length == 0) return;
-        let sum = 0;
-        let count = 0;
-
-        // Add childrens' positions
-        course.successors.forEach((succ) => {
-            if (yValues[succ] !== undefined) {
-                sum += yValues[succ];
-                count++;
-            }
-        });
-
-        // Add parents' positions
-        Object.entries(newSubjectInfoData).forEach(([otherCode, otherCourse]) => {
-            if (otherCourse.successors.includes(code) && yValues[otherCode] !== undefined) {
-                sum += yValues[otherCode];
-                count++;
-            }
-        });
-
-        if (count > 0) {
-            yValues[code] = sum / count;
-        }
-    });
-}
-
-Object.values(subjectOrderData).forEach((semester) => {
-    semester.sort((a, b) => yValues[a] - yValues[b]);
-})
-
-const positions = {}
-Object.entries(subjectOrderData).forEach(([semester, courses]) => {
-    courses.forEach((course, i) => {
-        const x = padding + parseInt(semester - 1) * columnWidth;
-        const y = padding + i * rowHeight;
-        positions[course] = { x, y }
-
-        if (x + columnWidth > maxX) {maxX = x + columnWidth}
-        if (y + rowHeight > maxY) {maxY = y + rowHeight}
-    });
-});
     
 const Visualisation = () => {
+    const [[newSubjectInfoData, edgeXOffsets, edgeYOffsets], setOffsets] = useState([[], [], []]);
+    const [[positions, maxX, maxY], setPositions] = useState([[], 0, 0]);
+
+    // Calculate positions and offsets only once
+    useEffect(() => {
+        const offsets = addHelperNodesAndGetOffsets(subjectInfoData, subjectOrderData);
+        setOffsets(offsets);
+
+        const pos = getPositions(offsets[0], subjectOrderData,
+                                 padding, columnWidth, rowHeight);
+        setPositions(pos);
+    }, []);
+
     return (
         <div className="visualisationBox" 
                 style = {{
@@ -76,34 +32,14 @@ const Visualisation = () => {
                     height: maxY
                 }}
         >
-            <svg className='connections'>
-                {Object.entries(newSubjectInfoData).map(([startCode, course]) => {
-                    return course.successors.map((endCode, i) => {
-
-                        const start = positions[startCode];
-                        const end = positions[endCode];
-                        if (!start || !end) { return null; }
-                        const startX = start.x + subjectWidth / 2;
-                        const startY = start.y + subjectHeight / 2;
-                        const endX = end.x + subjectWidth / 2;
-                        const endY = end.y + subjectHeight / 2;
-                        const midX = (startX + endX) / 2;
-                        if (startX > endX) { return null; }
-                        
-                        let yOffset = edgeYOffsets[`${startCode}-${endCode}`];
-                        let xOffset = edgeXOffsets[`${startCode}-${endCode}`];
-
-                        const path = `
-                            M ${startX} ${startY + yOffset}
-                            L ${midX + xOffset} ${startY + yOffset}
-                            L ${midX + xOffset} ${endY + yOffset}
-                            L ${endX} ${endY + yOffset}
-                        `;
-                        return (<path key={`${startCode}-${endCode}-${i}`} d={path}
-                            stroke="black" fill="transparent" strokeWidth="2" />);
-                    })}
-                )}
-            </svg>
+            <Connections 
+                subjectInfoData={newSubjectInfoData}
+                positions={positions}
+                xOffsets={edgeXOffsets}
+                yOffsets={edgeYOffsets}
+                subjectHeight={subjectHeight}
+                subjectWidth={subjectWidth}
+            />
             {Object.entries(newSubjectInfoData).map(([code, course]) => {
                 const pos = positions[code];
                 if (!pos || course.name == "") return null;

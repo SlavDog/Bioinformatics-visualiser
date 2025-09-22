@@ -78,9 +78,11 @@ function createSuccessingHelperNodes(parentCode, parentSemester,
 }
 
 
-export function addHelperNodesAndOffsets(originalInfoData, orderData,
-                                         edgeYOffsets, edgeXOffsets) {
+export function addHelperNodesAndGetOffsets(originalInfoData, orderData) {
+    const edgeXOffsets = {};
+    const edgeYOffsets = {};
     const newSubjectInfoData = structuredClone(originalInfoData)
+
     Object.entries(originalInfoData).forEach(([parentCode, course]) => {
         const newSuccessors = [...course.successors];
         newSuccessors.forEach((successorCode, i) => {
@@ -103,5 +105,60 @@ export function addHelperNodesAndOffsets(originalInfoData, orderData,
     });
 
     fillEdgeXOffsets(edgeXOffsets, newSubjectInfoData, orderData);
-    return newSubjectInfoData;
+    return [newSubjectInfoData, edgeXOffsets, edgeYOffsets];
+}
+
+export function getPositions(newSubjectInfoData, subjectOrderData, padding, columnWidth, rowHeight) {
+    let maxX = 0;
+    let maxY = 0;
+    Object.values(subjectOrderData).forEach((semester) => {
+        semester.sort((a, b) => 
+            newSubjectInfoData[b].successors.length - newSubjectInfoData[a].successors.length
+        );
+    })
+
+    const startIndices = [];
+    const endIndices = [];
+
+    Object.keys(subjectOrderData).forEach((semester) => {
+
+        // Set first and last unprocessed item index
+        startIndices[semester - 1] = 0;
+        endIndices[semester - 1] = subjectOrderData[semester].length - 1;
+    });
+
+    const newOrder = {};
+    Object.entries(subjectOrderData).forEach(([semester, subjects]) => {
+        let startReadIndex = startIndices[semester - 1];
+        let endReadIndex = endIndices[semester - 1];
+        newOrder[semester] = [];
+
+        while (startReadIndex <= endReadIndex) {
+            let successors = newSubjectInfoData[subjects[startReadIndex]].successors;
+            let currentSuccsCount = successors.length - 1;
+            newOrder[semester].push(subjects[startReadIndex++]);
+            while (currentSuccsCount > 0) {
+                if (startReadIndex <= endReadIndex) {
+                    newOrder[semester].push(subjects[endReadIndex--]);
+                }
+
+                currentSuccsCount--;
+            }
+        }
+    });
+    console.log(newOrder);
+
+    const positions = {}
+    Object.entries(newOrder).forEach(([semester, courses]) => {
+        courses.forEach((course, i) => {
+            const x = padding + parseInt(semester - 1) * columnWidth;
+            const y = padding + i * rowHeight;
+            positions[course] = { x, y }
+
+            if (x + columnWidth > maxX) {maxX = x + columnWidth}
+            if (y + rowHeight > maxY) {maxY = y + rowHeight}
+        });
+    });
+
+    return [positions, maxX, maxY];
 }
