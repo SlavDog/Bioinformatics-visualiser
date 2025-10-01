@@ -79,6 +79,42 @@ function createSuccessingHelperNodes(parentCode, parentSemester,
 }
 
 
+function getSubtreeSizes(data) {
+    const visited = new Set();
+    const resultSizes = {};
+    const resultDepths = {};
+    Object.keys(data).forEach((code) => {
+        if (!visited.has(code)) {
+            getSubtreeSizesAux(data, visited, code, resultSizes, resultDepths);
+        }
+    });
+    return [resultSizes, resultDepths];
+}
+
+
+function getSubtreeSizesAux(data, visited, current, resultSizes, resultDepths) {
+    visited[current] = true;
+    if (data[current].successors.length == 0) {
+        resultSizes[current] = 1;
+        resultDepths[current] = 1;
+        return [1, 1];
+    }
+    let sum = 0;
+    let maxDepth = 0;
+    data[current].successors.forEach((succCode) => {
+        if (data[succCode].semester != "null") {
+            const [depth, size] = getSubtreeSizesAux(data, visited, succCode,
+                                                     resultSizes, resultDepths);
+            sum += size;
+            if (depth > maxDepth) {maxDepth = depth;}
+        }
+    });
+    resultSizes[current] = sum + 1;
+    resultDepths[current] = maxDepth + 1;
+    return [maxDepth + 1, sum + 1];
+}
+
+
 export function addHelperNodesAndGetOffsets(originalInfoData, orderData) {
     const edgeXOffsets = {};
     const edgeYOffsets = {};
@@ -109,59 +145,69 @@ export function addHelperNodesAndGetOffsets(originalInfoData, orderData) {
     return [newSubjectInfoData, edgeXOffsets, edgeYOffsets];
 }
 
+
+
 export function getPositions(newSubjectInfoData, subjectOrderData, padding,
                              columnWidth, rowHeight, subjectWidth,
                              subjectHeight, subjectPadding) {
     let maxX = 0;
     let maxY = 0;
-    Object.values(subjectOrderData).forEach((semester) => {
-        semester.sort((a, b) => 
-            newSubjectInfoData[b].successors.length - newSubjectInfoData[a].successors.length
-        );
+    let semestersCount = Object.keys(subjectOrderData).length;
+
+    const [subtreeSizes, subtreeDepths] = getSubtreeSizes(newSubjectInfoData);
+    
+    const codeToPositions = {};
+    const positionsToCode = Array.from({ length: semestersCount }, () => []);
+    Object.values(subjectOrderData).forEach((semesterArray, semesterIndex) => {
+        let positionIndex = 0;
+        semesterArray.forEach((code) => {
+            if (codeToPositions[code] || newSubjectInfoData[code].semester == "null") {
+                return;
+            }
+            let placed = false;
+            while (!placed) {
+                if (getTreePositions(newSubjectInfoData, semesterIndex, 
+                                    positionIndex, code, codeToPositions,
+                                    positionsToCode)) {
+                    placed = true;
+                }
+                positionIndex++;
+            }
+        })
     })
 
-    const startIndices = [];
-    const endIndices = [];
-
-    Object.keys(subjectOrderData).forEach((semester) => {
-
-        // Set first and last unprocessed item index
-        startIndices[semester - 1] = 0;
-        endIndices[semester - 1] = subjectOrderData[semester].length - 1;
-    });
-
-    const newOrder = {};
-    Object.entries(subjectOrderData).forEach(([semester, subjects]) => {
-        let startReadIndex = startIndices[semester - 1];
-        let endReadIndex = endIndices[semester - 1];
-        newOrder[semester] = [];
-
-        while (startReadIndex <= endReadIndex) {
-            let successors = newSubjectInfoData[subjects[startReadIndex]].successors;
-            let currentSuccsCount = successors.length - 1;
-            newOrder[semester].push(subjects[startReadIndex++]);
-            while (currentSuccsCount > 0) {
-                if (startReadIndex <= endReadIndex) {
-                    newOrder[semester].push(subjects[endReadIndex--]);
-                }
-
-                currentSuccsCount--;
-            }
-        }
-    });
-    console.log(newOrder);
-
     const positions = {}
-    Object.entries(subjectOrderData).forEach(([semester, courses]) => {
-        courses.forEach((course, i) => {
-            const x = parseInt(semester - 1) * columnWidth  + (columnWidth - subjectWidth - 2 * subjectPadding) / 2;
-            const y = i * rowHeight + (rowHeight - subjectHeight - 2 * subjectPadding) / 2;
-            positions[course] = { x, y };
 
-            if (x + columnWidth + subjectPadding * 2 > maxX) {maxX = x + columnWidth}
-            if (y + rowHeight + subjectPadding * 2 > maxY) {maxY = y + rowHeight}
-        });
-    });
+    Object.entries(codeToPositions).forEach(([code, [oldX, oldY]]) => {
+        const x = oldX * columnWidth  + (columnWidth - subjectWidth - 2 * subjectPadding) / 2;
+        const y = oldY * rowHeight + (rowHeight - subjectHeight - 2 * subjectPadding) / 2;
+        positions[code] = { x, y };
 
+        if (x + columnWidth + subjectPadding * 2 > maxX) {maxX = x + columnWidth}
+        if (y + rowHeight + subjectPadding * 2 > maxY) {maxY = y + rowHeight}
+    })
     return [positions, maxX, maxY];
+}
+
+function getTreePositions(newSubjectInfoData, semesterIndex, 
+                          positionIndex, code, codeToPositions, positionsToCode) {
+    if ((positionsToCode[semesterIndex] &&
+        positionsToCode[semesterIndex][positionIndex])) {
+            return false;
+    }
+    // debugger;
+    console.log(code, semesterIndex, positionIndex);
+    let succs = newSubjectInfoData[code].successors;
+    
+    for (let i = 0; i < succs.length; i++) {
+        if (newSubjectInfoData[succs[i]].semester != "null"
+            && !getTreePositions(newSubjectInfoData, semesterIndex + 1,
+                                 i + positionIndex, succs[i], codeToPositions,
+                                 positionsToCode)) {
+            return false;
+        }
+    }
+    codeToPositions[code] = [semesterIndex, positionIndex];
+    positionsToCode[semesterIndex][positionIndex] = code;
+    return true;
 }
