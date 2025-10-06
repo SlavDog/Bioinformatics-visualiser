@@ -1,22 +1,38 @@
 .subject {
-  background-color: rgb(73, 73, 73);
-  padding: 16px;
-  width: 250px;
-  height: 125px;
-  border: 3px solid transparent;
+  background-color: rgb(255, 255, 255);
+  border: 2px solid transparent;
   border-radius: 14px; /* funguje správně */
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  background:
-    linear-gradient(white, white) padding-box,              /* vnitřek */
-    linear-gradient(0deg, #00DCF5, #009CFD) border-box; /* gradient border */
+  box-shadow: #33333327 2px 2px 5px;
 }
+
+.subjectTypeIN {
+  border-color: orange;
+  background-image: linear-gradient(160deg, #ffffff 60%, #ffee8d 100%);
+}
+
+.subjectTypeBI {
+  border-color: #108a00;
+  background-image: linear-gradient(160deg, #ffffff 60%, #bdffcd 100%);
+}
+
+.subjectTypeMA {
+  border-color: #009cfd;
+  background-image: linear-gradient(160deg, #ffffff 60%, #87fffd 100%);
+}
+
+.subjectTypeOT {
+  border-color: #333333;
+  background-image: linear-gradient(160deg, #ffffff 60%, #bdbdbd 100%);
+}
+
 
 .subjectCode {
   font-family: "Inter", sans-serif;
   font-weight: 300;
-  color: #817F7F;
+  color: #4e4e4e;
   font-size: 14px;
   margin: 0;
 }
@@ -50,10 +66,13 @@
 }
 
 .circle {
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
-  background-color: rgb(0, 204, 255);
+  background-color: rgb(255, 255, 255);
+  border-style: solid;
+  border-width: 2px;
+  border-color: #9a9a9a;
   margin-right: 10px;
 }
 
@@ -68,7 +87,7 @@ body {
 }
 
 .visualisationBox {
-  background-color: rgb(199, 199, 199);
+  background-color: rgb(255, 255, 255);
   position: relative;
   width: 100%;   /* nebo explicitně šířku podle potřeby */
   height: 100%;  /* nebo min-height pokud obsah roste */
@@ -89,4 +108,11 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
+}
+
+.semesterTitles {
+  font-family: "Inter", sans-serif;
+  font-weight: 600;
+  font-size: 32px;
+  padding-top: 100px;
 }

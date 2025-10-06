@@ -4,6 +4,7 @@ import requests
 import time
 from sympy import Symbol, simplify_logic
 from bs4 import BeautifulSoup
+import os
 
 class SubjectInfo:
     def __init__(self, name: str, faculty: str, code: str, language: str, completion: str, successors: list[str], credit: str):
@@ -330,6 +331,17 @@ def clean_dict(data: SubjectSuccessors) -> SubjectSuccessors:
     return data
 
 
+def code_to_subj_type(code: str) -> str:
+    code = code.replace("PřF:", "")
+    if code[0] == "P" or code[0] == "I":
+        return "IN"
+    if code[0] == "C" or code[0:2] == "Bi":
+        return "BI"
+    if code[0] == "M":
+        return "MA"
+    return "OT"
+
+
 def build_final_json(data: SubjectSuccessors, codes_to_sem) -> None:
     result = {}
     for subject in data:
@@ -339,7 +351,7 @@ def build_final_json(data: SubjectSuccessors, codes_to_sem) -> None:
             "language" : data[subject].language, "completion" : data[subject].completion,
             "has_successors" : data[subject].has_successors, "has_parent" : data[subject].has_parent,
             "credits" : data[subject].credits, "link": transform_code_to_link(subject),
-            "semester" : semester
+            "semester" : semester, "type" : code_to_subj_type(subject)
         }
     with open("./src/final_tree.json", "w", encoding="utf-8") as f:
         json.dump(result, f, indent=4, ensure_ascii=False)
@@ -348,8 +360,8 @@ def build_final_json(data: SubjectSuccessors, codes_to_sem) -> None:
 
 def main() -> None:
     print("Extracting names from input JSON file.")
-    codes = extract_codes("./data/bc_bio_cz.json")
-    sem_to_codes, codes_to_sem = extract_order("./data/bc_bio_cz.json", "apl")
+    codes = extract_codes(os.path.join("src", "data", "bc_bio_cz.json"))
+    sem_to_codes, codes_to_sem = extract_order(os.path.join("src", "data", "bc_bio_cz.json"), "apl")
     print("Building the prerequisites dictionary.")
     successors = build_successor_dict(codes)
     print("Cleaning the unneccessary subjects.")

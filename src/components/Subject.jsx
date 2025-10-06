@@ -1,7 +1,7 @@
 const Subject = ({ code, course, style }) => {
     const link = "https://is.muni.cz" + course.link;
     return (
-        <div className="subject" style={style}>
+        <div className={`subject subjectType${course.type}`} style={style}>
             <div className="topSubjectContainer">
                 <p className="subjectCode">{code}</p>
                 <a className="subjectName" draggable="false" href={link}>{course.name}</a>
