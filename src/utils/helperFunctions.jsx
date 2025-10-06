@@ -50,7 +50,8 @@ function fillEdgeXOffsets(edgeXOffsets, infoData, orderData) {
     Object.entries(orderData).forEach(([semester, subjects]) => {
         let i = 0;
         subjects.forEach(parentCode => {
-           infoData[parentCode].successors.forEach(successorCode => {
+            if (!infoData[parentCode]) {return;}
+            infoData[parentCode].successors.forEach(successorCode => {
                 ensureOffset(edgeXOffsets, `${parentCode}-${successorCode}`,
                     (i - (numberOfSuccsBySemester[semester] - 1) / 2) * 12);
                 i += 1;
@@ -161,7 +162,7 @@ export function getPositions(newSubjectInfoData, subjectOrderData, padding,
     Object.values(subjectOrderData).forEach((semesterArray, semesterIndex) => {
         let positionIndex = 0;
         semesterArray.forEach((code) => {
-            if (codeToPositions[code] || newSubjectInfoData[code].semester == "null") {
+            if (codeToPositions[code] || !newSubjectInfoData[code] || newSubjectInfoData[code].semester == "null") {
                 return;
             }
             let placed = false;
@@ -195,8 +196,6 @@ function getTreePositions(newSubjectInfoData, semesterIndex,
         positionsToCode[semesterIndex][positionIndex])) {
             return false;
     }
-    // debugger;
-    console.log(code, semesterIndex, positionIndex);
     let succs = newSubjectInfoData[code].successors;
     
     for (let i = 0; i < succs.length; i++) {
