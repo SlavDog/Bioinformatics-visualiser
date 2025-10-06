@@ -12,7 +12,14 @@ const DragScrollBox = () => {
         setStartX(e.screenX);
         setStartY(e.screenY);
     }
-    
+
+
+    // Zoom in
+    const handleZoomIn = () => setScale(prevScale => Math.min(prevScale + 0.1, 1.05));
+    const handleZoomOut = () => setScale(prevScale => Math.max(prevScale - 0.1, 0.35));
+    const [scale, setScale] = useState(0.65);
+
+
     useEffect(() => {
 
         const onMouseMove = (e) => {
@@ -53,13 +60,19 @@ const DragScrollBox = () => {
 
 
     return (
-    <div
-      className="scrollableBox"
-      ref={boxRef}
-      onMouseDown={onMouseDown}
-    >
-      <Visualisation/>
-    </div>
+        <>
+        <div
+        className="scrollableBox"
+        ref={boxRef}
+        onMouseDown={onMouseDown}
+        >
+            <div style={{ position: 'absolute', top: "5vh", left: "6vw", zIndex: 100 }}>
+                <button onClick={handleZoomIn} style={{ marginRight: '8px' }}>➕ Zoom In</button>
+                <button onClick={handleZoomOut}>➖ Zoom Out</button>
+            </div>
+            <Visualisation scale={scale}/>
+        </div>
+        </>
   );
 }
 
