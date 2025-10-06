@@ -1,0 +1,83 @@
+.subject {
+  background-color: rgb(255, 255, 255);
+  border: 2px solid transparent;
+  border-radius: 14px; /* funguje správně */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: #33333327 2px 2px 5px;
+}
+
+.subjectTypeIN {
+  border-color: orange;
+  background-image: linear-gradient(160deg, #ffffff 60%, #ffee8d 100%);
+}
+
+.subjectTypeBI {
+  border-color: #108a00;
+  background-image: linear-gradient(160deg, #ffffff 60%, #bdffcd 100%);
+}
+
+.subjectTypeMA {
+  border-color: #009cfd;
+  background-image: linear-gradient(160deg, #ffffff 60%, #87fffd 100%);
+}
+
+.subjectTypeOT {
+  border-color: #333333;
+  background-image: linear-gradient(160deg, #ffffff 60%, #bdbdbd 100%);
+}
+
+
+.subjectCode {
+  font-family: "Inter", sans-serif;
+  font-weight: 300;
+  color: #4e4e4e;
+  font-size: 14px;
+  margin: 0;
+}
+
+.subjectName {
+  font-family: "Inter", sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  margin: 3px 0px;
+  color: black;
+  text-decoration: none;
+}
+
+.subjectCredits {
+  font-family: "Inter", sans-serif;
+  font-weight: 600;
+  font-size: 24px;
+  margin: 0;
+}
+
+.subjectInfo {
+  font-family: "Inter", sans-serif;
+  font-weight: 300;
+  font-size: 16px;
+  margin: 0;
+}
+
+.iconContainer {
+  display: flex;
+  justify-content: left;
+}
+
+.circle {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: rgb(255, 255, 255);
+  border-style: solid;
+  border-width: 2px;
+  border-color: #9a9a9a;
+  margin-right: 10px;
+}
+
+.bottomSubjectLine {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+}

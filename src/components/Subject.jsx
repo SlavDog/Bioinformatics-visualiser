@@ -1,3 +1,5 @@
+import './Subject.css'
+
 const Subject = ({ code, course, style }) => {
     const link = "https://is.muni.cz" + course.link;
     return (
