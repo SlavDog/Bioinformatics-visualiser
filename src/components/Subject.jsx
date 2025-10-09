@@ -9,7 +9,7 @@ const Subject = ({ code, course, style }) => {
                 <a className="subjectName" draggable="false" href={link}>{course.name}</a>
                 <p className="subjectInfo">{course.faculty} / {course.language} / {course.completion}</p>
             </div>
-            <div className="bottomSubjectLine">
+            <div className="bottomSubjectContainer">
                 <div className="iconContainer">
                     <div className="circle"></div>
                     <div className="circle"></div>

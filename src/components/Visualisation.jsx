@@ -1,6 +1,7 @@
 import subjectOrderData from '../data/order.json';
 import subjectInfoData from '../data/final_tree.json'
 import Subject from './Subject';
+import SmallSubject from './SmallSubject';
 import Connections from './Connections';
 import { useState, useEffect } from 'react';
 import {addHelperNodesAndGetOffsets, getPositions} from '../utils/helperFunctions'
@@ -16,6 +17,7 @@ const Visualisation = ({scale}) => {
     const [[newSubjectInfoData, edgeXOffsets, edgeYOffsets], setOffsets] = useState([[], [], []]);
     const [[positions, maxX, maxY], setPositions] = useState([[], 0, 0]);
     const semesterCount = Object.keys(subjectOrderData).length;
+    const SubjectComponent = scale < 0.5 ? SmallSubject : Subject;
 
     // Calculate positions and offsets only once
     useEffect(() => {
@@ -78,7 +80,7 @@ const Visualisation = ({scale}) => {
                     {Object.entries(newSubjectInfoData).map(([code, course]) => {
                         const pos = positions[code];
                         if (!pos || course.name == "") return null;
-                        return (<Subject
+                        return (<SubjectComponent
                             key={code}
                             code={code}
                             course={course}

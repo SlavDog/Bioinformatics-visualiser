@@ -1,11 +1,12 @@
 .subject {
   background-color: rgb(255, 255, 255);
-  border: 2px solid transparent;
-  border-radius: 14px; /* funguje správně */
+  border: 3px solid transparent;
+  border-radius: 14px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  box-shadow: #33333327 2px 2px 5px;
+  box-shadow: #00000037 5px 5px 10px;
+  background-size: 110% 110%; /* Fixes white lines on the edges when scaled */
 }
 
 .subjectTypeIN {
@@ -27,7 +28,6 @@
   border-color: #333333;
   background-image: linear-gradient(160deg, #ffffff 60%, #bdbdbd 100%);
 }
-
 
 .subjectCode {
   font-family: "Inter", sans-serif;
@@ -76,8 +76,36 @@
   margin-right: 10px;
 }
 
-.bottomSubjectLine {
+.bottomSubjectContainer {
   display: flex;
   justify-content: space-between;
   align-items: end;
+}
+
+.smallSubjectCode {
+  font-family: "Inter", sans-serif;
+  font-weight: 300;
+  font-size: 36px;
+  margin: 0;
+  text-decoration: none;
+  margin-top: 100px;
+  color: black;
+}
+
+.smallSubjectCredits {
+  font-family: "Inter", sans-serif;
+  font-weight: 300;
+  font-size: 32px;
+  margin: 0;
+  color: #4e4e4e;
+}
+
+.smallTopSubjectContainer {
+  margin-top: 5%;
+  text-align: center;
+}
+
+.smallBottomSubjectContainer {
+  margin-bottom: 5%;
+  text-align: center;
 }
