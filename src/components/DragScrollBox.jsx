@@ -1,5 +1,6 @@
 import { useRef, useState, useEffect } from 'react';
 import Visualisation from './Visualisation';
+import SideBar from './SideBar';
 
 const DragScrollBox = () => {
     const boxRef = useRef(null);
@@ -67,9 +68,10 @@ const DragScrollBox = () => {
         onMouseDown={onMouseDown}
         >
             <div style={{ position: 'absolute', top: "5vh", left: "6vw", zIndex: 100 }}>
-                <button onClick={handleZoomIn} style={{ marginRight: '8px' }}>➕ Zoom In</button>
-                <button onClick={handleZoomOut}>➖ Zoom Out</button>
+                <button className='zoomButton' onClick={handleZoomIn} style={{ marginRight: '8px' }}>➕ Zoom In</button>
+                <button className='zoomButton' onClick={handleZoomOut}>➖ Zoom Out</button>
             </div>
+            <SideBar ></SideBar>
             <Visualisation scale={scale}/>
         </div>
         </>
