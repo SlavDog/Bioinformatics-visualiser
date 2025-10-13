@@ -6,22 +6,10 @@ from sympy import Symbol, simplify_logic
 from bs4 import BeautifulSoup
 import os
 
-class SubjectInfo:
-    def __init__(self, name: str, faculty: str, code: str, language: str, completion: str, successors: list[str], credit: str):
-        self.name = name
-        self.faculty = faculty
-        self.code = code
-        self.language = language
-        self.completion = completion
-        self.successors = successors
-        self.has_successors = False
-        self.has_parent = False
-        self.credits = credit
-
 SubjectSuccessors = dict[str, list[str]]
 
 
-def extract_codes(filename: str) -> list[str]:
+def extract_codes(filename: str, spec: str) -> list[str]:
     """
     Extract all subject codes from MUNI-style JSON file.
 
@@ -31,50 +19,50 @@ def extract_codes(filename: str) -> list[str]:
     Returns:
         list[str]: A list containing all subject codes.
     """
-    code_list = []
+    sem_to_codes, codes_to_sem = extract_order(filename, spec)
+    result_data = {"codes": [], "choices": {}, "order": sem_to_codes, "codes_to_sem": codes_to_sem}
     with open(filename, "r", encoding='utf-8') as source:
         data = json.load(source)
 
         # Write down all base subjects
         for subject in data["base"]:
             if "code" in subject:
-                code_list.append(subject["code"])                
+                result_data["codes"].append(subject["code"])                
             elif "choice" in subject:
                 continue
 
         # Write down every subject from a certain choice group
         for choice in data["choices"]:
-            if "tv" == choice or "core" == choice: # we must ignore CORE and PE
-                continue
-            for subject_code in data["choices"][choice]["list"]:
-                code_list.append(subject_code)
+            result_data["choices"][choice] = data["choices"][choice]
+            if not ("tv" == choice or "core" == choice): # we must ignore CORE and PE
+                for subject in data["choices"][choice]["list"]:
+                    result_data["codes"].append(subject)
 
         # Write down all specialization subjects
         for specialization in data["spec"].values():
             for subject in specialization["base"]:
                 if "choice" in subject:
                     continue
-                code_list.append(subject["code"])
+                result_data["codes"].append(subject["code"])
 
-    return code_list
+    return result_data
 
 
 def extract_order(filename: str, spec: str) -> list[list[str]]:
-    sem_to_codes = []
+    sem_to_codes = {}
     codes_to_sem = {}
     with open(filename, "r", encoding='utf-8') as source:
         data = json.load(source)
         for i, semester in enumerate(data["spec"][spec]["plan"].values()):
-            sem_to_codes.append([])
+            sem_to_codes[i + 1] = []
             for subject in semester:
+                sem_to_codes[i + 1].append(subject)
                 if "choice" in subject:
                     if "tv" == subject["choice"] or "core" == subject["choice"]:
                         continue
                     for choice_subject_code in data["choices"][subject["choice"]]["list"]:
-                        sem_to_codes[i].append(choice_subject_code)
                         codes_to_sem[choice_subject_code] = i + 1
                 else:
-                    sem_to_codes[i].append(subject["code"])
                     codes_to_sem[subject["code"]] = i + 1
     return sem_to_codes, codes_to_sem
 
@@ -222,7 +210,7 @@ def transform_link_to_code(link: str) -> str:
         raise ValueError("Incorrect link format!")
 
 
-def build_successor_dict(subject_codes: list[str]) \
+def build_successor_dict(data) \
         -> SubjectSuccessors:
     """
     Build a dictionary mapping subject codes to their successor codes.
@@ -236,6 +224,7 @@ def build_successor_dict(subject_codes: list[str]) \
     Returns:
         
     """
+    subject_codes = data["codes"]
     result: SubjectSuccessors = {}
     for code in subject_codes:
         link = transform_code_to_link(code)
@@ -243,7 +232,8 @@ def build_successor_dict(subject_codes: list[str]) \
         response = requests.get(f"https://is.muni.cz" + link)
         if response.status_code == 200:
             html = response.text
-            result[code] = get_subject(html, code)
+            semester = "null" if not code in data["codes_to_sem"] else data["codes_to_sem"][code]
+            result[code] = get_subject(html, code, semester)
         else:
             print("Failed to fetch page:", response.status_code)
 
@@ -252,7 +242,7 @@ def build_successor_dict(subject_codes: list[str]) \
     return result
 
 
-def get_subject(html: str, code: str) \
+def get_subject(html: str, code: str, semester) \
         -> tuple[str, str, str, str]:
     code = re.sub(r"^[^:]*:(.*)", r"\1", code)
     name_match = re.search(re.compile(rf"<H2>{code}\s([^<]+)", re.IGNORECASE), html)
@@ -274,7 +264,10 @@ def get_subject(html: str, code: str) \
     credit_match = re.search(re.compile(r"[0-9]/[0-9](?:/[0-9])?\.\s([0-9][0-9]?)\skr\.\s(\(plus ukončení\)\.)?", re.IGNORECASE), html)
     credit = credit_match.group(1)
     if (credit_match.group(2)):
-        credit += " + u."
+        if completion == "zk":
+            credit = str(int(credit) + 2)
+        if completion == "k":
+            credit = str(int(credit) + 1)
     print(f"    {credit} kr.")
 
 
@@ -282,10 +275,11 @@ def get_subject(html: str, code: str) \
                           .union(find_successor_codes(html, code, True))
     print(f"    {successor_codes if successor_codes else "{}"}")
 
-    return SubjectInfo(name, transform_faculty(faculty),
-                       code, transform_language(language),
-                       completion, list(successor_codes), credit)
-
+    return {"name": name, "faculty": transform_faculty(faculty),
+            "successors": list(successor_codes), "language": transform_language(language),
+            "completion": completion, "has_successors": False, "has_parent": False,
+            "credits": credit, "link": transform_code_to_link(code),
+            "semester" : semester, "type" : code_to_subj_type(code)}
 
 def transform_faculty(full_faculty_name: str) -> str:
     match full_faculty_name:
@@ -307,7 +301,7 @@ def transform_language(full_language_name: str) -> str:
             return "Unknown language"
 
 
-def clean_dict(data: SubjectSuccessors) -> SubjectSuccessors:
+def clean_dict(data):
     """
     Remove any successor subject codes that are not keys in the given dictionary.
 
@@ -319,15 +313,15 @@ def clean_dict(data: SubjectSuccessors) -> SubjectSuccessors:
     """
     for key in data:
         result = []
-        for child in data[key].successors:
+        for child in data[key]["successors"]:
             if child in data:
                 result.append(child)
-        data[key].successors = [child for child in data[key].successors if child in data]
+        data[key]["successors"] = [child for child in data[key]["successors"] if child in data]
         
-        if data[key].successors:
-            data[key].has_successors = True
-            for successor in data[key].successors:
-                data[successor].has_parent = True
+        if data[key]["successors"]:
+            data[key]["has_successors"] = True
+            for successor in data[key]["successors"]:
+                data[successor]["has_parent"] = True
     return data
 
 
@@ -342,35 +336,26 @@ def code_to_subj_type(code: str) -> str:
     return "OT"
 
 
-def build_final_json(data: SubjectSuccessors, codes_to_sem) -> None:
-    result = {}
-    for subject in data:
-        semester = "null" if subject not in codes_to_sem else codes_to_sem[subject]
-        result[subject] = {"name": data[subject].name, 
-            "faculty" : data[subject].faculty, "successors": data[subject].successors,
-            "language" : data[subject].language, "completion" : data[subject].completion,
-            "has_successors" : data[subject].has_successors, "has_parent" : data[subject].has_parent,
-            "credits" : data[subject].credits, "link": transform_code_to_link(subject),
-            "semester" : semester, "type" : code_to_subj_type(subject)
-        }
+def build_final_json(data, cleaned_successors) -> None:
+    filtered_dict = {
+                        "details": cleaned_successors,
+                        "order": data["order"],
+                        "choices": data["choices"]
+                    }
     with open("./src/final_tree.json", "w", encoding="utf-8") as f:
-        json.dump(result, f, indent=4, ensure_ascii=False)
-
+        json.dump(filtered_dict, f, indent=4, ensure_ascii=False)
 
 
 def main() -> None:
     print("Extracting names from input JSON file.")
-    codes = extract_codes(os.path.join("src", "data", "bc_bio_cz.json"))
-    sem_to_codes, codes_to_sem = extract_order(os.path.join("src", "data", "bc_bio_cz.json"), "apl")
-    print("Building the prerequisites dictionary.")
-    successors = build_successor_dict(codes)
+    data = extract_codes(os.path.join("src", "data", "bc_bio_cz.json"), "apl")
+    print(data)
+    successors = build_successor_dict(data)
     print("Cleaning the unneccessary subjects.")
     cleaned_successors = clean_dict(successors)
 
     print("Building the final JSON files.")
-    build_final_json(cleaned_successors, codes_to_sem)
-    with open("./src/data/order.json", "w", encoding="utf-8") as f:
-        json.dump({i + 1: sem_to_codes[i] for i in range(len(sem_to_codes))}, f, indent=4, ensure_ascii=False)
+    build_final_json(data, cleaned_successors)
 
 
 if __name__ == "__main__":
