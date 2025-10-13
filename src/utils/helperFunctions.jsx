@@ -65,16 +65,21 @@ function createSuccessingHelperNodes(parentCode, parentSemester,
                                      successorCode, succSemester,
                                      subjectInfoData, orderData,
                                      edgeYOffsets, offset) {
+    // remove direct link
     subjectInfoData[parentCode].successors = subjectInfoData[parentCode].successors
         .filter(item => item !== successorCode);
-    let prevNode = parentCode;
     
+        let prevNode = parentCode;
+    
+    // insert new helper nodes
     for (let i = parentSemester + 1; i < succSemester; i++) {
         let helperNodeCode = `HELPER_${successorCode}_${i}`;
         createHelperNode(subjectInfoData, orderData, prevNode, helperNodeCode, i);
         ensureOffset(edgeYOffsets, `${prevNode}-${helperNodeCode}`, offset);
         prevNode = helperNodeCode;
     }
+
+    // connect last helper to successor
     subjectInfoData[prevNode].successors.push(successorCode);
     ensureOffset(edgeYOffsets, `${prevNode}-${successorCode}`, offset);
 }
@@ -123,22 +128,30 @@ export function addHelperNodesAndGetOffsets(originalInfoData, orderData) {
 
     Object.entries(originalInfoData).forEach(([parentCode, course]) => {
         const newSuccessors = [...course.successors];
+        let parentSemester = parseSemester(course.semester);
+        
         newSuccessors.forEach((successorCode, i) => {
-            if (!originalInfoData[successorCode]) {return;}
+            const successor = originalInfoData[successorCode];
+            if (!successor) {return;}
 
-            let succSemester = parseSemester(originalInfoData[successorCode].semester);
-            let parentSemester = parseSemester(course.semester);
-            const offset = ensureOffset(edgeYOffsets, `${parentCode}-${successorCode}`,
-                        (i - (newSuccessors.length - 1) / 2) * 12);
+            let succSemester = parseSemester(successor.semester);
+            const offset = ensureOffset(
+                edgeYOffsets,
+                `${parentCode}-${successorCode}`,
+                (i - (newSuccessors.length - 1) / 2) * 12
+            );
 
             // Create helper nodes in layers between connected subjects from distant semesters
-            if (parentSemester != null && succSemester != null
-                    && parentSemester + 1 != succSemester 
-                    && parentSemester < succSemester) {
-                createSuccessingHelperNodes(parentCode, parentSemester, successorCode,
-                                            succSemester, newSubjectInfoData, orderData,
-                                            edgeYOffsets, offset);
+            if (parentSemester == null || 
+                succSemester != null ||
+                parentSemester + 1 != succSemester || 
+                parentSemester > succSemester
+            ) {
+                return;
             }
+            createSuccessingHelperNodes(parentCode, parentSemester, successorCode,
+                                        succSemester, newSubjectInfoData, orderData,
+                                        edgeYOffsets, offset);
         })
     });
 
