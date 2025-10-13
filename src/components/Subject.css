@@ -29,6 +29,32 @@
   background-image: linear-gradient(160deg, #ffffff 60%, #bdbdbd 100%);
 }
 
+.subjectTypechoice {
+  border-color: #a000a0;
+  overflow: hidden;
+  background-image: linear-gradient(160deg, #ffffff 60%, #fdd1ff 100%);
+  cursor: pointer;
+}
+
+.subjectTypechoice::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(160deg, #ffffff 40%, #fba9ff 100%);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  z-index: 0;
+}
+
+.subjectTypechoice:hover::after {
+  opacity: 1;
+  size: 110% 109%;
+}
+
+.subjectTypechoice > * {
+  z-index: 1;
+}
+
 .subjectCode {
   font-family: "Inter", sans-serif;
   font-weight: 300;

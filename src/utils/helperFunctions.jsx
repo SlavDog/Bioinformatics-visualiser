@@ -1,4 +1,4 @@
-const helperNode = {
+const emptyNode = {
   name: "",
   faculty: "",
   successors: [],
@@ -27,12 +27,12 @@ function ensureOffset(allOffsets, key, offsetToAdd) {
 function createHelperNode(infoData, orderData, prevNodeCode, currentNodeCode, semester) {
     if (!infoData[currentNodeCode]) {
         infoData[currentNodeCode] = {
-            ...helperNode,
+            ...emptyNode,
             semester: semester,
             successors: []
         };
-    if (!orderData[semester].includes(currentNodeCode))
-        orderData[semester].push(currentNodeCode);
+    if (!orderData[semester].some(s => s.code === currentNodeCode))
+        orderData[semester].push({"code": currentNodeCode});
     }
     infoData[prevNodeCode].successors.push(currentNodeCode);
 }
@@ -49,7 +49,8 @@ function fillEdgeXOffsets(edgeXOffsets, infoData, orderData) {
     });
     Object.entries(orderData).forEach(([semester, subjects]) => {
         let i = 0;
-        subjects.forEach(parentCode => {
+        subjects.forEach(parent => {
+            const parentCode = parent.code;
             if (!infoData[parentCode]) {return;}
             infoData[parentCode].successors.forEach(successorCode => {
                 ensureOffset(edgeXOffsets, `${parentCode}-${successorCode}`,
@@ -63,7 +64,7 @@ function fillEdgeXOffsets(edgeXOffsets, infoData, orderData) {
 
 function createSuccessingHelperNodes(parentCode, parentSemester,
                                      successorCode, succSemester,
-                                     subjectInfoData, orderData,
+                                     subjectInfoData, subjectData,
                                      edgeYOffsets, offset) {
     // remove direct link
     subjectInfoData[parentCode].successors = subjectInfoData[parentCode].successors
@@ -74,7 +75,7 @@ function createSuccessingHelperNodes(parentCode, parentSemester,
     // insert new helper nodes
     for (let i = parentSemester + 1; i < succSemester; i++) {
         let helperNodeCode = `HELPER_${successorCode}_${i}`;
-        createHelperNode(subjectInfoData, orderData, prevNode, helperNodeCode, i);
+        createHelperNode(subjectInfoData, subjectData["order"], prevNode, helperNodeCode, i);
         ensureOffset(edgeYOffsets, `${prevNode}-${helperNodeCode}`, offset);
         prevNode = helperNodeCode;
     }
@@ -121,17 +122,58 @@ function getSubtreeSizesAux(data, visited, current, resultSizes, resultDepths) {
 }
 
 
-export function addHelperNodesAndGetOffsets(originalInfoData, orderData) {
+function addChoiceNodes(details, order, choices) {
+    Object.entries(order).forEach(([semester, subjectList]) => {
+        subjectList.filter((subject) => subject["choice"] != undefined).forEach((choiceSubject) => {
+            const code = choiceSubject["choice"];
+            let hasPredecessors = false;
+            
+
+            const successors = [];
+            if (code != "core" && code != "tv") {
+                choices[code].list
+                    .flatMap(item => details[item].successors)
+                    .filter(item => !choices[code].list.includes(item));
+            }
+
+            Object.values(details).forEach((item) => {
+                item.successors = item.successors.map((succ) => {
+                    if (choices[code].list.includes(succ)) {
+                        hasPredecessors = true;
+                        return code;
+                    }
+                    return succ;
+                })
+            })
+            
+            details[code] = {
+                ...emptyNode,
+                name: choices[code].refnCZ,
+                successors: successors, 
+                has_successors: successors.length != 0,
+                has_parent: hasPredecessors, 
+                credits: choiceSubject.credits,
+                semester: Number(semester),
+                type: "choice"
+            };
+        });
+    })
+}
+
+
+export function addHelperNodesAndGetOffsets(subjectData) {
     const edgeXOffsets = {};
     const edgeYOffsets = {};
-    const newSubjectInfoData = structuredClone(originalInfoData)
+    const newDetails = structuredClone(subjectData["details"]);
+    const oldDetails = subjectData["details"];
+    addChoiceNodes(newDetails, subjectData["order"], subjectData["choices"]);
 
-    Object.entries(originalInfoData).forEach(([parentCode, course]) => {
+    Object.entries(oldDetails).forEach(([parentCode, course]) => {
         const newSuccessors = [...course.successors];
         let parentSemester = parseSemester(course.semester);
         
         newSuccessors.forEach((successorCode, i) => {
-            const successor = originalInfoData[successorCode];
+            const successor = oldDetails[successorCode];
             if (!successor) {return;}
 
             let succSemester = parseSemester(successor.semester);
@@ -141,22 +183,20 @@ export function addHelperNodesAndGetOffsets(originalInfoData, orderData) {
                 (i - (newSuccessors.length - 1) / 2) * 12
             );
 
-            // Create helper nodes in layers between connected subjects from distant semesters
             if (parentSemester == null || 
-                succSemester != null ||
-                parentSemester + 1 != succSemester || 
+                succSemester == null ||
+                parentSemester + 1 == succSemester || 
                 parentSemester > succSemester
             ) {
                 return;
             }
             createSuccessingHelperNodes(parentCode, parentSemester, successorCode,
-                                        succSemester, newSubjectInfoData, orderData,
+                                        succSemester, newDetails, subjectData,
                                         edgeYOffsets, offset);
         })
     });
-
-    fillEdgeXOffsets(edgeXOffsets, newSubjectInfoData, orderData);
-    return [newSubjectInfoData, edgeXOffsets, edgeYOffsets];
+    fillEdgeXOffsets(edgeXOffsets, newDetails, subjectData["order"]);
+    return [newDetails, edgeXOffsets, edgeYOffsets];
 }
 
 
@@ -167,17 +207,23 @@ export function getPositions(newSubjectInfoData, subjectOrderData, padding,
     let maxX = 0;
     let maxY = 0;
     let semestersCount = Object.keys(subjectOrderData).length;
-
     const [subtreeSizes, subtreeDepths] = getSubtreeSizes(newSubjectInfoData);
     
     const codeToPositions = {};
     const positionsToCode = Array.from({ length: semestersCount }, () => []);
+
     Object.values(subjectOrderData).forEach((semesterArray, semesterIndex) => {
         let positionIndex = 0;
-        semesterArray.forEach((code) => {
-            if (codeToPositions[code] || !newSubjectInfoData[code] || newSubjectInfoData[code].semester == "null") {
+
+        semesterArray.forEach((subject) => {
+            const code = subject.code || subject.choice;   // use choice code if it is a choice
+            if (codeToPositions[code] ||
+                !newSubjectInfoData[code] || 
+                newSubjectInfoData[code].semester == "null"
+            ) {
                 return;
             }
+
             let placed = false;
             while (!placed) {
                 if (getTreePositions(newSubjectInfoData, semesterIndex, 
@@ -205,10 +251,18 @@ export function getPositions(newSubjectInfoData, subjectOrderData, padding,
 
 function getTreePositions(newSubjectInfoData, semesterIndex, 
                           positionIndex, code, codeToPositions, positionsToCode) {
+    
+    // Position already occupied
     if ((positionsToCode[semesterIndex] &&
         positionsToCode[semesterIndex][positionIndex])) {
             return false;
     }
+
+    // Already drew this node
+    if (codeToPositions[code]) {
+        return true;
+    }
+
     let succs = newSubjectInfoData[code].successors;
     
     for (let i = 0; i < succs.length; i++) {

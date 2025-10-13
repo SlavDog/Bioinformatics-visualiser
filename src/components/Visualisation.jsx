@@ -1,4 +1,3 @@
-import subjectOrderData from '../data/order.json';
 import subjectInfoData from '../data/final_tree.json'
 import Subject from './Subject';
 import SmallSubject from './SmallSubject';
@@ -16,17 +15,17 @@ const subjectPadding = 16;
 const Visualisation = ({scale}) => {
     const [[newSubjectInfoData, edgeXOffsets, edgeYOffsets], setOffsets] = useState([[], [], []]);
     const [[positions, maxX, maxY], setPositions] = useState([[], 0, 0]);
-    const semesterCount = Object.keys(subjectOrderData).length;
+    const semesterCount = Object.keys(subjectInfoData["order"]).length;
     const SubjectComponent = scale < 0.5 ? SmallSubject : Subject;
 
     // Calculate positions and offsets only once
     useEffect(() => {
-        const offsets = addHelperNodesAndGetOffsets(subjectInfoData, subjectOrderData);
+        const offsets = addHelperNodesAndGetOffsets(subjectInfoData);
         setOffsets(offsets);
 
-        const pos = getPositions(offsets[0], subjectOrderData,
+        const pos = getPositions(offsets[0], subjectInfoData["order"],
                                  padding, columnWidth, rowHeight,
-                                subjectWidth, subjectHeight, subjectPadding);
+                                 subjectWidth, subjectHeight, subjectPadding);
         setPositions(pos);
     }, []);
 
