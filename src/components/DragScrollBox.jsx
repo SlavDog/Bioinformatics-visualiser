@@ -1,14 +1,16 @@
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect, cloneElement } from 'react';
 import Visualisation from './Visualisation';
 import SideBar from './SideBar';
 
 const DragScrollBox = () => {
     const boxRef = useRef(null);
     const [isDragging, setIsDragging] = useState(false);
+    const [dragEnabled, setDragEnabled] = useState(true);
     const [startX, setStartX] = useState(0);
     const [startY, setStartY] = useState(0);
 
     const onMouseDown = (e) => {
+        if (!dragEnabled) return;
         setIsDragging(true);
         setStartX(e.screenX);
         setStartY(e.screenY);
@@ -16,10 +18,9 @@ const DragScrollBox = () => {
 
 
     // Zoom in
-    const handleZoomIn = () => setScale(prevScale => Math.min(prevScale + 0.1, 1.05));
-    const handleZoomOut = () => setScale(prevScale => Math.max(prevScale - 0.1, 0.35));
-    const [scale, setScale] = useState(0.65);
-
+    const handleZoomIn = () => setScale(prevScale => Math.min(prevScale + 0.1, 1.5));
+    const handleZoomOut = () => setScale(prevScale => Math.max(prevScale - 0.1, 0.5));
+    const [scale, setScale] = useState(1.0);
 
     useEffect(() => {
 
@@ -71,8 +72,8 @@ const DragScrollBox = () => {
                 <button className='zoomButton' onClick={handleZoomIn} style={{ marginRight: '8px' }}>➕ Zoom In</button>
                 <button className='zoomButton' onClick={handleZoomOut}>➖ Zoom Out</button>
             </div>
-            <SideBar ></SideBar>
-            <Visualisation scale={scale}/>
+
+            <Visualisation scale={scale} setDragEnabled={setDragEnabled}/>
         </div>
         </>
   );

@@ -5,18 +5,18 @@ import Connections from './Connections';
 import { useState, useEffect } from 'react';
 import {addHelperNodesAndGetOffsets, getPositions} from '../utils/helperFunctions'
 
-const columnWidth = 400;
-const rowHeight = 200;
-const subjectHeight = 140;
-const subjectWidth = 250;
+const columnWidth = 325;
+const rowHeight = 175;
+const subjectHeight = 115;
+const subjectWidth = 200;
 const padding = 25;
 const subjectPadding = 16;
 
-const Visualisation = ({scale}) => {
+const Visualisation = ({scale, setDragEnabled}) => {
     const [[newSubjectInfoData, edgeXOffsets, edgeYOffsets], setOffsets] = useState([[], [], []]);
     const [[positions, maxX, maxY], setPositions] = useState([[], 0, 0]);
     const semesterCount = Object.keys(subjectInfoData["order"]).length;
-    const SubjectComponent = scale < 0.5 ? SmallSubject : Subject;
+    const SubjectComponent = scale < 0.7 ? SmallSubject : Subject;
 
     // Calculate positions and offsets only once
     useEffect(() => {
@@ -83,6 +83,7 @@ const Visualisation = ({scale}) => {
                             key={code}
                             code={code}
                             course={course}
+                            setDragEnabled={setDragEnabled}
                             style={{
                                 position: "absolute",
                                 left: positions[code].x,
