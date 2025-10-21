@@ -35,7 +35,7 @@ const Subject = ({ code, course, style, setDragEnabled }) => {
                         <p className="subjectCredits">{course.credits} kr.</p>
                     </div>
                 </div>
-                <SubjectDetailMenu open={isOpen} onClose={() => {setIsOpen(false); setDragEnabled(true);}} source={detailMenuSourceName}/>
+                <SubjectDetailMenu open={isOpen} onClose={() => {setIsOpen(false); setDragEnabled(true);}} source={detailMenuSourceName} setIsOpen={setIsOpen}/>
             </>
         );
 }
