@@ -169,7 +169,7 @@ def replace_any(match):
     return "(" + " | ".join(args) + ")"
 
 
-def transform_code_to_link(code: str) -> str:
+def transform_code_to_link(code: str, faculty: str = "") -> str:
     """
     Transform a subject code into a URL path.
 
@@ -183,8 +183,9 @@ def transform_code_to_link(code: str) -> str:
     match = pattern.search(code)
     if match:
         return f"/predmet/sci/{match.group(1)}"
-    else:
-        return f"/predmet/fi/{code}"
+    if faculty == "Přírodovědecká fakulta":
+        return f"/predmet/sci/{code}"
+    return f"/predmet/fi/{code}"
 
 
 def transform_link_to_code(link: str) -> str:
@@ -257,6 +258,8 @@ def get_subject(html: str, code: str, semester, predecessors) \
     faculty_match = re.search(re.compile(r"</H2>\s*\n\s*<b>([^<]+)</b>", re.IGNORECASE), html)
     faculty = faculty_match.group(1).strip()
 
+    print(transform_code_to_link(code, faculty))
+
     language = "Čeština"
     language_match = re.search(re.compile(r"<DT>\s*<B>Vyučovací jazyk</B>\s*</DT>\s*\n\s*<DD>([^<]+)</DD>"), html)
     if language_match:
@@ -290,7 +293,7 @@ def get_subject(html: str, code: str, semester, predecessors) \
             "successors": list(successor_codes), "language": transform_language(language),
             "predecessors": [],
             "completion": completion,
-            "credits": credit, "link": transform_code_to_link(code),
+            "credits": credit, "link": transform_code_to_link(code, faculty),
             "semester" : semester, "type" : code_to_subj_type(code)}
 
 

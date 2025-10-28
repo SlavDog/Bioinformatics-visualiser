@@ -161,7 +161,6 @@ function addChoiceNodes(details, order, choices) {
             };
         });
     })
-    console.log(details);
 }
 
 
@@ -269,7 +268,6 @@ function getTreePositions(newSubjectInfoData, semesterIndex,
     }
 
     let succs = newSubjectInfoData[code].successors;
-    
     for (let i = 0; i < succs.length; i++) {
         if (newSubjectInfoData[succs[i]].semester != "null"
             && !isInSomeChoice(succs[i], choices)
