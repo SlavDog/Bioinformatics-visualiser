@@ -3,7 +3,7 @@ import Subject from './Subject';
 import SmallSubject from './SmallSubject';
 import Connections from './Connections';
 import { useState, useEffect } from 'react';
-import {addHelperNodesAndGetOffsets, getPositions} from '../utils/helperFunctions'
+import {addHelperNodesAndGetOffsets, getPositions, isInSomeChoice} from '../utils/helperFunctions'
 
 const columnWidth = 325;
 const rowHeight = 175;
@@ -79,7 +79,7 @@ const Visualisation = ({scale, setDragEnabled}) => {
                     />
                     {Object.entries(newSubjectInfoData).map(([code, course]) => {
                         const pos = positions[code];
-                        if (!pos || course.name == "") return null;
+                        if (!pos || course.name == "" || isInSomeChoice(code, subjectInfoData["choices"])) return null;
                         return (<SubjectComponent
                             key={code}
                             code={code}

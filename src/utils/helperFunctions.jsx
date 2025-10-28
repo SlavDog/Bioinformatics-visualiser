@@ -144,7 +144,11 @@ function addChoiceNodes(details, order, choices) {
                     .filter(item => !choices[code].list.includes(item));
             }
 
-           
+            predecessors.forEach(predCode => {
+                details[predCode].successors = details[predCode].successors
+                                                .filter(subject => !isInSomeChoice(subject, choices));
+                details[predCode].successors.push(code);
+            });
             
             details[code] = {
                 ...emptyNode,
@@ -157,6 +161,7 @@ function addChoiceNodes(details, order, choices) {
             };
         });
     })
+    console.log(details);
 }
 
 
@@ -219,7 +224,7 @@ export function getPositions(newSubjectInfoData, subjectOrderData, choices, padd
             if (codeToPositions[code]
                 || !newSubjectInfoData[code]
                 || newSubjectInfoData[code].semester == "null"
-                || isInSomeChoice(subject, choices)
+                || isInSomeChoice(code, choices)
             ) {
                 return;
             }
@@ -267,7 +272,7 @@ function getTreePositions(newSubjectInfoData, semesterIndex,
     
     for (let i = 0; i < succs.length; i++) {
         if (newSubjectInfoData[succs[i]].semester != "null"
-            && !isInSomeChoice(newSubjectInfoData[succs[i]], choices)
+            && !isInSomeChoice(succs[i], choices)
             && !getTreePositions(newSubjectInfoData, semesterIndex + 1,
                                  i + positionIndex, succs[i], codeToPositions,
                                  positionsToCode, choices)) {
@@ -279,7 +284,7 @@ function getTreePositions(newSubjectInfoData, semesterIndex,
     return true;
 }
 
-function isInSomeChoice(subject, choices) {
+export function isInSomeChoice(subject, choices) {
     return Object.values(choices)
         .some(v => v.list
             .some(item => item == subject || item.code == subject));
