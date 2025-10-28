@@ -99,7 +99,7 @@ def find_successor_codes(html: str, code: str, by_prerequisites = True) -> list[
 
     if not by_prerequisites:
         pattern = re.compile(r'<a href="(?:/(?:auth/)?predmet/[^"]+)"><b>([^<]+)</b>(?:.*?)</a>', re.IGNORECASE)
-        return pattern.findall(section)
+        return [(code, False) for code in pattern.findall(section)]
     
     pattern = re.compile(r'<a href="/(?:auth/)?predmet/[^"]+"><b>([^<>]+)</b>.*?</a><br\s*/>\s*\n?(.*?)(?=&nbsp;)', re.IGNORECASE)
     
@@ -112,8 +112,8 @@ def find_successor_codes(html: str, code: str, by_prerequisites = True) -> list[
             result.append(successor_subject)
         except:
             print(f"Couldn't evaluate prerequisite formula {formula} for subject {successor_subject}. Skipping.")
-            
-    return result
+
+    return [(code, True) for code in result]
     
 
 def parse_and_evaluate_formula(code: str, formula: str) -> bool:
@@ -281,13 +281,17 @@ def get_subject(html: str, code: str, semester, predecessors) \
 
     successor_codes = set(find_successor_codes(html, code, False)) \
                           .union(find_successor_codes(html, code, True))
+    successor_codes = [{"code" : code, "by_prerequisites": by_prerequisites} for code, by_prerequisites in successor_codes]
     print(f"    {successor_codes if successor_codes else "{}"}")
 
     for successor in successor_codes:
-        if not successor in predecessors:
-            predecessors[successor] = [code]
+        temp_subject = {"code" : code, "by_prerequisites": successor["by_prerequisites"]}
+        if not successor["code"] in predecessors:
+            predecessors[successor["code"]] = [temp_subject]
         else:
-            predecessors[successor].append(code)
+            predecessors[successor["code"]].append(temp_subject)
+    print("--------")
+    print(predecessors)
 
     return {"name": name, "faculty": transform_faculty(faculty),
             "successors": list(successor_codes), "language": transform_language(language),
@@ -330,14 +334,9 @@ def clean_dict(data):
     for key in data:
         result = []
         for child in data[key]["successors"]:
-            if child in data:
+            if child["code"] in data:
                 result.append(child)
-        data[key]["successors"] = [child for child in data[key]["successors"] if child in data]
-        
-        if data[key]["successors"]:
-            data[key]["has_successors"] = True
-            for successor in data[key]["successors"]:
-                data[successor]["has_parent"] = True
+        data[key]["successors"] = [child for child in data[key]["successors"] if child["code"] in data]
     return data
 
 

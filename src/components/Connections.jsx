@@ -3,8 +3,9 @@ const Connections = ({subjectInfoData, positions, xOffsets, yOffsets,
   return (
     <svg className='connections'>
         {Object.entries(subjectInfoData).map(([startCode, course]) => {
-            return course.successors.map((endCode, i) => {
+            return course.successors.map((endInfo, i) => {
                 const start = positions[startCode];
+                const endCode = endInfo.code;
                 const end = positions[endCode];
                 if (!start || !end) { return null; }
                 const startX = start.x + subjectWidth / 2 + subjectPadding;
@@ -23,8 +24,9 @@ const Connections = ({subjectInfoData, positions, xOffsets, yOffsets,
                     L ${midX + xOffset} ${endY + yOffset}
                     L ${endX} ${endY + yOffset}
                 `;
+                let nonPrerequisite = !endInfo.by_prerequisites;
                 return (<path key={`${startCode}-${endCode}-${i}`} d={path}
-                    stroke="black" fill="transparent" strokeWidth="2" />);
+                    stroke={nonPrerequisite ? "gray" : "black"} fill="transparent" strokeWidth="2" strokeDasharray={nonPrerequisite ? "2 3" : "none"}/>);
             })}
         )}
     </svg>

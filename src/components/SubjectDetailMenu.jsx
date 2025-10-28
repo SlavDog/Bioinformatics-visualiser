@@ -61,7 +61,7 @@ const SubjectDetailMenu = ({open, onClose, source}) => {
                                     fontFamily='Inter'
                                     fill={predLineColor}
                                 >
-                                    ⬇️ Předcházející: {course.predecessors.join(', ')}
+                                    ⬇️ Předcházející: {course.predecessors.map(subject => subject.code).join(', ')}
                                 </text>
                             </svg>
                                 <Subject
@@ -91,7 +91,7 @@ const SubjectDetailMenu = ({open, onClose, source}) => {
                                     fontFamily='Inter'
                                     fill={succLineColor}
                                 >
-                                    ⬇️ Navazující: {course.successors.join(', ')}
+                                    ⬇️ Navazující: {course.successors.map(subject => subject.code).join(', ')}
                                 </text>
                             </svg>
                         </div>

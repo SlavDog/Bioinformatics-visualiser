@@ -24,7 +24,7 @@ function ensureOffset(allOffsets, key, offsetToAdd) {
 }
 
 
-function createHelperNode(infoData, orderData, prevNodeCode, currentNodeCode, semester) {
+function createHelperNode(infoData, orderData, prevNodeCode, currentNodeCode, semester, byPrerequisites) {
     if (!infoData[currentNodeCode]) {
         infoData[currentNodeCode] = {
             ...emptyNode,
@@ -34,15 +34,15 @@ function createHelperNode(infoData, orderData, prevNodeCode, currentNodeCode, se
     if (!orderData[semester].some(s => s.code === currentNodeCode))
         orderData[semester].push({"code": currentNodeCode});
     }
-    infoData[prevNodeCode].successors.push(currentNodeCode);
+    infoData[prevNodeCode].successors.push({"code": currentNodeCode, "by_prerequisites": byPrerequisites});
 }
 
 
 function fillEdgeXOffsets(edgeXOffsets, infoData, orderData) {
     const numberOfSuccsBySemester = Array(Object.keys(orderData).length).fill(0);
     Object.values(infoData).forEach(course => {
-        course.successors.forEach((successorCode) => {
-            if (infoData[successorCode].semester != "null") {
+        course.successors.forEach((successor) => {
+            if (infoData[successor.code].semester != "null") {
                 numberOfSuccsBySemester[course.semester - 1] += 1;
             }
         });
@@ -53,8 +53,8 @@ function fillEdgeXOffsets(edgeXOffsets, infoData, orderData) {
         subjects.forEach(parent => {
             const parentCode = parent.code ?? parent.choice;
             if (!infoData[parentCode]) {return;}
-            infoData[parentCode].successors.forEach(successorCode => {
-                ensureOffset(edgeXOffsets, `${parentCode}-${successorCode}`,
+            infoData[parentCode].successors.forEach(successor => {
+                ensureOffset(edgeXOffsets, `${parentCode}-${successor.code}`,
                     (i - (numberOfSuccsBySemester[semester] - 1) / 2) * 12);
                 i += 1;
            })
@@ -67,26 +67,28 @@ function createSuccessingHelperNodes(parentCode, parentSemester,
                                      successorCode, succSemester,
                                      subjectInfoData, subjectData,
                                      edgeYOffsets, offset) {
-    if (!subjectInfoData[parentCode].successors.includes(successorCode)) {
+    if (!subjectInfoData[parentCode].successors.some(succ => succ.code == successorCode)) {
         return;
     }
+
+    const byPrerequisites = subjectInfoData[parentCode].successors
+        .filter(successor => successor.code == successorCode)[0].by_prerequisites;
     
     // remove direct link
     subjectInfoData[parentCode].successors = subjectInfoData[parentCode].successors
-        .filter(item => item !== successorCode);
-    
-        let prevNode = parentCode;
-    
+        .filter(item => item.code !== successorCode);
+    let prevNode = parentCode;
+
     // insert new helper nodes
     for (let i = parentSemester + 1; i < succSemester; i++) {
         let helperNodeCode = `HELPER_${successorCode}_${i}`;
-        createHelperNode(subjectInfoData, subjectData["order"], prevNode, helperNodeCode, i);
+        createHelperNode(subjectInfoData, subjectData["order"], prevNode, helperNodeCode, i, byPrerequisites);
         ensureOffset(edgeYOffsets, `${prevNode}-${helperNodeCode}`, offset);
         prevNode = helperNodeCode;
     }
 
     // connect last helper to successor
-    subjectInfoData[prevNode].successors.push(successorCode);
+    subjectInfoData[prevNode].successors.push({"code": successorCode, "by_prerequisites": byPrerequisites});
     ensureOffset(edgeYOffsets, `${prevNode}-${successorCode}`, offset);
 }
 
@@ -137,17 +139,17 @@ function addChoiceNodes(details, order, choices) {
             if (code != "core" && code != "tv") {
                 successors = choices[code].list
                     .flatMap(item => details[item].successors)
-                    .filter(item => !choices[code].list.includes(item));
+                    .filter(item => !choices[code].list.includes(item.code));
 
                 predecessors = choices[code].list
                     .flatMap(item => details[item].predecessors)
-                    .filter(item => !choices[code].list.includes(item));
+                    .filter(item => !choices[code].list.includes(item.code));
             }
 
-            predecessors.forEach(predCode => {
-                details[predCode].successors = details[predCode].successors
-                                                .filter(subject => !isInSomeChoice(subject, choices));
-                details[predCode].successors.push(code);
+            predecessors.forEach(predecessor => {
+                details[predecessor.code].successors = details[predecessor.code].successors
+                                                .filter(subject => !isInSomeChoice(subject.code, choices));
+                details[predecessor.code].successors.push({"code": code, "by_prerequisites": true});
             });
             
             details[code] = {
@@ -175,14 +177,14 @@ export function addHelperNodesAndGetOffsets(subjectData) {
         const newSuccessors = [...course.successors];
         let parentSemester = parseSemester(course.semester);
         
-        newSuccessors.forEach((successorCode, i) => {
-            const successor = oldDetails[successorCode];
+        newSuccessors.forEach((successorInfo, i) => {
+            const successor = oldDetails[successorInfo.code];
             if (!successor) {return;}
 
             let succSemester = parseSemester(successor.semester);
             const offset = ensureOffset(
                 edgeYOffsets,
-                `${parentCode}-${successorCode}`,
+                `${parentCode}-${successorInfo.code}`,
                 (i - (newSuccessors.length - 1) / 2) * 12
             );
 
@@ -193,7 +195,7 @@ export function addHelperNodesAndGetOffsets(subjectData) {
             ) {
                 return;
             }
-            createSuccessingHelperNodes(parentCode, parentSemester, successorCode,
+            createSuccessingHelperNodes(parentCode, parentSemester, successorInfo.code,
                                         succSemester, newDetails, subjectData,
                                         edgeYOffsets, offset);
         })
@@ -269,10 +271,10 @@ function getTreePositions(newSubjectInfoData, semesterIndex,
 
     let succs = newSubjectInfoData[code].successors;
     for (let i = 0; i < succs.length; i++) {
-        if (newSubjectInfoData[succs[i]].semester != "null"
-            && !isInSomeChoice(succs[i], choices)
+        if (newSubjectInfoData[succs[i].code].semester != "null"
+            && !isInSomeChoice(succs[i].code, choices)
             && !getTreePositions(newSubjectInfoData, semesterIndex + 1,
-                                 i + positionIndex, succs[i], codeToPositions,
+                                 i + positionIndex, succs[i].code, codeToPositions,
                                  positionsToCode, choices)) {
             return false;
         }
