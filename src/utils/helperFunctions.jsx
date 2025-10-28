@@ -47,10 +47,11 @@ function fillEdgeXOffsets(edgeXOffsets, infoData, orderData) {
             }
         });
     });
+
     Object.entries(orderData).forEach(([semester, subjects]) => {
         let i = 0;
         subjects.forEach(parent => {
-            const parentCode = parent.code;
+            const parentCode = parent.code ?? parent.choice;
             if (!infoData[parentCode]) {return;}
             infoData[parentCode].successors.forEach(successorCode => {
                 ensureOffset(edgeXOffsets, `${parentCode}-${successorCode}`,
@@ -66,6 +67,10 @@ function createSuccessingHelperNodes(parentCode, parentSemester,
                                      successorCode, succSemester,
                                      subjectInfoData, subjectData,
                                      edgeYOffsets, offset) {
+    if (!subjectInfoData[parentCode].successors.includes(successorCode)) {
+        return;
+    }
+    
     // remove direct link
     subjectInfoData[parentCode].successors = subjectInfoData[parentCode].successors
         .filter(item => item !== successorCode);
@@ -126,32 +131,26 @@ function addChoiceNodes(details, order, choices) {
     Object.entries(order).forEach(([semester, subjectList]) => {
         subjectList.filter((subject) => subject["choice"] != undefined).forEach((choiceSubject) => {
             const code = choiceSubject["choice"];
-            let hasPredecessors = false;
-            
 
-            const successors = [];
+            let successors = [];
+            let predecessors = [];
             if (code != "core" && code != "tv") {
-                choices[code].list
+                successors = choices[code].list
                     .flatMap(item => details[item].successors)
+                    .filter(item => !choices[code].list.includes(item));
+
+                predecessors = choices[code].list
+                    .flatMap(item => details[item].predecessors)
                     .filter(item => !choices[code].list.includes(item));
             }
 
-            Object.values(details).forEach((item) => {
-                item.successors = item.successors.map((succ) => {
-                    if (choices[code].list.includes(succ)) {
-                        hasPredecessors = true;
-                        return code;
-                    }
-                    return succ;
-                })
-            })
+           
             
             details[code] = {
                 ...emptyNode,
                 name: choices[code].refnCZ,
                 successors: successors, 
-                has_successors: successors.length != 0,
-                has_parent: hasPredecessors, 
+                predecessors: predecessors,
                 credits: choiceSubject.credits,
                 semester: Number(semester),
                 type: "choice"
@@ -164,9 +163,9 @@ function addChoiceNodes(details, order, choices) {
 export function addHelperNodesAndGetOffsets(subjectData) {
     const edgeXOffsets = {};
     const edgeYOffsets = {};
+    addChoiceNodes(subjectData["details"], subjectData["order"], subjectData["choices"]);
     const newDetails = structuredClone(subjectData["details"]);
     const oldDetails = subjectData["details"];
-    addChoiceNodes(newDetails, subjectData["order"], subjectData["choices"]);
 
     Object.entries(oldDetails).forEach(([parentCode, course]) => {
         const newSuccessors = [...course.successors];
@@ -201,13 +200,13 @@ export function addHelperNodesAndGetOffsets(subjectData) {
 
 
 
-export function getPositions(newSubjectInfoData, subjectOrderData, padding,
+export function getPositions(newSubjectInfoData, subjectOrderData, choices, padding,
                              columnWidth, rowHeight, subjectWidth,
                              subjectHeight, subjectPadding) {
     let maxX = 0;
     let maxY = 0;
     let semestersCount = Object.keys(subjectOrderData).length;
-    const [subtreeSizes, subtreeDepths] = getSubtreeSizes(newSubjectInfoData);
+    // const [subtreeSizes, subtreeDepths] = getSubtreeSizes(newSubjectInfoData);
     
     const codeToPositions = {};
     const positionsToCode = Array.from({ length: semestersCount }, () => []);
@@ -217,9 +216,10 @@ export function getPositions(newSubjectInfoData, subjectOrderData, padding,
 
         semesterArray.forEach((subject) => {
             const code = subject.code || subject.choice;   // use choice code if it is a choice
-            if (codeToPositions[code] ||
-                !newSubjectInfoData[code] || 
-                newSubjectInfoData[code].semester == "null"
+            if (codeToPositions[code]
+                || !newSubjectInfoData[code]
+                || newSubjectInfoData[code].semester == "null"
+                || isInSomeChoice(subject, choices)
             ) {
                 return;
             }
@@ -228,7 +228,7 @@ export function getPositions(newSubjectInfoData, subjectOrderData, padding,
             while (!placed) {
                 if (getTreePositions(newSubjectInfoData, semesterIndex, 
                                     positionIndex, code, codeToPositions,
-                                    positionsToCode)) {
+                                    positionsToCode, choices)) {
                     placed = true;
                 }
                 positionIndex++;
@@ -250,11 +250,11 @@ export function getPositions(newSubjectInfoData, subjectOrderData, padding,
 }
 
 function getTreePositions(newSubjectInfoData, semesterIndex, 
-                          positionIndex, code, codeToPositions, positionsToCode) {
-    
+                          positionIndex, code, codeToPositions, 
+                          positionsToCode, choices) {
     // Position already occupied
-    if ((positionsToCode[semesterIndex] &&
-        positionsToCode[semesterIndex][positionIndex])) {
+    if ((positionsToCode[semesterIndex]
+        && positionsToCode[semesterIndex][positionIndex])) {
             return false;
     }
 
@@ -267,13 +267,20 @@ function getTreePositions(newSubjectInfoData, semesterIndex,
     
     for (let i = 0; i < succs.length; i++) {
         if (newSubjectInfoData[succs[i]].semester != "null"
+            && !isInSomeChoice(newSubjectInfoData[succs[i]], choices)
             && !getTreePositions(newSubjectInfoData, semesterIndex + 1,
                                  i + positionIndex, succs[i], codeToPositions,
-                                 positionsToCode)) {
+                                 positionsToCode, choices)) {
             return false;
         }
     }
     codeToPositions[code] = [semesterIndex, positionIndex];
     positionsToCode[semesterIndex][positionIndex] = code;
     return true;
+}
+
+function isInSomeChoice(subject, choices) {
+    return Object.values(choices)
+        .some(v => v.list
+            .some(item => item == subject || item.code == subject));
 }

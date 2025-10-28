@@ -4,7 +4,6 @@ const Connections = ({subjectInfoData, positions, xOffsets, yOffsets,
     <svg className='connections'>
         {Object.entries(subjectInfoData).map(([startCode, course]) => {
             return course.successors.map((endCode, i) => {
-
                 const start = positions[startCode];
                 const end = positions[endCode];
                 if (!start || !end) { return null; }

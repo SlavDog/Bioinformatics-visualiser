@@ -24,6 +24,7 @@ const Visualisation = ({scale, setDragEnabled}) => {
         setOffsets(offsets);
 
         const pos = getPositions(offsets[0], subjectInfoData["order"],
+                                 subjectInfoData["choices"],
                                  padding, columnWidth, rowHeight,
                                  subjectWidth, subjectHeight, subjectPadding);
         setPositions(pos);

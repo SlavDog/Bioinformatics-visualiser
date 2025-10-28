@@ -40,19 +40,29 @@ const SubjectDetailMenu = ({open, onClose, source}) => {
                 {Object.values(subjectInfoData["choices"][source]["list"]).map((code) => {
                     if (source == "tv" || source == "CORE") return "TV or CORE";
                     let course = subjectInfoData["details"][code];
-                    let predLineColor = course.has_predecessors ? "black" : "transparent";
-                    let succLineColor = course.has_successors ? "black" : "transparent";
+                    let predLineColor = course.predecessors.length != 0 ? "black" : "transparent";
+                    let succLineColor = course.successors.length != 0 ? "black" : "transparent";
 
                     return (
                         <div style={{display: "flex", flexDirection: "column", alignItems:"center"}}>
                             <svg width={subjectWidth} height="60">
                                 <line 
                                     key="vertline" 
-                                    x1={subjectWidth / 2} y1="10" 
+                                    x1={subjectWidth / 2} y1="20" 
                                     x2={subjectWidth / 2} y2="60" 
                                     stroke={predLineColor} 
                                     strokeDasharray="5 5" 
                                     strokeWidth="2" />
+                                <text 
+                                    x={subjectWidth / 2} 
+                                    y="10" 
+                                    textAnchor="middle" 
+                                    fontSize="12"
+                                    fontFamily='Inter'
+                                    fill={predLineColor}
+                                >
+                                    ⬇️ Předcházející: {course.predecessors.join(', ')}
+                                </text>
                             </svg>
                                 <Subject
                                 key={code}

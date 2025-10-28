@@ -225,7 +225,9 @@ def build_successor_dict(data) \
         
     """
     subject_codes = data["codes"]
-    result: SubjectSuccessors = {}
+    subject_data = {}
+    predecessors = {}
+
     for code in subject_codes:
         link = transform_code_to_link(code)
 
@@ -233,16 +235,19 @@ def build_successor_dict(data) \
         if response.status_code == 200:
             html = response.text
             semester = "null" if not code in data["codes_to_sem"] else data["codes_to_sem"][code]
-            result[code] = get_subject(html, code, semester)
+            subject_data[code] = get_subject(html, code, semester, predecessors)
         else:
             print("Failed to fetch page:", response.status_code)
 
         time.sleep(1)
 
-    return result
+    for subject in predecessors:
+        if subject in subject_data:
+            subject_data[subject]["predecessors"] = predecessors[subject]
+    return subject_data
 
 
-def get_subject(html: str, code: str, semester) \
+def get_subject(html: str, code: str, semester, predecessors) \
         -> tuple[str, str, str, str]:
     code = re.sub(r"^[^:]*:(.*)", r"\1", code)
     name_match = re.search(re.compile(rf"<H2>{code}\s([^<]+)", re.IGNORECASE), html)
@@ -275,11 +280,19 @@ def get_subject(html: str, code: str, semester) \
                           .union(find_successor_codes(html, code, True))
     print(f"    {successor_codes if successor_codes else "{}"}")
 
+    for successor in successor_codes:
+        if not successor in predecessors:
+            predecessors[successor] = [code]
+        else:
+            predecessors[successor].append(code)
+
     return {"name": name, "faculty": transform_faculty(faculty),
             "successors": list(successor_codes), "language": transform_language(language),
-            "completion": completion, "has_successors": False, "has_parent": False,
+            "predecessors": [],
+            "completion": completion,
             "credits": credit, "link": transform_code_to_link(code),
             "semester" : semester, "type" : code_to_subj_type(code)}
+
 
 def transform_faculty(full_faculty_name: str) -> str:
     match full_faculty_name:
