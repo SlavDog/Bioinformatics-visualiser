@@ -2,7 +2,7 @@ import './Subject.css'
 import SubjectDetailMenu from './SubjectDetailMenu';
 import { useState } from 'react';
 
-const SmallSubject = ({ code, course, style }) => {
+const SmallSubject = ({ code, course, style, setDragEnabled }) => {
     const [isOpen, setIsOpen] = useState(false);
     const link = "https://is.muni.cz" + course.link;
     let Info = <a className="smallSubjectCode" draggable="false" href={link}>{code}</a>;
@@ -16,6 +16,9 @@ const SmallSubject = ({ code, course, style }) => {
         detailMenuSourceName = code;
         Info = <a className="smallSubjectCode">{code}</a>
     }
+
+    let limit = course.credits ?? course.subjects;
+
     return (
         <>
             <div onClick={onClick} className={`subject subjectType${course.type}`} style={{...style, borderRadius: "0px", borderWidth: "4px"}}>
@@ -24,10 +27,10 @@ const SmallSubject = ({ code, course, style }) => {
                 </div>
                 <div style={{ backgroundColor: "#a5a5a5", height: "2px", width: "50%", alignSelf: 'center' }}></div>
                 <div className="smallBottomSubjectContainer">
-                    <p className="smallSubjectCredits">{course.credits} kr.</p>
+                    <p className="smallSubjectCredits">{limit} {course.credits ? "kr." : "předm."}</p>
                 </div>
             </div>
-            <SubjectDetailMenu open={isOpen} onClose={() => {setIsOpen(false); setDragEnabled(true);}} source={detailMenuSourceName} setIsOpen={setIsOpen}/>
+            <SubjectDetailMenu open={isOpen} onClose={() => {setIsOpen(false); setDragEnabled(true);}} source={detailMenuSourceName} setIsOpen={setIsOpen} credits={limit}/>
         </>
     );
 }

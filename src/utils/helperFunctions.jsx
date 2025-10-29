@@ -158,6 +158,7 @@ function addChoiceNodes(details, order, choices) {
                 successors: successors, 
                 predecessors: predecessors,
                 credits: choiceSubject.credits,
+                subjects: choiceSubject.subjects,
                 semester: Number(semester),
                 type: "choice"
             };

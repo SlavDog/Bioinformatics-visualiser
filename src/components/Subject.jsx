@@ -7,7 +7,7 @@ const Subject = ({ code, course, style, setDragEnabled }) => {
     const link = "https://is.muni.cz" + course.link;
 
     let Info = <><p className="subjectCode">{code}</p>
-                 <a className="subjectName" draggable="false" href={link}>{course.name}</a>
+                 <a className="subjectName" draggable="false" href={link} target='_blank'>{course.name}</a>
                  <p className="subjectInfo">{course.faculty} / {course.language} / {course.completion}</p></>;
     let onClick = () => {};
     let detailMenuSourceName = "";
@@ -21,6 +21,8 @@ const Subject = ({ code, course, style, setDragEnabled }) => {
         detailMenuSourceName = code;
     }
 
+    let limit = course.credits ?? course.subjects;
+
         return (
             <>
                 <div onClick={onClick} className={`subject subjectType${course.type}`} style={style}>
@@ -32,10 +34,10 @@ const Subject = ({ code, course, style, setDragEnabled }) => {
                             <div className="circle"></div>
                             <div className="circle"></div>
                         </div>
-                        <p className="subjectCredits">{course.credits} kr.</p>
+                        <p className="subjectCredits">{limit} {course.credits ? "kr." : "předm."}</p>
                     </div>
                 </div>
-                <SubjectDetailMenu open={isOpen} onClose={() => {setIsOpen(false); setDragEnabled(true);}} source={detailMenuSourceName} setIsOpen={setIsOpen}/>
+                <SubjectDetailMenu open={isOpen} onClose={() => {setIsOpen(false); setDragEnabled(true);}} source={detailMenuSourceName} setIsOpen={setIsOpen} credits={limit}/>
             </>
         );
 }
