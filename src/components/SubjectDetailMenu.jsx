@@ -14,6 +14,8 @@ const SubjectDetailMenu = ({open, onClose, source, credits}) => {
     const [isVisible, setIsVisible] = useState(false);
     const [isAnimatingOpen, setIsAnimatingOpen] = useState(false);
     
+
+    const handleEscape = (event) => { if (event.key === "Escape") { onClose(); }}
     useEffect(() => {
         if (open) {
             setIsVisible(true);
@@ -22,9 +24,11 @@ const SubjectDetailMenu = ({open, onClose, source, credits}) => {
 
             // Adding delay so that the element is already
             // added to DOM when we render the animation
+            document.addEventListener("keydown", handleEscape);
             setTimeout(() => setIsAnimatingOpen(true), 20);
         } else if (isVisible) {
             setIsClosing(true);
+            document.removeEventListener("keydown", handleEscape);
             setTimeout(() => setIsVisible(false), 300);
         }
     }, [open]);
