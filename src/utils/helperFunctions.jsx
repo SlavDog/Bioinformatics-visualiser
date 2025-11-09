@@ -42,6 +42,7 @@ function fillEdgeXOffsets(edgeXOffsets, infoData, orderData) {
     const numberOfSuccsBySemester = Array(Object.keys(orderData).length).fill(0);
     Object.values(infoData).forEach(course => {
         course.successors.forEach((successor) => {
+            if (!infoData[successor.code]) {return;}
             if (infoData[successor.code].semester != "null") {
                 numberOfSuccsBySemester[course.semester - 1] += 1;
             }
@@ -54,6 +55,7 @@ function fillEdgeXOffsets(edgeXOffsets, infoData, orderData) {
             const parentCode = parent.code ?? parent.choice;
             if (!infoData[parentCode]) {return;}
             infoData[parentCode].successors.forEach(successor => {
+                if (!infoData[successor.code]) {return;}
                 ensureOffset(edgeXOffsets, `${parentCode}-${successor.code}`,
                     (i - (numberOfSuccsBySemester[semester] - 1) / 2) * 12);
                 i += 1;
@@ -270,15 +272,19 @@ function getTreePositions(newSubjectInfoData, semesterIndex,
         return true;
     }
 
+    debugger;
     let succs = newSubjectInfoData[code].successors;
+    let currentY = positionIndex;
     for (let i = 0; i < succs.length; i++) {
+        if (!newSubjectInfoData[succs[i].code]) { continue; }   // successor not in data, move to another one
         if (newSubjectInfoData[succs[i].code].semester != "null"
             && !isInSomeChoice(succs[i].code, choices)
             && !getTreePositions(newSubjectInfoData, semesterIndex + 1,
-                                 i + positionIndex, succs[i].code, codeToPositions,
+                                 currentY, succs[i].code, codeToPositions,
                                  positionsToCode, choices)) {
             return false;
         }
+        currentY += 1;
     }
     codeToPositions[code] = [semesterIndex, positionIndex];
     positionsToCode[semesterIndex][positionIndex] = code;

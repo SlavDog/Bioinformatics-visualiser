@@ -2,7 +2,7 @@ import re
 import json
 import requests
 import time
-from sympy import Symbol, simplify_logic
+from sympy import Not, Symbol, simplify_logic, Or, And
 from bs4 import BeautifulSoup
 import os
 
@@ -94,12 +94,12 @@ def find_successor_codes(html: str, code: str, by_prerequisites = True) -> list[
     )
     match = section_pattern.search(html)
     if not match:
-        return []
+        return {}
     section = match.group(1)
 
     if not by_prerequisites:
         pattern = re.compile(r'<a href="(?:/(?:auth/)?predmet/[^"]+)"><b>([^<]+)</b>(?:.*?)</a>', re.IGNORECASE)
-        return [(code, False) for code in pattern.findall(section)]
+        return {code : ([], False) for code in pattern.findall(section)}
     
     pattern = re.compile(r'<a href="/(?:auth/)?predmet/[^"]+"><b>([^<>]+)</b>.*?</a><br\s*/>\s*\n?(.*?)(?=&nbsp;)', re.IGNORECASE)
     
@@ -108,12 +108,14 @@ def find_successor_codes(html: str, code: str, by_prerequisites = True) -> list[
     for successor_subject, formula in found_subjects_with_prerequisites:
         formula = BeautifulSoup(formula, "html.parser").get_text() # clean from HTML tags
         try: 
-            parse_and_evaluate_formula(code, formula)
-            result.append(successor_subject)
-        except:
+            required, groups = parse_and_evaluate_formula(code, formula)
+            if required:
+                result.append((successor_subject, groups))
+        except Exception as e:
+            print(e)
             print(f"Couldn't evaluate prerequisite formula {formula} for subject {successor_subject}. Skipping.")
 
-    return [(code, True) for code in result]
+    return {code : (group, True) for code, group in result}
     
 
 def parse_and_evaluate_formula(code: str, formula: str) -> bool:
@@ -132,9 +134,10 @@ def parse_and_evaluate_formula(code: str, formula: str) -> bool:
             The raw prerequisite formula of the successor subject.
 
     Returns:
-        bool:
-            True if the subject with the given code is required for the
-            successor subject, False otherwise.
+        Tuple[bool,list[list[str]]]:
+            A tuple where the first element indicates whether the `code` is 
+            required in the formula, and the second element is a list of 
+            OR-groups found in the formula that include the `code`.
     """
     # ignore all program, faculty and study major prerequisites
     formula = re.sub(re.compile(r"(?:!)?program\([^)]*\)", re.IGNORECASE), "PROG", formula)
@@ -152,15 +155,37 @@ def parse_and_evaluate_formula(code: str, formula: str) -> bool:
 
     formula = formula.replace("&&", "&").replace("||", "|").replace("!", "~")
     
-    symbols_dict = {}
+    symbols_dict: dict[str, Symbol] = {}
     all_codes = re.findall(r"[A-Za-z0-9:_ř]+", formula)
     for i, subject_code in enumerate(set(all_codes)):
         symbols_dict[subject_code.capitalize()] = Symbol(f"a{i}")
         formula = formula.replace(subject_code, f"a{i}")
 
+    reverse_dict = {v: k for k, v in symbols_dict.items()}
+    groups = extract_or_groups(simplify_logic(formula), reverse_dict)
+    groups = [list(map(str.upper, group)) for group in groups]
+    groups = list(filter(lambda group: code in group, groups))
+
     expr = simplify_logic(formula)
     code = re.sub(r"^[^:]*:(.*)", r"\1", code).capitalize()
-    return not expr.has(~symbols_dict[code])
+    return not expr.has(~symbols_dict[code]), groups
+
+
+def extract_or_groups(expr, reverse_dict: dict[Symbol, str]) -> list[list[str]]:
+    """Rekurzivně najdi všechny OR skupiny."""
+    groups = []
+    if isinstance(expr, Or):
+        syms = [a for a in expr.args if isinstance(a, Symbol)]
+        if len(syms) > 1:
+            groups.append([reverse_dict[s] for s in syms])
+        for a in expr.args:
+            groups.extend(extract_or_groups(a, reverse_dict))
+    elif isinstance(expr, And):
+        for a in expr.args:
+            groups.extend(extract_or_groups(a, reverse_dict))
+    elif isinstance(expr, Not):
+        groups.extend(extract_or_groups(expr.args[0], reverse_dict))
+    return groups
 
 
 def replace_any(match):
@@ -279,19 +304,18 @@ def get_subject(html: str, code: str, semester, predecessors) \
     print(f"    {credit} kr.")
 
 
-    successor_codes = set(find_successor_codes(html, code, False)) \
-                          .union(find_successor_codes(html, code, True))
-    successor_codes = [{"code" : code, "by_prerequisites": by_prerequisites} for code, by_prerequisites in successor_codes]
+    successor_codes = find_successor_codes(html, code, True)
+    soft_successors = find_successor_codes(html, code, False)
+    successor_codes.update(soft_successors)
+    successor_codes = [{"code" : code, "groups": groups, "by_prerequisites": by_prerequisites} for code, (groups, by_prerequisites) in successor_codes.items()]
     print(f"    {successor_codes if successor_codes else "{}"}")
 
     for successor in successor_codes:
-        temp_subject = {"code" : code, "by_prerequisites": successor["by_prerequisites"]}
+        temp_subject = {"code" : code, "groups": successor["groups"], "by_prerequisites": successor["by_prerequisites"]}
         if not successor["code"] in predecessors:
             predecessors[successor["code"]] = [temp_subject]
         else:
             predecessors[successor["code"]].append(temp_subject)
-    print("--------")
-    print(predecessors)
 
     return {"name": name, "faculty": transform_faculty(faculty),
             "successors": list(successor_codes), "language": transform_language(language),
@@ -321,25 +345,6 @@ def transform_language(full_language_name: str) -> str:
             return "Unknown language"
 
 
-def clean_dict(data):
-    """
-    Remove any successor subject codes that are not keys in the given dictionary.
-
-    Parameters:
-        data (dict): A dictionary where keys are subject codes and values are lists of successor codes.
-
-    Returns:
-        dict: A filtered dictionary with only successor codes that are keys in `data`.
-    """
-    for key in data:
-        result = []
-        for child in data[key]["successors"]:
-            if child["code"] in data:
-                result.append(child)
-        data[key]["successors"] = [child for child in data[key]["successors"] if child["code"] in data]
-    return data
-
-
 def code_to_subj_type(code: str) -> str:
     code = code.replace("PřF:", "")
     if code[0] == "P" or code[0] == "I":
@@ -364,14 +369,10 @@ def build_final_json(data, cleaned_successors) -> None:
 def main() -> None:
     print("Extracting names from input JSON file.")
     data = extract_codes(os.path.join("src", "data", "bc_bio_cz.json"), "apl")
-    print(data)
     successors = build_successor_dict(data)
-    print("Cleaning the unneccessary subjects.")
-    cleaned_successors = clean_dict(successors)
 
     print("Building the final JSON files.")
-    build_final_json(data, cleaned_successors)
-
+    build_final_json(data, successors)
 
 if __name__ == "__main__":
     main()
