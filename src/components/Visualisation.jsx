@@ -50,19 +50,34 @@ const Visualisation = ({scale, setDragEnabled}) => {
                 position: "relative"
                 }}
             >
-                {Array.from({ length: semesterCount }).map((_, i) => 
-                    <div key={i} style={{display: 'flex',
-                                        justifyContent: 'center',
-                                        position: 'absolute',
-                                        backgroundColor: i % 2 == 0 ? "#e8e8e8" : "white",
-                                        left: i * columnWidth,
-                                        top: 0,
-                                        height: "100%",
-                                        width: columnWidth
-                                        }}
-                    >
-                        <p className='semesterTitles'>{i + 1}. Semestr</p>
-                    </div>
+                {Array.from({ length: semesterCount }).map((_, i) => {
+                    const semesterSubjects = subjectInfoData["order"][i + 1];
+                    const semesterCredits = semesterSubjects
+                        .map(subject => {
+                            if (!subject.code) return 0;
+                            const course = newSubjectInfoData[subject.code];
+                            return course && course.credits ? Number(course.credits) : 0;
+                        })
+                        .reduce((acc, c) => acc + c, 0);
+
+                    return (
+                        <div key={i} style={{display: 'flex',
+                                            flexDirection: 'column',  // přidáno
+                                            alignItems: 'center',     // přidáno
+                                            position: 'absolute',
+                                            backgroundColor: i % 2 == 0 ? "#e8e8e8" : "white",
+                                            left: i * columnWidth,
+                                            top: 0,
+                                            height: "100%",
+                                            width: columnWidth
+                                            }}
+                        >
+                            <p className='semesterTitles'>{i + 1}. Semestr</p>
+                            <p className='semesterSubtitles'>Celkem kreditů: {semesterCredits}</p>
+                        </div>
+                    )
+                }
+                    
                 )}
                 <div style={{
                     position: 'absolute',

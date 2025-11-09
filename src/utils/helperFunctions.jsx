@@ -271,7 +271,6 @@ function getTreePositions(newSubjectInfoData, semesterIndex,
         return true;
     }
 
-    debugger;
     let succs = newSubjectInfoData[code].successors;
     let currentY = positionIndex;
     for (let i = 0; i < succs.length; i++) {
