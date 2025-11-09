@@ -221,9 +221,8 @@ export function getPositions(newSubjectInfoData, subjectOrderData, choices, padd
     const positionsToCode = Array.from({ length: semestersCount }, () => []);
 
     Object.values(subjectOrderData).forEach((semesterArray, semesterIndex) => {
-        let positionIndex = 0;
-
         semesterArray.forEach((subject) => {
+            let positionIndex = 0;
             const code = subject.code || subject.choice;   // use choice code if it is a choice
             if (codeToPositions[code]
                 || !newSubjectInfoData[code]
