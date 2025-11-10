@@ -15,14 +15,15 @@ const Connections = ({subjectInfoData, positions, xOffsets, yOffsets,
                 const midX = (startX + endX) / 2;
                 if (startX > endX) { return null; }
                 
-                let yOffset = yOffsets[`${startCode}-${endCode}`];
+                let yStartOffset = yOffsets[`${startCode}-${endCode}-start`];
+                let yEndOffset = yOffsets[`${startCode}-${endCode}-end`];
                 let xOffset = xOffsets[`${startCode}-${endCode}`];
 
                 const path = `
-                    M ${startX} ${startY + yOffset}
-                    L ${midX + xOffset} ${startY + yOffset}
-                    L ${midX + xOffset} ${endY + yOffset}
-                    L ${endX} ${endY + yOffset}
+                    M ${startX} ${startY + yStartOffset}
+                    L ${midX + xOffset} ${startY + yStartOffset}
+                    L ${midX + xOffset} ${endY + yEndOffset}
+                    L ${endX} ${endY + yEndOffset}
                 `;
                 let nonPrerequisite = !endInfo.by_prerequisites;
                 return (<path key={`${startCode}-${endCode}-${i}`} d={path}

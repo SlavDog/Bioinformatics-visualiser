@@ -3,7 +3,8 @@ import Subject from './Subject';
 import SmallSubject from './SmallSubject';
 import Connections from './Connections';
 import { useState, useEffect } from 'react';
-import {addHelperNodesAndGetOffsets, getPositions, isInSomeChoice} from '../utils/helperFunctions'
+import {addHelperNodesAndGetOffsets, getPositions, getUniquePredGroups, isInSomeChoice, getYOffsetForOrGroup} from '../utils/helperFunctions'
+import orGateIcon from '../assets/or_gate.svg';
 
 const columnWidth = 325;
 const rowHeight = 175;
@@ -94,21 +95,47 @@ const Visualisation = ({scale, setDragEnabled}) => {
                     />
                     {Object.entries(newSubjectInfoData).map(([code, course]) => {
                         const pos = positions[code];
-                        if (!pos || course.name == "" || isInSomeChoice(code, subjectInfoData["choices"])) return null;
-                        return (<SubjectComponent
-                            key={code}
-                            code={code}
-                            course={course}
-                            setDragEnabled={setDragEnabled}
-                            style={{
-                                position: "absolute",
-                                left: positions[code].x,
-                                top: positions[code].y,
-                                width: subjectWidth,
-                                height: subjectHeight,
-                                padding: subjectPadding
-                            }}
-                        />)
+                        if (!pos || course.name == "" || isInSomeChoice(code, subjectInfoData["choices"])) { return null; }
+
+                        let hasOrGate = course.predecessors.some(pred => pred.groups.length > 0) &&
+                            course.predecessors.some(pred => pred.groups.some(g => g.filter(s => newSubjectInfoData[s]).length > 1));
+
+                        let orGatesPositions = [];
+                        if (hasOrGate) {
+                            getUniquePredGroups(course).forEach(group => {
+                                if (group.length > 1) {
+                                    console.log("Adding OR gate for", code, "group", group);
+                                    console.log(course);
+                                    let yOffset = getYOffsetForOrGroup(edgeYOffsets, group, code);
+                                    orGatesPositions.push(yOffset + subjectHeight / 2 + 15);
+                                }
+                            });
+                        };
+                        return (<>
+                            <SubjectComponent
+                                code={code}
+                                key={code}
+                                course={course}
+                                setDragEnabled={setDragEnabled}
+                                style={{
+                                    position: "absolute",
+                                    left: positions[code].x,
+                                    top: positions[code].y,
+                                    width: subjectWidth,
+                                    height: subjectHeight,
+                                    padding: subjectPadding
+                                }}
+                            />
+                            {hasOrGate && orGatesPositions.map((pos, i) =>
+                                <img src={orGateIcon} alt="OR Gate Icon" className="orGateIcon" key={`orGate-${code}-${i}`} style={{
+                                    position: "absolute",
+                                    left: positions[code].x - 30,
+                                    top: pos,
+                                    width: 30,
+                                    height: 30
+                                }}/>
+                            )}
+                        </>)
                     })}
                 </div>
             </div>
