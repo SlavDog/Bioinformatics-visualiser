@@ -4,14 +4,19 @@ import SmallSubject from './SmallSubject';
 import Connections from './Connections';
 import { useState, useEffect } from 'react';
 import {addHelperNodesAndGetOffsets, getPositions, getUniquePredGroups, isInSomeChoice, getYOffsetForOrGroup} from '../utils/helperFunctions'
-import orGateIcon from '../assets/or_gate.svg';
+import OrGates from './OrGates';
+import SemesterColumn from './SemesterColumn';
 
-const columnWidth = 325;
-const rowHeight = 175;
-const subjectHeight = 115;
-const subjectWidth = 200;
-const padding = 25;
-const subjectPadding = 16;
+
+const Layout = {
+    columnWidth: 325,
+    rowHeight: 175,
+    subjectHeight: 115,
+    subjectWidth: 200,
+    padding: 25,
+    subjectPadding: 16,
+}
+
 
 const Visualisation = ({scale, setDragEnabled}) => {
     const [[newSubjectInfoData, edgeXOffsets, edgeYOffsets], setOffsets] = useState([[], [], []]);
@@ -26,8 +31,8 @@ const Visualisation = ({scale, setDragEnabled}) => {
 
         const pos = getPositions(offsets[0], subjectInfoData["order"],
                                  subjectInfoData["choices"],
-                                 padding, columnWidth, rowHeight,
-                                 subjectWidth, subjectHeight, subjectPadding);
+                                 Layout.padding, Layout.columnWidth, Layout.rowHeight,
+                                 Layout.subjectWidth, Layout.subjectHeight, Layout.subjectPadding);
         setPositions(pos);
     }, []);
 
@@ -36,81 +41,54 @@ const Visualisation = ({scale, setDragEnabled}) => {
             style = {{
                 width: (maxX - 75) * scale,
                 height: (maxY + 100) * scale,
-                display: "grid",
-                position: 'relative',
-                gridTemplateColumns: "repeat(6, 1fr)",
             }}
         >
-            <div
+            <div className="visualisationBackground"
                 style={{
-                transform: `scale(${scale})`,
-                transformOrigin: "0 0",
-                transition: "transform 0.2s ease-out",
-                width: maxX - 75,
-                height: maxY + 300,
-                position: "relative"
+                    transform: `scale(${scale})`,
+                    width: maxX - 75,
+                    height: maxY + 300,
                 }}
             >
                 {Array.from({ length: semesterCount }).map((_, i) => {
-                    const semesterSubjects = subjectInfoData["order"][i + 1];
-                    const semesterCredits = semesterSubjects
-                        .map(subject => {
-                            if (!subject.code) return 0;
-                            const course = newSubjectInfoData[subject.code];
-                            return course && course.credits ? Number(course.credits) : 0;
-                        })
-                        .reduce((acc, c) => acc + c, 0);
-
                     return (
-                        <div key={i} style={{display: 'flex',
-                                            flexDirection: 'column',  // přidáno
-                                            alignItems: 'center',     // přidáno
-                                            position: 'absolute',
-                                            backgroundColor: i % 2 == 0 ? "#e8e8e8" : "white",
-                                            left: i * columnWidth,
-                                            top: 0,
-                                            height: "100%",
-                                            width: columnWidth
-                                            }}
-                        >
-                            <p className='semesterTitles'>{i + 1}. Semestr</p>
-                            <p className='semesterSubtitles'>Celkem kreditů: {semesterCredits}</p>
-                        </div>
+                        <SemesterColumn 
+                            columnWidth={Layout.columnWidth}
+                            index={i} 
+                            semesterSubjects={subjectInfoData["order"][i + 1]}
+                            subjectInfoData={newSubjectInfoData}
+                        />
                     )
                 }
                     
                 )}
-                <div style={{
-                    position: 'absolute',
-                    inset: '250px 0 0 0'
-                }}>
+                <div className="visualisationForeground">
                     <Connections 
                         subjectInfoData={newSubjectInfoData}
                         positions={positions}
                         xOffsets={edgeXOffsets}
                         yOffsets={edgeYOffsets}
-                        subjectHeight={subjectHeight}
-                        subjectWidth={subjectWidth}
-                        subjectPadding={subjectPadding}
+                        subjectHeight={Layout.subjectHeight}
+                        subjectWidth={Layout.subjectWidth}
+                        subjectPadding={Layout.subjectPadding}
                     />
                     {Object.entries(newSubjectInfoData).map(([code, course]) => {
                         const pos = positions[code];
                         if (!pos || course.name == "" || isInSomeChoice(code, subjectInfoData["choices"])) { return null; }
 
                         let hasOrGate = course.predecessors.some(pred => pred.groups.length > 0) &&
-                            course.predecessors.some(pred => pred.groups.some(g => g.filter(s => newSubjectInfoData[s]).length > 1));
+                            course.predecessors
+                                .some(pred => pred.groups
+                                .some(g => g
+                                    .filter(s => newSubjectInfoData[s]).length > 1));
 
-                        let orGatesPositions = [];
-                        if (hasOrGate) {
-                            getUniquePredGroups(course).forEach(group => {
-                                if (group.length > 1) {
-                                    console.log("Adding OR gate for", code, "group", group);
-                                    console.log(course);
-                                    let yOffset = getYOffsetForOrGroup(edgeYOffsets, group, code);
-                                    orGatesPositions.push(yOffset + subjectHeight / 2 + 15);
-                                }
-                            });
-                        };
+                        let orGatesPositions = hasOrGate ? getUniquePredGroups(course)
+                            .filter(group => group.length > 1)
+                            .map(group => {
+                                let yOffset = getYOffsetForOrGroup(edgeYOffsets, group, code);
+                                yOffset + Layout.subjectHeight / 2 + 15;
+                            }) : [];
+
                         return (<>
                             <SubjectComponent
                                 code={code}
@@ -121,20 +99,16 @@ const Visualisation = ({scale, setDragEnabled}) => {
                                     position: "absolute",
                                     left: positions[code].x,
                                     top: positions[code].y,
-                                    width: subjectWidth,
-                                    height: subjectHeight,
-                                    padding: subjectPadding
+                                    width: Layout.subjectWidth,
+                                    height: Layout.subjectHeight,
+                                    padding: Layout.subjectPadding
                                 }}
                             />
-                            {hasOrGate && orGatesPositions.map((pos, i) =>
-                                <img src={orGateIcon} alt="OR Gate Icon" className="orGateIcon" key={`orGate-${code}-${i}`} style={{
-                                    position: "absolute",
-                                    left: positions[code].x - 30,
-                                    top: pos,
-                                    width: 30,
-                                    height: 30
-                                }}/>
-                            )}
+                            {hasOrGate && <OrGates 
+                                orGatesPositions={orGatesPositions} 
+                                positions={positions}
+                                code={code}
+                            />}
                         </>)
                     })}
                 </div>
