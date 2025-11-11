@@ -2,6 +2,7 @@ import '../Subject/Subject.css'
 import subjectInfoData from '../../data/final_tree.json'
 import SubjectDetailMenuHeader from './SubjectDetailMenuHeader';
 import SubjectList from './SubjectList';
+import { getChoiceLimitText } from '../../utils/textHelpers';
 
 import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
@@ -33,13 +34,8 @@ const SubjectDetailMenu = ({open, onClose, source, credits}) => {
     if (!isVisible) return null;
 
     const choiceLimit = subjectInfoData["choices"][source].type;
-    const [subjectLimit, creditsLimit] = choiceLimit.split(":").map(Number);
-    let limitText = `V tomto semestru si doporučujeme zapsat ${credits} kr. z celkově potřebných ${creditsLimit} kr. z následujícího výběru:`
-    if (subjectLimit != 0) {
-        let subjectDeclination = credits == 1 ? "předmět" : (credits >= 2 && credits < 5 ? "předměty" : "předmětů")
-        let sentenceEnd = subjectLimit > 1 ? `z ${subjectLimit} předmětů celkově potřebných z následujícího výběru:` : "z následujícího výběru:"
-        limitText = `V tomto semestru si doporučujeme zapsat ${credits} ${subjectDeclination} ${sentenceEnd}`
-    } 
+    const limitText = getChoiceLimitText(choiceLimit, credits);
+
     return createPortal(
     <>
         <div className={`overlay ${isClosing ? "closingOverlay" : isAnimatingOpen ? "openingOverlay" : ""}`} onClick={onClose}></div>
