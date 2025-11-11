@@ -1,5 +1,5 @@
 import './Subject.css'
-import SubjectDetailMenu from './SubjectDetailMenu';
+import SubjectDetailMenu from './SubjectDetailMenu/SubjectDetailMenu';
 import { useState } from 'react';
 
 const SmallSubject = ({ code, course, style, setDragEnabled }) => {

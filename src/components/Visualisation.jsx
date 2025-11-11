@@ -19,7 +19,7 @@ const Layout = {
 
 
 const Visualisation = ({scale, setDragEnabled}) => {
-    const [[newSubjectInfoData, edgeXOffsets, edgeYOffsets], setOffsets] = useState([[], [], []]);
+    const [[processedSubjects, edgeXOffsets, edgeYOffsets], setOffsets] = useState([[], [], []]);
     const [[positions, maxX, maxY], setPositions] = useState([[], 0, 0]);
     const semesterCount = Object.keys(subjectInfoData["order"]).length;
     const SubjectComponent = scale < 0.7 ? SmallSubject : Subject;
@@ -56,7 +56,7 @@ const Visualisation = ({scale, setDragEnabled}) => {
                             columnWidth={Layout.columnWidth}
                             index={i} 
                             semesterSubjects={subjectInfoData["order"][i + 1]}
-                            subjectInfoData={newSubjectInfoData}
+                            subjectInfoData={processedSubjects}
                         />
                     )
                 }
@@ -64,7 +64,7 @@ const Visualisation = ({scale, setDragEnabled}) => {
                 )}
                 <div className="visualisationForeground">
                     <Connections 
-                        subjectInfoData={newSubjectInfoData}
+                        subjectInfoData={processedSubjects}
                         positions={positions}
                         xOffsets={edgeXOffsets}
                         yOffsets={edgeYOffsets}
@@ -72,7 +72,7 @@ const Visualisation = ({scale, setDragEnabled}) => {
                         subjectWidth={Layout.subjectWidth}
                         subjectPadding={Layout.subjectPadding}
                     />
-                    {Object.entries(newSubjectInfoData).map(([code, course]) => {
+                    {Object.entries(processedSubjects).map(([code, course]) => {
                         const pos = positions[code];
                         if (!pos || course.name == "" || isInSomeChoice(code, subjectInfoData["choices"])) { return null; }
 
@@ -80,13 +80,13 @@ const Visualisation = ({scale, setDragEnabled}) => {
                             course.predecessors
                                 .some(pred => pred.groups
                                 .some(g => g
-                                    .filter(s => newSubjectInfoData[s]).length > 1));
+                                    .filter(s => processedSubjects[s]).length > 1));
 
                         let orGatesPositions = hasOrGate ? getUniquePredGroups(course)
                             .filter(group => group.length > 1)
                             .map(group => {
                                 let yOffset = getYOffsetForOrGroup(edgeYOffsets, group, code);
-                                yOffset + Layout.subjectHeight / 2 + 15;
+                                return yOffset + Layout.subjectHeight / 2 + 15;
                             }) : [];
 
                         return (<>
