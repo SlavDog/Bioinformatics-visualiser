@@ -4,8 +4,8 @@ function ChoiceConnection({course, subjectWidth, isPredecessor}) {
     let subjectsList = isPredecessor ? course.predecessors : course.successors;
     let voluntarySubjectsArray = subjectsList.map(subject => subject.code).filter(code => !Object.keys(subjectInfoData["details"]).includes(code));
     let compulsorySubjectsArray = subjectsList.map(subject => subject.code).filter(code => Object.keys(subjectInfoData["details"]).includes(code));
-    let volunatrySubjectstext = `${isPredecessor ? "Je následníkem" : "Nachází se v prerekvizitách"} některých předmětů,\nkteré nejsou povinné: ${voluntarySubjectsArray.join(", ")}`;
-    let compulsorySubjectsText = `${isPredecessor ? "Je následníkem" : "Nachází se v prerekvizitách"} některých předmětů,\nkteré jsou povinné: ${compulsorySubjectsArray.join(", ")}`;
+    let volunatrySubjectstext = `${isPredecessor ? "Je následníkem" : "Je předchůdcem"} některých předmětů,\nkteré nejsou povinné: ${voluntarySubjectsArray.join(", ")}`;
+    let compulsorySubjectsText = `${isPredecessor ? "Je následníkem" : "Je předchůdcem"} některých předmětů,\nkteré jsou povinné: ${compulsorySubjectsArray.join(", ")}`;
 
     let yStart = isPredecessor ? 25 : 5;
     let yEnd = isPredecessor ? 55 : 30;
