@@ -3,7 +3,7 @@ import Subject from '../Subject/Subject';
 import SmallSubject from '../Subject/SmallSubject';
 import Connections from './Connections';
 import { useState, useEffect } from 'react';
-import {addHelperNodesAndGetOffsets, getPositions, getUniquePredGroups, isInSomeChoice, getYOffsetForOrGroup} from '../../utils/helperFunctions'
+import {addHelperNodesAndGetOffsets, getPositions, getUniquePredGroups, isInSomeChoice, getYOffsetForOrGroup} from '@/utils/graph'
 import OrGates from './OrGates';
 import SemesterColumn from './SemesterColumn';
 
