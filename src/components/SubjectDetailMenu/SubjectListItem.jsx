@@ -1,4 +1,4 @@
-import Subject from "../Subject"
+import Subject from "../Subject/Subject"
 
 const subjectHeight = 140;
 const subjectWidth = 250;

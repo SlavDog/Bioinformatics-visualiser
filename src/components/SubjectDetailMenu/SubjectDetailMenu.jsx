@@ -1,4 +1,4 @@
-import '../Subject.css'
+import '../Subject/Subject.css'
 import subjectInfoData from '../../data/final_tree.json'
 import SubjectDetailMenuHeader from './SubjectDetailMenuHeader';
 import SubjectList from './SubjectList';

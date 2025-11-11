@@ -1,4 +1,4 @@
-import orGateIcon from '../assets/or_gate.svg';
+import orGateIcon from '../../assets/or_gate.svg';
 
 function OrGates({orGatesPositions, positions, code}) {
     return (<>
