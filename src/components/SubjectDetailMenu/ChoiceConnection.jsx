@@ -17,54 +17,64 @@ function ChoiceConnection({course, subjectWidth, isPredecessor}) {
     return (
         <div style={{display: "flex", flexDirection: "row"}}>
             <svg width={subjectWidth / 2} height="60">
-                <line 
-                    key="vertline" 
-                    x1={x} y1={yStart} 
-                    x2={x} y2={yEnd} 
-                    stroke={compulsoryColor} 
-                    strokeWidth="2"
-                />
-                <polygon points={`${x - 5},${yEnd} ${x + 5},${yEnd} ${x},${yEnd + 5}`} fill={compulsoryColor} />
-                <circle cx={x} cy={isPredecessor ? 15 : 45} r="10" fill="transparent" stroke={compulsoryColor} strokeWidth="2" />
-                <text 
-                    x={x} 
-                    y={isPredecessor ? "20" : "50"} 
-                    textAnchor="middle" 
-                    fontSize="12"
-                    fontFamily='Inter'
-                    fill={compulsoryColor}
-                    style={{ cursor: compulsoryColor === "transparent" ? "default" : "help", fontWeight: 600 }}
-                >
+                <g className='choiceConnection' style={{
+                        cursor: compulsoryColor === "transparent" ? "default" : "help",
+                        pointerEvents: compulsoryColor === "transparent" ? "none" : "auto"
+                }}>
                     {compulsoryColor != "transparent" &&
                         <title>{compulsorySubjectsText}</title>
                     }
-                    ?
-                </text>
+                    <line 
+                        key="vertline" 
+                        x1={x} y1={yStart} 
+                        x2={x} y2={yEnd} 
+                        stroke={compulsoryColor} 
+                        strokeWidth="2"
+                    />
+                    <polygon points={`${x - 5},${yEnd} ${x + 5},${yEnd} ${x},${yEnd + 5}`} fill={compulsoryColor} />
+                    <circle cx={x} cy={isPredecessor ? 15 : 45} r="10" fill="transparent" stroke={compulsoryColor} strokeWidth="2" />
+                    <text 
+                        x={x} 
+                        y={isPredecessor ? "20" : "50"} 
+                        textAnchor="middle" 
+                        fontSize="12"
+                        fontFamily='Inter'
+                        fill={compulsoryColor}
+                        style={{fontWeight: 600 }}
+                    >
+                        ?
+                    </text>
+                </g>
             </svg>
             <svg width={subjectWidth / 2} height="60">
-                <line 
-                    key="vertline" 
-                    x1={x} y1={yStart} 
-                    x2={x} y2={yEnd} 
-                    stroke={voluntaryColor} 
-                    strokeWidth="2"
-                />
-                <polygon points={`${x - 5},${yEnd} ${x + 5},${yEnd} ${x},${yEnd + 5}`} fill={voluntaryColor} />
-                <circle cx={x} cy={isPredecessor ? 5 : 45} r="10" fill="transparent" stroke={voluntaryColor} strokeWidth="2" />
-                <text 
-                    x={x} 
-                    y={isPredecessor ? "10" : "50"} 
-                    textAnchor="middle" 
-                    fontSize="12"
-                    fontFamily='Inter'
-                    fill={voluntaryColor}
-                    style={{ cursor: voluntaryColor === "transparent" ? "default" : "help", fontWeight: 600 }}
-                >
+                <g className='choiceConnection' style={{
+                        cursor: voluntaryColor === "transparent" ? "default" : "help",
+                        pointerEvents: voluntaryColor === "transparent" ? "none" : "auto"
+                }}>
                     {voluntaryColor != "transparent" &&
                         <title>{volunatrySubjectstext}</title>
                     }
-                    ?
-                </text>
+                    <line 
+                        key="vertline" 
+                        x1={x} y1={yStart} 
+                        x2={x} y2={yEnd} 
+                        stroke={voluntaryColor} 
+                        strokeWidth="2"
+                    />
+                    <polygon points={`${x - 5},${yEnd} ${x + 5},${yEnd} ${x},${yEnd + 5}`} fill={voluntaryColor} />
+                    <circle cx={x} cy={isPredecessor ? 5 : 45} r="10" fill="transparent" stroke={voluntaryColor} strokeWidth="2" />
+                    <text 
+                        x={x} 
+                        y={isPredecessor ? "10" : "50"} 
+                        textAnchor="middle" 
+                        fontSize="12"
+                        fontFamily='Inter'
+                        fill={voluntaryColor}
+                        style={{fontWeight: 600 }}
+                    >
+                        ?
+                    </text>
+                </g>
             </svg>
         </div>
     )

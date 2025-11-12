@@ -8,15 +8,9 @@ export function SemesterColumn({columnWidth, index, semesterSubjects, subjectInf
         .reduce((acc, c) => acc + c, 0);
 
     return (
-     <div key={index} style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        position: 'absolute',
+     <div key={index} className="semesterColumn" style={{
         backgroundColor: index % 2 == 0 ? "#e8e8e8" : "white",
         left: index * columnWidth,
-        top: 0,
-        height: "100%",
         width: columnWidth                    
     }}>
         <p className='semesterTitles'>{index + 1}. Semestr</p>

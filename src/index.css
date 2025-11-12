@@ -149,3 +149,26 @@ body {
 .closingOverlay {
   opacity: 0;
 }
+
+
+/* transition musí být v základním selektoru */
+.choiceConnection circle,
+.choiceConnection line {
+  transition: stroke 0.2s ease-in-out;
+}
+
+.choiceConnection polygon,
+.choiceConnection text {
+  transition: fill 0.2s ease-in-out;
+}
+
+.choiceConnection:hover circle,
+.choiceConnection:hover line
+{
+  stroke: #a000a0;
+}
+
+.choiceConnection:hover polygon,
+.choiceConnection:hover text {
+  fill: #a000a0;
+}
