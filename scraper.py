@@ -144,8 +144,8 @@ def parse_and_evaluate_formula(code: str, formula: str) -> bool:
     formula = re.sub(re.compile(r"(?:!)?typ_studia\([^)]*\)", re.IGNORECASE), "STUD", formula)
     formula = re.sub(re.compile(r"(?:!)?fakulta\([^)]*\)", re.IGNORECASE), "FAC", formula)
 
-    # remove NOW(...) wrapper, keep only the inner expression
-    formula = re.sub(re.compile(r"NOW\(([^)]*)\)", re.IGNORECASE), r"\1", formula)
+    # remove NOW(...) subjects
+    formula = re.sub(re.compile(r"NOW\(([^)]*)\)", re.IGNORECASE), "NOW", formula)
 
     # replace ANY(...) or NOWANY(...) with equivalent OR expression
     # (the replace_any function is automatically called by re.sub 
@@ -168,7 +168,11 @@ def parse_and_evaluate_formula(code: str, formula: str) -> bool:
 
     expr = simplify_logic(formula)
     code = re.sub(r"^[^:]*:(.*)", r"\1", code).capitalize()
-    return not expr.has(~symbols_dict[code]), groups
+
+    symbol = symbols_dict.get(code)
+    if not symbol:   # In case we deleted the subject when removing NOW
+        return False, groups
+    return not expr.has(~symbol), groups
 
 
 def extract_or_groups(expr, reverse_dict: dict[Symbol, str]) -> list[list[str]]:
