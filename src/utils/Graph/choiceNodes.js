@@ -3,10 +3,22 @@ import { emptyNode } from "./dataUtils";
 export function addChoiceNodes(details, order, choices) {
     Object.entries(order).forEach(([semester, subjectList]) => {
         subjectList
-        .filter((subject) => subject["choice"] != undefined)
-        .forEach((choiceSubject) => {
+                .filter((subject) => subject["choice"] != undefined)
+                .forEach((choiceSubject) => {
             const choiceCode = choiceSubject["choice"];
-            if (choiceCode == "core" || choiceCode == "tv") { return; }
+            if (choiceCode == "core" || choiceCode == "tv") { 
+                details[choiceCode] = {
+                ...emptyNode,
+                name: choices[choiceCode].refnCZ,
+                successors: [], 
+                predecessors: [],
+                credits: choiceSubject.credits,
+                subjects: [],
+                semester: Number(semester),
+                type: "choice"
+            };
+                return; 
+            }
 
             let successors = [];
             let predecessors = [];
