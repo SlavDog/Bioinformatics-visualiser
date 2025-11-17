@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect } from 'react';
 import Visualisation from '@components/Visualisation/Visualisation';
 
-const DragScrollBox = () => {
+function DragScrollBox() {
     const boxRef = useRef(null);
     const [isDragging, setIsDragging] = useState(false);
     const [dragEnabled, setDragEnabled] = useState(true);

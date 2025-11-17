@@ -1,6 +1,6 @@
 import { Layout } from "@/consts/VisualisationParameters";
 
-const Connections = ({subjectInfoData, positions, xOffsets, yOffsets}) => {
+function Connections({subjectInfoData, positions, xOffsets, yOffsets}) {
   return (
     <svg className='connections'>
         {Object.entries(subjectInfoData).map(([startCode, course]) => {

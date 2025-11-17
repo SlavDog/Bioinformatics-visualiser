@@ -7,7 +7,7 @@ import VisualisationBackground from '@components/Visualisation/VisualisationBack
 
 import { useState, useEffect } from 'react';
 
-const Visualisation = ({scale, setDragEnabled}) => {
+function Visualisation({scale, setDragEnabled}) {
     const [[processedSubjects, edgeXOffsets, edgeYOffsets], setOffsets] = useState([[], [], []]);
     const [[positions, maxX, maxY], setPositions] = useState([[], 0, 0]);
 
@@ -47,7 +47,7 @@ const Visualisation = ({scale, setDragEnabled}) => {
                     subjectInfoData={subjectInfoData}
                     SubjectComponent={SubjectComponent}
                     setDragEnabled={setDragEnabled}
-                    />
+                />
             </VisualisationBackground>
         </div>
     );

@@ -7,7 +7,7 @@ import { getChoiceLimitText } from '@/utils/textHelpers';
 import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 
-const SubjectDetailMenu = ({open, onClose, source, credits}) => {
+function SubjectDetailMenu({open, onClose, source, credits}) {
     const [isClosing, setIsClosing] = useState(false);
     const [isVisible, setIsVisible] = useState(false);
     const [isAnimatingOpen, setIsAnimatingOpen] = useState(false);

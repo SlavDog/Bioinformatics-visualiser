@@ -1,4 +1,4 @@
-const SideBar = () => {
+function SideBar() {
     return <div>AHOJ</div>
 }
 

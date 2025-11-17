@@ -1,6 +1,6 @@
 import { Layout } from "../../consts/VisualisationParameters";
 
-export function SemesterColumn({index, semesterSubjects, subjectInfoData}) {
+function SemesterColumn({index, semesterSubjects, subjectInfoData}) {
     const semesterCredits = semesterSubjects
         .map(subject => {
             if (!subject.code) return 0;

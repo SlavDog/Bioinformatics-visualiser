@@ -2,7 +2,7 @@ import './Subject.css'
 import SubjectDetailMenu from '@components/SubjectDetailMenu/SubjectDetailMenu';
 import { useState } from 'react';
 
-const SmallSubject = ({ code, course, style, setDragEnabled }) => {
+function SmallSubject({ code, course, style, setDragEnabled }) {
     const [isOpen, setIsOpen] = useState(false);
     const link = "https://is.muni.cz" + course.link;
     let Info = <a className="smallSubjectCode" draggable="false" href={link}>{code}</a>;

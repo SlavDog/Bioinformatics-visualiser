@@ -20,7 +20,7 @@ function VisualisationBackground({children, maxX, maxY, semesterCount, subjectIn
             })}
             {children}
         </div>
-    )
+    );
 }
 
 export default VisualisationBackground;
