@@ -42,7 +42,6 @@ export function fillOrGroupOffsets(orGroupEndOffsets, successorInfo, offset) {
 export function getYOffsetForOrGroup(edgeYOffsets, group, succCode) {
     let i = 0;
     while (i < group.length) {
-        console.log(`${group[i]}-${succCode}-end`);
         if (`${group[i]}-${succCode}-end` in edgeYOffsets) {
             return edgeYOffsets[`${group[i]}-${succCode}-end`];
         }

@@ -29,7 +29,6 @@ export function createSuccessingHelperNodes(parentCode, parentSemester,
         prevNode = helperNodeCode;
     }
 
-    console.log(groups);
     subjectInfoData[successorCode].predecessors.forEach(predecessor => {
         for (let i = 0; i < predecessor.groups.length; i++) {
             let group = predecessor.groups[i];

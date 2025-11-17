@@ -1,10 +1,12 @@
-import Connections from "./Connections";
+import Connections from "@components/Visualisation/Connections";
 import { isInSomeChoice } from "@utils/Graph";
 import { getOrGatesPositionsForSubject } from "@utils/Graph";
 import { Layout } from "@/consts/VisualisationParameters";
 import OrGates from "@components/Visualisation/OrGates";
 
-function visualisationForeground({edgeXOffsets, edgeYOffsets, positions, processedSubjects, subjectInfoData, SubjectComponent, setDragEnabled}) {
+function visualisationForeground({edgeXOffsets, edgeYOffsets, 
+        positions, processedSubjects, subjectInfoData,
+        SubjectComponent, setDragEnabled}) {
     return (
         <div className="visualisationForeground">
             <Connections 
