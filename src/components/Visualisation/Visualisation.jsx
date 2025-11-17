@@ -4,6 +4,7 @@ import SmallSubject from '@components/Subject/SmallSubject';
 import {addHelperNodesAndGetOffsets, getPositions} from '@utils/Graph'
 import VisualisationForeground from '@components/Visualisation/VisualisationForeground';
 import VisualisationBackground from '@components/Visualisation/VisualisationBackground';
+import { Layout } from '@/consts/VisualisationParameters';
 
 import { useState, useEffect } from 'react';
 
@@ -13,6 +14,8 @@ function Visualisation({scale, setDragEnabled}) {
 
     const semesterCount = Object.keys(subjectInfoData["order"]).length;
     const SubjectComponent = scale < 0.7 ? SmallSubject : Subject;
+    const width = maxX + 2 * Layout.padding;
+    const height = maxY + Layout.padding;
 
     // Calculate positions and offsets only once
     useEffect(() => {
@@ -27,8 +30,8 @@ function Visualisation({scale, setDragEnabled}) {
     return (
         <div className="visualisationBox" 
             style = {{
-                width: (maxX - 75) * scale,
-                height: (maxY + 100) * scale,
+                width: width,
+                height: height
             }}
         >
             <VisualisationBackground
