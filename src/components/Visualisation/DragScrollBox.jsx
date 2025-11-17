@@ -1,5 +1,6 @@
 import { useRef, useState, useEffect } from 'react';
 import Visualisation from '@components/Visualisation/Visualisation';
+import { Layout } from '../../consts/VisualisationParameters';
 
 function DragScrollBox() {
     const boxRef = useRef(null);
@@ -17,9 +18,17 @@ function DragScrollBox() {
 
 
     // Zoom in
-    const handleZoomIn = () => setScale(prevScale => Math.min(prevScale + 0.1, 1.5));
+    const handleZoomIn = () => setScale(prevScale => Math.min(prevScale + 0.1, 1.0));
     const handleZoomOut = () => setScale(prevScale => Math.max(prevScale - 0.1, 0.5));
-    const [scale, setScale] = useState(1.0);
+    const [scale, setScale] = useState(0.7);
+
+
+    useEffect(() => {
+    if (boxRef.current) {
+        boxRef.current.scrollLeft = 0;
+        boxRef.current.scrollTop = Layout.padding;
+    }
+    }, []);
 
     useEffect(() => {
 
@@ -62,18 +71,17 @@ function DragScrollBox() {
 
     return (
         <>
-        <div
-        className="scrollableBox"
-        ref={boxRef}
-        onMouseDown={onMouseDown}
-        >
-            <div style={{ position: 'absolute', top: "5vh", left: "6vw", zIndex: 100 }}>
-                <button className='zoomButton' onClick={handleZoomIn} style={{ marginRight: '8px' }}>➕ Zoom In</button>
-                <button className='zoomButton' onClick={handleZoomOut}>➖ Zoom Out</button>
+            <div
+            className="scrollableBox"
+            ref={boxRef}
+            onMouseDown={onMouseDown}
+            >
+                <div style={{ position: 'absolute', top: "5vh", left: "6vw", zIndex: 100 }}>
+                    <button className='zoomButton' onClick={handleZoomIn} style={{ marginRight: '8px' }}>➕ Zoom In</button>
+                    <button className='zoomButton' onClick={handleZoomOut}>➖ Zoom Out</button>
+                </div>
+                <Visualisation scale={scale} setDragEnabled={setDragEnabled}/>
             </div>
-
-            <Visualisation scale={scale} setDragEnabled={setDragEnabled}/>
-        </div>
         </>
   );
 }

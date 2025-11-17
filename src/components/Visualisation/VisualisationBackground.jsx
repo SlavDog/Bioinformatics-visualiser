@@ -5,8 +5,8 @@ function VisualisationBackground({children, maxX, maxY, semesterCount, subjectIn
         <div className="visualisationBackground"
             style={{
                 transform: `scale(${scale})`,
-                width: maxX - 75,
-                height: maxY + 300,
+                width: maxX + 40,
+                height: maxY,
             }}
         >
             {Array.from({ length: semesterCount }).map((_, i) => {
@@ -15,6 +15,7 @@ function VisualisationBackground({children, maxX, maxY, semesterCount, subjectIn
                         index={i} 
                         semesterSubjects={subjectInfoData["order"][i + 1]}
                         subjectInfoData={processedSubjects}
+                        maxY={maxY}
                     />
                 );
             })}

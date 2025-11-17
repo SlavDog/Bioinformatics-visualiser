@@ -3,6 +3,6 @@ export const Layout = {
     rowHeight: 175,
     subjectHeight: 115,
     subjectWidth: 200,
-    padding: 25,
+    padding: 500,
     subjectPadding: 16,
 }

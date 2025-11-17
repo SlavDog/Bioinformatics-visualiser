@@ -76,7 +76,7 @@ export function getPositions(newSubjectInfoData, subjectOrderData, choices) {
     const positions = {}
 
     Object.entries(codeToPositions).forEach(([code, [oldX, oldY]]) => {
-        const x = oldX * Layout.columnWidth  + (Layout.columnWidth - Layout.subjectWidth - 2 * Layout.subjectPadding) / 2;
+        const x = Layout.padding + oldX * Layout.columnWidth  + (Layout.columnWidth - Layout.subjectWidth - 2 * Layout.subjectPadding) / 2;
         const y = oldY * Layout.rowHeight + (Layout.rowHeight - Layout.subjectHeight - 2 * Layout.subjectPadding) / 2;
         positions[code] = { x, y };
 

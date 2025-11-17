@@ -1,6 +1,6 @@
 import { Layout } from "../../consts/VisualisationParameters";
 
-function SemesterColumn({index, semesterSubjects, subjectInfoData}) {
+function SemesterColumn({index, semesterSubjects, subjectInfoData, maxY}) {
     const semesterCredits = semesterSubjects
         .map(subject => {
             if (!subject.code) return 0;
@@ -12,8 +12,9 @@ function SemesterColumn({index, semesterSubjects, subjectInfoData}) {
     return (
      <div key={index} className="semesterColumn" style={{
         backgroundColor: index % 2 == 0 ? "#e8e8e8" : "white",
-        left: index * Layout.columnWidth,
-        width: Layout.columnWidth                    
+        left: Layout.padding + index * Layout.columnWidth,
+        width: Layout.columnWidth,
+        height: maxY + 300
     }}>
         <p className='semesterTitles'>{index + 1}. Semestr</p>
         <p className='semesterSubtitles'>Celkem kreditů: {semesterCredits}</p>
