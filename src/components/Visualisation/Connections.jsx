@@ -1,5 +1,6 @@
-const Connections = ({subjectInfoData, positions, xOffsets, yOffsets,
-                      subjectHeight, subjectWidth, subjectPadding}) => {
+import { Layout } from "@/consts/VisualisationParameters";
+
+const Connections = ({subjectInfoData, positions, xOffsets, yOffsets}) => {
   return (
     <svg className='connections'>
         {Object.entries(subjectInfoData).map(([startCode, course]) => {
@@ -8,10 +9,10 @@ const Connections = ({subjectInfoData, positions, xOffsets, yOffsets,
                 const endCode = endInfo.code;
                 const end = positions[endCode];
                 if (!start || !end) { return null; }
-                const startX = start.x + subjectWidth / 2 + subjectPadding;
-                const startY = start.y + subjectHeight / 2 + subjectPadding;
-                const endX = end.x + subjectWidth / 2 + subjectPadding;
-                const endY = end.y + subjectHeight / 2 + subjectPadding;
+                const startX = start.x + Layout.subjectWidth / 2 + Layout.subjectPadding;
+                const startY = start.y + Layout.subjectHeight / 2 + Layout.subjectPadding;
+                const endX = end.x + Layout.subjectWidth / 2 + Layout.subjectPadding;
+                const endY = end.y + Layout.subjectHeight / 2 + Layout.subjectPadding;
                 const midX = (startX + endX) / 2;
                 if (startX > endX) { return null; }
                 

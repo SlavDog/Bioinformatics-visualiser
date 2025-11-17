@@ -1,4 +1,6 @@
-export function SemesterColumn({columnWidth, index, semesterSubjects, subjectInfoData}) {
+import { Layout } from "../../consts/VisualisationParameters";
+
+export function SemesterColumn({index, semesterSubjects, subjectInfoData}) {
     const semesterCredits = semesterSubjects
         .map(subject => {
             if (!subject.code) return 0;
@@ -10,8 +12,8 @@ export function SemesterColumn({columnWidth, index, semesterSubjects, subjectInf
     return (
      <div key={index} className="semesterColumn" style={{
         backgroundColor: index % 2 == 0 ? "#e8e8e8" : "white",
-        left: index * columnWidth,
-        width: columnWidth                    
+        left: index * Layout.columnWidth,
+        width: Layout.columnWidth                    
     }}>
         <p className='semesterTitles'>{index + 1}. Semestr</p>
         <p className='semesterSubtitles'>Celkem kreditů: {semesterCredits}</p>

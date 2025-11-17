@@ -10,7 +10,6 @@ export function getUniquePredGroups(course) {
             }
         });
     });
-    console.log(result);
     return result;
 }
 

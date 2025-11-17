@@ -1,4 +1,8 @@
 import { isInSomeChoice } from "@utils/Graph/choiceNodes";
+import { Layout } from "@/consts/VisualisationParameters";
+import { getUniquePredGroups } from "@utils/Graph/orGroups";
+import { getYOffsetForOrGroup } from "@utils/Graph/offsets";
+
 
 export function getSubtreeSizes(data) {
     const visited = new Set();
@@ -36,9 +40,7 @@ export function getSubtreeSizesAux(data, visited, current, resultSizes, resultDe
 }
 
 
-export function getPositions(newSubjectInfoData, subjectOrderData, choices, padding,
-                             columnWidth, rowHeight, subjectWidth,
-                             subjectHeight, subjectPadding) {
+export function getPositions(newSubjectInfoData, subjectOrderData, choices) {
     let maxX = 0;
     let maxY = 0;
     let semestersCount = Object.keys(subjectOrderData).length;
@@ -74,12 +76,12 @@ export function getPositions(newSubjectInfoData, subjectOrderData, choices, padd
     const positions = {}
 
     Object.entries(codeToPositions).forEach(([code, [oldX, oldY]]) => {
-        const x = oldX * columnWidth  + (columnWidth - subjectWidth - 2 * subjectPadding) / 2;
-        const y = oldY * rowHeight + (rowHeight - subjectHeight - 2 * subjectPadding) / 2;
+        const x = oldX * Layout.columnWidth  + (Layout.columnWidth - Layout.subjectWidth - 2 * Layout.subjectPadding) / 2;
+        const y = oldY * Layout.rowHeight + (Layout.rowHeight - Layout.subjectHeight - 2 * Layout.subjectPadding) / 2;
         positions[code] = { x, y };
 
-        if (x + columnWidth + subjectPadding * 2 > maxX) {maxX = x + columnWidth}
-        if (y + rowHeight + subjectPadding * 2 > maxY) {maxY = y + rowHeight}
+        if (x + Layout.columnWidth + Layout.subjectPadding * 2 > maxX) {maxX = x + Layout.columnWidth}
+        if (y + Layout.rowHeight + Layout.subjectPadding * 2 > maxY) {maxY = y + Layout.rowHeight}
     })
     return [positions, maxX, maxY];
 }
@@ -115,4 +117,21 @@ export function getTreePositions(newSubjectInfoData, semesterIndex,
     codeToPositions[code] = [semesterIndex, positionIndex];
     positionsToCode[semesterIndex][positionIndex] = code;
     return true;
+}
+
+
+export function getOrGatesPositionsForSubject(code, course, processedSubjects, edgeYOffsets) {
+    let hasOrGate = course.predecessors.some(pred => pred.groups.length > 0) &&
+        course.predecessors
+            .some(pred => pred.groups
+            .some(g => g
+                .filter(s => processedSubjects[s]).length > 1));
+
+    if (!hasOrGate) { return []; }
+    return getUniquePredGroups(course)
+        .filter(group => group.length > 1)
+        .map(group => {
+            let yOffset = getYOffsetForOrGroup(edgeYOffsets, group, code);
+            return yOffset + Layout.subjectHeight / 2 + 15;
+        });
 }

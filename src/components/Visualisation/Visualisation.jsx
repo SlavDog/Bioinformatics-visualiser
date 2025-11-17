@@ -4,19 +4,12 @@ import SmallSubject from '@components/Subject/SmallSubject';
 import Connections from '@components/Visualisation/Connections';
 import OrGates from '@components/Visualisation/OrGates';
 import SemesterColumn from '@components/Visualisation/SemesterColumn';
-import {addHelperNodesAndGetOffsets, getPositions, getUniquePredGroups, isInSomeChoice, getYOffsetForOrGroup} from '@/utils/graph'
+import { Layout } from '@/consts/VisualisationParameters';
+import {addHelperNodesAndGetOffsets, getPositions, isInSomeChoice} from '@utils/Graph'
+import { getOrGatesPositionsForSubject } from '@utils/Graph';
+import VisualisationForeground from '@components/Visualisation/VisualisationForeground';
+
 import { useState, useEffect } from 'react';
-
-
-const Layout = {
-    columnWidth: 325,
-    rowHeight: 175,
-    subjectHeight: 115,
-    subjectWidth: 200,
-    padding: 25,
-    subjectPadding: 16,
-}
-
 
 const Visualisation = ({scale, setDragEnabled}) => {
     const [[processedSubjects, edgeXOffsets, edgeYOffsets], setOffsets] = useState([[], [], []]);
@@ -30,9 +23,7 @@ const Visualisation = ({scale, setDragEnabled}) => {
         setOffsets(offsets);
 
         const pos = getPositions(offsets[0], subjectInfoData["order"],
-                                 subjectInfoData["choices"],
-                                 Layout.padding, Layout.columnWidth, Layout.rowHeight,
-                                 Layout.subjectWidth, Layout.subjectHeight, Layout.subjectPadding);
+                                 subjectInfoData["choices"]);
         setPositions(pos);
     }, []);
 
@@ -53,7 +44,6 @@ const Visualisation = ({scale, setDragEnabled}) => {
                 {Array.from({ length: semesterCount }).map((_, i) => {
                     return (
                         <SemesterColumn 
-                            columnWidth={Layout.columnWidth}
                             index={i} 
                             semesterSubjects={subjectInfoData["order"][i + 1]}
                             subjectInfoData={processedSubjects}
@@ -62,56 +52,15 @@ const Visualisation = ({scale, setDragEnabled}) => {
                 }
                     
                 )}
-                <div className="visualisationForeground">
-                    <Connections 
-                        subjectInfoData={processedSubjects}
-                        positions={positions}
-                        xOffsets={edgeXOffsets}
-                        yOffsets={edgeYOffsets}
-                        subjectHeight={Layout.subjectHeight}
-                        subjectWidth={Layout.subjectWidth}
-                        subjectPadding={Layout.subjectPadding}
-                    />
-                    {Object.entries(processedSubjects).map(([code, course]) => {
-                        const pos = positions[code];
-                        if (!pos || course.name == "" || isInSomeChoice(code, subjectInfoData["choices"])) { return null; }
-
-                        let hasOrGate = course.predecessors.some(pred => pred.groups.length > 0) &&
-                            course.predecessors
-                                .some(pred => pred.groups
-                                .some(g => g
-                                    .filter(s => processedSubjects[s]).length > 1));
-
-                        let orGatesPositions = hasOrGate ? getUniquePredGroups(course)
-                            .filter(group => group.length > 1)
-                            .map(group => {
-                                let yOffset = getYOffsetForOrGroup(edgeYOffsets, group, code);
-                                return yOffset + Layout.subjectHeight / 2 + 15;
-                            }) : [];
-
-                        return (<>
-                            <SubjectComponent
-                                code={code}
-                                key={code}
-                                course={course}
-                                setDragEnabled={setDragEnabled}
-                                style={{
-                                    position: "absolute",
-                                    left: positions[code].x,
-                                    top: positions[code].y,
-                                    width: Layout.subjectWidth,
-                                    height: Layout.subjectHeight,
-                                    padding: Layout.subjectPadding
-                                }}
-                            />
-                            {hasOrGate && <OrGates 
-                                orGatesPositions={orGatesPositions} 
-                                positions={positions}
-                                code={code}
-                            />}
-                        </>)
-                    })}
-                </div>
+                <VisualisationForeground
+                    edgeXOffsets={edgeXOffsets}
+                    edgeYOffsets={edgeYOffsets}
+                    positions={positions}
+                    processedSubjects={processedSubjects}
+                    subjectInfoData={subjectInfoData}
+                    SubjectComponent={SubjectComponent}
+                    setDragEnabled={setDragEnabled}
+                />
             </div>
         </div>
     );
