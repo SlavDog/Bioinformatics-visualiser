@@ -1,6 +1,5 @@
-import { useRef, useState, useEffect, cloneElement } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import Visualisation from '../Visualisation/Visualisation';
-import SideBar from '../Layout/SideBar';
 
 const DragScrollBox = () => {
     const boxRef = useRef(null);
