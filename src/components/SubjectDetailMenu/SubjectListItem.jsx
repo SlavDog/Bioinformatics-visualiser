@@ -1,5 +1,5 @@
 import Subject from "@components/Subject/Subject"
-import ChoiceConnections from "@components/Layout/ChoiceConnections";
+import ChoiceConnections from "@components/SubjectDetailMenu/ChoiceConnections";
 
 const subjectHeight = 140;
 const subjectWidth = 250;

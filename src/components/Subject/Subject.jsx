@@ -1,4 +1,4 @@
-import './Subject.css'
+import '@components/Subject/Subject.css'
 import { useState } from 'react';
 import SubjectDetailMenu from '@components/SubjectDetailMenu/SubjectDetailMenu';
 
@@ -37,7 +37,13 @@ const Subject = ({ code, course, style, setDragEnabled }) => {
                         <p className="subjectCredits">{limit} {course.credits ? "kr." : "předm."}</p>
                     </div>
                 </div>
-                <SubjectDetailMenu open={isOpen} onClose={() => {setIsOpen(false); setDragEnabled(true);}} source={detailMenuSourceName} setIsOpen={setIsOpen} credits={limit}/>
+                <SubjectDetailMenu
+                    open={isOpen}
+                    onClose={() => {setIsOpen(false); setDragEnabled(true);}}
+                    source={detailMenuSourceName}
+                    setIsOpen={setIsOpen}
+                    credits={limit}
+                />
             </>
         );
 }

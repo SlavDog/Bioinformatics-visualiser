@@ -1,6 +1,6 @@
-import '../Subject/Subject.css'
+import '@components/Subject/Subject.css'
 import subjectInfoData from '@/data/final_tree.json'
-import SubjectDetailMenuHeader from '@components/SubjectDetailMenu/SubjectDetailMenuHeader';
+import SubjectDetailMenuHeader from '@components/ui/SubjectDetailMenuHeader';
 import SubjectList from '@components/SubjectDetailMenu/SubjectList';
 import { getChoiceLimitText } from '@/utils/textHelpers';
 
