@@ -1,7 +1,7 @@
-import { addChoiceNodes } from "./choiceNodes";
-import { parseSemester, ensureOffset } from "./dataUtils";
-import { fillOrGroupOffsets, fillEdgeXOffsets } from "./offsets";
-import { createSuccessingHelperNodes } from "./helperNodes";
+import { addChoiceNodes } from "@utils/Graph/choiceNodes";
+import { parseSemester, ensureOffset } from "@utils/Graph//dataUtils";
+import { fillOrGroupOffsets, fillEdgeXOffsets } from "@utils/Graph/offsets";
+import { createSuccessingHelperNodes } from "@utils/Graph/helperNodes";
 
 export function addHelperNodesAndGetOffsets(subjectData) {
     const edgeXOffsets = {};

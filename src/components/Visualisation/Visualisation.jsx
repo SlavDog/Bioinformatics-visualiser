@@ -1,11 +1,11 @@
-import subjectInfoData from '../../data/final_tree.json'
-import Subject from '../Subject/Subject';
-import SmallSubject from '../Subject/SmallSubject';
-import Connections from './Connections';
-import { useState, useEffect } from 'react';
+import subjectInfoData from '@/data/final_tree.json'
+import Subject from '@components/Subject/Subject';
+import SmallSubject from '@components/Subject/SmallSubject';
+import Connections from '@components/Visualisation/Connections';
+import OrGates from '@components/Visualisation/OrGates';
+import SemesterColumn from '@components/Visualisation/SemesterColumn';
 import {addHelperNodesAndGetOffsets, getPositions, getUniquePredGroups, isInSomeChoice, getYOffsetForOrGroup} from '@/utils/graph'
-import OrGates from './OrGates';
-import SemesterColumn from './SemesterColumn';
+import { useState, useEffect } from 'react';
 
 
 const Layout = {

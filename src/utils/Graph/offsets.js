@@ -1,4 +1,4 @@
-import { ensureOffset } from './dataUtils.js';
+import { ensureOffset } from '@utils/Graph/dataUtils.js';
 
 export function fillEdgeXOffsets(edgeXOffsets, infoData, orderData) {
     // count number of successors per semester

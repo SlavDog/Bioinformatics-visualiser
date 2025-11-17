@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from 'react';
-import Visualisation from '../Visualisation/Visualisation';
+import Visualisation from '@components/Visualisation/Visualisation';
 
 const DragScrollBox = () => {
     const boxRef = useRef(null);

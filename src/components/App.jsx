@@ -1,4 +1,4 @@
-import DragScrollBox from './Layout/DragScrollBox.jsx';
+import DragScrollBox from '@components/Layout/DragScrollBox.jsx';
 
 function App() {
   return (

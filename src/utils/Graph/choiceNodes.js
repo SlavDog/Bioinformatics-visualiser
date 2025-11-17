@@ -1,4 +1,4 @@
-import { emptyNode } from "./dataUtils";
+import { emptyNode } from "@utils/Graph/dataUtils";
 
 export function addChoiceNodes(details, order, choices) {
     Object.entries(order).forEach(([semester, subjectList]) => {

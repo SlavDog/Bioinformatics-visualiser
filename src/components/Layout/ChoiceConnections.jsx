@@ -1,5 +1,5 @@
-import subjectInfoData from '../../data/final_tree.json'
-import ChoiceConnection from '../ui/ChoiceConnection';
+import subjectInfoData from '@/data/final_tree.json'
+import ChoiceConnection from '@components/ui/ChoiceConnection';
 
 function ChoiceConnections({course, subjectWidth, isPredecessor}) {
     let subjectsList = isPredecessor ? course.predecessors : course.successors;

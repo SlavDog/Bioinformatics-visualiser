@@ -1,5 +1,5 @@
-import { emptyNode, ensureOffset } from './dataUtils.js';
-import { deleteCodeFromOrGroups } from './orGroups.js';
+import { emptyNode, ensureOffset } from '@utils/Graph/dataUtils.js';
+import { deleteCodeFromOrGroups } from '@utils/Graph/orGroups.js';
 
 export function createSuccessingHelperNodes(parentCode, parentSemester,
                                      successorCode, succSemester,

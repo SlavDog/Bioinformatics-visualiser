@@ -1,4 +1,4 @@
-import { isInSomeChoice } from "./choiceNodes";
+import { isInSomeChoice } from "@utils/Graph/choiceNodes";
 
 export function getSubtreeSizes(data) {
     const visited = new Set();

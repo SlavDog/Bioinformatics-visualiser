@@ -1,8 +1,8 @@
 import '../Subject/Subject.css'
-import subjectInfoData from '../../data/final_tree.json'
-import SubjectDetailMenuHeader from './SubjectDetailMenuHeader';
-import SubjectList from './SubjectList';
-import { getChoiceLimitText } from '../../utils/textHelpers';
+import subjectInfoData from '@/data/final_tree.json'
+import SubjectDetailMenuHeader from '@components/SubjectDetailMenu/SubjectDetailMenuHeader';
+import SubjectList from '@components/SubjectDetailMenu/SubjectList';
+import { getChoiceLimitText } from '@/utils/textHelpers';
 
 import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';

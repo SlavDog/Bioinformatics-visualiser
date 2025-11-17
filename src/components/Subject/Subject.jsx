@@ -1,6 +1,6 @@
 import './Subject.css'
 import { useState } from 'react';
-import SubjectDetailMenu from '../SubjectDetailMenu/SubjectDetailMenu';
+import SubjectDetailMenu from '@components/SubjectDetailMenu/SubjectDetailMenu';
 
 const Subject = ({ code, course, style, setDragEnabled }) => {
     const [isOpen, setIsOpen] = useState(false);
