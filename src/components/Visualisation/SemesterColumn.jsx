@@ -13,6 +13,7 @@ function SemesterColumn({index, semesterSubjects, subjectInfoData, maxY}) {
      <div key={index} className="semesterColumn" style={{
         backgroundColor: index % 2 == 0 ? "#e8e8e8" : "white",
         left: Layout.padding + index * Layout.columnWidth,
+        top: 100,
         width: Layout.columnWidth,
         height: maxY + 300
     }}>

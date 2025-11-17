@@ -77,7 +77,7 @@ export function getPositions(newSubjectInfoData, subjectOrderData, choices) {
 
     Object.entries(codeToPositions).forEach(([code, [oldX, oldY]]) => {
         const x = Layout.padding + oldX * Layout.columnWidth  + (Layout.columnWidth - Layout.subjectWidth - 2 * Layout.subjectPadding) / 2;
-        const y = oldY * Layout.rowHeight + (Layout.rowHeight - Layout.subjectHeight - 2 * Layout.subjectPadding) / 2;
+        const y = 100 + oldY * Layout.rowHeight + (Layout.rowHeight - Layout.subjectHeight - 2 * Layout.subjectPadding) / 2;
         positions[code] = { x, y };
 
         if (x + Layout.columnWidth + Layout.subjectPadding * 2 > maxX) {maxX = x + Layout.columnWidth}
@@ -132,6 +132,6 @@ export function getOrGatesPositionsForSubject(code, course, processedSubjects, e
         .filter(group => group.length > 1)
         .map(group => {
             let yOffset = getYOffsetForOrGroup(edgeYOffsets, group, code);
-            return yOffset + Layout.subjectHeight / 2 + 15;
+            return 100 + yOffset + Layout.subjectHeight / 2 + 15;
         });
 }
