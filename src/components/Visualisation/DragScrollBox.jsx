@@ -77,9 +77,11 @@ function DragScrollBox() {
             ref={boxRef}
             onMouseDown={onMouseDown}
             >
-                <div style={{ position: 'absolute', top: "5vh", left: "6vw", zIndex: 100 }}>
-                    <button className='zoomButton' onClick={handleZoomIn} style={{ marginRight: '8px' }}>➕ Zoom In</button>
-                    <button className='zoomButton' onClick={handleZoomOut}>➖ Zoom Out</button>
+                <div style={{ position: 'absolute', top: "5vh", left: "6vw", zIndex: 100, width: "200px" }}>
+                    <div style={{display: "flex", flexDirection: "row", width: "240px", justifyContent: "space-evenly", padding: "10px 2px 10px 2px"}}>
+                        <button className='zoomButton' onClick={handleZoomIn}>➕ Zoom In</button>
+                        <button className='zoomButton' onClick={handleZoomOut}>➖ Zoom Out</button>
+                    </div>
                     <SideBar/>
                 </div>
                 <Visualisation scale={scale} setDragEnabled={setDragEnabled}/>
