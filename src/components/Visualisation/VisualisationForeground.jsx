@@ -17,7 +17,7 @@ function visualisationForeground({edgeXOffsets, edgeYOffsets,
             />
             {Object.entries(processedSubjects).map(([code, course]) => {
                 const pos = positions[code];
-                if (!pos || course.name == "" || isInSomeChoice(code, choices)) { return null; }
+                if (!pos || course.name == "") { return null; }
 
                 const orGatesPositions = getOrGatesPositionsForSubject(code, course, processedSubjects, edgeYOffsets);
                 return (

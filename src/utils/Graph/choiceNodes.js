@@ -69,10 +69,3 @@ export function addChoiceNodes(details, order, choices) {
     });
     return newOrder;
 }
-
-
-export function isInSomeChoice(subject, choices) {
-    return Object.values(choices)
-        .some(v => v.list
-            .some(item => item == subject || item.code == subject));
-}

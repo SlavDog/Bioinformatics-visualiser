@@ -1,4 +1,3 @@
-import { isInSomeChoice } from "@utils/Graph/choiceNodes";
 import { Layout } from "@/consts/VisualisationParameters";
 import { getUniquePredGroups } from "@utils/Graph/orGroups";
 import { getYOffsetForOrGroup } from "@utils/Graph/offsets";
@@ -56,7 +55,6 @@ export function getPositions(newSubjectInfoData, subjectOrderData, choices) {
             if (codeToPositions[code]
                 || !newSubjectInfoData[code]
                 || newSubjectInfoData[code].semester == "null"
-                || isInSomeChoice(code, choices)
             ) {
                 return;
             }
@@ -106,7 +104,6 @@ export function getTreePositions(newSubjectInfoData, semesterIndex,
     for (let i = 0; i < succs.length; i++) {
         if (!newSubjectInfoData[succs[i].code]) { continue; }   // successor not in data, move to another one
         if (newSubjectInfoData[succs[i].code].semester != "null"
-            && !isInSomeChoice(succs[i].code, choices)
             && !getTreePositions(newSubjectInfoData, semesterIndex + 1,
                                  currentY, succs[i].code, codeToPositions,
                                  positionsToCode, choices)) {
