@@ -3,7 +3,9 @@ import { Layout } from "@/consts/VisualisationParameters";
 function SemesterColumn({index, semesterSubjects, processedSubjects, maxY}) {
     const semesterCredits = semesterSubjects
         .map(subject => {
-            if (!subject.code) return 0;
+            if (!subject.code) {
+                return subject.credits;
+            }
             const course = processedSubjects[subject.code];
             return course && course.credits ? Number(course.credits) : 0;
         })

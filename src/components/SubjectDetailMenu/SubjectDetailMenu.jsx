@@ -34,7 +34,6 @@ function SubjectDetailMenu({open, onClose, source, credits}) {
     if (!isVisible) return null;
 
     const sourceChoiceCode = source.replace(/-\d+$/, "");
-    console.log(sourceChoiceCode);
     const choiceLimit = subjectInfoData["choices"][sourceChoiceCode].type;
     const limitText = getChoiceLimitText(choiceLimit, credits);
 
