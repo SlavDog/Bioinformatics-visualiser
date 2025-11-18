@@ -33,15 +33,17 @@ function SubjectDetailMenu({open, onClose, source, credits}) {
 
     if (!isVisible) return null;
 
-    const choiceLimit = subjectInfoData["choices"][source].type;
+    const sourceChoiceCode = source.replace(/-\d+$/, "");
+    console.log(sourceChoiceCode);
+    const choiceLimit = subjectInfoData["choices"][sourceChoiceCode].type;
     const limitText = getChoiceLimitText(choiceLimit, credits);
 
     return createPortal(
     <>
         <div className={`overlay ${isClosing ? "closingOverlay" : isAnimatingOpen ? "openingOverlay" : ""}`} onClick={onClose}></div>
         <div className={`subjectDetailMenuBox ${isClosing ? "closingBox" : isAnimatingOpen ? "openingBox" : ""}`}>
-            <SubjectDetailMenuHeader choiceName={subjectInfoData["choices"][source]["refnCZ"]} limitText={limitText} onClose={onClose} />
-            <SubjectList source={source}/>
+            <SubjectDetailMenuHeader choiceName={subjectInfoData["choices"][sourceChoiceCode]["refnCZ"]} limitText={limitText} onClose={onClose} />
+            <SubjectList source={sourceChoiceCode}/>
         </div>
     </>, document.getElementById('SubjectDetailMenuPortal'))
 }
