@@ -1,6 +1,7 @@
 import { useRef, useState, useEffect } from 'react';
 import Visualisation from '@components/Visualisation/Visualisation';
-import { Layout } from '../../consts/VisualisationParameters';
+import { Layout } from '@/consts/VisualisationParameters';
+import SideBar from '@components/layouts/SideBar';
 
 function DragScrollBox() {
     const boxRef = useRef(null);
@@ -79,6 +80,7 @@ function DragScrollBox() {
                 <div style={{ position: 'absolute', top: "5vh", left: "6vw", zIndex: 100 }}>
                     <button className='zoomButton' onClick={handleZoomIn} style={{ marginRight: '8px' }}>➕ Zoom In</button>
                     <button className='zoomButton' onClick={handleZoomOut}>➖ Zoom Out</button>
+                    <SideBar/>
                 </div>
                 <Visualisation scale={scale} setDragEnabled={setDragEnabled}/>
             </div>
