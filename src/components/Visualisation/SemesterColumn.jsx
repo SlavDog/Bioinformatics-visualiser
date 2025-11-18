@@ -1,7 +1,6 @@
-import { Layout } from "../../consts/VisualisationParameters";
+import { Layout } from "@/consts/VisualisationParameters";
 
 function SemesterColumn({index, semesterSubjects, processedSubjects, maxY}) {
-    console.log(semesterSubjects);
     const semesterCredits = semesterSubjects
         .map(subject => {
             if (!subject.code) return 0;
