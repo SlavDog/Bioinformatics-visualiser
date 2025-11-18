@@ -1,9 +1,9 @@
 import { Layout } from "@/consts/VisualisationParameters";
 
-function Connections({subjectInfoData, positions, xOffsets, yOffsets}) {
+function Connections({processedSubjects, positions, xOffsets, yOffsets}) {
   return (
     <svg className='connections'>
-        {Object.entries(subjectInfoData).map(([startCode, course]) => {
+        {Object.entries(processedSubjects).map(([startCode, course]) => {
             return course.successors.map((endInfo, i) => {
                 const start = positions[startCode];
                 const endCode = endInfo.code;

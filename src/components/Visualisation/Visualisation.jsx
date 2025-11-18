@@ -9,10 +9,9 @@ import { Layout } from '@/consts/VisualisationParameters';
 import { useState, useEffect } from 'react';
 
 function Visualisation({scale, setDragEnabled}) {
-    const [[processedSubjects, edgeXOffsets, edgeYOffsets], setOffsets] = useState([[], [], []]);
+    const [[processedSubjects, processedOrder, edgeXOffsets, edgeYOffsets], setOffsets] = useState([[], [], [], []]);
     const [[positions, maxX, maxY], setPositions] = useState([[], 0, 0]);
 
-    const semesterCount = Object.keys(subjectInfoData["order"]).length;
     const SubjectComponent = scale < 0.7 ? SmallSubject : Subject;
     const width = maxX + 2 * Layout.padding;
     const height = maxY + Layout.padding;
@@ -22,10 +21,12 @@ function Visualisation({scale, setDragEnabled}) {
         const offsets = addHelperNodesAndGetOffsets(subjectInfoData);
         setOffsets(offsets);
 
-        const pos = getPositions(offsets[0], subjectInfoData["order"],
+        const pos = getPositions(offsets[0], offsets[1],
                                  subjectInfoData["choices"]);
         setPositions(pos);
     }, []);
+
+    console.log(processedOrder);
 
     return (
         <div className="visualisationBox" 
@@ -37,8 +38,8 @@ function Visualisation({scale, setDragEnabled}) {
             <VisualisationBackground
                 maxX={maxX} 
                 maxY={maxY}
-                semesterCount={semesterCount}
-                subjectInfoData={subjectInfoData}
+                semesterCount={Object.keys(processedOrder).length}
+                processedOrder={processedOrder}
                 processedSubjects={processedSubjects}
                 scale={scale}
             >
@@ -47,7 +48,7 @@ function Visualisation({scale, setDragEnabled}) {
                     edgeYOffsets={edgeYOffsets}
                     positions={positions}
                     processedSubjects={processedSubjects}
-                    subjectInfoData={subjectInfoData}
+                    choices={subjectInfoData["choices"]}
                     SubjectComponent={SubjectComponent}
                     setDragEnabled={setDragEnabled}
                 />

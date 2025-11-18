@@ -1,10 +1,11 @@
 import { Layout } from "../../consts/VisualisationParameters";
 
-function SemesterColumn({index, semesterSubjects, subjectInfoData, maxY}) {
+function SemesterColumn({index, semesterSubjects, processedSubjects, maxY}) {
+    console.log(semesterSubjects);
     const semesterCredits = semesterSubjects
         .map(subject => {
             if (!subject.code) return 0;
-            const course = subjectInfoData[subject.code];
+            const course = processedSubjects[subject.code];
             return course && course.credits ? Number(course.credits) : 0;
         })
         .reduce((acc, c) => acc + c, 0);

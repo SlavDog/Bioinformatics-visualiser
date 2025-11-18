@@ -1,24 +1,34 @@
 import { emptyNode } from "@utils/Graph/dataUtils";
 
 export function addChoiceNodes(details, order, choices) {
+    const newOrder = structuredClone(order);
     Object.entries(order).forEach(([semester, subjectList]) => {
         subjectList
-                .filter((subject) => subject["choice"] != undefined)
-                .forEach((choiceSubject) => {
-            const choiceCode = choiceSubject["choice"];
-            if (choiceCode == "core" || choiceCode == "tv") { 
-                details[choiceCode] = {
-                ...emptyNode,
-                name: choices[choiceCode].refnCZ,
-                successors: [], 
-                predecessors: [],
-                credits: choiceSubject.credits,
-                subjects: [],
-                semester: Number(semester),
-                type: "choice"
-            };
-                return; 
-            }
+            .filter((subject) => subject["choice"] != undefined)
+            .forEach((choiceSubject) => {
+                const choiceCode = choiceSubject["choice"];
+                if (choiceCode == "core" || choiceCode == "tv") { 
+                    details[`${choiceCode}-${semester}`] = {
+                        ...emptyNode,
+                        name: choices[choiceCode].refnCZ,
+                        successors: [], 
+                        predecessors: [],
+                        credits: choiceSubject.credits,
+                        subjects: [],
+                        semester: Number(semester),
+                        type: "choice"
+                    };
+
+                    newOrder[semester] = newOrder[semester]
+                            .filter((subject) => subject["choice"] != choiceCode)
+                    newOrder[semester].push(
+                        {
+                            "choice": `${choiceCode}-${semester}`,
+                            "credits": choiceSubject.credits
+                        }
+                    )
+                    return;
+                };
 
             let successors = [];
             let predecessors = [];
@@ -45,7 +55,7 @@ export function addChoiceNodes(details, order, choices) {
                 details[predecessor.code].successors.push({"code": choiceCode, "groups" : predecessor.groups, "by_prerequisites": true});
             });
             
-            details[choiceCode] = {
+            details[`${choiceCode}-${semester}`] = {
                 ...emptyNode,
                 name: choices[choiceCode].refnCZ,
                 successors: successors, 
@@ -56,7 +66,8 @@ export function addChoiceNodes(details, order, choices) {
                 type: "choice"
             };
         });
-    })
+    });
+    return newOrder;
 }
 
 

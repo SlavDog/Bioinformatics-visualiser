@@ -6,7 +6,7 @@ import { createSuccessingHelperNodes } from "@utils/Graph/helperNodes";
 export function addHelperNodesAndGetOffsets(subjectData) {
     const edgeXOffsets = {};
     const edgeYOffsets = {};
-    addChoiceNodes(subjectData["details"], subjectData["order"], subjectData["choices"]);
+    const newOrder = addChoiceNodes(subjectData["details"], subjectData["order"], subjectData["choices"]);
     const newDetails = structuredClone(subjectData["details"]);
     const oldDetails = subjectData["details"];
     const orGroupEndOffsets = {};
@@ -40,8 +40,8 @@ export function addHelperNodesAndGetOffsets(subjectData) {
             }
         })
     });
-    fillEdgeXOffsets(edgeXOffsets, newDetails, subjectData["order"]);
-    return [newDetails, edgeXOffsets, edgeYOffsets];
+    fillEdgeXOffsets(edgeXOffsets, newDetails, newOrder);
+    return [newDetails, newOrder, edgeXOffsets, edgeYOffsets];
 }
 
 

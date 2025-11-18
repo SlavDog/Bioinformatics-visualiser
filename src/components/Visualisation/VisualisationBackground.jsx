@@ -1,6 +1,6 @@
 import SemesterColumn from "@components/Visualisation/SemesterColumn";
 
-function VisualisationBackground({children, maxX, maxY, semesterCount, subjectInfoData, processedSubjects, scale}) {
+function VisualisationBackground({children, maxX, maxY, semesterCount, processedOrder, processedSubjects, scale}) {
     return (
         <div className="visualisationBackground"
             style={{
@@ -13,8 +13,8 @@ function VisualisationBackground({children, maxX, maxY, semesterCount, subjectIn
                 return (
                     <SemesterColumn 
                         index={i} 
-                        semesterSubjects={subjectInfoData["order"][i + 1]}
-                        subjectInfoData={processedSubjects}
+                        semesterSubjects={processedOrder[i + 1]}
+                        processedSubjects={processedSubjects}
                         maxY={maxY}
                     />
                 );

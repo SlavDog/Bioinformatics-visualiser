@@ -5,19 +5,19 @@ import { Layout } from "@/consts/VisualisationParameters";
 import OrGates from "@components/Visualisation/OrGates";
 
 function visualisationForeground({edgeXOffsets, edgeYOffsets, 
-        positions, processedSubjects, subjectInfoData,
+        positions, processedSubjects, choices,
         SubjectComponent, setDragEnabled}) {
     return (
         <div className="visualisationForeground">
             <Connections 
-                subjectInfoData={processedSubjects}
+                processedSubjects={processedSubjects}
                 positions={positions}
                 xOffsets={edgeXOffsets}
                 yOffsets={edgeYOffsets}
             />
             {Object.entries(processedSubjects).map(([code, course]) => {
                 const pos = positions[code];
-                if (!pos || course.name == "" || isInSomeChoice(code, subjectInfoData["choices"])) { return null; }
+                if (!pos || course.name == "" || isInSomeChoice(code, choices)) { return null; }
 
                 const orGatesPositions = getOrGatesPositionsForSubject(code, course, processedSubjects, edgeYOffsets);
                 return (
