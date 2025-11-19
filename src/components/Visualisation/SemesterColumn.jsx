@@ -11,13 +11,13 @@ function SemesterColumn({index, semesterSubjects, processedSubjects, maxY}) {
         })
         .reduce((acc, c) => acc + c, 0);
 
+    console.log(index * Layout.columnWidth + Layout.columnWidth);
     return (
      <div key={index} className="semesterColumn" style={{
         backgroundColor: index % 2 == 0 ? "#e8e8e8" : "white",
-        left: Layout.padding + index * Layout.columnWidth,
-        top: 100,
+        left: index * Layout.columnWidth,
         width: Layout.columnWidth,
-        height: maxY + 300
+        height: maxY + Layout.semesterTitleInset
     }}>
         <p className='semesterTitles'>{index + 1}. Semestr</p>
         <p className='semesterSubtitles'>Celkem kreditů: {semesterCredits}</p>

@@ -5,4 +5,5 @@ export const Layout = {
     subjectWidth: 200,
     padding: 500,
     subjectPadding: 16,
+    semesterTitleInset: 250
 }

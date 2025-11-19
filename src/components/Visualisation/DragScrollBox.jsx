@@ -27,7 +27,7 @@ function DragScrollBox() {
     useEffect(() => {
     if (boxRef.current) {
         boxRef.current.scrollLeft = 0;
-        boxRef.current.scrollTop = Layout.padding;
+        boxRef.current.scrollTop = 0;
     }
     }, []);
 
@@ -71,22 +71,23 @@ function DragScrollBox() {
 
 
     return (
-        <>
-            <div
-            className="scrollableBox"
-            ref={boxRef}
-            onMouseDown={onMouseDown}
-            >
-                <div style={{ position: 'absolute', top: "5vh", left: "6vw", zIndex: 100, width: "200px" }}>
-                    <div style={{display: "flex", flexDirection: "row", width: "240px", justifyContent: "space-evenly", padding: "10px 2px 10px 2px"}}>
-                        <button className='zoomButton' onClick={handleZoomIn}>➕ Zoom In</button>
-                        <button className='zoomButton' onClick={handleZoomOut}>➖ Zoom Out</button>
-                    </div>
-                    <SideBar/>
-                </div>
-                <Visualisation scale={scale} setDragEnabled={setDragEnabled}/>
-            </div>
-        </>
+        // <>
+        //     <div
+        //     className="scrollableBox"
+        //     ref={boxRef}
+        //     onMouseDown={onMouseDown}
+        //     >
+        //         <div style={{ position: 'absolute', top: "5vh", left: "6vw", zIndex: 100, width: "200px" }}>
+        //             <div style={{display: "flex", flexDirection: "row", width: "240px", justifyContent: "space-evenly", padding: "10px 2px 10px 2px"}}>
+        //                 <button className='zoomButton' onClick={handleZoomIn}>➕ Zoom In</button>
+        //                 <button className='zoomButton' onClick={handleZoomOut}>➖ Zoom Out</button>
+        //             </div>
+        //             <SideBar/>
+        //         </div>
+        //         <Visualisation scale={scale} setDragEnabled={setDragEnabled}/>
+        //     </div>
+        // </>
+        <Visualisation scale={scale} setDragEnabled={setDragEnabled}/>
   );
 }
 

@@ -1,12 +1,14 @@
 import SemesterColumn from "@components/Visualisation/SemesterColumn";
+import { Layout } from "@/consts/VisualisationParameters";
 
 function VisualisationBackground({children, maxX, maxY, semesterCount, processedOrder, processedSubjects, scale}) {
+    console.log(maxY);
     return (
         <div className="visualisationBackground"
             style={{
                 transform: `scale(${scale})`,
-                width: maxX + 40,
-                height: maxY,
+                width: maxX,
+                height: maxY + Layout.semesterTitleInset
             }}
         >
             {Array.from({ length: semesterCount }).map((_, i) => {

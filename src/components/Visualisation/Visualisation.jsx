@@ -14,8 +14,8 @@ function Visualisation({scale, setDragEnabled}) {
     const [[positions, maxX, maxY], setPositions] = useState([[], 0, 0]);
 
     const SubjectComponent = scale < 0.7 ? SmallSubject : Subject;
-    const width = maxX + 2 * Layout.padding;
-    const height = maxY + Layout.padding;
+    const width = maxX;
+    const height = maxY;
 
     // Calculate positions and offsets only once
     useEffect(() => {
@@ -26,8 +26,6 @@ function Visualisation({scale, setDragEnabled}) {
                                  subjectInfoData["choices"]);
         setPositions(pos);
     }, []);
-
-    console.log(processedOrder);
 
     return (
         <div className="visualisationBox" 

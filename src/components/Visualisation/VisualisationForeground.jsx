@@ -8,7 +8,10 @@ function visualisationForeground({edgeXOffsets, edgeYOffsets,
         positions, processedSubjects, choices,
         SubjectComponent, setDragEnabled}) {
     return (
-        <div className="visualisationForeground">
+        <div className="visualisationForeground"
+            style={{
+                inset: `${Layout.semesterTitleInset}px 0 0 0`
+        }}>
             <Connections 
                 processedSubjects={processedSubjects}
                 positions={positions}
