@@ -1,0 +1,55 @@
+.sideBar {
+  position: absolute;
+  z-index: 10;
+  background-color: white;
+  border-radius: 20px;
+  border: 2px solid rgb(192, 192, 192);
+  padding: 20px;
+  font-family: "Inter", sans-serif;
+  width: 200px;
+}
+
+.sideBarTitle {
+  font-size: large;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #929292;
+}
+
+.sideBarSubtitle {
+  font-size: small;
+  font-weight: 600;
+  padding-top: 10px;
+}
+
+.field {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: space-between;
+  padding: 0px 0 3px 7px;
+}
+
+.preferenceFieldLabel {
+  font-size: small;
+}
+
+.tagsBox {
+  height: 100px;
+  border: 1px solid rgb(192, 192, 192);
+  border-radius: 5px;
+  margin-top: 10px;
+}
+
+select, .submitButton {
+  font-family: 'Inter', sans-serif;
+  background-color: #e6e6e6;
+  transition: background-color 0.2s ease;
+  border-radius: 5px;
+  border-width: 0px;
+  padding: 5px;
+}
+
+.submitButton:hover {
+  background-color: #b8b8b8;
+  cursor: pointer;
+}

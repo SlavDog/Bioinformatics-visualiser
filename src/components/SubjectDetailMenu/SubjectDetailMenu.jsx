@@ -3,6 +3,7 @@ import subjectInfoData from '@/data/final_tree.json'
 import SubjectDetailMenuHeader from '@components/ui/SubjectDetailMenuHeader';
 import SubjectList from '@components/SubjectDetailMenu/SubjectList';
 import { getChoiceLimitText } from '@/utils/textHelpers';
+import "./SubjectDetailMenu.css";
 
 import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';

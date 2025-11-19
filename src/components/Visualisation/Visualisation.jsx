@@ -1,10 +1,11 @@
-import subjectInfoData from '@/data/final_tree.json'
+import subjectInfoData from '@/data/final_tree.json';
 import Subject from '@components/Subject/Subject';
 import SmallSubject from '@components/Subject/SmallSubject';
-import {addHelperNodesAndGetOffsets, getPositions} from '@utils/Graph'
+import {addHelperNodesAndGetOffsets, getPositions} from '@utils/Graph';
 import VisualisationForeground from '@components/Visualisation/VisualisationForeground';
 import VisualisationBackground from '@components/Visualisation/VisualisationBackground';
 import { Layout } from '@/consts/VisualisationParameters';
+import "./Visualisation.css";
 
 import { useState, useEffect } from 'react';
 
@@ -13,8 +14,8 @@ function Visualisation({scale, setDragEnabled}) {
     const [[positions, maxX, maxY], setPositions] = useState([[], 0, 0]);
 
     const SubjectComponent = scale < 0.7 ? SmallSubject : Subject;
-    const width = maxX + 2 * Layout.padding;
-    const height = maxY + Layout.padding;
+    const width = (maxX + 2 * Layout.paddingHorizontal) * scale;
+    const height = (maxY + Layout.semesterTitleInset + 2 * Layout.paddingVertical) * scale;
 
     // Calculate positions and offsets only once
     useEffect(() => {
@@ -26,13 +27,11 @@ function Visualisation({scale, setDragEnabled}) {
         setPositions(pos);
     }, []);
 
-    console.log(processedOrder);
-
     return (
         <div className="visualisationBox" 
             style = {{
                 width: width,
-                height: height
+                height: height,
             }}
         >
             <VisualisationBackground

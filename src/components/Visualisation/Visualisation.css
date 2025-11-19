@@ -1,0 +1,72 @@
+.visualisationBox {
+  background-color: gray;
+}
+
+.visualisationBackground {
+  position: relative;
+  transform-origin: 0 0;
+  transition: transform 0.1s ease-in;
+}
+
+.visualisationForeground {
+  position: absolute;
+}
+
+.scrollableBox {
+  width: 90vw;
+  height: 90vh;
+  overflow: scroll;
+  margin: 20px auto;
+  user-select: none;
+}
+
+.connections {
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: visible;
+}
+
+.semesterTitles {
+  font-family: "Inter", sans-serif;
+  font-weight: 600;
+  font-size: 32px;
+  padding-top: 100px;
+  margin-bottom: 0;
+}
+
+.semesterSubtitles {
+  font-family: "Inter", sans-serif;
+  font-weight: 300;
+  font-size: 18px;
+  margin-top: 10px;
+}
+
+.semesterColumn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: absolute;
+}
+
+.bigTitle {
+  font-family: "Inter", sans-serif;
+  font-weight: 600;
+  font-size: 28px;
+  text-align: center;
+}
+
+.bigSubTitle {
+  font-family: "Inter", sans-serif;
+  font-weight: 300;
+  font-size: 20px;
+  margin-top: 0;
+  text-align: center;
+}
+
+.zoomButton {
+   font-family: "Inter", sans-serif;
+   font-weight: 500;
+   border: 2px solid rgb(192, 192, 192);
+   border-radius: 5px;
+}

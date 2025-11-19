@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect } from 'react';
 import Visualisation from '@components/Visualisation/Visualisation';
-import { Layout } from '@/consts/VisualisationParameters';
-import SideBar from '@components/layouts/SideBar';
+import SideBar from '@components/layouts//SideBar/SideBar';
+import RangeScaler from '@components/ui/RangeScaler/RangeScaler';
 
 function DragScrollBox() {
     const boxRef = useRef(null);
@@ -12,24 +12,15 @@ function DragScrollBox() {
 
     const onMouseDown = (e) => {
         if (!dragEnabled) return;
+        if (e.target.closest(".sideBar") || e.target.closest(".rangeScaler")) {
+            return;
+        }
         setIsDragging(true);
         setStartX(e.screenX);
         setStartY(e.screenY);
     }
 
-
-    // Zoom in
-    const handleZoomIn = () => setScale(prevScale => Math.min(prevScale + 0.1, 1.0));
-    const handleZoomOut = () => setScale(prevScale => Math.max(prevScale - 0.1, 0.5));
     const [scale, setScale] = useState(0.7);
-
-
-    useEffect(() => {
-    if (boxRef.current) {
-        boxRef.current.scrollLeft = 0;
-        boxRef.current.scrollTop = Layout.padding;
-    }
-    }, []);
 
     useEffect(() => {
 
@@ -73,15 +64,12 @@ function DragScrollBox() {
     return (
         <>
             <div
-            className="scrollableBox"
-            ref={boxRef}
-            onMouseDown={onMouseDown}
+                className="scrollableBox"
+                ref={boxRef}
+                onMouseDown={onMouseDown}
             >
                 <div style={{ position: 'absolute', top: "5vh", left: "6vw", zIndex: 100, width: "200px" }}>
-                    <div style={{display: "flex", flexDirection: "row", width: "240px", justifyContent: "space-evenly", padding: "10px 2px 10px 2px"}}>
-                        <button className='zoomButton' onClick={handleZoomIn}>➕ Zoom In</button>
-                        <button className='zoomButton' onClick={handleZoomOut}>➖ Zoom Out</button>
-                    </div>
+                    <RangeScaler scale={scale} setScale={setScale} />
                     <SideBar/>
                 </div>
                 <Visualisation scale={scale} setDragEnabled={setDragEnabled}/>

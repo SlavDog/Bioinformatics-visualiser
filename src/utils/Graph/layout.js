@@ -45,14 +45,14 @@ export function getPositions(newSubjectInfoData, subjectOrderData, choices) {
     let semestersCount = Object.keys(subjectOrderData).length;
     // const [subtreeSizes, subtreeDepths] = getSubtreeSizes(newSubjectInfoData);
     
-    const codeToPositions = {};
+    const codeToCoordinates = {};
     const positionsToCode = Array.from({ length: semestersCount }, () => []);
 
     Object.values(subjectOrderData).forEach((semesterArray, semesterIndex) => {
         semesterArray.forEach((subject) => {
             let positionIndex = 0;
             const code = subject.code || subject.choice;   // use choice code if it is a choice
-            if (codeToPositions[code]
+            if (codeToCoordinates[code]
                 || !newSubjectInfoData[code]
                 || newSubjectInfoData[code].semester == "null"
             ) {
@@ -62,7 +62,7 @@ export function getPositions(newSubjectInfoData, subjectOrderData, choices) {
             let placed = false;
             while (!placed) {
                 if (getTreePositions(newSubjectInfoData, semesterIndex, 
-                                    positionIndex, code, codeToPositions,
+                                    positionIndex, code, codeToCoordinates,
                                     positionsToCode, choices)) {
                     placed = true;
                 }
@@ -71,22 +71,23 @@ export function getPositions(newSubjectInfoData, subjectOrderData, choices) {
         })
     })
 
-    const positions = {}
+    const realPositions = {}
 
-    Object.entries(codeToPositions).forEach(([code, [oldX, oldY]]) => {
-        const x = Layout.padding + oldX * Layout.columnWidth  + (Layout.columnWidth - Layout.subjectWidth - 2 * Layout.subjectPadding) / 2;
-        const y = 100 + oldY * Layout.rowHeight + (Layout.rowHeight - Layout.subjectHeight - 2 * Layout.subjectPadding) / 2;
-        positions[code] = { x, y };
+    Object.entries(codeToCoordinates).forEach(([code, [coordX, coordY]]) => {
+        const x = coordX * Layout.columnWidth  + (Layout.columnWidth - Layout.subjectWidth - 2 * Layout.subjectPadding) / 2;
+        const y = coordY * Layout.rowHeight + (Layout.rowHeight - Layout.subjectHeight - 2 * Layout.subjectPadding) / 2;
+        realPositions[code] = { x, y };
 
-        if (x + Layout.columnWidth + Layout.subjectPadding * 2 > maxX) {maxX = x + Layout.columnWidth}
-        if (y + Layout.rowHeight + Layout.subjectPadding * 2 > maxY) {maxY = y + Layout.rowHeight}
+        // adding one, because the outer edge's real coordinate is needed
+        if ((coordX + 1) * Layout.columnWidth > maxX) {maxX = (coordX + 1) * Layout.columnWidth;}
+        if ((coordY + 1) * Layout.rowHeight > maxY) {maxY = (coordY + 1) * Layout.rowHeight;}
     })
-    return [positions, maxX, maxY];
+    return [realPositions, maxX, maxY];
 }
 
 
 export function getTreePositions(newSubjectInfoData, semesterIndex, 
-                          positionIndex, code, codeToPositions, 
+                          positionIndex, code, codeToCoordinates, 
                           positionsToCode, choices) {
     // Position already occupied
     if ((positionsToCode[semesterIndex]
@@ -95,7 +96,7 @@ export function getTreePositions(newSubjectInfoData, semesterIndex,
     }
 
     // Already drew this node
-    if (codeToPositions[code]) {
+    if (codeToCoordinates[code]) {
         return true;
     }
 
@@ -105,13 +106,13 @@ export function getTreePositions(newSubjectInfoData, semesterIndex,
         if (!newSubjectInfoData[succs[i].code]) { continue; }   // successor not in data, move to another one
         if (newSubjectInfoData[succs[i].code].semester != "null"
             && !getTreePositions(newSubjectInfoData, semesterIndex + 1,
-                                 currentY, succs[i].code, codeToPositions,
+                                 currentY, succs[i].code, codeToCoordinates,
                                  positionsToCode, choices)) {
             return false;
         }
         currentY += 1;
     }
-    codeToPositions[code] = [semesterIndex, positionIndex];
+    codeToCoordinates[code] = [semesterIndex, positionIndex];
     positionsToCode[semesterIndex][positionIndex] = code;
     return true;
 }
@@ -129,6 +130,6 @@ export function getOrGatesPositionsForSubject(code, course, processedSubjects, e
         .filter(group => group.length > 1)
         .map(group => {
             let yOffset = getYOffsetForOrGroup(edgeYOffsets, group, code);
-            return 100 + yOffset + Layout.subjectHeight / 2 + 15;
+            return yOffset + Layout.subjectHeight / 2 + 15;
         });
 }
