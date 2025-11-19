@@ -3,7 +3,8 @@ export const Layout = {
     rowHeight: 175,
     subjectHeight: 115,
     subjectWidth: 200,
-    padding: 500,
+    paddingHorizontal: 400,
+    paddingVertical: 100,
     subjectPadding: 16,
     semesterTitleInset: 250
 }

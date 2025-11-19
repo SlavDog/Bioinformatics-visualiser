@@ -23,14 +23,6 @@ function DragScrollBox() {
     const handleZoomOut = () => setScale(prevScale => Math.max(prevScale - 0.1, 0.5));
     const [scale, setScale] = useState(0.7);
 
-
-    useEffect(() => {
-    if (boxRef.current) {
-        boxRef.current.scrollLeft = 0;
-        boxRef.current.scrollTop = 0;
-    }
-    }, []);
-
     useEffect(() => {
 
         const onMouseMove = (e) => {
@@ -71,23 +63,21 @@ function DragScrollBox() {
 
 
     return (
-        // <>
-        //     <div
-        //     className="scrollableBox"
-        //     ref={boxRef}
-        //     onMouseDown={onMouseDown}
-        //     >
-        //         <div style={{ position: 'absolute', top: "5vh", left: "6vw", zIndex: 100, width: "200px" }}>
-        //             <div style={{display: "flex", flexDirection: "row", width: "240px", justifyContent: "space-evenly", padding: "10px 2px 10px 2px"}}>
-        //                 <button className='zoomButton' onClick={handleZoomIn}>➕ Zoom In</button>
-        //                 <button className='zoomButton' onClick={handleZoomOut}>➖ Zoom Out</button>
-        //             </div>
-        //             <SideBar/>
-        //         </div>
-        //         <Visualisation scale={scale} setDragEnabled={setDragEnabled}/>
-        //     </div>
-        // </>
-        <Visualisation scale={scale} setDragEnabled={setDragEnabled}/>
+        <>
+            <div
+            className="scrollableBox"
+            ref={boxRef}
+            onMouseDown={onMouseDown}
+            >
+                <div style={{ position: 'absolute', top: "5vh", left: "6vw", zIndex: 100, width: "200px" }}>
+                    <div style={{display: "flex", flexDirection: "row", width: "240px", justifyContent: "space-evenly", padding: "10px 2px 10px 2px"}}>
+                        <input type="range" id="volume" min="0.5" max="1.5" step="0.1" value={scale} onChange={(e) => setScale(e.target.value)} />
+                    </div>
+                    <SideBar/>
+                </div>
+                <Visualisation scale={scale} setDragEnabled={setDragEnabled}/>
+            </div>
+        </>
   );
 }
 

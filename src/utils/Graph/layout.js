@@ -78,6 +78,7 @@ export function getPositions(newSubjectInfoData, subjectOrderData, choices) {
         const y = coordY * Layout.rowHeight + (Layout.rowHeight - Layout.subjectHeight - 2 * Layout.subjectPadding) / 2;
         realPositions[code] = { x, y };
 
+        // adding one, because the outer edge's real coordinate is needed
         if ((coordX + 1) * Layout.columnWidth > maxX) {maxX = (coordX + 1) * Layout.columnWidth;}
         if ((coordY + 1) * Layout.rowHeight > maxY) {maxY = (coordY + 1) * Layout.rowHeight;}
     })

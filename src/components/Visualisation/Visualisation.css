@@ -1,11 +1,7 @@
-.visualisationBox {
-  background-color: red;
-}
-
 .visualisationBackground {
+  position: relative;
   transform-origin: 0 0;
-  background-color: aqua;
-  transition: transform 0.2s ease-out;
+  transition: transform 0.1s ease-in;
 }
 
 .visualisationForeground {
@@ -18,8 +14,6 @@
   overflow: scroll;
   margin: 20px auto;
   user-select: none;
-  display: flex;
-  justify-content: center;
 }
 
 .connections {

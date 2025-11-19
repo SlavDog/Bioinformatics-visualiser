@@ -14,8 +14,8 @@ function Visualisation({scale, setDragEnabled}) {
     const [[positions, maxX, maxY], setPositions] = useState([[], 0, 0]);
 
     const SubjectComponent = scale < 0.7 ? SmallSubject : Subject;
-    const width = maxX;
-    const height = maxY;
+    const width = (maxX + 2 * Layout.paddingHorizontal) * scale;
+    const height = (maxY + Layout.semesterTitleInset + 2 * Layout.paddingVertical) * scale;
 
     // Calculate positions and offsets only once
     useEffect(() => {
@@ -31,7 +31,8 @@ function Visualisation({scale, setDragEnabled}) {
         <div className="visualisationBox" 
             style = {{
                 width: width,
-                height: height
+                height: height,
+                backgroundColor: "aquamarine",
             }}
         >
             <VisualisationBackground
