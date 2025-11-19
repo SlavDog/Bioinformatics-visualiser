@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect } from 'react';
 import Visualisation from '@components/Visualisation/Visualisation';
 import { Layout } from '@/consts/VisualisationParameters';
-import SideBar from '@components/layouts/SideBar';
+import SideBar from '@components/layouts//SideBar/SideBar';
 
 function DragScrollBox() {
     const boxRef = useRef(null);

@@ -1,6 +1,6 @@
 import SubjectListItem from "@components/SubjectDetailMenu/SubjectListItem";
 import subjectInfoData from '@/data/final_tree.json';
-import BigButton from "@components/ui/BigButton";
+import BigButton from "@components/ui/BigButton/BigButton";
 
 function SubjectList({source}) {
     const choice = subjectInfoData["choices"][source];

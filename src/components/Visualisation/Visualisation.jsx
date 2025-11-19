@@ -1,10 +1,11 @@
-import subjectInfoData from '@/data/final_tree.json'
+import subjectInfoData from '@/data/final_tree.json';
 import Subject from '@components/Subject/Subject';
 import SmallSubject from '@components/Subject/SmallSubject';
-import {addHelperNodesAndGetOffsets, getPositions} from '@utils/Graph'
+import {addHelperNodesAndGetOffsets, getPositions} from '@utils/Graph';
 import VisualisationForeground from '@components/Visualisation/VisualisationForeground';
 import VisualisationBackground from '@components/Visualisation/VisualisationBackground';
 import { Layout } from '@/consts/VisualisationParameters';
+import "./Visualisation.css";
 
 import { useState, useEffect } from 'react';
 

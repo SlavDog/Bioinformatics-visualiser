@@ -1,7 +1,8 @@
 import CheckboxField from "@components/ui/CheckboxField";
-import subjectInfoData from '@/data/final_tree.json'
+import subjectInfoData from '@/data/final_tree.json';
 import SelectField from "@components/ui/SelectField";
-import TagsBox from "../ui/TagsBox";
+import TagsBox from "@components/ui/TagsBox";
+import "./SideBar.css";
 
 function SideBar() {
     return (

@@ -1,0 +1,87 @@
+.subjectDetailMenuBox {
+  position: fixed;
+  top: 55%;
+  left: 50%;
+  transform: translate(-50%, -40%);
+  z-index: 1000;
+  background-color: white;
+  padding: 15px;
+  border: 3px solid #a000a0;
+  border-radius: 14px;
+  height: 70vh;
+  width: 90vw;
+  opacity: 0;
+  transition: opacity 0.2s ease, transform 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  overflow: scroll;
+  background-image: linear-gradient(160deg, #ffffff 0%, #fdd1ff 100%);
+}
+
+.menuBoxSubjectsContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    padding: 0;
+    margin: 0 0;
+    height: 100%;
+    width: 100%;
+    overflow-y: hidden;
+    overflow-x: auto;
+  }
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 1000;
+  transition: opacity 0.3s ease;
+}
+
+
+.openingBox {
+  opacity: 1;
+  transform: translate(-50%, -50%);
+}
+
+.closingBox {
+  opacity: 0;
+  transform: translate(-50%, -40%);
+}
+
+.openingOverlay {
+  opacity: 1;
+}
+
+.closingOverlay {
+  opacity: 0;
+}
+
+
+.choiceConnection circle,
+.choiceConnection line {
+  transition: stroke 0.2s ease-in-out;
+}
+
+.choiceConnection polygon,
+.choiceConnection text {
+  transition: fill 0.2s ease-in-out;
+}
+
+.choiceConnection:hover circle,
+.choiceConnection:hover line
+{
+  stroke: #a000a0;
+}
+
+.choiceConnection:hover polygon,
+.choiceConnection:hover text {
+  fill: #a000a0;
+}
