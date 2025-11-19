@@ -11,6 +11,9 @@ function DragScrollBox() {
 
     const onMouseDown = (e) => {
         if (!dragEnabled) return;
+        if (e.target.closest(".sideBar") || e.target.closest(".rangeScaler")) {
+            return;
+        }
         setIsDragging(true);
         setStartX(e.screenX);
         setStartY(e.screenY);
