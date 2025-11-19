@@ -1,6 +1,7 @@
 import { useRef, useState, useEffect } from 'react';
 import Visualisation from '@components/Visualisation/Visualisation';
 import SideBar from '@components/layouts//SideBar/SideBar';
+import RangeScaler from '@components/ui/RangeScaler/RangeScaler';
 
 function DragScrollBox() {
     const boxRef = useRef(null);
@@ -68,9 +69,7 @@ function DragScrollBox() {
                 onMouseDown={onMouseDown}
             >
                 <div style={{ position: 'absolute', top: "5vh", left: "6vw", zIndex: 100, width: "200px" }}>
-                    <div className='rangeScaler' style={{display: "flex", flexDirection: "row", width: "240px", justifyContent: "space-evenly", padding: "10px 2px 10px 2px"}}>
-                        <input type="range" id="volume" min="0.5" max="1.5" step="0.1" value={scale} onChange={(e) => setScale(e.target.value)} />
-                    </div>
+                    <RangeScaler scale={scale} setScale={setScale} />
                     <SideBar/>
                 </div>
                 <Visualisation scale={scale} setDragEnabled={setDragEnabled}/>
