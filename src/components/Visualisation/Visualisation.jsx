@@ -32,7 +32,6 @@ function Visualisation({scale, setDragEnabled}) {
             style = {{
                 width: width,
                 height: height,
-                backgroundColor: "aquamarine",
             }}
         >
             <VisualisationBackground
