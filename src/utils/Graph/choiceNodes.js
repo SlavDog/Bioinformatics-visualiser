@@ -24,7 +24,8 @@ export function addChoiceNodes(details, order, choices) {
                         });
                     });
                 };
-                saveChoiceNode(details, newOrder, choiceCode, choiceSubject, semester, choices, successors, predecessors);
+                saveChoiceNode(details, newOrder, choiceCode, choiceSubject,
+                               semester, choices, successors, predecessors);
         });
     });
     return newOrder;
@@ -44,7 +45,8 @@ function getPredsOrSuccs(isSuccs, subjChoices, details) {
 }
 
 
-function saveChoiceNode(details, newOrder, choiceCode, choiceSubject, semester, choices, successors, predecessors) {
+function saveChoiceNode(details, newOrder, choiceCode, choiceSubject,
+                        semester, choices, successors, predecessors) {
     details[`${choiceCode}-${semester}`] = {
         ...emptyNode,
         name: choices[choiceCode].refnCZ,
