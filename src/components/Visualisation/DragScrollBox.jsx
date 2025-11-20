@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect } from 'react';
 import Visualisation from '@components/Visualisation/Visualisation';
 import SideBar from '@components/layouts//SideBar/SideBar';
-import RangeScaler from '@components/ui/RangeScaler/RangeScaler';
+import { Layout } from '@/consts/VisualisationParameters';
 
 function DragScrollBox() {
     const boxRef = useRef(null);
@@ -12,9 +12,6 @@ function DragScrollBox() {
 
     const onMouseDown = (e) => {
         if (!dragEnabled) return;
-        if (e.target.closest(".sideBar") || e.target.closest(".rangeScaler")) {
-            return;
-        }
         setIsDragging(true);
         setStartX(e.screenX);
         setStartY(e.screenY);
@@ -64,15 +61,18 @@ function DragScrollBox() {
     return (
         <>
             <div
-                className="scrollableBox"
-                ref={boxRef}
-                onMouseDown={onMouseDown}
+                className="visualisationBox"
             >
-                <div style={{ position: 'absolute', top: "5vh", left: "6vw", zIndex: 100, width: "200px" }}>
-                    <RangeScaler scale={scale} setScale={setScale} />
-                    <SideBar/>
+                <SideBar scale={scale} setScale={setScale}/>
+                <div className="scrollableBox"
+                    ref={boxRef}
+                    onMouseDown={onMouseDown}
+                    style={{
+                        marginLeft: `${Layout.sidebarWidth + 42}px`
+                    }}
+                >
+                    <Visualisation scale={scale} setDragEnabled={setDragEnabled}/>
                 </div>
-                <Visualisation scale={scale} setDragEnabled={setDragEnabled}/>
             </div>
         </>
   );

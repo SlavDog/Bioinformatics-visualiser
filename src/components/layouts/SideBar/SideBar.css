@@ -1,12 +1,15 @@
 .sideBar {
-  position: absolute;
   z-index: 10;
   background-color: white;
-  border-radius: 20px;
   border: 2px solid rgb(192, 192, 192);
   padding: 20px;
   font-family: "Inter", sans-serif;
-  width: 200px;
+  position: absolute;
+  flex-direction: column;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  top: 0;
+  bottom: 0;
 }
 
 .sideBarTitle {
@@ -26,7 +29,7 @@
   flex-direction: row;
   width: 100%;
   justify-content: space-between;
-  padding: 0px 0 3px 7px;
+  padding: 0px 0 3px 0px;
 }
 
 .preferenceFieldLabel {

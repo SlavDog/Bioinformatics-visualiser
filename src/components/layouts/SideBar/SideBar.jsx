@@ -2,11 +2,17 @@ import CheckboxField from "@components/ui/CheckboxField";
 import subjectInfoData from '@/data/final_tree.json';
 import SelectField from "@components/ui/SelectField";
 import TagsBox from "@components/ui/TagsBox";
+import RangeScaler from "@components/ui/RangeScaler/RangeScaler";
+import { Layout } from "@/consts/VisualisationParameters";
 import "./SideBar.css";
 
-function SideBar() {
+function SideBar({scale, setScale}) {
     return (
-        <div className="sideBar">
+        <div className="sideBar"
+                style={{
+                   width: `${Layout.sidebarWidth}px` 
+                }}>
+            <RangeScaler scale={scale} setScale={setScale} />
             <h1 className="sideBarTitle">Preferovaná oblast</h1>
             <CheckboxField>Preferuji informatiku</CheckboxField>
             <CheckboxField>Preferuji matematiku</CheckboxField>

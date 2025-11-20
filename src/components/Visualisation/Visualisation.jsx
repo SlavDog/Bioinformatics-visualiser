@@ -28,7 +28,7 @@ function Visualisation({scale, setDragEnabled}) {
     }, []);
 
     return (
-        <div className="visualisationBox" 
+        <div className="visualisationBackgroundWithPadding" 
             style = {{
                 width: width,
                 height: height,

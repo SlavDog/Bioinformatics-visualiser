@@ -1,4 +1,4 @@
-.visualisationBox {
+.visualisationBackgroundWithPadding {
   background-color: gray;
 }
 
@@ -13,11 +13,17 @@
 }
 
 .scrollableBox {
+  height: 100%;
+  overflow: scroll;
+  background-color: gray;
+}
+
+.visualisationBox {
   width: 90vw;
   height: 90vh;
-  overflow: scroll;
   margin: 20px auto;
   user-select: none;
+  position: relative;
 }
 
 .connections {
