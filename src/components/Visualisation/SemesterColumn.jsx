@@ -17,7 +17,7 @@ function SemesterColumn({index, semesterSubjects, processedSubjects, maxY}) {
         backgroundColor: index % 2 == 0 ? "#e8e8e8" : "white",
         left: index * Layout.columnWidth,
         width: Layout.columnWidth,
-        height: maxY + Layout.semesterTitleInset
+        height: maxY + Layout.semesterTitleInset + Layout.semesterColumnBottomPadding,
     }}>
         <p className='semesterTitles'>{index + 1}. Semestr</p>
         <p className='semesterSubtitles'>Celkem kreditů: {semesterCredits}</p>

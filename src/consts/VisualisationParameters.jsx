@@ -7,5 +7,6 @@ export const Layout = {
     paddingVertical: 120,
     subjectPadding: 16,
     semesterTitleInset: 250,
-    sidebarWidth: 240
+    sidebarWidth: 240,
+    semesterColumnBottomPadding: 50,
 }

@@ -8,7 +8,7 @@ function VisualisationBackground({children, maxX, maxY, semesterCount, processed
             style={{
                 transform: `scale(${scale})`,
                 width: maxX * scale,
-                height: (maxY + Layout.semesterTitleInset) * scale,
+                height: (maxY + Layout.semesterTitleInset + Layout.semesterColumnBottomPadding) * scale,
                 top: Layout.paddingVertical * scale,
                 left: Layout.paddingHorizontal * scale
             }}

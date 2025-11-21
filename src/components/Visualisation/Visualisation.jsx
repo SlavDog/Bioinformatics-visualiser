@@ -15,7 +15,7 @@ function Visualisation({scale, setDragEnabled}) {
 
     const SubjectComponent = scale < 0.7 ? SmallSubject : Subject;
     const width = (maxX + 2 * Layout.paddingHorizontal) * scale;
-    const height = (maxY + Layout.semesterTitleInset + 2 * Layout.paddingVertical) * scale;
+    const height = (maxY + Layout.semesterTitleInset + Layout.semesterColumnBottomPadding + 2 * Layout.paddingVertical) * scale;
 
     // Calculate positions and offsets only once
     useEffect(() => {

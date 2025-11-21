@@ -86,7 +86,7 @@ function DragScrollBox() {
                     ref={boxRef}
                     onMouseDown={onMouseDown}
                     style={{
-                        marginLeft: `${Layout.sidebarWidth + 42}px`
+                        marginLeft: `${Layout.sidebarWidth + 42}px` // 42 = sidebar padding and border
                     }}
                 >
                     <Visualisation scale={scale} setDragEnabled={setDragEnabled}/>
