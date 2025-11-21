@@ -1,5 +1,5 @@
 .visualisationBackgroundWithPadding {
-  background-color: gray;
+  background-color: rgb(201, 201, 201);
 }
 
 .visualisationBackground {
@@ -15,7 +15,7 @@
 .scrollableBox {
   height: 100%;
   overflow: scroll;
-  background-color: gray;
+  background-color: rgb(201, 201, 201);
 }
 
 .visualisationBox {
