@@ -20,6 +20,7 @@ function VisualisationBackground({children, maxX, maxY, semesterCount, processed
                         semesterSubjects={processedOrder[i + 1]}
                         processedSubjects={processedSubjects}
                         maxY={maxY}
+                        semesterCount={semesterCount}
                     />
                 );
             })}
