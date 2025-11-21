@@ -9,6 +9,7 @@ function DragScrollBox() {
     const [dragEnabled, setDragEnabled] = useState(true);
     const [startX, setStartX] = useState(0);
     const [startY, setStartY] = useState(0);
+    const [scale, setScale] = useState(0.7);
 
     const onMouseDown = (e) => {
         if (!dragEnabled) return;
@@ -17,7 +18,24 @@ function DragScrollBox() {
         setStartY(e.screenY);
     }
 
-    const [scale, setScale] = useState(0.7);
+
+    useEffect(() => {
+        const onWheel = (e) => {
+            if (!e.ctrlKey) return;
+            e.preventDefault();  // turns of the default page zoom
+
+
+            if (e.deltaY < 0) {
+                setScale(prev => Math.min(prev + 0.1, 1.5));
+            } else {
+                setScale(prev => Math.max(prev - 0.1, 0.5));
+            }
+        };
+
+        window.addEventListener("wheel", onWheel, { passive: false });
+        return () => window.removeEventListener("wheel", onWheel);
+    }, []);
+
 
     useEffect(() => {
 
