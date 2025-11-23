@@ -11,7 +11,6 @@ function SemesterColumn({index, semesterSubjects, processedSubjects, maxY, semes
         })
         .reduce((acc, c) => acc + c, 0);
 
-    console.log(index * Layout.columnWidth + Layout.columnWidth);
     return (
      <div key={index} className="semesterColumn" style={{
         backgroundColor: index % 2 == 0 ? "#e8e8e8" : "white",

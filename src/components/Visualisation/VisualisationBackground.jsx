@@ -2,7 +2,6 @@ import SemesterColumn from "@components/Visualisation/SemesterColumn";
 import { Layout } from "@/consts/VisualisationParameters";
 
 function VisualisationBackground({children, maxX, maxY, semesterCount, processedOrder, processedSubjects, scale}) {
-    console.log("Backround", "width", maxX * scale, "height", (maxY + Layout.semesterTitleInset) * scale)
     return (
         <div className="visualisationBackground"
             style={{
