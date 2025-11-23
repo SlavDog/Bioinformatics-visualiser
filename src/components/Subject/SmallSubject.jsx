@@ -1,4 +1,4 @@
-import './Subject.css'
+import './styles.css'
 import SubjectDetailMenu from '@components/SubjectDetailMenu/SubjectDetailMenu';
 import { useState } from 'react';
 

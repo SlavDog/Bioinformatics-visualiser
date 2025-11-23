@@ -5,7 +5,7 @@ import {addHelperNodesAndGetOffsets, getPositions} from '@utils/Graph';
 import VisualisationForeground from '@components/Visualisation/VisualisationForeground';
 import VisualisationBackground from '@components/Visualisation/VisualisationBackground';
 import { Layout } from '@/consts/VisualisationParameters';
-import "./Visualisation.css";
+import "./styles.css";
 
 import { useState, useEffect } from 'react';
 

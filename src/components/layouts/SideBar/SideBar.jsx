@@ -4,7 +4,7 @@ import SelectField from "@components/ui/SelectField";
 import TagsBox from "@components/ui/TagsBox";
 import RangeScaler from "@components/ui/RangeScaler/RangeScaler";
 import { Layout } from "@/consts/VisualisationParameters";
-import "./SideBar.css";
+import "./styles.css";
 
 function SideBar({scale, setScale}) {
     return (

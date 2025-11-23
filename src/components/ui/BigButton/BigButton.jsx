@@ -1,4 +1,4 @@
-import "./BigButton.css"
+import "./styles.css"
 
 function BigButton({color, text, onClick}) {
   return (

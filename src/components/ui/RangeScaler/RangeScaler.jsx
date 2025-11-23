@@ -1,4 +1,4 @@
-import "./RangeScaler.css"
+import "./styles.css"
 
 function RangeScaler({scale, setScale}) {
     return (
