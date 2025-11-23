@@ -22,7 +22,7 @@ function DragScrollBox() {
     useEffect(() => {
         const onWheel = (e) => {
             if (!e.ctrlKey) return;
-            e.preventDefault();  // turns of the default page zoom
+            e.preventDefault();  // turns off the default page zoom
 
 
             if (e.deltaY < 0) {
