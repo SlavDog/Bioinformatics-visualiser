@@ -32,10 +32,10 @@ export function addChoiceNodes(details, order, choices) {
 }
 
 
-function getPredsOrSuccs(isSuccs, subjChoices, details) {
+function getPredsOrSuccs(getSuccs, subjChoices, details) {
     const result = [];
     subjChoices.list.forEach(code => {
-        details[code][isSuccs ? "successors" : "predecessors"].forEach(successor => {
+        details[code][getSuccs ? "successors" : "predecessors"].forEach(successor => {
             if (!subjChoices.list.includes(successor.code)) {
                 result.push({ ...successor });
             }
