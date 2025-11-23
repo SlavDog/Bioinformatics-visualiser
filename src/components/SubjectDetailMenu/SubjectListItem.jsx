@@ -1,13 +1,24 @@
 import Subject from "@components/Subject/Subject"
 import ChoiceConnections from "@components/SubjectDetailMenu/ChoiceConnections";
+import subjectInfoData from '@/data/final_tree.json'
 
 const subjectHeight = 140;
 const subjectWidth = 250;
 const subjectPadding = 16;
 
 function SubjectListItem({code, course}) {
+    let isAlsoOutside = Object.values(subjectInfoData.order)
+                    .some(semester => semester
+                        .some(subject => subject.code == code));
     return (
-        <div style={{display: "flex", flexDirection: "column", alignItems: "center"}}>
+        <div 
+            title = {isAlsoOutside ? "Nachází se již jako předmět mimo tento výběr." : undefined}
+            style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                opacity: isAlsoOutside ? 0.5 : 1
+            }}>
             <ChoiceConnections
                 course={course}
                 subjectWidth={subjectWidth}
