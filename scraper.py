@@ -264,7 +264,7 @@ def build_successor_dict(data) \
         response = requests.get(f"https://is.muni.cz" + link)
         if response.status_code == 200:
             html = response.text
-            semester = "null" if not code in data["codes_to_sem"] else data["codes_to_sem"][code]
+            semester = None if not code in data["codes_to_sem"] else data["codes_to_sem"][code]
             subject_data[code] = get_subject(html, code, semester, predecessors)
         else:
             print("Failed to fetch page:", response.status_code)
@@ -325,7 +325,7 @@ def get_subject(html: str, code: str, semester, predecessors) \
             "successors": list(successor_codes), "language": transform_language(language),
             "predecessors": [],
             "completion": completion,
-            "credits": credit, "link": transform_code_to_link(code, faculty),
+            "credits": int(credit), "link": transform_code_to_link(code, faculty),
             "semester" : semester, "type" : code_to_subj_type(code)}
 
 
