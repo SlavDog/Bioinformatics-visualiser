@@ -1,13 +1,14 @@
-import subjectInfoData from '@/data/final_tree.json'
 import SubjectDetailMenuHeader from '@components/ui/SubjectDetailMenuHeader';
 import SubjectList from '@components/SubjectDetailMenu/SubjectList';
 import { getChoiceLimitText } from '@/utils/textHelpers';
+import { useData } from "@components/providers/dataProvider";
 import "./styles.css";
 
 import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 
 function SubjectDetailMenu({open, onClose, source, credits}) {
+    const subjectInfoData = useData();
     const [isClosing, setIsClosing] = useState(false);
     const [isVisible, setIsVisible] = useState(false);
     const [isAnimatingOpen, setIsAnimatingOpen] = useState(false);

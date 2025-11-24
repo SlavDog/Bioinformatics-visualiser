@@ -1,5 +1,4 @@
 import Connections from "@components/Visualisation/Connections";
-import { isInSomeChoice } from "@utils/Graph";
 import { getOrGatesPositionsForSubject } from "@utils/Graph";
 import { Layout } from "@/consts/VisualisationParameters";
 import OrGates from "@components/Visualisation/OrGates";

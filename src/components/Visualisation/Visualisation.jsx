@@ -1,15 +1,17 @@
-import subjectInfoData from '@/data/final_tree.json';
 import Subject from '@components/Subject/Subject';
 import SmallSubject from '@components/Subject/SmallSubject';
 import {addHelperNodesAndGetOffsets, getPositions} from '@utils/Graph';
 import VisualisationForeground from '@components/Visualisation/VisualisationForeground';
 import VisualisationBackground from '@components/Visualisation/VisualisationBackground';
 import { Layout } from '@/consts/VisualisationParameters';
+import { useData } from "@components/providers/dataProvider";
+
 import "./styles.css";
 
 import { useState, useEffect } from 'react';
 
 function Visualisation({scale, setDragEnabled}) {
+    const subjectInfoData = useData();
     const [[processedSubjects, processedOrder, edgeXOffsets, edgeYOffsets], setOffsets] = useState([[], [], [], []]);
     const [[positions, maxX, maxY], setPositions] = useState([[], 0, 0]);
 

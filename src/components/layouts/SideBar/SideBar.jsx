@@ -1,12 +1,13 @@
 import CheckboxField from "@components/ui/CheckboxField";
-import subjectInfoData from '@/data/final_tree.json';
 import SelectField from "@components/ui/SelectField";
 import TagsBox from "@components/ui/TagsBox";
 import RangeScaler from "@components/ui/RangeScaler/RangeScaler";
 import { Layout } from "@/consts/VisualisationParameters";
 import "./styles.css";
+import { useData } from "@components/providers/dataProvider";
 
 function SideBar({scale, setScale}) {
+    const subjectInfoData = useData();
     return (
         <div className="sideBar"
                 style={{

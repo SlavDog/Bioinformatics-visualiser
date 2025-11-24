@@ -1,7 +1,8 @@
-import subjectInfoData from '@/data/final_tree.json'
+import { useData } from "@components/providers/dataProvider";
 import ChoiceConnection from '@components/ui/ChoiceConnection';
 
 function ChoiceConnections({course, subjectWidth, isPredecessor}) {
+    const subjectInfoData = useData();
     let subjectsList = isPredecessor ? course.predecessors : course.successors;
     let voluntarySubjectsArray = subjectsList.map(subject => subject.code).filter(code => !Object.keys(subjectInfoData["details"]).includes(code));
     let compulsorySubjectsArray = subjectsList.map(subject => subject.code).filter(code => Object.keys(subjectInfoData["details"]).includes(code));

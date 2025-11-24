@@ -1,8 +1,10 @@
 import SubjectListItem from "@components/SubjectDetailMenu/SubjectListItem";
-import subjectInfoData from '@/data/final_tree.json';
 import BigButton from "@components/ui/BigButton/BigButton";
+import { useData } from "@components/providers/dataProvider";
+
 
 function SubjectList({source}) {
+    const subjectInfoData = useData();
     const choice = subjectInfoData["choices"][source];
     if (source == "tv") { 
         return <BigButton color={"#b400d8"} onClick={() => window.open('https://www.fsps.muni.cz/cus/vyuka/predmety-povinne-telesne-vychovy', '_blank')} text="Zobrazit aktuální nabídku tělocviků!"></BigButton>

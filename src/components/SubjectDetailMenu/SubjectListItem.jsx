@@ -1,12 +1,13 @@
 import Subject from "@components/Subject/Subject"
 import ChoiceConnections from "@components/SubjectDetailMenu/ChoiceConnections";
-import subjectInfoData from '@/data/final_tree.json'
+import { useData } from "@components/providers/dataProvider";
 
 const subjectHeight = 140;
 const subjectWidth = 250;
 const subjectPadding = 16;
 
 function SubjectListItem({code, course}) {
+    const subjectInfoData = useData();
     let isAlsoOutside = Object.values(subjectInfoData.order)
                     .some(semester => semester
                         .some(subject => subject.code == code));
