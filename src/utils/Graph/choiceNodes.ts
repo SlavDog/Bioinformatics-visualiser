@@ -64,7 +64,7 @@ function saveChoiceNode(details: Details, newOrder: Order, choiceCode: string, o
     };
 
     newOrder[semester] = newOrder[semester]
-            .filter((subject) => "choice" in subject && subject.choice != choiceCode)
+            .filter((subject) => !("choice" in subject) || subject.choice != choiceCode)
 
     newOrder[semester].push(
         {
@@ -72,6 +72,7 @@ function saveChoiceNode(details: Details, newOrder: Order, choiceCode: string, o
             "credits": orderSubject.credits
         }
     )
+
 }
 
 
