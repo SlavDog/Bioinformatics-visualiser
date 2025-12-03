@@ -36,7 +36,6 @@ export function getPositions(details: Details, order: Order, choices: Choices) :
         })
     })
 
-
     Object.entries(codeToCoordinates).forEach(([code, [coordX, coordY]]) => {
         const x = coordX * Layout.columnWidth  + (Layout.columnWidth - Layout.subjectWidth - 2 * Layout.subjectPadding) / 2;
         const y = coordY * Layout.rowHeight + (Layout.rowHeight - Layout.subjectHeight - 2 * Layout.subjectPadding) / 2;
@@ -67,9 +66,8 @@ export function getTreePositions(details: Details, semesterIndex: number,
     let succs = details[code].successors;
     let currentY = positionIndex;
     for (let i = 0; i < succs.length; i++) {
-        if (!details[succs[i].code]) { continue; }   // successor not in data, move to another one
-        if (details[succs[i].code].semester != null
-            && !getTreePositions(details, semesterIndex + 1,
+        if (!details[succs[i].code] || details[succs[i].code].semester == null) { continue; }   // successor not in data, move to another one
+        if (!getTreePositions(details, semesterIndex + 1,
                                  currentY, succs[i].code, codeToCoordinates,
                                  positionsToCode, choices)) {
             return false;

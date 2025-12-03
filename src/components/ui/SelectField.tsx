@@ -1,13 +1,14 @@
 type SelectFieldProps = {
-    options: Array<string>
+    options: Array<string>,
+    placeholder?: string
 }
 
 
-function SelectField({options} : SelectFieldProps) {
+function SelectField({options, placeholder} : SelectFieldProps) {
     return (
         <div className="field">
             <select>
-                <option value="" disabled selected>Vyberte předmět</option>
+                <option value="" disabled selected>{placeholder}</option>
                 {options.sort().map((code) => {
                     return (
                         <option key={code} value={code}>

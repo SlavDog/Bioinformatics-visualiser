@@ -11,7 +11,7 @@ export function addChoiceNodes(details: Details, order: Order, choices: Choices)
             .forEach((choiceSubject) => {
                 const choiceCode = choiceSubject.choice;
 
-                if (choiceCode != "core" && choiceCode != "tv") { 
+                if (!choiceCode.includes("core") && !choiceCode.includes("tv")) { 
                     successors = getPredsOrSuccs(true, choices[choiceCode], details);
                     predecessors = getPredsOrSuccs(false, choices[choiceCode], details);
 
@@ -36,9 +36,9 @@ export function addChoiceNodes(details: Details, order: Order, choices: Choices)
 function getPredsOrSuccs(getSuccs: boolean, subjChoices: Choice, details: Details) : Array<Edge> {
     const result: Array<Edge> = [];
     subjChoices.list
-        .filter(choiceSubject => typeof choiceSubject != "string")
-        .forEach(subject => {
-            details[subject.code][getSuccs ? "successors" : "predecessors"].forEach(successor => {
+        .filter(choiceSubject => typeof choiceSubject == "string")
+        .forEach(choiceSubject => {
+            details[choiceSubject][getSuccs ? "successors" : "predecessors"].forEach(successor => {
                 if (!subjChoices.list.includes(successor.code)) {
                     result.push({ ...successor });
                 }

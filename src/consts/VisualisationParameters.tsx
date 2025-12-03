@@ -1,5 +1,5 @@
 export const Layout = {
-    columnWidth: 325,
+    columnWidth: 350,
     rowHeight: 175,
     subjectHeight: 115,
     subjectWidth: 200,
@@ -9,4 +9,5 @@ export const Layout = {
     semesterTitleInset: 250,
     sidebarWidth: 240,
     semesterColumnBottomPadding: 50,
+    edgeXOffsetStep: 12,
 }
