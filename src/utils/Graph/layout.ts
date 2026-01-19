@@ -4,13 +4,10 @@ import { getYOffsetForOrGroup } from "@utils/Graph/offsets";
 import { Choices, CodeToCoordinates, Course, Details, EdgeOffsets, Order, PositionsToCode, RealPositions} from "@/types/subjects";
 
 export function getPositions(details: Details, order: Order, choices: Choices) : [RealPositions, number, number] {
-    let maxX = 0;
-    let maxY = 0;
     let semestersCount = Object.keys(order).length;
     // const [subtreeSizes, subtreeDepths] = getSubtreeSizes(details);
     
     const codeToCoordinates: CodeToCoordinates = {};
-    const realPositions: RealPositions = {}
     const positionsToCode: PositionsToCode = Array.from({ length: semestersCount }, () => []);
 
     Object.values(order).forEach((semesterArray, semesterIndex) => {
@@ -24,24 +21,27 @@ export function getPositions(details: Details, order: Order, choices: Choices) :
                 return;
             }
 
-            let placed = false;
-            while (!placed) {
-                if (getTreePositions(details, semesterIndex, 
-                                    positionIndex, code, codeToCoordinates,
-                                    positionsToCode, choices)) {
-                    placed = true;
-                }
+            while (!getTreePositions(details, semesterIndex, 
+                                     positionIndex, code, codeToCoordinates,
+                                     positionsToCode, choices)) {
                 positionIndex++;
             }
         })
     })
+    return getRealPositionsAndBoundaries(codeToCoordinates);
+}
 
+
+function getRealPositionsAndBoundaries(codeToCoordinates: CodeToCoordinates) : [RealPositions, number, number] {
+    const realPositions: RealPositions = {};
+    let maxX = 0;
+    let maxY = 0;
     Object.entries(codeToCoordinates).forEach(([code, [coordX, coordY]]) => {
         const x = coordX * Layout.columnWidth  + (Layout.columnWidth - Layout.subjectWidth - 2 * Layout.subjectPadding) / 2;
         const y = coordY * Layout.rowHeight + (Layout.rowHeight - Layout.subjectHeight - 2 * Layout.subjectPadding) / 2;
         realPositions[code] = { x, y };
 
-        // adding one, because the outer edge's real coordinate is needed
+        // adding one, because the outer edge's real coordinate is required for size calculation
         if ((coordX + 1) * Layout.columnWidth > maxX) {maxX = (coordX + 1) * Layout.columnWidth;}
         if ((coordY + 1) * Layout.rowHeight > maxY) {maxY = (coordY + 1) * Layout.rowHeight;}
     })
@@ -50,15 +50,17 @@ export function getPositions(details: Details, order: Order, choices: Choices) :
 
 
 export function getTreePositions(details: Details, semesterIndex: number, 
-                          positionIndex: number, code: string, codeToCoordinates: CodeToCoordinates, 
-                          positionsToCode: PositionsToCode, choices: Choices) : boolean {
+                                 positionIndex: number, code: string,
+                                 codeToCoordinates: CodeToCoordinates, 
+                                 positionsToCode: PositionsToCode, 
+                                 choices: Choices) : boolean {
     // Position already occupied
     if ((positionsToCode[semesterIndex]
         && positionsToCode[semesterIndex][positionIndex])) {
             return false;
     }
 
-    // Already drew this node
+    // Node already placed
     if (codeToCoordinates[code]) {
         return true;
     }
