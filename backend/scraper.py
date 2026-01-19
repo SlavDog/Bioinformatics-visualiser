@@ -2,14 +2,47 @@ import re
 import json
 import requests
 import time
-from sympy import Not, Symbol, simplify_logic, Or, And
+from sympy import Not, Symbol, simplify_logic, Or, And  # type: ignore
 from bs4 import BeautifulSoup
 import os
+from typing import Any, TypedDict
 
-SubjectSuccessors = dict[str, list[str]]
+SemToCodes = dict[int, list[str]]
+CodesToSem = dict[str, int]
+SuccessorCodes = dict[str, tuple[list[list[str]], bool]]
+
+class ResultData(TypedDict):
+    codes: list[str]
+    choices: dict[str, Any]
+    order: dict[int, list[str]]
+    codes_to_sem: CodesToSem
+
+class SubjectLink(TypedDict):
+    code: str
+    groups: list[list[str]]
+    by_prerequisites: bool
+
+class SubjectDict(TypedDict):
+    name: str
+    faculty: str
+    successors: list[SubjectLink]  # Změněno z Any
+    language: str
+    predecessors: list[SubjectLink] # Změněno ze str na SubjectLink
+    completion: str
+    credits: int
+    link: str
+    semester: int | None
+    type: str
+
+SubjectSuccessors = dict[str, SubjectDict]
+
+class FinalJson(TypedDict):
+    details: SubjectSuccessors
+    order: dict[int, list[str]]
+    choices: dict[str, Any]
 
 
-def extract_codes(filename: str, spec: str) -> list[str]:
+def extract_codes(filename: str, spec: str) -> ResultData:
     """
     Extract all subject codes from MUNI-style JSON file.
 
@@ -20,7 +53,7 @@ def extract_codes(filename: str, spec: str) -> list[str]:
         list[str]: A list containing all subject codes.
     """
     sem_to_codes, codes_to_sem = extract_order(filename, spec)
-    result_data = {"codes": [], "choices": {}, "order": sem_to_codes, "codes_to_sem": codes_to_sem}
+    result_data: ResultData = {"codes": [], "choices": {}, "order": sem_to_codes, "codes_to_sem": codes_to_sem}
     with open(filename, "r", encoding='utf-8') as source:
         data = json.load(source)
 
@@ -48,9 +81,9 @@ def extract_codes(filename: str, spec: str) -> list[str]:
     return result_data
 
 
-def extract_order(filename: str, spec: str) -> list[list[str]]:
-    sem_to_codes = {}
-    codes_to_sem = {}
+def extract_order(filename: str, spec: str) -> tuple[SemToCodes, CodesToSem]:
+    sem_to_codes: SemToCodes = {}
+    codes_to_sem: CodesToSem = {}
     with open(filename, "r", encoding='utf-8') as source:
         data = json.load(source)
         for i, semester in enumerate(data["spec"][spec]["plan"].values()):
@@ -67,7 +100,7 @@ def extract_order(filename: str, spec: str) -> list[list[str]]:
     return sem_to_codes, codes_to_sem
 
 
-def find_successor_codes(html: str, code: str, by_prerequisites = True) -> list[str]:
+def find_successor_codes(html: str, code: str, by_prerequisites: bool = True) -> SuccessorCodes:
     """
     Find all successor subject codes from the desired section
     of the MUNI subject catalogue HTML page.
@@ -114,11 +147,10 @@ def find_successor_codes(html: str, code: str, by_prerequisites = True) -> list[
         except Exception as e:
             print(e)
             print(f"Couldn't evaluate prerequisite formula {formula} for subject {successor_subject}. Skipping.")
-
     return {code : (group, True) for code, group in result}
     
 
-def parse_and_evaluate_formula(code: str, formula: str) -> bool:
+def parse_and_evaluate_formula(code: str, formula: str) -> tuple[bool, list[list[str]]]:
     """
     Determine whether a specific subject code is required in a prerequisite formula.
 
@@ -175,7 +207,7 @@ def parse_and_evaluate_formula(code: str, formula: str) -> bool:
     return not expr.has(~symbol), groups
 
 
-def extract_or_groups(expr, reverse_dict: dict[Symbol, str]) -> list[list[str]]:
+def extract_or_groups(expr: Symbol, reverse_dict: dict[Symbol, str]) -> list[list[str]]:
     """Rekurzivně najdi všechny OR skupiny."""
     groups = []
     if isinstance(expr, Or):
@@ -192,7 +224,7 @@ def extract_or_groups(expr, reverse_dict: dict[Symbol, str]) -> list[list[str]]:
     return groups
 
 
-def replace_any(match):
+def replace_any(match: re.Match[str]) -> str:
     args = match.group(1).split(",")
     args = [arg.strip() for arg in args]
     return "(" + " | ".join(args) + ")"
@@ -240,7 +272,7 @@ def transform_link_to_code(link: str) -> str:
         raise ValueError("Incorrect link format!")
 
 
-def build_successor_dict(data) \
+def build_successor_dict(data: ResultData) \
         -> SubjectSuccessors:
     """
     Build a dictionary mapping subject codes to their successor codes.
@@ -256,7 +288,7 @@ def build_successor_dict(data) \
     """
     subject_codes = data["codes"]
     subject_data = {}
-    predecessors = {}
+    predecessors: dict[str, list[SubjectLink]] = {}
 
     for code in subject_codes:
         link = transform_code_to_link(code)
@@ -277,16 +309,20 @@ def build_successor_dict(data) \
     return subject_data
 
 
-def get_subject(html: str, code: str, semester, predecessors) \
-        -> tuple[str, str, str, str]:
+def get_subject(html: str, code: str, semester: int | None, predecessors: dict[str, list[SubjectLink]]) \
+        -> SubjectDict:
     code = re.sub(r"^[^:]*:(.*)", r"\1", code)
+
+    name = ""
     name_match = re.search(re.compile(rf"<H2>{code}\s([^<]+)", re.IGNORECASE), html)
-    name = name_match.group(1).strip()
+    if name_match:
+        name = name_match.group(1).strip()
     print(f"{code} - {name}")
 
+    faculty = ""
     faculty_match = re.search(re.compile(r"</H2>\s*\n\s*<b>([^<]+)</b>", re.IGNORECASE), html)
-    faculty = faculty_match.group(1).strip()
-
+    if faculty_match:
+        faculty = faculty_match.group(1).strip()
     print(transform_code_to_link(code, faculty))
 
     language = "Čeština"
@@ -294,35 +330,42 @@ def get_subject(html: str, code: str, semester, predecessors) \
     if language_match:
         language = language_match.group(1).strip()
     
+    completion = "zk"
     completion_match = re.search(re.compile(r"Ukončení:\s*(z|k|zk|SZk|SDzk)\.", re.IGNORECASE), html)
-    completion = completion_match.group(1)
+    if completion_match:
+        completion = completion_match.group(1)
     print(f"    {faculty} / {language} / {completion}")
 
+    credit = 0
     credit_match = re.search(re.compile(r"[0-9]/[0-9](?:/[0-9])?\.\s([0-9][0-9]?)\skr\.\s(\(plus ukončení\)\.)?", re.IGNORECASE), html)
-    credit = credit_match.group(1)
-    if (credit_match.group(2)):
-        if completion == "zk":
-            credit = str(int(credit) + 2)
-        if completion == "k":
-            credit = str(int(credit) + 1)
+    
+    if credit_match:
+        credit = int(credit_match.group(1))
+        if (credit_match.group(2)):
+            if completion == "zk":
+                credit = int(credit) + 2
+            if completion == "k":
+                credit = int(credit) + 1
     print(f"    {credit} kr.")
 
 
     successor_codes = find_successor_codes(html, code, True)
     soft_successors = find_successor_codes(html, code, False)
     successor_codes.update(soft_successors)
-    successor_codes = [{"code" : code, "groups": groups, "by_prerequisites": by_prerequisites} for code, (groups, by_prerequisites) in successor_codes.items()]
-    print(f"    {successor_codes if successor_codes else "{}"}")
 
-    for successor in successor_codes:
-        temp_subject = {"code" : code, "groups": successor["groups"], "by_prerequisites": successor["by_prerequisites"]}
+    formatted_successors: list[SubjectLink] = [{"code" : code, "groups": groups, "by_prerequisites": by_prerequisites}
+                                               for code, (groups, by_prerequisites) in successor_codes.items()]
+    print(f"    {formatted_successors if formatted_successors else "{}"}")
+
+    for successor in formatted_successors:
+        temp_subject: SubjectLink = {"code" : code, "groups": successor["groups"], "by_prerequisites": successor["by_prerequisites"]}
         if not successor["code"] in predecessors:
             predecessors[successor["code"]] = [temp_subject]
         else:
             predecessors[successor["code"]].append(temp_subject)
 
     return {"name": name, "faculty": transform_faculty(faculty),
-            "successors": list(successor_codes), "language": transform_language(language),
+            "successors": list(formatted_successors), "language": transform_language(language),
             "predecessors": [],
             "completion": completion,
             "credits": int(credit), "link": transform_code_to_link(code, faculty),
@@ -360,8 +403,8 @@ def code_to_subj_type(code: str) -> str:
     return "OT"
 
 
-def build_final_json(data, cleaned_successors) -> None:
-    filtered_dict = {
+def build_final_json(data: ResultData, cleaned_successors: SubjectSuccessors) -> None:
+    filtered_dict: FinalJson = {
                         "details": cleaned_successors,
                         "order": data["order"],
                         "choices": data["choices"]

@@ -36,7 +36,7 @@ function getRealPositionsAndBoundaries(codeToCoordinates: CodeToCoordinates) : [
     const realPositions: RealPositions = {};
     let maxX = 0;
     let maxY = 0;
-    Object.entries(codeToCoordinates).forEach(([code, [coordX, coordY]]) => {
+    Object.entries(codeToCoordinates).forEach(([code, {x: coordX, y: coordY}]) => {
         const x = coordX * Layout.columnWidth  + (Layout.columnWidth - Layout.subjectWidth - 2 * Layout.subjectPadding) / 2;
         const y = coordY * Layout.rowHeight + (Layout.rowHeight - Layout.subjectHeight - 2 * Layout.subjectPadding) / 2;
         realPositions[code] = { x, y };
@@ -76,7 +76,7 @@ export function getTreePositions(details: Details, semesterIndex: number,
         }
         currentY += 1;
     }
-    codeToCoordinates[code] = [semesterIndex, positionIndex];
+    codeToCoordinates[code] = {x: semesterIndex, y: positionIndex};
     positionsToCode[semesterIndex][positionIndex] = code;
     return true;
 }

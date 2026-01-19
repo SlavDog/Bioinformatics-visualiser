@@ -53,7 +53,7 @@ export type SubjectData = {
 
 export type EdgeOffsets = Record<string, number>;
 
-export type Coordinates = [number, number];
+export type Coordinates = {x: number, y: number};
 export type RealCoordinates = {x: number, y: number};
 export type CodeToCoordinates = Record<string, Coordinates>;
 export type PositionsToCode = Array<Array<string>>;
