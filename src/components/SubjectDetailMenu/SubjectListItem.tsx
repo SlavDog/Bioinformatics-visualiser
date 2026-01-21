@@ -2,10 +2,7 @@ import { Course } from "@/types/subjects";
 import Subject from "@components/Subject/Subject"
 import ChoiceConnections from "@components/SubjectDetailMenu/ChoiceConnections";
 import { useData } from "@components/providers/dataProvider";
-
-const subjectHeight = 140;
-const subjectWidth = 250;
-const subjectPadding = 16;
+import { Layout } from "@/consts/VisualisationParameters";
 
 
 type SubjectListItemProps = {
@@ -30,7 +27,7 @@ function SubjectListItem({code, course} : SubjectListItemProps) {
             }}>
             <ChoiceConnections
                 course={course}
-                subjectWidth={subjectWidth}
+                subjectWidth={Layout.detailMenuSubjectWidth}
                 isPredecessor={true}
             />
                 <Subject
@@ -38,16 +35,16 @@ function SubjectListItem({code, course} : SubjectListItemProps) {
                     code={code}
                     course={course}
                     style={{
-                        width: subjectWidth,
-                        height: subjectHeight,
-                        padding: subjectPadding,
+                        width: Layout.detailMenuSubjectWidth,
+                        height: Layout.detailMenuSubjectHeight,
+                        padding: Layout.detailMenuSubjectPadding,
                         transform: "scale(0.9)"
                     }}
                     setDragEnabled={() => {}}
             />
             <ChoiceConnections 
                 course={course}
-                subjectWidth={subjectWidth}
+                subjectWidth={Layout.detailMenuSubjectWidth}
                 isPredecessor={false}
             />
         </div>

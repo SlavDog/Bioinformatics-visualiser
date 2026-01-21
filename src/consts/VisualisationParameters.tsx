@@ -10,4 +10,7 @@ export const Layout = {
     sidebarWidth: 240,
     semesterColumnBottomPadding: 50,
     edgeXOffsetStep: 12,
-}
+    detailMenuSubjectHeight: 140,
+    detailMenuSubjectWidth: 250,
+    detailMenuSubjectPadding: 16,
+};
