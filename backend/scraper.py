@@ -14,7 +14,7 @@ SuccessorCodes = dict[str, tuple[list[list[str]], bool]]
 class ResultData(TypedDict):
     codes: list[str]
     choices: dict[str, Any]
-    order: dict[int, list[str]]
+    order: dict[str, dict[int, list[str]]]
     codes_to_sem: CodesToSem
 
 class SubjectLink(TypedDict):
@@ -25,9 +25,9 @@ class SubjectLink(TypedDict):
 class SubjectDict(TypedDict):
     name: str
     faculty: str
-    successors: list[SubjectLink]  # Změněno z Any
+    successors: list[SubjectLink]
     language: str
-    predecessors: list[SubjectLink] # Změněno ze str na SubjectLink
+    predecessors: list[SubjectLink]
     completion: str
     credits: int
     link: str
@@ -38,11 +38,11 @@ SubjectSuccessors = dict[str, SubjectDict]
 
 class FinalJson(TypedDict):
     details: SubjectSuccessors
-    order: dict[int, list[str]]
+    order: dict[str, dict[int, list[str]]]
     choices: dict[str, Any]
 
 
-def extract_codes(filename: str, spec: str) -> ResultData:
+def extract_codes(filename: str) -> ResultData:
     """
     Extract all subject codes from MUNI-style JSON file.
 
@@ -52,8 +52,11 @@ def extract_codes(filename: str, spec: str) -> ResultData:
     Returns:
         list[str]: A list containing all subject codes.
     """
-    sem_to_codes, codes_to_sem = extract_order(filename, spec)
-    result_data: ResultData = {"codes": [], "choices": {}, "order": sem_to_codes, "codes_to_sem": codes_to_sem}
+    orders, codes_to_sem = extract_orders(filename)
+    result_data: ResultData = {"codes": [],
+                               "choices": {},
+                               "order": {a: b for (a, b) in orders},
+                               "codes_to_sem": codes_to_sem}
     with open(filename, "r", encoding='utf-8') as source:
         data = json.load(source)
 
@@ -81,23 +84,28 @@ def extract_codes(filename: str, spec: str) -> ResultData:
     return result_data
 
 
-def extract_order(filename: str, spec: str) -> tuple[SemToCodes, CodesToSem]:
-    sem_to_codes: SemToCodes = {}
+def extract_orders(filename: str) -> tuple[list[tuple[str, SemToCodes]], CodesToSem]:
+    result = []
     codes_to_sem: CodesToSem = {}
     with open(filename, "r", encoding='utf-8') as source:
         data = json.load(source)
-        for i, semester in enumerate(data["spec"][spec]["plan"].values()):
-            sem_to_codes[i + 1] = []
-            for subject in semester:
-                sem_to_codes[i + 1].append(subject)
-                if "choice" in subject:
-                    if "tv" == subject["choice"] or "core" == subject["choice"]:
-                        continue
-                    for choice_subject_code in data["choices"][subject["choice"]]["list"]:
-                        codes_to_sem[choice_subject_code] = i + 1
-                else:
-                    codes_to_sem[subject["code"]] = i + 1
-    return sem_to_codes, codes_to_sem
+        for spec in data["spec"]:
+            sem_to_codes: SemToCodes = {}
+
+            for i, semester in enumerate(data["spec"][spec]["plan"].values()):
+                sem_to_codes[i + 1] = []
+                for subject in semester:
+                    sem_to_codes[i + 1].append(subject)
+
+                    if "choice" in subject:
+                        if "tv" == subject["choice"] or "core" == subject["choice"]:
+                            continue
+                        for choice_subject_code in data["choices"][subject["choice"]]["list"]:
+                            codes_to_sem[choice_subject_code] = i + 1
+                    else:
+                        codes_to_sem[subject["code"]] = i + 1
+            result.append((spec, sem_to_codes))
+        return result, codes_to_sem
 
 
 def find_successor_codes(html: str, code: str, by_prerequisites: bool = True) -> SuccessorCodes:
@@ -403,19 +411,20 @@ def code_to_subj_type(code: str) -> str:
     return "OT"
 
 
-def build_final_json(data: ResultData, cleaned_successors: SubjectSuccessors) -> None:
-    filtered_dict: FinalJson = {
-                        "details": cleaned_successors,
+def build_final_json(data: ResultData, successors: SubjectSuccessors) -> None:
+    final_json: FinalJson = {
+                        "details": successors,
                         "order": data["order"],
                         "choices": data["choices"]
                     }
-    with open("./src/final_tree.json", "w", encoding="utf-8") as f:
-        json.dump(filtered_dict, f, indent=4, ensure_ascii=False)
+    print(final_json["order"])
+    with open("../src/data/final_tree.json", "w", encoding="utf-8") as f:
+        json.dump(final_json, f, indent=4, ensure_ascii=False)
 
 
 def main() -> None:
     print("Extracting names from input JSON file.")
-    data = extract_codes(os.path.join("src", "data", "bc_bio_cz.json"), "apl")
+    data = extract_codes("../src/data/bc_bio_cz.json")
     successors = build_successor_dict(data)
 
     print("Building the final JSON files.")

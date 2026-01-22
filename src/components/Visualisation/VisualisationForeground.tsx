@@ -32,7 +32,9 @@ function visualisationForeground({edgeXOffsets, edgeYOffsets,
             />
             {Object.entries(processedSubjects).map(([code, course]) => {
                 const pos = positions[code];
-                if (!pos || course.name == "") { return null; }
+                if (!pos) {return null;}
+                if (course.name == "") { return <p key={code} style={{position: "absolute", left: positions[code].x,
+                                top: positions[code].y}}>{code}</p>; }
 
                 const orGatesPositions = getOrGatesPositionsForSubject(code, course, processedSubjects, edgeYOffsets);
                 return (

@@ -1,6 +1,7 @@
 import SemesterColumn from "@components/Visualisation/SemesterColumn";
 import { Layout } from "@/consts/VisualisationParameters";
 import { Details, Order } from "@/types/subjects";
+import { useSelectedSpecialization } from "@components/providers/dataProvider";
 
 
 type VisualisationBackgroundProps = {
@@ -15,6 +16,8 @@ type VisualisationBackgroundProps = {
 
 
 function VisualisationBackground({children, maxX, maxY, semesterCount, processedOrder, processedSubjects, scale} : VisualisationBackgroundProps) {
+    const selectedSpecialization = useSelectedSpecialization();
+    const currentSpecOrder = processedOrder[selectedSpecialization] || {};
     return (
         <div className="visualisationBackground"
             style={{
@@ -26,10 +29,11 @@ function VisualisationBackground({children, maxX, maxY, semesterCount, processed
             }}
         >
             {Array.from({ length: semesterCount }).map((_, i) => {
+                const subjects = currentSpecOrder[i + 1] || [];
                 return (
                     <SemesterColumn 
                         index={i} 
-                        semesterSubjects={processedOrder[i + 1]}
+                        semesterSubjects={subjects}
                         processedSubjects={processedSubjects}
                         maxY={maxY}
                         semesterCount={semesterCount}

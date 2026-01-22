@@ -3,14 +3,14 @@ import { getUniquePredGroups } from "@utils/Graph/orGroups";
 import { getYOffsetForOrGroup } from "@utils/Graph/offsets";
 import { Choices, CodeToCoordinates, Course, Details, EdgeOffsets, Order, PositionsToCode, RealPositions} from "@/types/subjects";
 
-export function getPositions(details: Details, order: Order, choices: Choices) : [RealPositions, number, number] {
-    let semestersCount = Object.keys(order).length;
+export function getPositions(details: Details, order: Order, choices: Choices, selectedSpecialization: string) : [RealPositions, number, number] {
+    let semestersCount = Object.keys(order[selectedSpecialization]).length;
     // const [subtreeSizes, subtreeDepths] = getSubtreeSizes(details);
     
     const codeToCoordinates: CodeToCoordinates = {};
     const positionsToCode: PositionsToCode = Array.from({ length: semestersCount }, () => []);
 
-    Object.values(order).forEach((semesterArray, semesterIndex) => {
+    Object.values(order[selectedSpecialization]).forEach((semesterArray, semesterIndex) => {
         semesterArray.forEach((subject) => {
             let positionIndex = 0;
             const code = "code" in subject ? subject.code : subject.choice;

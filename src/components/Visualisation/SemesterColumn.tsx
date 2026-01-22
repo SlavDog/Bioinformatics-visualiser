@@ -15,7 +15,7 @@ function SemesterColumn({index, semesterSubjects, processedSubjects, maxY, semes
     const semesterCredits = semesterSubjects
         .map(subject => {
             if (!("code" in subject)) {
-                return subject.credits;
+                return subject.credits ?? 0;
             }
             const course = processedSubjects[subject.code];
             return course && course.credits ? Number(course.credits) : 0;

@@ -1,12 +1,13 @@
-import { Details, EdgeOffsets, Order } from '@/types/subjects';
+import { Details, EdgeOffsets, Order, OrderSubject } from '@/types/subjects';
 import { emptyNode, ensureOffset } from '@utils/Graph/dataUtils.js';
 import { deleteCodeFromOrGroups } from '@utils/Graph/orGroups.js';
 
 export function createSuccessingHelperNodes(parentCode: string, parentSemester: number,
                                      successorCode: string, succSemester: number,
-                                     newDetails: Details, order: Order,
+                                     newDetails: Details, order: Record<string, Array<OrderSubject>>,
                                      edgeYOffsets: EdgeOffsets, startOffset: number,
-                                     endOffset: number, groups: Array<Array<string>>) : void {
+                                     endOffset: number, groups: Array<Array<string>>,
+                                     selectedSpecialization: string) : void {
     if (!newDetails[parentCode].successors.some(succ => succ.code == successorCode)) {
         return;
     }
@@ -24,7 +25,7 @@ export function createSuccessingHelperNodes(parentCode: string, parentSemester: 
     // insert new helper nodes
     for (let i = parentSemester + 1; i < succSemester; i++) {
         let helperNodeCode = `HELPER_${successorCode}_${i}`;
-        createHelperNode(newDetails, order, prevNode, helperNodeCode, i, byPrerequisites);
+        createHelperNode(newDetails, order, prevNode, helperNodeCode, i, byPrerequisites, selectedSpecialization);
         ensureOffset(edgeYOffsets, `${prevNode}-${helperNodeCode}-start`, startOffset);
         ensureOffset(edgeYOffsets, `${prevNode}-${helperNodeCode}-end`, startOffset);
         prevNode = helperNodeCode;
@@ -55,9 +56,10 @@ export function createSuccessingHelperNodes(parentCode: string, parentSemester: 
 }
 
 
-export function createHelperNode(details: Details, order: Order, 
+export function createHelperNode(details: Details, order: Record<string, Array<OrderSubject>>, 
         prevNodeCode: string, currentNodeCode: string, 
-        semester: number, byPrerequisites: boolean) : void {
+        semester: number, byPrerequisites: boolean,
+        selectedSpecialization: string) : void {
     if (!details[currentNodeCode]) {
         details[currentNodeCode] = {
             ...emptyNode,

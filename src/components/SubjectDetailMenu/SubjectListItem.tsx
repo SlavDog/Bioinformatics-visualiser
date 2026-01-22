@@ -14,8 +14,10 @@ type SubjectListItemProps = {
 function SubjectListItem({code, course} : SubjectListItemProps) {
     const subjectInfoData = useData();
     let isAlsoOutside = Object.values(subjectInfoData.order)
+        .some(specializationObj => 
+            Object.values(specializationObj)
                     .some(semester => semester
-                        .some(subject => "code" in subject && subject.code == code));
+                        .some(subject => "code" in subject && subject.code == code)));
     return (
         <div 
             title = {isAlsoOutside ? "Nachází se již jako předmět mimo tento výběr." : undefined}

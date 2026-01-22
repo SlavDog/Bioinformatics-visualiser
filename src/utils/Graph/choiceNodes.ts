@@ -1,11 +1,11 @@
 import { Choice, Choices, OrderSubject, Details, Edge, Order} from "@/types/subjects";
 import { emptyNode } from "@utils/Graph/dataUtils";
 
-export function addChoiceNodes(details: Details, order: Order, choices: Choices) : Order {
+export function addChoiceNodes(details: Details, order: Order, choices: Choices, selectedSpecialization: string) : Order {
     const newOrder = structuredClone(order);
     let successors: Array<Edge> = [];
     let predecessors: Array<Edge> = [];
-    Object.entries(order).forEach(([semester, subjectList]) => {
+    Object.entries(order[selectedSpecialization]).forEach(([semester, subjectList]) => {
         subjectList
             .filter((subject) => "choice" in subject)
             .forEach((choiceSubject) => {
@@ -26,7 +26,8 @@ export function addChoiceNodes(details: Details, order: Order, choices: Choices)
                     });
                 };
                 saveChoiceNode(details, newOrder, choiceCode, choiceSubject,
-                               Number(semester), choices, successors, predecessors);
+                               Number(semester), choices, successors, predecessors,
+                               selectedSpecialization);
         });
     });
     return newOrder;
@@ -50,23 +51,23 @@ function getPredsOrSuccs(getSuccs: boolean, subjChoices: Choice, details: Detail
 
 function saveChoiceNode(details: Details, newOrder: Order, choiceCode: string, orderSubject: OrderSubject,
                         semester: number, choices: Choices, successors: Array<Edge>,
-                        predecessors: Array<Edge>) : void {
+                        predecessors: Array<Edge>, selectedSpecialization: string) : void {
     if (!("credits" in orderSubject)) {return; }
     details[`${choiceCode}-${semester}`] = {
         ...emptyNode,
         name: choices[choiceCode].refnCZ,
         successors: successors, 
         predecessors: predecessors,
-        credits: orderSubject.credits,
+        credits: orderSubject.credits ?? 0,
         subjects: [],
         semester: semester,
         type: "choice"
     };
 
-    newOrder[semester] = newOrder[semester]
+    newOrder[selectedSpecialization][semester] = newOrder[selectedSpecialization][semester]
             .filter((subject) => !("choice" in subject) || subject.choice != choiceCode)
 
-    newOrder[semester].push(
+    newOrder[selectedSpecialization][semester].push(
         {
             "choice": `${choiceCode}-${semester}`,
             "credits": orderSubject.credits

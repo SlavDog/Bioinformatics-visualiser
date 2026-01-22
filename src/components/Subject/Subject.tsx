@@ -6,7 +6,7 @@ import { Course } from '@/types/subjects';
 
 export type SubjectProps = {
     code: string;
-    course: Course;        // you already have this type
+    course: Course;
     style: React.CSSProperties;
     setDragEnabled: (b: boolean) => void;
 }

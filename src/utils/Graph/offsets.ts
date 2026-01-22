@@ -1,19 +1,18 @@
 import { ensureOffset } from '@utils/Graph/dataUtils.js';
-import { EdgeOffsets, Details, Order, Edge } from '@/types/subjects';
+import { EdgeOffsets, Details, Order, Edge, OrderSubject } from '@/types/subjects';
 import { Layout } from '@/consts/VisualisationParameters';
 
-export function fillEdgeXOffsets(edgeXOffsets: EdgeOffsets, infoData: Details, orderData: Order) : void {
+export function fillEdgeXOffsets(edgeXOffsets: EdgeOffsets, infoData: Details,
+                                 orderData: Record<string, Array<OrderSubject>>) : void {
     // count number of successors per semester
     const numberOfSuccsBySemester = Array(Object.keys(orderData).length).fill(0);
     Object.values(infoData).forEach(course => {
         course.successors.forEach((successor) => {
             if (!infoData[successor.code] || infoData[successor.code].semester == null) {return;}
-            console.log(course, successor.code);
             numberOfSuccsBySemester[Number(course.semester) - 1] += 1;
         });
     });
 
-    console.log("Number of succs by semester:", numberOfSuccsBySemester);
     // assign x offsets
     Object.entries(orderData).forEach(([semester, subjects]) => {
         let i = 0;
@@ -23,7 +22,6 @@ export function fillEdgeXOffsets(edgeXOffsets: EdgeOffsets, infoData: Details, o
 
             infoData[parentCode].successors.forEach(successor => {
                 if (!infoData[successor.code]) {return;}
-                console.log(parentCode, successor.code, i, (i - (numberOfSuccsBySemester[Number(semester) - 1]) / 2) * Layout.edgeXOffsetStep);
                 ensureOffset(edgeXOffsets, `${parentCode}-${successor.code}`,
                     (i - (numberOfSuccsBySemester[Number(semester) - 1] - 1) / 2) * Layout.edgeXOffsetStep);
                 i += 1;

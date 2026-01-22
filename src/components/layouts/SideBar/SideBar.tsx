@@ -4,7 +4,7 @@ import TagsBox from "@components/ui/TagsBox";
 import RangeScaler from "@components/ui/RangeScaler/RangeScaler";
 import { Layout } from "@/consts/VisualisationParameters";
 import "./styles.css";
-import { useData, useSetData } from "@components/providers/dataProvider";
+import { useData, useSetData, useSelectedSpecialization, useSetSelectedSpecialization } from "@components/providers/dataProvider";
 import { useContext, useState } from "react";
 
 
@@ -17,6 +17,8 @@ type SidebarProps = {
 
 function SideBar({scale, setScale} : SidebarProps) {
     const subjectInfoData = useData();
+    const selectedSpecialization = useSelectedSpecialization();
+    const setSelectedSpecialization = useSetSelectedSpecialization();
     const setData = useSetData();
     const [code, setCode] = useState("");
     const [semester, setSemester] = useState(1);
@@ -41,10 +43,13 @@ function SideBar({scale, setScale} : SidebarProps) {
             },
             order: {
                 ...prev.order,
-                [semester]: [
-                    ...prev.order[semester],
-                    {code: code}
-                ]
+                [selectedSpecialization]: {
+                    ...prev.order[selectedSpecialization],
+                    [semester]: [
+                        ...prev.order[selectedSpecialization][semester],
+                        {code: code}
+                    ]
+                }
             }
         }));
     }
@@ -56,9 +61,9 @@ function SideBar({scale, setScale} : SidebarProps) {
                 }}>
             <RangeScaler scale={scale} setScale={setScale} />
             <h1 className="sideBarTitle">Preferovaná oblast</h1>
-            <CheckboxField>Preferuji informatiku</CheckboxField>
-            <CheckboxField>Preferuji matematiku</CheckboxField>
-            <CheckboxField>Preferuji biologii</CheckboxField>
+            <CheckboxField checked={false} onChange={() => {}}>Preferuji informatiku</CheckboxField>
+            <CheckboxField checked={false} onChange={() => {}}>Preferuji matematiku</CheckboxField>
+            <CheckboxField checked={false} onChange={() => {}}>Preferuji biologii</CheckboxField>
             <h1 className="sideBarSubtitle">Předměty, které chci:</h1>
             <SelectField placeholder="Vyberte předmět" options={Object.keys(subjectInfoData["details"])}/>
             <h1 className="sideBarSubtitle">Předměty, které nechci:</h1>
@@ -66,8 +71,10 @@ function SideBar({scale, setScale} : SidebarProps) {
             <h1 className="sideBarSubtitle">Aktuální filtry:</h1>
             <TagsBox/>
             <h1 className="sideBarTitle">Zaměření</h1>
-            <CheckboxField>Aplikovaná bioinformatika</CheckboxField>
-            <CheckboxField>Vývoj bioinformatického software</CheckboxField>
+            <CheckboxField checked={selectedSpecialization === "apl"} 
+                onChange={() => setSelectedSpecialization("apl")}>Aplikovaná bioinformatika</CheckboxField>
+            <CheckboxField checked={selectedSpecialization === "vyvoj"} 
+                onChange={() => setSelectedSpecialization("vyvoj")}>Vývoj bioinformatického software</CheckboxField>
             <input type="text" className="sideBarInput" placeholder="Zadejte kód" value={code} onChange={(e) => setCode(e.target.value)} />
             <select value={semester} onChange={(e) => setSemester(Number(e.target.value))}>
                 {["1", "2", "3", "4", "5", "6"].map((number) => {

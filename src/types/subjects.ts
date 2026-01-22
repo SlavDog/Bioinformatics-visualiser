@@ -24,10 +24,10 @@ export type OrderSubject = {
     code: string
 } | {
     choice: string,
-    credits: number
+    credits?: number
 }
 
-export type Order = Record<string, Array<OrderSubject>>;
+export type Order = Record<string, Record<string, Array<OrderSubject>>>;
 
 export type ChoiceSubject = {
     code: string,

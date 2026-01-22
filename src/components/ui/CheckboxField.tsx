@@ -1,12 +1,14 @@
 type PreferenceFieldProps = {
-    children: React.ReactNode
+    children: React.ReactNode,
+    checked: boolean,
+    onChange: () => void;
 }
 
-function PreferenceField({children} : PreferenceFieldProps) {
+function PreferenceField({children, checked, onChange} : PreferenceFieldProps) {
     return (
         <div className="field">
             <label className="preferenceFieldLabel">{children}</label>
-            <input id="check" type="checkbox"/>
+            <input id="check" type="checkbox" checked={checked} onChange={onChange}/>
         </div>
     )
 }

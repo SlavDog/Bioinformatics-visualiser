@@ -4,8 +4,8 @@ import {addHelperNodesAndGetOffsets, getPositions} from '@utils/Graph';
 import VisualisationForeground from '@components/Visualisation/VisualisationForeground';
 import VisualisationBackground from '@components/Visualisation/VisualisationBackground';
 import { Layout } from '@/consts/VisualisationParameters';
-import { useData } from "@components/providers/dataProvider";
-import { Details, EdgeOffsets, Order, SubjectData } from '@/types/subjects';
+import { useData, useSelectedSpecialization } from "@components/providers/dataProvider";
+import { Details, EdgeOffsets, Order, RealPositions, SubjectData } from '@/types/subjects';
 
 import "./styles.css";
 
@@ -16,26 +16,48 @@ type VisualisationProps = {
     setDragEnabled: Dispatch<SetStateAction<boolean>>
 }
 
+type VisualisationState = {
+    subjects: Details;
+    order: Order;
+    xOffsets: EdgeOffsets;
+    yOffsets: EdgeOffsets;
+    positions: RealPositions;
+    maxX: number;
+    maxY: number;
+};
+
 function Visualisation({scale, setDragEnabled}: VisualisationProps) {
     const subjectInfoData: SubjectData = useData();;
-    const [[processedSubjects, processedOrder, edgeXOffsets, edgeYOffsets], setOffsets] = useState<[Details, Order, EdgeOffsets, EdgeOffsets]>([{}, {}, {}, {}]);
-    const [[positions, maxX, maxY], setPositions] = useState([{}, 0, 0]);
+    const [visState, setVisState] = useState<VisualisationState>({
+        subjects: {},
+        order: {},
+        xOffsets: {},
+        yOffsets: {},
+        positions: {},
+        maxX: 0,
+        maxY: 0
+    });
+    const selectedSpecialization = useSelectedSpecialization();
 
     const SubjectComponent = scale < 0.7 ? SmallSubject : Subject;
-    const width = (maxX + 2 * Layout.paddingHorizontal) * scale;
-    const height = (maxY + Layout.semesterTitleInset + Layout.semesterColumnBottomPadding + 2 * Layout.paddingVertical) * scale;
 
     // Calculate positions when new data is loaded
     useEffect(() => {
-        const offsets = addHelperNodesAndGetOffsets(subjectInfoData);
-        setOffsets(offsets);
+        const [newDetails, newOrder, xOff, yOff] = addHelperNodesAndGetOffsets(subjectInfoData, selectedSpecialization);
+        const [pos, maxX, maxY] = getPositions(newDetails, newOrder, subjectInfoData.choices, selectedSpecialization);
+        setVisState({
+            subjects: newDetails,
+            order: newOrder,
+            xOffsets: xOff,
+            yOffsets: yOff,
+            positions: pos,
+            maxX: maxX,
+            maxY: maxY
+        });
+    }, [subjectInfoData, selectedSpecialization]);
 
-        const pos = getPositions(offsets[0], offsets[1],
-                                 subjectInfoData["choices"]);
-        setPositions(pos);
-    }, [subjectInfoData]);
-
-    console.log(edgeXOffsets);
+    const width = (visState.maxX + 2 * Layout.paddingHorizontal) * scale;
+    const height = (visState.maxY + Layout.semesterTitleInset + Layout.semesterColumnBottomPadding + 2 * Layout.paddingVertical) * scale;
 
     return (
         <div className="visualisationBackgroundWithPadding" 
@@ -45,19 +67,19 @@ function Visualisation({scale, setDragEnabled}: VisualisationProps) {
             }}
         >
             <VisualisationBackground
-                maxX={maxX} 
-                maxY={maxY}
-                semesterCount={Object.keys(processedOrder).length}
-                processedOrder={processedOrder}
-                processedSubjects={processedSubjects}
+                maxX={visState.maxX} 
+                maxY={visState.maxY}
+                semesterCount={Object.keys(visState.order[selectedSpecialization] ?? []).length}
+                processedOrder={visState.order}
+                processedSubjects={visState.subjects}
                 scale={scale}
             >
                 <VisualisationForeground
-                    edgeXOffsets={edgeXOffsets}
-                    edgeYOffsets={edgeYOffsets}
-                    positions={positions}
-                    processedSubjects={processedSubjects}
-                    choices={subjectInfoData["choices"]}
+                    edgeXOffsets={visState.xOffsets}
+                    edgeYOffsets={visState.yOffsets}
+                    positions={visState.positions}
+                    processedSubjects={visState.subjects}
+                    choices={subjectInfoData.choices}
                     SubjectComponent={SubjectComponent}
                     setDragEnabled={setDragEnabled}
                 />

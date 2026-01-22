@@ -4,12 +4,12 @@ import { fillOrGroupOffsets, fillEdgeXOffsets } from "@utils/Graph/offsets";
 import { createSuccessingHelperNodes } from "@utils/Graph/helperNodes";
 import { Details, EdgeOffsets, Order, SubjectData } from "@/types/subjects";
 
-export function addHelperNodesAndGetOffsets(subjectData: SubjectData) : [Details, Order, EdgeOffsets, EdgeOffsets] {
+export function addHelperNodesAndGetOffsets(subjectData: SubjectData, selectedSpecialization: string) : [Details, Order, EdgeOffsets, EdgeOffsets] {
     const edgeXOffsets = {};
     const edgeYOffsets = {};
-    const newOrder = addChoiceNodes(subjectData["details"], subjectData["order"], subjectData["choices"]);
-    const newDetails = structuredClone(subjectData["details"]);
-    const oldDetails = subjectData["details"];
+    const newOrder = addChoiceNodes(subjectData.details, subjectData.order, subjectData.choices, selectedSpecialization);
+    const newDetails = structuredClone(subjectData.details);
+    const oldDetails = subjectData.details;
     const orGroupEndOffsets: Record<string, number> = {};
 
     Object.entries(oldDetails).forEach(([parentCode, course]) => {
@@ -36,12 +36,13 @@ export function addHelperNodesAndGetOffsets(subjectData: SubjectData) : [Details
 
             if (parentSemester != null && succSemester != null && shouldCreateHelperNodes(parentSemester, succSemester)) {
                 createSuccessingHelperNodes(parentCode, parentSemester, successorInfo.code,
-                                            succSemester, newDetails, subjectData.order,
-                                            edgeYOffsets, offset, offset, successorInfo.groups);
+                                            succSemester, newDetails, newOrder[selectedSpecialization],
+                                            edgeYOffsets, offset, offset, successorInfo.groups,
+                                            selectedSpecialization);
             }
         })
     });
-    fillEdgeXOffsets(edgeXOffsets, newDetails, newOrder);
+    fillEdgeXOffsets(edgeXOffsets, newDetails, newOrder[selectedSpecialization]);
     return [newDetails, newOrder, edgeXOffsets, edgeYOffsets];
 }
 
