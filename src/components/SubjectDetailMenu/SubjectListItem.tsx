@@ -20,12 +20,10 @@ function SubjectListItem({code, course} : SubjectListItemProps) {
                         .some(subject => "code" in subject && subject.code == code)));
     return (
         <div 
-            title = {isAlsoOutside ? "Nachází se již jako předmět mimo tento výběr." : undefined}
             style={{
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
-                opacity: isAlsoOutside ? 0.5 : 1
             }}>
             <ChoiceConnections
                 course={course}
@@ -36,6 +34,7 @@ function SubjectListItem({code, course} : SubjectListItemProps) {
                     key={code}
                     code={code}
                     course={course}
+                    isAlsoOutside={isAlsoOutside}
                     style={{
                         width: Layout.detailMenuSubjectWidth,
                         height: Layout.detailMenuSubjectHeight,

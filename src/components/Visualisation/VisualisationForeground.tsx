@@ -43,6 +43,7 @@ function visualisationForeground({edgeXOffsets, edgeYOffsets,
                             code={code}
                             key={code}
                             course={course}
+                            isAlsoOutside={false}
                             setDragEnabled={setDragEnabled}
                             style={{
                                 position: "absolute",

@@ -2,17 +2,19 @@ import './styles.css'
 import { useState } from 'react';
 import SubjectDetailMenu from '@components/SubjectDetailMenu/SubjectDetailMenu';
 import { Course } from '@/types/subjects';
+import Warning from '@components/Subject/Warning';
 
 
 export type SubjectProps = {
     code: string;
     course: Course;
+    isAlsoOutside: boolean;
     style: React.CSSProperties;
     setDragEnabled: (b: boolean) => void;
 }
 
 
-function Subject({ code, course, style, setDragEnabled } : SubjectProps) {
+function Subject({ code, course, isAlsoOutside = false, style, setDragEnabled } : SubjectProps) {
     const [isOpen, setIsOpen] = useState(false);
     const link = "https://is.muni.cz" + course.link;
 
@@ -31,6 +33,8 @@ function Subject({ code, course, style, setDragEnabled } : SubjectProps) {
         detailMenuSourceName = code;
     }
 
+    const WarningComponent = isAlsoOutside ? <Warning/> : null;
+
     let limit = course.credits ?? course.subjects;
 
     return (
@@ -38,6 +42,7 @@ function Subject({ code, course, style, setDragEnabled } : SubjectProps) {
             <div onClick={onClick} className={`subject subjectType${course.type}`} style={style}>
                 <div className="topSubjectContainer">
                     {Info}
+                    {WarningComponent}
                 </div>
                 <div className="bottomSubjectContainer">
                     <div className="iconContainer">
