@@ -4,12 +4,13 @@ type ChoiceConnectionProps = {
     yStart: number,
     yEnd: number,
     isPredecessor: boolean,
+    allSoft: boolean,
     text: string,
     subjectWidth: number
 }
 
 
-function ChoiceConnection({color, x, yStart, yEnd, isPredecessor, text, subjectWidth} : ChoiceConnectionProps) {
+function ChoiceConnection({color, x, yStart, yEnd, isPredecessor, allSoft, text, subjectWidth} : ChoiceConnectionProps) {
     return (
         <svg width={subjectWidth / 2} height="60">
             <g className='choiceConnection' style={{
@@ -24,6 +25,7 @@ function ChoiceConnection({color, x, yStart, yEnd, isPredecessor, text, subjectW
                     x2={x} y2={yEnd} 
                     stroke={color} 
                     strokeWidth="2"
+                    strokeDasharray={allSoft ? "2 3" : "none"}
                 />
                 <polygon points={`${x - 5},${yEnd} ${x + 5},${yEnd} ${x},${yEnd + 5}`} fill={color} />
                 <circle cx={x} cy={isPredecessor ? 15 : 45} r="10" fill="transparent" stroke={color} strokeWidth="2" />
