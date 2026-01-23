@@ -15,9 +15,9 @@ function Connections({processedSubjects, positions, xOffsets, yOffsets} : Connec
     <svg className='connections'>
         {Object.entries(processedSubjects).map(([startCode, course]) => {
             return course.successors.map((endInfo, i) => {
-                const start = positions[startCode];
-                const endCode = endInfo.code;
-                const end = positions[endCode];
+              const start = positions[startCode];
+              const endCode = endInfo.code;
+              const end = positions[endCode];
                 if (!start || !end) { return null; }
                 const startX = start.x + Layout.subjectWidth / 2 + Layout.subjectPadding;
                 const startY = start.y + Layout.subjectHeight / 2 + Layout.subjectPadding;

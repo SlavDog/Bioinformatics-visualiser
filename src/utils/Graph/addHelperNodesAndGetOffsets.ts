@@ -4,6 +4,8 @@ import { fillOrGroupOffsets, fillEdgeXOffsets } from "@utils/Graph/offsets";
 import { createSuccessingHelperNodes } from "@utils/Graph/helperNodes";
 import { Details, Edge, EdgeOffsets, Order, SubjectData } from "@/types/subjects";
 
+const OFFSET_STEP = 12;
+
 export function addHelperNodesAndGetOffsets(subjectData: SubjectData, selectedSpecialization: string) : [Details, Order, EdgeOffsets, EdgeOffsets] {
     const oldDetails = subjectData.details;
     const orGroupEndOffsets: Record<string, number> = {};
@@ -24,7 +26,7 @@ export function addHelperNodesAndGetOffsets(subjectData: SubjectData, selectedSp
             let succSemester = successor.semester
 
             // Assign start and end offsets
-            let offset = (i - (newSuccessors.length - 1) / 2) * 12;
+            let offset = (i - (newSuccessors.length - 1) / 2) * OFFSET_STEP;
             ensureOffset(edgeYOffsets, `${parentCode}-${succCode}-start`, offset);
             resolveEndOffset(edgeYOffsets, orGroupEndOffsets, parentCode,
                              succCode, groups, offset, successorInfo);

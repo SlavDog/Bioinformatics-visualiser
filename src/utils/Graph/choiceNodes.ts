@@ -5,6 +5,7 @@ export function addChoiceNodes(details: Details, order: Order, choices: Choices,
     const newOrder = structuredClone(order);
     let successors: Array<Edge> = [];
     let predecessors: Array<Edge> = [];
+
     Object.entries(order[selectedSpecialization]).forEach(([semester, subjectList]) => {
         subjectList
             .filter((subject) => "choice" in subject)
@@ -12,40 +13,52 @@ export function addChoiceNodes(details: Details, order: Order, choices: Choices,
                 const choiceCode = choiceSubject.choice;
 
                 if (!choiceCode.includes("core") && !choiceCode.includes("tv")) { 
-                    successors = getPredsOrSuccs(true, choices[choiceCode], details);
-                    predecessors = getPredsOrSuccs(false, choices[choiceCode], details);
-
-                    predecessors.forEach(predecessor => {
-                        details[predecessor.code].successors = details[predecessor.code].successors
-                            .filter(subject => !isInSomeChoice(subject.code, choices));
-                        details[predecessor.code].successors.push({
-                            "code": choiceCode,
-                            "groups" : predecessor.groups,
-                            "by_prerequisites": true
-                        });
-                    });
+                    successors = connectPredsOrSuccs(true, choices[choiceCode], details, choiceCode, Number(semester));
+                    predecessors = connectPredsOrSuccs(false, choices[choiceCode], details, choiceCode, Number(semester));
                 };
                 saveChoiceNode(details, newOrder, choiceCode, choiceSubject,
                                Number(semester), choices, successors, predecessors,
                                selectedSpecialization);
         });
     });
+    console.log(details);
     return newOrder;
 }
 
 
-function getPredsOrSuccs(getSuccs: boolean, subjChoices: Choice, details: Details) : Array<Edge> {
-    const result: Array<Edge> = [];
-    subjChoices.list
-        .filter(choiceSubject => typeof choiceSubject == "string")
-        .forEach(choiceSubject => {
-            details[choiceSubject][getSuccs ? "successors" : "predecessors"].forEach(successor => {
-                if (!subjChoices.list.includes(successor.code)) {
-                    result.push({ ...successor });
-                }
-            }) 
+function connectPredsOrSuccs(connectSuccs: boolean, subjChoices: Choice, details: Details,
+                             choiceCode: string, semester: number) : Edge[] {
+    let neighboursArray: Array<Edge> = [];
+    const predsOrSuccs = connectSuccs ? "successors" : "predecessors";
+    const inversePredsOrSuccs = connectSuccs ? "predecessors" : "successors";
+
+    neighboursArray = subjChoices.list
+        .map(item => {
+            const code = typeof item === "string" ? item : item.code;
+            return details[code][predsOrSuccs];
         })
-    return result;
+        .flat()
+        .filter((edge => edge.code in details))
+
+    neighboursArray.forEach(neighbour => {
+        const shouldDrawFullLine = details[neighbour.code][inversePredsOrSuccs]
+            .filter(subject => subjChoices.list.includes(subject.code))
+            .some(subject => subject.by_prerequisites);
+
+        // Remove direct links to choice subjects
+        details[neighbour.code][inversePredsOrSuccs] = details[neighbour.code][inversePredsOrSuccs]
+            .filter(subject => !subjChoices.list.includes(subject.code));
+
+        // Add a new link to choice node
+        if (!details[neighbour.code][inversePredsOrSuccs].some(succ => succ.code == `${choiceCode}-${semester}`)) {
+            details[neighbour.code][inversePredsOrSuccs].push({
+                "code": `${choiceCode}-${semester}`,
+                "groups" : neighbour.groups,
+                "by_prerequisites": shouldDrawFullLine
+            });
+        }
+    });
+    return neighboursArray
 }
 
 
@@ -78,6 +91,11 @@ function saveChoiceNode(details: Details, newOrder: Order, choiceCode: string, o
 
 
 export function isInSomeChoice(code: string, choices: Choices) : boolean {
+    const result = Object.values(choices)
+    .some(v => v.list
+        .some(item => item == code || (typeof item == "object" 
+            && "code" in item && item.code == code)));
+console.log("Checking if", code, "is in some choice, result:", result) 
     return Object.values(choices)
         .some(v => v.list
             .some(item => item == code || (typeof item == "object" 
