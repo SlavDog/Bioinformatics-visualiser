@@ -2,42 +2,38 @@ import { addChoiceNodes } from "@utils/Graph/choiceNodes";
 import { ensureOffset } from "@utils/Graph/dataUtils";
 import { fillOrGroupOffsets, fillEdgeXOffsets } from "@utils/Graph/offsets";
 import { createSuccessingHelperNodes } from "@utils/Graph/helperNodes";
-import { Details, EdgeOffsets, Order, SubjectData } from "@/types/subjects";
+import { Details, Edge, EdgeOffsets, Order, SubjectData } from "@/types/subjects";
 
 export function addHelperNodesAndGetOffsets(subjectData: SubjectData, selectedSpecialization: string) : [Details, Order, EdgeOffsets, EdgeOffsets] {
-    const edgeXOffsets = {};
-    const edgeYOffsets = {};
-    const newOrder = addChoiceNodes(subjectData.details, subjectData.order, subjectData.choices, selectedSpecialization);
-    const newDetails = structuredClone(subjectData.details);
     const oldDetails = subjectData.details;
     const orGroupEndOffsets: Record<string, number> = {};
+    const edgeXOffsets = {};
+    const edgeYOffsets = {};
+
+    const newOrder = addChoiceNodes(subjectData.details, subjectData.order, subjectData.choices, selectedSpecialization);
+    const newDetails = structuredClone(subjectData.details);
 
     Object.entries(oldDetails).forEach(([parentCode, course]) => {
-        const newSuccessors = [...course.successors];
-        let parentSemester = course.semester
+        const { successors: newSuccessors, semester: parentSemester } = course;
         
         newSuccessors.forEach((successorInfo, i) => {
             const successor = oldDetails[successorInfo.code];
             if (!successor) {return;}
 
-            let offset = (i - (newSuccessors.length - 1) / 2) * 12;
+            const { code: succCode, groups } = successorInfo;
             let succSemester = successor.semester
 
-            ensureOffset(edgeYOffsets, `${parentCode}-${successorInfo.code}-start`, offset);
+            // Assign start and end offsets
+            let offset = (i - (newSuccessors.length - 1) / 2) * 12;
+            ensureOffset(edgeYOffsets, `${parentCode}-${succCode}-start`, offset);
+            resolveEndOffset(edgeYOffsets, orGroupEndOffsets, parentCode,
+                             succCode, groups, offset, successorInfo);
 
-            if (!successorInfo.groups || successorInfo.groups.length == 0) {
-                ensureOffset(edgeYOffsets, `${parentCode}-${successorInfo.code}-end`, offset);
-            } else {
-                if (!orGroupEndOffsets[successorInfo.code]) {
-                    fillOrGroupOffsets(orGroupEndOffsets, successorInfo, offset);
-                }
-                ensureOffset(edgeYOffsets, `${parentCode}-${successorInfo.code}-end`, orGroupEndOffsets[parentCode]);
-            }
-
-            if (parentSemester != null && succSemester != null && shouldCreateHelperNodes(parentSemester, succSemester)) {
-                createSuccessingHelperNodes(parentCode, parentSemester, successorInfo.code,
+            if (parentSemester != null && succSemester != null
+                    && shouldCreateHelperNodes(parentSemester, succSemester)) {
+                createSuccessingHelperNodes(parentCode, parentSemester, succCode,
                                             succSemester, newDetails, newOrder[selectedSpecialization],
-                                            edgeYOffsets, offset, offset, successorInfo.groups,
+                                            edgeYOffsets, offset, offset, groups,
                                             selectedSpecialization);
             }
         })
@@ -53,4 +49,18 @@ function shouldCreateHelperNodes(parentSemester: number | null,
             succSemester == null ||
             parentSemester + 1 == succSemester ||
             parentSemester > succSemester);
+}
+
+
+function resolveEndOffset(edgeYOffsets: EdgeOffsets, orGroupEndOffsets: Record<string, number>,
+                          parentCode: string, succCode: string, groups: string[][],
+                          offset: number, successorInfo: Edge) : void {
+    if (!groups || groups.length == 0) {
+        ensureOffset(edgeYOffsets, `${parentCode}-${succCode}-end`, offset);
+        return;
+    }
+    if (!orGroupEndOffsets[succCode]) {
+        fillOrGroupOffsets(orGroupEndOffsets, successorInfo, offset);
+    }
+    ensureOffset(edgeYOffsets, `${parentCode}-${succCode}-end`, orGroupEndOffsets[parentCode]);
 }
