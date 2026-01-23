@@ -359,7 +359,9 @@ def get_subject(html: str, code: str, semester: int | None, predecessors: dict[s
 
     successor_codes = find_successor_codes(html, code, True)
     soft_successors = find_successor_codes(html, code, False)
-    successor_codes.update(soft_successors)
+    for succ_code, data in soft_successors.items():
+        if succ_code not in successor_codes:
+            successor_codes[succ_code] = data
 
     formatted_successors: list[SubjectLink] = [{"code" : code, "groups": groups, "by_prerequisites": by_prerequisites}
                                                for code, (groups, by_prerequisites) in successor_codes.items()]
