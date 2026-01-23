@@ -3,6 +3,10 @@ import { useState } from 'react';
 import SubjectDetailMenu from '@components/SubjectDetailMenu/SubjectDetailMenu';
 import { Course } from '@/types/subjects';
 import Warning from '@components/Subject/Warning';
+import BioIcon from '@/assets/bio.svg'
+import InfIcon from '@/assets/inf.svg'
+import MathIcon from '@/assets/math.svg'
+import { typeCodeToName } from '@utils/textHelpers';
 
 
 export type SubjectProps = {
@@ -46,7 +50,7 @@ function Subject({ code, course, isAlsoOutside = false, style, setDragEnabled } 
                 </div>
                 <div className="bottomSubjectContainer">
                     <div className="iconContainer">
-                        <div className="circle"></div>
+                        <img src={course.type === "IN" ? InfIcon : course.type === "BI" ? BioIcon : course.type === "MA" ? MathIcon : ""} title={typeCodeToName(course.type)} draggable="false" className='circle' />
                         <div className="circle"></div>
                     </div>
                     <p className="subjectCredits">{limit} {course.credits ? "kr." : "předm."}</p>

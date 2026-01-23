@@ -8,3 +8,16 @@ export function getChoiceLimitText(choiceLimit: string, credits: number) : strin
     }
     return limitText;
 }
+
+export function typeCodeToName(typeCode: string) : string {
+    switch(typeCode) {
+        case "IN":
+            return "Informatika";
+        case "BI":
+            return "Biologie";
+        case "MA":
+            return "Matematika";
+        default:
+            return "Ostatní";
+    }
+}
