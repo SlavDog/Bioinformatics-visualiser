@@ -17,6 +17,8 @@ export function typeCodeToName(typeCode: string) : string {
             return "Biologie";
         case "MA":
             return "Matematika";
+        case "choice":
+            return "Volba z několika předmětů";
         default:
             return "Ostatní";
     }

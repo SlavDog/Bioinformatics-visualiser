@@ -6,6 +6,8 @@ import Warning from '@components/Subject/Warning';
 import BioIcon from '@/assets/bio.svg'
 import InfIcon from '@/assets/inf.svg'
 import MathIcon from '@/assets/math.svg'
+import ChoiceIcon from '@/assets/choice.svg'
+import OtherIcon from '@/assets/other.svg'
 import { typeCodeToName } from '@utils/textHelpers';
 
 
@@ -50,7 +52,7 @@ function Subject({ code, course, isAlsoOutside = false, style, setDragEnabled } 
                 </div>
                 <div className="bottomSubjectContainer">
                     <div className="iconContainer">
-                        <img src={course.type === "IN" ? InfIcon : course.type === "BI" ? BioIcon : course.type === "MA" ? MathIcon : ""} title={typeCodeToName(course.type)} draggable="false" className='circle' />
+                        <img src={course.type === "IN" ? InfIcon : course.type === "BI" ? BioIcon : course.type === "MA" ? MathIcon : course.type === "choice" ? ChoiceIcon : OtherIcon} title={typeCodeToName(course.type)} draggable="false" className='circle' />
                         <div className="circle"></div>
                     </div>
                     <p className="subjectCredits">{limit} {course.credits ? "kr." : "předm."}</p>
