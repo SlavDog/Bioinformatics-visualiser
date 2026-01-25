@@ -30,10 +30,18 @@ function Connections({processedSubjects, positions, xOffsets, yOffsets} : Connec
                 let yEndOffset = yOffsets[`${startCode}-${endCode}-end`];
                 let xOffset = xOffsets[`${startCode}-${endCode}`];
 
+                const r = 20;
+                const yDiff = (endY + yEndOffset) - (startY + yStartOffset);
+                const xDiff = endX - startX;
+                const actualR = Math.min(r, Math.abs(yDiff / 2), Math.abs(xDiff / 2));
+                const dirY = Math.sign(yDiff);
+
                 const path = `
                     M ${startX} ${startY + yStartOffset}
-                    L ${midX + xOffset} ${startY + yStartOffset}
-                    L ${midX + xOffset} ${endY + yEndOffset}
+                    L ${midX + xOffset - actualR} ${startY + yStartOffset}
+                    Q ${midX + xOffset} ${startY + yStartOffset}, ${midX + xOffset} ${startY + yStartOffset + (actualR * dirY)}
+                    L ${midX + xOffset} ${endY + yEndOffset - (actualR * dirY)}
+                    Q ${midX + xOffset} ${endY + yEndOffset}, ${midX + xOffset + actualR} ${endY + yEndOffset}
                     L ${endX} ${endY + yEndOffset}
                 `;
                 let nonPrerequisite = !endInfo.by_prerequisites;

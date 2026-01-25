@@ -9,6 +9,7 @@ const OFFSET_STEP = 12;
 export function addHelperNodesAndGetOffsets(subjectData: SubjectData, selectedSpecialization: string) : [Details, Order, EdgeOffsets, EdgeOffsets] {
     const oldDetails = subjectData.details;
     const orGroupEndOffsets: Record<string, number> = {};
+    const successorInDegreeCounter: Record<string, number> = {};
     const edgeXOffsets = {};
     const edgeYOffsets = {};
 
@@ -20,7 +21,7 @@ export function addHelperNodesAndGetOffsets(subjectData: SubjectData, selectedSp
         
         newSuccessors.forEach((successorInfo, i) => {
             const successor = oldDetails[successorInfo.code];
-            if (!successor) {return;}
+            if (!successor || successor.semester == null) {return;}
 
             const { code: succCode, groups } = successorInfo;
             let succSemester = successor.semester
@@ -28,8 +29,10 @@ export function addHelperNodesAndGetOffsets(subjectData: SubjectData, selectedSp
             // Assign start and end offsets
             let offset = (i - (newSuccessors.length - 1) / 2) * OFFSET_STEP;
             ensureOffset(edgeYOffsets, `${parentCode}-${succCode}-start`, offset);
+
+            const endOffset = getEndOffset(succCode, oldDetails, successorInDegreeCounter);
             resolveEndOffset(edgeYOffsets, orGroupEndOffsets, parentCode,
-                             succCode, groups, offset, successorInfo);
+                             succCode, groups, endOffset, successorInfo);
 
             if (parentSemester != null && succSemester != null
                     && shouldCreateHelperNodes(parentSemester, succSemester)) {
@@ -65,4 +68,14 @@ function resolveEndOffset(edgeYOffsets: EdgeOffsets, orGroupEndOffsets: Record<s
         fillOrGroupOffsets(orGroupEndOffsets, successorInfo, offset);
     }
     ensureOffset(edgeYOffsets, `${parentCode}-${succCode}-end`, orGroupEndOffsets[parentCode]);
+}
+
+function getEndOffset(succCode: string, oldDetails: Details, successorInDegreeCounter: Record<string, number>) : number {
+    if (!(succCode in successorInDegreeCounter)) {
+        successorInDegreeCounter[succCode] = 0;
+    }
+    const inDegree = oldDetails[succCode].predecessors.length;
+    let endOffset = (successorInDegreeCounter[succCode] - (inDegree - 1) / 2) * OFFSET_STEP;
+    successorInDegreeCounter[succCode]++;
+    return endOffset;
 }
