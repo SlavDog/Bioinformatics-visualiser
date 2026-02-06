@@ -82,15 +82,19 @@ export function getTreePositions(details: Details, semesterIndex: number,
 }
 
 
-export function getOrGatesPositionsForSubject(code: string, course: Course,
-        processedSubjects: Details, edgeYOffsets: EdgeOffsets) : Array<number> {
-    let hasOrGate = course.predecessors.some(pred => pred.groups.length > 0) &&
+function hasOrGate(course: Course, processedSubjects: Details) : boolean {
+    return course.predecessors.some(pred => pred.groups.length > 0) &&
         course.predecessors
             .some(pred => pred.groups
             .some(g => g
                 .filter(s => processedSubjects[s]).length > 1));
+}
 
-    if (!hasOrGate) { return []; }
+
+export function getOrGatesPositionsForSubject(code: string, course: Course,
+        processedSubjects: Details, edgeYOffsets: EdgeOffsets) : Array<number> {
+    if (!hasOrGate(course, processedSubjects)) { return []; }
+
     return getUniquePredGroups(course)
         .filter(group => group.length > 1)
         .map(group => {
