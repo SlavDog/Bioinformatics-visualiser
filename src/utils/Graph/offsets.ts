@@ -34,7 +34,7 @@ export function fillEdgeXOffsets(edgeXOffsets: EdgeOffsets, infoData: Details,
 export function fillOrGroupOffsets(orGroupEndOffsets: Record<string, number>, edge: Edge, offset: number) : void {
     edge.groups.forEach((group) => {
         group.forEach((codeInGroup) => {
-            orGroupEndOffsets[codeInGroup] = offset;
+            orGroupEndOffsets[`${codeInGroup}-${edge.code}`] = offset;
         })
     })
 }

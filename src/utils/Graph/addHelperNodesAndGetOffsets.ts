@@ -38,7 +38,7 @@ export function addHelperNodesAndGetOffsets(subjectData: SubjectData, selectedSp
                     && shouldCreateHelperNodes(parentSemester, succSemester)) {
                 createSuccessingHelperNodes(parentCode, parentSemester, succCode,
                                             succSemester, newDetails, newOrder[selectedSpecialization],
-                                            edgeYOffsets, offset, offset, groups,
+                                            edgeYOffsets, offset, endOffset, groups,
                                             selectedSpecialization);
             }
         })
@@ -64,10 +64,10 @@ function resolveEndOffset(edgeYOffsets: EdgeOffsets, orGroupEndOffsets: Record<s
         ensureOffset(edgeYOffsets, `${parentCode}-${succCode}-end`, offset);
         return;
     }
-    if (!orGroupEndOffsets[succCode]) {
+    if (orGroupEndOffsets[`${parentCode}-${succCode}`] === undefined) {
         fillOrGroupOffsets(orGroupEndOffsets, successorInfo, offset);
     }
-    ensureOffset(edgeYOffsets, `${parentCode}-${succCode}-end`, orGroupEndOffsets[parentCode]);
+    ensureOffset(edgeYOffsets, `${parentCode}-${succCode}-end`, orGroupEndOffsets[`${parentCode}-${succCode}`]);
 }
 
 function getEndOffset(succCode: string, oldDetails: Details, successorInDegreeCounter: Record<string, number>) : number {

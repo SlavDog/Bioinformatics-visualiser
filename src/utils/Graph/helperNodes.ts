@@ -25,9 +25,9 @@ export function createSuccessingHelperNodes(parentCode: string, parentSemester: 
     // insert new helper nodes
     for (let i = parentSemester + 1; i < succSemester; i++) {
         let helperNodeCode = `HELPER_${successorCode}_${i}`;
-        createHelperNode(newDetails, order, prevNode, helperNodeCode, i, byPrerequisites, selectedSpecialization);
-        ensureOffset(edgeYOffsets, `${prevNode}-${helperNodeCode}-start`, startOffset);
-        ensureOffset(edgeYOffsets, `${prevNode}-${helperNodeCode}-end`, startOffset);
+        createHelperNode(newDetails, order, prevNode, helperNodeCode, i, byPrerequisites);
+        ensureOffset(edgeYOffsets, `${prevNode}-${helperNodeCode}-start`, i == parentSemester + 1 ? startOffset : endOffset);
+        ensureOffset(edgeYOffsets, `${prevNode}-${helperNodeCode}-end`, endOffset);
         prevNode = helperNodeCode;
     }
 
@@ -51,15 +51,14 @@ export function createSuccessingHelperNodes(parentCode: string, parentSemester: 
     groups.forEach(group => group.push(prevNode));
     newDetails[prevNode].successors.push({"code": successorCode, "groups": groups, "by_prerequisites": byPrerequisites});
     newDetails[successorCode].predecessors.push({"code": prevNode, "groups": groups, "by_prerequisites": byPrerequisites});
-    ensureOffset(edgeYOffsets, `${prevNode}-${successorCode}-start`, startOffset);
+    ensureOffset(edgeYOffsets, `${prevNode}-${successorCode}-start`, endOffset);
     ensureOffset(edgeYOffsets, `${prevNode}-${successorCode}-end`, endOffset);
 }
 
 
 export function createHelperNode(details: Details, order: Record<string, Array<OrderSubject>>, 
         prevNodeCode: string, currentNodeCode: string, 
-        semester: number, byPrerequisites: boolean,
-        selectedSpecialization: string) : void {
+        semester: number, byPrerequisites: boolean) : void {
     if (!details[currentNodeCode]) {
         details[currentNodeCode] = {
             ...emptyNode,
