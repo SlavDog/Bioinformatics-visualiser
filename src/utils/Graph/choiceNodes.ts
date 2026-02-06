@@ -21,7 +21,6 @@ export function addChoiceNodes(details: Details, order: Order, choices: Choices,
                                selectedSpecialization);
         });
     });
-    console.log(details);
     return newOrder;
 }
 
@@ -95,7 +94,6 @@ export function isInSomeChoice(code: string, choices: Choices) : boolean {
     .some(v => v.list
         .some(item => item == code || (typeof item == "object" 
             && "code" in item && item.code == code)));
-console.log("Checking if", code, "is in some choice, result:", result) 
     return Object.values(choices)
         .some(v => v.list
             .some(item => item == code || (typeof item == "object" 
