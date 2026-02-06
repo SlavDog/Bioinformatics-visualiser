@@ -8,7 +8,7 @@ function PreferenceField({children, checked, onChange} : PreferenceFieldProps) {
     return (
         <div className="field">
             <label className="preferenceFieldLabel">{children}</label>
-            <input id="check" type="checkbox" checked={checked} onChange={onChange}/>
+            <input id="check" type="radio" checked={checked} onChange={onChange}/>
         </div>
     )
 }
