@@ -14,6 +14,7 @@ export function getPositions(details: Details, order: Order, choices: Choices, s
         semesterArray.forEach((subject) => {
             let positionIndex = 0;
             const code = "code" in subject ? subject.code : subject.choice;
+            
             if (codeToCoordinates[code]
                 || !details[code]
                 || details[code].semester == null
@@ -91,7 +92,7 @@ function hasOrGate(course: Course, processedSubjects: Details) : boolean {
 }
 
 
-export function getOrGatesPositionsForSubject(code: string, course: Course,
+export function getOrGatesYOffsetsForSubject(code: string, course: Course,
         processedSubjects: Details, edgeYOffsets: EdgeOffsets) : Array<number> {
     if (!hasOrGate(course, processedSubjects)) { return []; }
 
@@ -104,4 +105,18 @@ export function getOrGatesPositionsForSubject(code: string, course: Course,
             }
         })
         .filter(element => element != undefined);
+}
+
+export function getAllOrGatesPositions(details: Details, positions: RealPositions, edgeYOffsets: EdgeOffsets) : Array<{x: number, y: number}> {
+    let orGatesPositions: Array<{x: number, y: number}> = [];
+    Object.entries(details).forEach(([code, course]) => {
+        if (!hasOrGate(course, details)) { return; }
+        const x = positions[code].x;
+        const yOffsets = getOrGatesYOffsetsForSubject(code, course, details, edgeYOffsets);
+
+        yOffsets.forEach(yOffset => {
+            orGatesPositions.push({x, y: yOffset + positions[code].y - 15});
+        })
+    })
+    return orGatesPositions;
 }

@@ -1,5 +1,5 @@
 import Connections from "@components/Visualisation/Connections";
-import { getOrGatesPositionsForSubject } from "@utils/Graph";
+import { getOrGatesYOffsetsForSubject } from "@utils/Graph";
 import { Layout } from "@/consts/VisualisationParameters";
 import OrGates from "@components/Visualisation/OrGates";
 import { Choices, Details, EdgeOffsets, RealPositions } from "@/types/subjects";
@@ -14,11 +14,13 @@ type VisualisationForegroundProps = {
     choices: Choices,
     SubjectComponent: React.ComponentType<SubjectProps>,
     setDragEnabled: Dispatch<SetStateAction<boolean>>
+    orGatesPositions: Array<{x: number, y: number}>
 }
 
 function visualisationForeground({edgeXOffsets, edgeYOffsets, 
         positions, processedSubjects, choices,
-        SubjectComponent, setDragEnabled} : VisualisationForegroundProps) {
+        SubjectComponent, setDragEnabled,
+        orGatesPositions} : VisualisationForegroundProps) {
     return (
         <div className="visualisationForeground"
             style={{
@@ -30,6 +32,7 @@ function visualisationForeground({edgeXOffsets, edgeYOffsets,
                 xOffsets={edgeXOffsets}
                 yOffsets={edgeYOffsets}
             />
+            <OrGates orGatesPositions={orGatesPositions}/>
             {Object.entries(processedSubjects).map(([code, course]) => {
                 const pos = positions[code];
                 if (!pos) {return null;}
@@ -54,11 +57,6 @@ function visualisationForeground({edgeXOffsets, edgeYOffsets,
                                 padding: Layout.subjectPadding
                             }}
                         />
-                        {orGatesPositions.length != 0 && <OrGates 
-                            orGatesPositions={orGatesPositions} 
-                            positions={positions}
-                            code={code}
-                        />}
                     </>
                 );
             })}

@@ -1,6 +1,6 @@
 import Subject from '@components/Subject/Subject';
 import SmallSubject from '@components/Subject/SmallSubject';
-import {addHelperNodesAndGetOffsets, getPositions} from '@utils/Graph';
+import {addHelperNodesAndGetOffsets, getAllOrGatesPositions, getPositions} from '@utils/Graph';
 import VisualisationForeground from '@components/Visualisation/VisualisationForeground';
 import VisualisationBackground from '@components/Visualisation/VisualisationBackground';
 import { Layout } from '@/consts/VisualisationParameters';
@@ -24,6 +24,7 @@ type VisualisationState = {
     positions: RealPositions;
     maxX: number;
     maxY: number;
+    orGatesPositions: Array<{x: number, y: number}>;
 };
 
 function Visualisation({scale, setDragEnabled}: VisualisationProps) {
@@ -35,7 +36,8 @@ function Visualisation({scale, setDragEnabled}: VisualisationProps) {
         yOffsets: {},
         positions: {},
         maxX: 0,
-        maxY: 0
+        maxY: 0,
+        orGatesPositions: []
     });
     const selectedSpecialization = useSelectedSpecialization();
 
@@ -45,6 +47,8 @@ function Visualisation({scale, setDragEnabled}: VisualisationProps) {
     useEffect(() => {
         const [newDetails, newOrder, xOff, yOff] = addHelperNodesAndGetOffsets(subjectInfoData, selectedSpecialization);
         const [pos, maxX, maxY] = getPositions(newDetails, newOrder, subjectInfoData.choices, selectedSpecialization);
+        const orGatesPositions = getAllOrGatesPositions(newDetails, pos, yOff);
+        
         setVisState({
             subjects: newDetails,
             order: newOrder,
@@ -52,7 +56,8 @@ function Visualisation({scale, setDragEnabled}: VisualisationProps) {
             yOffsets: yOff,
             positions: pos,
             maxX: maxX,
-            maxY: maxY
+            maxY: maxY,
+            orGatesPositions: orGatesPositions
         });
     }, [subjectInfoData, selectedSpecialization]);
 
@@ -82,6 +87,7 @@ function Visualisation({scale, setDragEnabled}: VisualisationProps) {
                     choices={subjectInfoData.choices}
                     SubjectComponent={SubjectComponent}
                     setDragEnabled={setDragEnabled}
+                    orGatesPositions={visState.orGatesPositions}
                 />
             </VisualisationBackground>
         </div>

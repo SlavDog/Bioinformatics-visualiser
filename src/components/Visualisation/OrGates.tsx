@@ -1,21 +1,16 @@
 import orGateIcon from '@/assets/or_gate.svg';
-import { RealPositions } from '@/types/subjects';
-
 
 type OrGatesProps = {
-    orGatesPositions: Array<number>,
-    positions: RealPositions,
-    code: string
+    orGatesPositions: Array<{x: number, y: number}>
 }
 
-
-function OrGates({orGatesPositions, positions, code} : OrGatesProps) {
+function OrGates({orGatesPositions} : OrGatesProps) {
     return (<>
         {orGatesPositions.map((pos, i) =>
-            <img src={orGateIcon} alt="OR Gate Icon" className="orGateIcon" key={`orGate-${code}-${i}`} style={{
+            <img src={orGateIcon} alt="OR Gate Icon" className="orGateIcon" key={`orGate-${pos.x}-${pos.y}`} style={{
                 position: "absolute",
-                left: positions[code].x - 30,
-                top: pos,
+                left: pos.x - 30,
+                top: pos.y,
                 width: 30,
                 height: 30
             }}/>
