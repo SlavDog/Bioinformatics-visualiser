@@ -1,4 +1,4 @@
-import { Details, EdgeOffsets, Order, OrderSubject } from '@/types/subjects';
+import { Details, EdgeOffsets, Spec, OrderSubject } from '@/types/subjects';
 import { emptyNode, ensureOffset } from '@utils/Graph/dataUtils.js';
 import { deleteCodeFromOrGroups } from '@utils/Graph/orGroups.js';
 
@@ -56,7 +56,7 @@ export function createSuccessingHelperNodes(parentCode: string, parentSemester: 
 }
 
 
-export function createHelperNode(details: Details, order: Record<string, Array<OrderSubject>>, 
+export function createHelperNode(details: Details, plan: Record<string, Array<OrderSubject>>, 
         prevNodeCode: string, currentNodeCode: string, 
         semester: number, byPrerequisites: boolean) : void {
     if (!details[currentNodeCode]) {
@@ -66,8 +66,8 @@ export function createHelperNode(details: Details, order: Record<string, Array<O
             predecessors: [],
             semester: semester,
         };
-    if (!order[semester].some(s => "code" in s && s.code === currentNodeCode))
-        order[semester].push({"code": currentNodeCode});
+    if (!plan[semester].some(s => "code" in s && s.code === currentNodeCode))
+        plan[semester].push({"code": currentNodeCode});
     }
     details[prevNodeCode].successors.push({"code": currentNodeCode, groups: [], "by_prerequisites": byPrerequisites});
     details[currentNodeCode].predecessors.push({"code": prevNodeCode, groups: [], "by_prerequisites": byPrerequisites});

@@ -1,12 +1,12 @@
-import { Choice, Choices, OrderSubject, Details, Edge, Order} from "@/types/subjects";
+import { Choice, Choices, OrderSubject, Details, Edge, Spec} from "@/types/subjects";
 import { emptyNode } from "@utils/Graph/dataUtils";
 
-export function addChoiceNodes(details: Details, order: Order, choices: Choices, selectedSpecialization: string) : Order {
-    const newOrder = structuredClone(order);
+export function addChoiceNodes(details: Details, spec: Spec, choices: Choices, selectedSpecialization: string) : Spec {
+    const newOrder = structuredClone(spec);
     let successors: Array<Edge> = [];
     let predecessors: Array<Edge> = [];
 
-    Object.entries(order[selectedSpecialization]).forEach(([semester, subjectList]) => {
+    Object.entries(spec[selectedSpecialization].plan).forEach(([semester, subjectList]) => {
         subjectList
             .filter((subject) => "choice" in subject)
             .forEach((choiceSubject) => {
@@ -61,7 +61,7 @@ function connectPredsOrSuccs(connectSuccs: boolean, subjChoices: Choice, details
 }
 
 
-function saveChoiceNode(details: Details, newOrder: Order, choiceCode: string, orderSubject: OrderSubject,
+function saveChoiceNode(details: Details, newSpec: Spec, choiceCode: string, orderSubject: OrderSubject,
                         semester: number, choices: Choices, successors: Array<Edge>,
                         predecessors: Array<Edge>, selectedSpecialization: string) : void {
     if (!("credits" in orderSubject)) {return; }
@@ -76,10 +76,10 @@ function saveChoiceNode(details: Details, newOrder: Order, choiceCode: string, o
         type: "choice"
     };
 
-    newOrder[selectedSpecialization][semester] = newOrder[selectedSpecialization][semester]
+    newSpec[selectedSpecialization]["plan"][semester] = newSpec[selectedSpecialization]["plan"][semester]
             .filter((subject) => !("choice" in subject) || subject.choice != choiceCode)
 
-    newOrder[selectedSpecialization][semester].push(
+    newSpec[selectedSpecialization]["plan"][semester].push(
         {
             "choice": `${choiceCode}-${semester}`,
             "credits": orderSubject.credits
@@ -90,10 +90,6 @@ function saveChoiceNode(details: Details, newOrder: Order, choiceCode: string, o
 
 
 export function isInSomeChoice(code: string, choices: Choices) : boolean {
-    const result = Object.values(choices)
-    .some(v => v.list
-        .some(item => item == code || (typeof item == "object" 
-            && "code" in item && item.code == code)));
     return Object.values(choices)
         .some(v => v.list
             .some(item => item == code || (typeof item == "object" 

@@ -27,7 +27,16 @@ export type OrderSubject = {
     credits?: number
 }
 
-export type Order = Record<string, Record<string, Array<OrderSubject>>>;
+export type Specialization = {
+  nameCZ: string;
+  nameEN: string;
+  descCZ: string;
+  descEN: string;
+  base: Array<OrderSubject>;
+  plan: Record<string, Array<OrderSubject>>;
+};
+
+export type Spec = Record<string, Specialization>;
 
 export type ChoiceSubject = {
     code: string,
@@ -47,7 +56,7 @@ export type Choices = Record<string, Choice>;
 
 export type SubjectData = {
     details: Details,
-    order: Order,
+    spec: Spec,
     choices: Choices,
 }
 

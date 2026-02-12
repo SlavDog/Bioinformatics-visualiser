@@ -52,11 +52,10 @@ def extract_codes(filename: str) -> ResultData:
     Returns:
         list[str]: A list containing all subject codes.
     """
-    orders, codes_to_sem = extract_orders(filename)
     result_data: ResultData = {"codes": [],
                                "choices": {},
-                               "order": {a: b for (a, b) in orders},
-                               "codes_to_sem": codes_to_sem}
+                               "spec": {},
+                               "codes_to_sem": get_codes_to_sem(filename)}
     with open(filename, "r", encoding='utf-8') as source:
         data = json.load(source)
 
@@ -81,22 +80,17 @@ def extract_codes(filename: str) -> ResultData:
                     continue
                 result_data["codes"].append(subject["code"])
 
+    result_data["spec"] = data["spec"]
     return result_data
 
 
-def extract_orders(filename: str) -> tuple[list[tuple[str, SemToCodes]], CodesToSem]:
-    result = []
+def get_codes_to_sem(filename: str) -> tuple[list[tuple[str, SemToCodes]], CodesToSem]:
     codes_to_sem: CodesToSem = {}
     with open(filename, "r", encoding='utf-8') as source:
         data = json.load(source)
         for spec in data["spec"]:
-            sem_to_codes: SemToCodes = {}
-
             for i, semester in enumerate(data["spec"][spec]["plan"].values()):
-                sem_to_codes[i + 1] = []
                 for subject in semester:
-                    sem_to_codes[i + 1].append(subject)
-
                     if "choice" in subject:
                         if "tv" == subject["choice"] or "core" == subject["choice"]:
                             continue
@@ -104,8 +98,7 @@ def extract_orders(filename: str) -> tuple[list[tuple[str, SemToCodes]], CodesTo
                             codes_to_sem[choice_subject_code] = i + 1
                     else:
                         codes_to_sem[subject["code"]] = i + 1
-            result.append((spec, sem_to_codes))
-        return result, codes_to_sem
+        return codes_to_sem
 
 
 def find_successor_codes(html: str, code: str, by_prerequisites: bool = True) -> SuccessorCodes:
@@ -282,18 +275,6 @@ def transform_link_to_code(link: str) -> str:
 
 def build_successor_dict(data: ResultData) \
         -> SubjectSuccessors:
-    """
-    Build a dictionary mapping subject codes to their successor codes.
-
-    Parameters:
-        by_prerequisites (bool): Determines whether successors are taken from
-            the "Nachází se v prerekvizitách" section (True) or the
-            "Navazující předměty" section (False).
-        subject_codes (list[str]): List of subject codes that should be included.
-
-    Returns:
-        
-    """
     subject_codes = data["codes"]
     subject_data = {}
     predecessors: dict[str, list[SubjectLink]] = {}
@@ -416,17 +397,17 @@ def code_to_subj_type(code: str) -> str:
 def build_final_json(data: ResultData, successors: SubjectSuccessors) -> None:
     final_json: FinalJson = {
                         "details": successors,
-                        "order": data["order"],
+                        "spec": data["spec"],
                         "choices": data["choices"]
                     }
-    print(final_json["order"])
-    with open("../src/data/final_tree.json", "w", encoding="utf-8") as f:
+    print(final_json["spec"])
+    with open("../src/data/inf_tree_cz.json", "w", encoding="utf-8") as f:
         json.dump(final_json, f, indent=4, ensure_ascii=False)
 
 
 def main() -> None:
     print("Extracting names from input JSON file.")
-    data = extract_codes("../src/data/bc_bio_cz.json")
+    data = extract_codes("../src/data/inf_cz.json")
     successors = build_successor_dict(data)
 
     print("Building the final JSON files.")

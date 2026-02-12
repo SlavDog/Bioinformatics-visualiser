@@ -2,18 +2,18 @@ import { addChoiceNodes } from "@utils/Graph/choiceNodes";
 import { ensureOffset } from "@utils/Graph/dataUtils";
 import { fillOrGroupOffsets, fillEdgeXOffsets } from "@utils/Graph/offsets";
 import { createSuccessingHelperNodes } from "@utils/Graph/helperNodes";
-import { Details, Edge, EdgeOffsets, Order, SubjectData } from "@/types/subjects";
+import { Details, Edge, EdgeOffsets, Spec, SubjectData } from "@/types/subjects";
 
 const OFFSET_STEP = 12;
 
-export function addHelperNodesAndGetOffsets(subjectData: SubjectData, selectedSpecialization: string) : [Details, Order, EdgeOffsets, EdgeOffsets] {
+export function addHelperNodesAndGetOffsets(subjectData: SubjectData, selectedSpecialization: string) : [Details, Spec, EdgeOffsets, EdgeOffsets] {
     const oldDetails = subjectData.details;
     const orGroupEndOffsets: Record<string, number> = {};
     const successorInDegreeCounter: Record<string, number> = {};
     const edgeXOffsets = {};
     const edgeYOffsets = {};
 
-    const newOrder = addChoiceNodes(subjectData.details, subjectData.order, subjectData.choices, selectedSpecialization);
+    const newOrder = addChoiceNodes(subjectData.details, subjectData.spec, subjectData.choices, selectedSpecialization);
     const newDetails = structuredClone(subjectData.details);
 
     Object.entries(oldDetails).forEach(([parentCode, course]) => {
@@ -37,13 +37,13 @@ export function addHelperNodesAndGetOffsets(subjectData: SubjectData, selectedSp
             if (parentSemester != null && succSemester != null
                     && shouldCreateHelperNodes(parentSemester, succSemester)) {
                 createSuccessingHelperNodes(parentCode, parentSemester, succCode,
-                                            succSemester, newDetails, newOrder[selectedSpecialization],
+                                            succSemester, newDetails, newOrder[selectedSpecialization].plan,
                                             edgeYOffsets, offset, endOffset, groups,
                                             selectedSpecialization);
             }
         })
     });
-    fillEdgeXOffsets(edgeXOffsets, newDetails, newOrder[selectedSpecialization]);
+    fillEdgeXOffsets(edgeXOffsets, newDetails, newOrder[selectedSpecialization].plan);
     return [newDetails, newOrder, edgeXOffsets, edgeYOffsets];
 }
 

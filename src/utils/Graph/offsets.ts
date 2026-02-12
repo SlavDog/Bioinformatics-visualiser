@@ -1,5 +1,5 @@
 import { ensureOffset } from '@utils/Graph/dataUtils.js';
-import { EdgeOffsets, Details, Order, Edge, OrderSubject } from '@/types/subjects';
+import { EdgeOffsets, Details, Edge, OrderSubject } from '@/types/subjects';
 import { Layout } from '@/consts/VisualisationParameters';
 
 export function fillEdgeXOffsets(edgeXOffsets: EdgeOffsets, infoData: Details,

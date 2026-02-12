@@ -5,7 +5,7 @@ import VisualisationForeground from '@components/Visualisation/VisualisationFore
 import VisualisationBackground from '@components/Visualisation/VisualisationBackground';
 import { Layout } from '@/consts/VisualisationParameters';
 import { useData, useSelectedSpecialization } from "@components/providers/dataProvider";
-import { Details, EdgeOffsets, Order, RealPositions, SubjectData } from '@/types/subjects';
+import { Details, EdgeOffsets, RealPositions, Spec, SubjectData } from '@/types/subjects';
 
 import "./styles.css";
 
@@ -18,7 +18,7 @@ type VisualisationProps = {
 
 type VisualisationState = {
     subjects: Details;
-    order: Order;
+    spec: Spec;
     xOffsets: EdgeOffsets;
     yOffsets: EdgeOffsets;
     positions: RealPositions;
@@ -31,7 +31,7 @@ function Visualisation({scale, setDragEnabled}: VisualisationProps) {
     const subjectInfoData: SubjectData = useData();;
     const [visState, setVisState] = useState<VisualisationState>({
         subjects: {},
-        order: {},
+        spec: {},
         xOffsets: {},
         yOffsets: {},
         positions: {},
@@ -45,13 +45,13 @@ function Visualisation({scale, setDragEnabled}: VisualisationProps) {
 
     // Calculate positions when new data is loaded
     useEffect(() => {
-        const [newDetails, newOrder, xOff, yOff] = addHelperNodesAndGetOffsets(subjectInfoData, selectedSpecialization);
-        const [pos, maxX, maxY] = getPositions(newDetails, newOrder, subjectInfoData.choices, selectedSpecialization);
+        const [newDetails, newSpec, xOff, yOff] = addHelperNodesAndGetOffsets(subjectInfoData, selectedSpecialization);
+        const [pos, maxX, maxY] = getPositions(newDetails, newSpec, selectedSpecialization);
         const orGatesPositions = getAllOrGatesPositions(newDetails, pos, yOff);
         
         setVisState({
             subjects: newDetails,
-            order: newOrder,
+            spec: newSpec,
             xOffsets: xOff,
             yOffsets: yOff,
             positions: pos,
@@ -74,8 +74,8 @@ function Visualisation({scale, setDragEnabled}: VisualisationProps) {
             <VisualisationBackground
                 maxX={visState.maxX} 
                 maxY={visState.maxY}
-                semesterCount={Object.keys(visState.order[selectedSpecialization] ?? []).length}
-                processedOrder={visState.order}
+                semesterCount={Object.keys(visState.spec[selectedSpecialization] ?? []).length}
+                processedSpec={visState.spec}
                 processedSubjects={visState.subjects}
                 scale={scale}
             >

@@ -18,7 +18,7 @@ type SubjectDataProvider = {
 
 export function SubjectDataProvider({ children }: SubjectDataProvider) {
   const [data, setData] = useState<SubjectData>(subjectInfoData);
-  const [selectedSpecialization, setSelectedSpecialization] = useState<string>("vyvoj");
+  const [selectedSpecialization, setSelectedSpecialization] = useState<string>(Object.keys(subjectInfoData.spec)[0]);
 
   return (
     <SubjectDataContext value={{ data, setData, selectedSpecialization, setSelectedSpecialization}}>

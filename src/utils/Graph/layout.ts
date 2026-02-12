@@ -1,16 +1,14 @@
 import { Layout } from "@/consts/VisualisationParameters";
 import { getUniquePredGroups } from "@utils/Graph/orGroups";
 import { getYOffsetForOrGroup } from "@utils/Graph/offsets";
-import { Choices, CodeToCoordinates, Course, Details, EdgeOffsets, Order, PositionsToCode, RealPositions} from "@/types/subjects";
+import { Choices, CodeToCoordinates, Course, Details, EdgeOffsets, PositionsToCode, RealPositions, Spec} from "@/types/subjects";
 
-export function getPositions(details: Details, order: Order, choices: Choices, selectedSpecialization: string) : [RealPositions, number, number] {
-    let semestersCount = Object.keys(order[selectedSpecialization]).length;
-    // const [subtreeSizes, subtreeDepths] = getSubtreeSizes(details);
-    
+export function getPositions(details: Details, spec: Spec, selectedSpecialization: string) : [RealPositions, number, number] {
+    let semestersCount = Object.keys(spec[selectedSpecialization].plan).length;
     const codeToCoordinates: CodeToCoordinates = {};
     const positionsToCode: PositionsToCode = Array.from({ length: semestersCount }, () => []);
 
-    Object.values(order[selectedSpecialization]).forEach((semesterArray, semesterIndex) => {
+    Object.values(spec[selectedSpecialization].plan).forEach((semesterArray, semesterIndex) => {
         semesterArray.forEach((subject) => {
             let positionIndex = 0;
             const code = "code" in subject ? subject.code : subject.choice;
@@ -24,7 +22,7 @@ export function getPositions(details: Details, order: Order, choices: Choices, s
 
             while (!getTreePositions(details, semesterIndex, 
                                      positionIndex, code, codeToCoordinates,
-                                     positionsToCode, choices)) {
+                                     positionsToCode)) {
                 positionIndex++;
             }
         })
@@ -53,8 +51,7 @@ function getRealPositionsAndBoundaries(codeToCoordinates: CodeToCoordinates) : [
 export function getTreePositions(details: Details, semesterIndex: number, 
                                  positionIndex: number, code: string,
                                  codeToCoordinates: CodeToCoordinates, 
-                                 positionsToCode: PositionsToCode, 
-                                 choices: Choices) : boolean {
+                                 positionsToCode: PositionsToCode) : boolean {
     // Position already occupied
     if ((positionsToCode[semesterIndex]
         && positionsToCode[semesterIndex][positionIndex])) {
@@ -72,7 +69,7 @@ export function getTreePositions(details: Details, semesterIndex: number,
         if (!details[succs[i].code] || details[succs[i].code].semester == null) { continue; }   // successor not in data, move to another one
         if (!getTreePositions(details, semesterIndex + 1,
                                  currentY, succs[i].code, codeToCoordinates,
-                                 positionsToCode, choices)) {
+                                 positionsToCode)) {
             return false;
         }
         currentY += 1;
@@ -106,6 +103,7 @@ export function getOrGatesYOffsetsForSubject(code: string, course: Course,
         })
         .filter(element => element != undefined);
 }
+
 
 export function getAllOrGatesPositions(details: Details, positions: RealPositions, edgeYOffsets: EdgeOffsets) : Array<{x: number, y: number}> {
     let orGatesPositions: Array<{x: number, y: number}> = [];

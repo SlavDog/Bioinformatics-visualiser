@@ -24,35 +24,35 @@ function SideBar({scale, setScale} : SidebarProps) {
     const [semester, setSemester] = useState(1);
     
 
-    const sendToBackend = async () => {
-        const res = await fetch("http://localhost:8000/run-script", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                code: code,
-                semester: semester
-            })
-        });
+    // const sendToBackend = async () => {
+    //     const res = await fetch("http://localhost:8000/run-script", {
+    //         method: "POST",
+    //         headers: { "Content-Type": "application/json" },
+    //         body: JSON.stringify({
+    //             code: code,
+    //             semester: semester
+    //         })
+    //     });
 
-        const newValue = await res.json();
-        setData(prev => ({
-            ...prev,
-            details: {
-                ...prev.details,
-                [code]: newValue,
-            },
-            order: {
-                ...prev.order,
-                [selectedSpecialization]: {
-                    ...prev.order[selectedSpecialization],
-                    [semester]: [
-                        ...prev.order[selectedSpecialization][semester],
-                        {code: code}
-                    ]
-                }
-            }
-        }));
-    }
+    //     const newValue = await res.json();
+    //     setData(prev => ({
+    //         ...prev,
+    //         details: {
+    //             ...prev.details,
+    //             [code]: newValue,
+    //         },
+    //         order: {
+    //             ...prev.order,
+    //             [selectedSpecialization]: {
+    //                 ...prev.order[selectedSpecialization],
+    //                 [semester]: [
+    //                     ...prev.order[selectedSpecialization][semester],
+    //                     {code: code}
+    //                 ]
+    //             }
+    //         }
+    //     }));
+    // }
 
     return (
         <div className="sideBar"
@@ -71,11 +71,16 @@ function SideBar({scale, setScale} : SidebarProps) {
             <h1 className="sideBarSubtitle">Aktuální filtry:</h1>
             <TagsBox/>
             <h1 className="sideBarTitle">Zaměření</h1>
-            <CheckboxField checked={selectedSpecialization === "apl"} 
-                onChange={() => setSelectedSpecialization("apl")}>Aplikovaná bioinformatika</CheckboxField>
-            <CheckboxField checked={selectedSpecialization === "vyvoj"} 
-                onChange={() => setSelectedSpecialization("vyvoj")}>Vývoj bioinformatického software</CheckboxField>
-            <input type="text" className="sideBarInput" placeholder="Zadejte kód" value={code} onChange={(e) => setCode(e.target.value)} />
+            {Object.entries(subjectInfoData.spec).map(([specCode, spec]) => {
+                return (
+                    <CheckboxField key={specCode} checked={selectedSpecialization === specCode} 
+                        onChange={() => setSelectedSpecialization(specCode)}>
+                        {spec.nameCZ}
+                    </CheckboxField>
+                );
+            })}
+
+            {/* <input type="text" className="sideBarInput" placeholder="Zadejte kód" value={code} onChange={(e) => setCode(e.target.value)} />
             <select value={semester} onChange={(e) => setSemester(Number(e.target.value))}>
                 {["1", "2", "3", "4", "5", "6"].map((number) => {
                     return (
@@ -85,9 +90,9 @@ function SideBar({scale, setScale} : SidebarProps) {
                     );
                 })}
             </select>
-            <button disabled={code === ""} className="sideBarButton" onClick={sendToBackend}>Přidat předmět</button>
+            <button disabled={code === ""} className="sideBarButton" onClick={sendToBackend}>Přidat předmět</button> */}
         </div>
     );
 }
 
-export default SideBar;
+export default SideBar
