@@ -142,10 +142,12 @@ export function getTreePositions(details: Details, semesterIndex: number,
 
 
 function hasOrGate(course: Course, processedSubjects: Details) : boolean {
-    return course.predecessors.some(pred => pred.groups.length > 0) &&
-        course.predecessors
+    return course.predecessors.some(pred => pred.groups.length > 0)
+        && course.predecessors
             .some(pred => pred.groups
             .some(g => g
+                .filter(s => processedSubjects[s]?.semester != null 
+                            && processedSubjects[s].semester < (course.semester ?? 0))
                 .filter(s => processedSubjects[s]).length > 1));
 }
 
