@@ -10,6 +10,8 @@ export function getPositions(details: Details, spec: Spec, selectedSpecializatio
 
     Object.values(spec[selectedSpecialization].plan).forEach((semesterArray, semesterIndex) => {
         semesterArray.forEach((subject) => {
+            const tempCodeToCoordinates = {};
+            const tempPositionsToCode = Array.from({ length: semestersCount }, () => []);
             let positionIndex = 0;
             const code = "code" in subject ? subject.code : subject.choice;
             
@@ -22,12 +24,69 @@ export function getPositions(details: Details, spec: Spec, selectedSpecializatio
 
             while (!getTreePositions(details, semesterIndex, 
                                      positionIndex, code, codeToCoordinates,
-                                     positionsToCode)) {
+                                     positionsToCode, tempCodeToCoordinates,
+                                     tempPositionsToCode)
+                    || !addMissedPredecessorsPositions(details, positionsToCode, tempCodeToCoordinates, tempPositionsToCode, selectedSpecialization)) {
                 positionIndex++;
             }
-        })
+            
+
+            Object.assign(codeToCoordinates, tempCodeToCoordinates);
+            tempPositionsToCode.forEach((semesterArray, semesterIdx) => {
+                semesterArray.forEach((code, positionIdx) => {
+                    positionsToCode[semesterIdx][positionIdx] = code;
+                })
+            })
+        });
     })
+
     return getRealPositionsAndBoundaries(codeToCoordinates);
+}
+
+
+function getConnectedComponent(startCode: string, details: Details): string[] {
+    const visited: Set<string> = new Set();
+    const queue = [startCode];
+    
+    visited.add(startCode);
+    while (queue.length > 0) {
+        const currentCode = queue.shift();
+        if (!currentCode) continue;
+        const course = details[currentCode];
+
+        const succs = (course.successors ?? []).map(s => s.code);
+        const preds = (course.predecessors ?? []).map(p => p.code);
+        const neighbors = [...succs, ...preds];
+
+        for (const neighbor of neighbors) {
+            if (neighbor && !visited.has(neighbor) && details[neighbor]) {
+                visited.add(neighbor);
+                queue.push(neighbor);
+            }
+        }
+    }
+    return Array.from(visited);
+}
+
+
+function addMissedPredecessorsPositions(details: Details, positionsToCode: PositionsToCode, tempCodeToCoordinates: CodeToCoordinates, tempPositionsToCode: PositionsToCode, selectedSpecialization: string) : boolean {
+    console.log(getConnectedComponent(Object.keys(tempCodeToCoordinates)[0], details))
+    const missedCodes: string[] = getConnectedComponent(Object.keys(tempCodeToCoordinates)[0], details)
+        .filter(code => !tempCodeToCoordinates[code] && details[code].semester != null);
+    missedCodes.forEach(code => {
+        let currentSemester = details[code]?.semester;
+        if (currentSemester == null) { return; }
+        let positionIndex =  tempPositionsToCode[currentSemester - 1].length;
+        while (tempPositionsToCode[currentSemester - 1][positionIndex]) {
+            if (positionsToCode[currentSemester - 1] && positionsToCode[currentSemester - 1][positionIndex]) {
+                return false;
+            }
+            positionIndex++;
+        }
+        tempCodeToCoordinates[code] = {x: currentSemester - 1, y: positionIndex};
+        tempPositionsToCode[currentSemester - 1][positionIndex] = code;
+    })
+    return true;
 }
 
 
@@ -51,15 +110,17 @@ function getRealPositionsAndBoundaries(codeToCoordinates: CodeToCoordinates) : [
 export function getTreePositions(details: Details, semesterIndex: number, 
                                  positionIndex: number, code: string,
                                  codeToCoordinates: CodeToCoordinates, 
-                                 positionsToCode: PositionsToCode) : boolean {
+                                 positionsToCode: PositionsToCode, tempCodeToCoordinates: CodeToCoordinates, tempPositionsToCode: PositionsToCode) : boolean {
     // Position already occupied
     if ((positionsToCode[semesterIndex]
         && positionsToCode[semesterIndex][positionIndex])) {
             return false;
     }
 
-    // Node already placed
-    if (codeToCoordinates[code]) {
+    // Node already placed or semester doesn't match the one in data
+    if (codeToCoordinates[code] 
+            || (details[code].semester != null 
+                    && details[code].semester != semesterIndex + 1 && details[code].predecessors.length > 0)) {
         return true;
     }
 
@@ -69,13 +130,13 @@ export function getTreePositions(details: Details, semesterIndex: number,
         if (!details[succs[i].code] || details[succs[i].code].semester == null) { continue; }   // successor not in data, move to another one
         if (!getTreePositions(details, semesterIndex + 1,
                                  currentY, succs[i].code, codeToCoordinates,
-                                 positionsToCode)) {
+                                 positionsToCode, tempCodeToCoordinates, tempPositionsToCode)) {
             return false;
         }
         currentY += 1;
     }
-    codeToCoordinates[code] = {x: semesterIndex, y: positionIndex};
-    positionsToCode[semesterIndex][positionIndex] = code;
+    tempCodeToCoordinates[code] = {x: semesterIndex, y: positionIndex};
+    tempPositionsToCode[semesterIndex][positionIndex] = code;
     return true;
 }
 
