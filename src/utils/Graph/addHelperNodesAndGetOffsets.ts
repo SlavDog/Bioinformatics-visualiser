@@ -21,7 +21,7 @@ export function addHelperNodesAndGetOffsets(subjectData: SubjectData, selectedSp
         
         newSuccessors.forEach((successorInfo, i) => {
             const successor = oldDetails[successorInfo.code];
-            if (!successor || successor.semester == null) {return;}
+            if (!successor || successor.semester == null || successor.semester <= (course.semester ?? 0)) {return;}
 
             const { code: succCode, groups } = successorInfo;
             let succSemester = successor.semester
