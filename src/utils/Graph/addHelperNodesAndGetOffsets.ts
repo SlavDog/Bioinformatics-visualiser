@@ -15,6 +15,7 @@ export function addHelperNodesAndGetOffsets(subjectData: SubjectData, selectedSp
     const edgeYOffsets = {};
 
     const newOrder = addChoiceNodes(subjectData.details, subjectData.spec, subjectData.choices, selectedSpecialization);
+    removeIllogicalEdges(subjectData.details);
     removeTransitiveEdges(subjectData.details);
     const newDetails = structuredClone(subjectData.details);
 
@@ -47,6 +48,22 @@ export function addHelperNodesAndGetOffsets(subjectData: SubjectData, selectedSp
     });
     fillEdgeXOffsets(edgeXOffsets, newDetails, newOrder[selectedSpecialization].plan);
     return [newDetails, newOrder, edgeXOffsets, edgeYOffsets];
+}
+
+
+function removeIllogicalEdges(details: Details) : void {
+    Object.entries(details).forEach(([code, course]) => {
+        const courseSemester = course.semester;
+        course.successors = course.successors.filter(succ => {
+            const succSemester = details[succ.code]?.semester;
+            return !(courseSemester != null && succSemester != null && succSemester <= courseSemester);
+        });
+        course.predecessors = course.predecessors.filter(pred => {
+            const predSemester = details[pred.code]?.semester;
+            return !(courseSemester != null && predSemester != null && predSemester >= courseSemester);
+        }
+        );
+    });
 }
 
 
