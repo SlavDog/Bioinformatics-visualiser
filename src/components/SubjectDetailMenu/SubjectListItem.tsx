@@ -1,8 +1,9 @@
 import { Course } from "@/types/subjects";
 import Subject from "@components/Subject/Subject"
 import ChoiceConnections from "@components/SubjectDetailMenu/ChoiceConnections";
-import { useData } from "@components/providers/dataProvider";
+import { useData, useSelectedSpecialization } from "@components/providers/dataProvider";
 import { Layout } from "@/consts/VisualisationParameters";
+import { OrderSubject } from "@/types/subjects";
 
 
 type SubjectListItemProps = {
@@ -12,10 +13,11 @@ type SubjectListItemProps = {
 
 
 function SubjectListItem({code, course} : SubjectListItemProps) {
+    const spec = useSelectedSpecialization();
     const subjectInfoData = useData();
-    let isAlsoOutside = Object.values(subjectInfoData.order)
-        .some(specializationObj => 
-            Object.values(specializationObj)
+
+    let isAlsoOutside = Object.values(subjectInfoData.spec)
+        .some(specializationObj => Object.values(specializationObj.plan)
                     .some(semester => semester
                         .some(subject => "code" in subject && subject.code == code)));
     return (
