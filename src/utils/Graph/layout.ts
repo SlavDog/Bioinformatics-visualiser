@@ -44,7 +44,8 @@ export function getPositions(details: Details, spec: Spec, selectedSpecializatio
 }
 
 
-function getConnectedComponent(startCode: string, details: Details): string[] {
+export function getReachableCodes(startCode: string, details: Details, searchPredecessorEdges: boolean = true): string[] {
+    if (details[startCode] == null) {return [];}
     const visited: Set<string> = new Set();
     const queue = [startCode];
     
@@ -55,7 +56,7 @@ function getConnectedComponent(startCode: string, details: Details): string[] {
         const course = details[currentCode];
 
         const succs = (course.successors ?? []).map(s => s.code);
-        const preds = (course.predecessors ?? []).map(p => p.code);
+        const preds = searchPredecessorEdges ? (course.predecessors ?? []).map(p => p.code) : [];
         const neighbors = [...succs, ...preds];
 
         for (const neighbor of neighbors) {
@@ -70,9 +71,9 @@ function getConnectedComponent(startCode: string, details: Details): string[] {
 
 
 function addMissedPredecessorsPositions(details: Details, positionsToCode: PositionsToCode, tempCodeToCoordinates: CodeToCoordinates, tempPositionsToCode: PositionsToCode, selectedSpecialization: string) : boolean {
-    console.log(getConnectedComponent(Object.keys(tempCodeToCoordinates)[0], details))
-    const missedCodes: string[] = getConnectedComponent(Object.keys(tempCodeToCoordinates)[0], details)
+    const missedCodes: string[] = getReachableCodes(Object.keys(tempCodeToCoordinates)[0], details)
         .filter(code => !tempCodeToCoordinates[code] && details[code].semester != null);
+
     missedCodes.forEach(code => {
         let currentSemester = details[code]?.semester;
         if (currentSemester == null) { return; }

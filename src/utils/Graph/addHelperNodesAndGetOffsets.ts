@@ -3,6 +3,7 @@ import { ensureOffset } from "@utils/Graph/dataUtils";
 import { fillOrGroupOffsets, fillEdgeXOffsets } from "@utils/Graph/offsets";
 import { createSuccessingHelperNodes } from "@utils/Graph/helperNodes";
 import { Details, Edge, EdgeOffsets, Spec, SubjectData } from "@/types/subjects";
+import { getReachableCodes } from "./layout";
 
 const OFFSET_STEP = 12;
 
@@ -14,6 +15,7 @@ export function addHelperNodesAndGetOffsets(subjectData: SubjectData, selectedSp
     const edgeYOffsets = {};
 
     const newOrder = addChoiceNodes(subjectData.details, subjectData.spec, subjectData.choices, selectedSpecialization);
+    removeTransitiveEdges(subjectData.details);
     const newDetails = structuredClone(subjectData.details);
 
     Object.entries(oldDetails).forEach(([parentCode, course]) => {
@@ -45,6 +47,30 @@ export function addHelperNodesAndGetOffsets(subjectData: SubjectData, selectedSp
     });
     fillEdgeXOffsets(edgeXOffsets, newDetails, newOrder[selectedSpecialization].plan);
     return [newDetails, newOrder, edgeXOffsets, edgeYOffsets];
+}
+
+
+function removeTransitiveEdges(details: Details) : void {
+    Object.keys(details).forEach(code => {
+        const successors = details[code].successors;
+        if (!successors || successors.length == 0) return;
+        const redundantCodes = new Set<string>();
+        successors.forEach(succ => {
+            const reachable = getReachableCodes(succ.code, details, false);
+            reachable
+                .filter(reachableCode => reachableCode != succ.code)
+                .forEach(code => redundantCodes.add(code));
+        });
+
+        details[code].successors = successors.filter(succ => !redundantCodes.has(succ.code));
+
+        redundantCodes.forEach(redundantCode => {
+            if (details[redundantCode]) {
+                details[redundantCode].predecessors = details[redundantCode].predecessors
+                    .filter(pred => pred.code !== code);
+            }
+        });
+    })
 }
 
 
