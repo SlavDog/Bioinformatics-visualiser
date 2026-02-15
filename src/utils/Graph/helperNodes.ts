@@ -1,14 +1,14 @@
-import { Details, EdgeOffsets, Spec, OrderSubject } from '@/types/subjects';
+import { Details, EdgeOffsets, Spec, OrderSubject, Choices } from '@/types/subjects';
 import { emptyNode, ensureOffset } from '@utils/Graph/dataUtils.js';
 import { deleteCodeFromOrGroups } from '@utils/Graph/orGroups.js';
-
+import { isInSomeChoice } from './choiceNodes';
 export function createSuccessingHelperNodes(parentCode: string, parentSemester: number,
                                      successorCode: string, succSemester: number,
-                                     newDetails: Details, order: Record<string, Array<OrderSubject>>,
+                                     newDetails: Details, order: Record<string, Array<OrderSubject>>, choices: Choices,
                                      edgeYOffsets: EdgeOffsets, startOffset: number,
-                                     endOffset: number, groups: Array<Array<string>>,
-                                     selectedSpecialization: string) : void {
-    if (!newDetails[parentCode].successors.some(succ => succ.code == successorCode)) {
+                                     endOffset: number, groups: Array<Array<string>>) : void {
+    if (!newDetails[parentCode].successors.some(succ => succ.code == successorCode)
+            || isInSomeChoice(parentCode, order, choices)) {
         return;
     }
 

@@ -41,8 +41,7 @@ export function addHelperNodesAndGetOffsets(subjectData: SubjectData, selectedSp
                     && shouldCreateHelperNodes(parentSemester, succSemester)) {
                 createSuccessingHelperNodes(parentCode, parentSemester, succCode,
                                             succSemester, newDetails, newOrder[selectedSpecialization].plan,
-                                            edgeYOffsets, offset, endOffset, groups,
-                                            selectedSpecialization);
+                                            subjectData.choices, edgeYOffsets, offset, endOffset, groups);
             }
         })
     });

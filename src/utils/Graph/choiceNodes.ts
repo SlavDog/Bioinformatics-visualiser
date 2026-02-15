@@ -89,10 +89,14 @@ function saveChoiceNode(details: Details, newSpec: Spec, choiceCode: string, ord
 }
 
 
-export function isInSomeChoice(code: string, choices: Choices) : boolean {
-    return Object.values(choices)
-        .some(v => v.list
-            .some(item => item == code || (typeof item == "object" 
-                                           && "code" in item
-                                           && item.code == code)));
+export function isInSomeChoice(code: string, order: Record<string, Array<OrderSubject>>, choices: Choices) : boolean {
+    return Object.values(order).some(semester => {
+        return semester.some(subject => {
+            if ("choice" in subject) {
+                const choiceCode = subject.choice.replace(/-\d+$/, "");  // Remove semester suffix
+                return choices[choiceCode].list.some(item => item == code);
+            }
+            return false;
+        })
+    });
 }
