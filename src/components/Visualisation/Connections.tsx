@@ -21,7 +21,7 @@ function Connections({processedSubjects, positions, xOffsets, yOffsets} : Connec
                 let nonPrerequisite = !endInfo.by_prerequisites;
 
                 return (<path key={`${startCode}-${endInfo.code}-${i}`} d={path}
-                    stroke={nonPrerequisite ? "gray" : "black"} fill="transparent" strokeWidth="2" strokeDasharray={nonPrerequisite ? "2 3" : "none"}/>);
+                    stroke={nonPrerequisite ? "var(--connection-secondary)" : "var(--connection-primary)"} fill="transparent" strokeWidth="2" strokeDasharray={nonPrerequisite ? "2 3" : "none"}/>);
             })}
         )}
     </svg>

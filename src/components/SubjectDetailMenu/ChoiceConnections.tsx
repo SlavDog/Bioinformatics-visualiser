@@ -24,8 +24,8 @@ function ChoiceConnections({course, subjectWidth, isPredecessor} : ChoiceConnect
     let yEnd = isPredecessor ? 55 : 30;
     let x = subjectWidth / 4;
 
-    let compulsoryColor = compulsorySubjectsArray.length == 0 ? "transparent" : "black";
-    let voluntaryColor = voluntarySubjectsArray.length == 0 ? "transparent" : "gray";
+    let compulsoryColor = compulsorySubjectsArray.length == 0 ? "transparent" : "var(--text-primary)";
+    let voluntaryColor = voluntarySubjectsArray.length == 0 ? "transparent" : "var(--text-secondary)";
 
     return (
         <div style={{display: "flex", flexDirection: "row", userSelect: "none"}}>

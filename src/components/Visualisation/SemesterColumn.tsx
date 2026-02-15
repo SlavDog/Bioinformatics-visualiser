@@ -24,7 +24,7 @@ function SemesterColumn({index, semesterSubjects, processedSubjects, maxY, semes
 
     return (
      <div key={index} className="semesterColumn" style={{
-        backgroundColor: index % 2 == 0 ? "#e8e8e8" : "white",
+        backgroundColor: index % 2 == 0 ? "var(--column-even)" : "var(--column-odd)",
         left: index * Layout.columnWidth,
         width: Layout.columnWidth,
         height: maxY + Layout.semesterTitleInset + Layout.semesterColumnBottomPadding,

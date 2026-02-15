@@ -4,9 +4,9 @@
   left: 50%;
   transform: translate(-50%, -40%);
   z-index: 1000;
-  background-color: white;
+  background-color: var(--choice-menu-background);
   padding: 15px;
-  border: 3px solid #a000a0;
+  border: 3px solid var(--choice);
   border-radius: 14px;
   height: 70vh;
   width: 90vw;
@@ -17,7 +17,7 @@
   justify-content: space-evenly;
   align-items: center;
   overflow: scroll;
-  background-image: linear-gradient(160deg, #ffffff 0%, #fdd1ff 100%);
+  background-image: linear-gradient(160deg, var(--subject-background) 0%, var(--choice-menu-background-gradient) 100%);
 }
 
 .menuBoxSubjectsContainer {
@@ -40,7 +40,7 @@
   right: 0;
   bottom: 0;
   opacity: 0;
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: var(--menu-background-overlay);
   z-index: 1000;
   transition: opacity 0.3s ease;
 }
@@ -78,10 +78,10 @@
 .choiceConnection:hover circle,
 .choiceConnection:hover line
 {
-  stroke: #a000a0;
+  stroke: var(--choice);
 }
 
 .choiceConnection:hover polygon,
 .choiceConnection:hover text {
-  fill: #a000a0;
+  fill: var(--choice);
 }

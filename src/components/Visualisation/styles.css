@@ -1,5 +1,5 @@
 .visualisationBackgroundWithPadding {
-  background-color: rgb(201, 201, 201);
+  background-color: var(--visualisation-background);
 }
 
 .visualisationBackground {
@@ -15,7 +15,7 @@
 .scrollableBox {
   height: 100%;
   overflow: scroll;
-  background-color: rgb(201, 201, 201);
+  background-color: var(--visualisation-background);
 }
 
 .visualisationBox {
@@ -39,6 +39,7 @@
   font-size: 32px;
   padding-top: 100px;
   margin-bottom: 0;
+  color: var(--text-primary);
 }
 
 .semesterSubtitles {
@@ -46,6 +47,7 @@
   font-weight: 300;
   font-size: 18px;
   margin-top: 10px;
+  color: var(--text-primary);
 }
 
 .semesterColumn {
@@ -60,6 +62,7 @@
   font-weight: 600;
   font-size: 28px;
   text-align: center;
+  color: var(--text-primary);
 }
 
 .bigSubTitle {
@@ -68,11 +71,12 @@
   font-size: 20px;
   margin-top: 0;
   text-align: center;
+  color: var(--text-primary);
 }
 
 .zoomButton {
    font-family: "Inter", sans-serif;
    font-weight: 500;
-   border: 2px solid rgb(192, 192, 192);
+   border: 2px solid var(--background-secondary);
    border-radius: 5px;
 }

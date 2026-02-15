@@ -6,6 +6,7 @@ import { Layout } from "@/consts/VisualisationParameters";
 import "./styles.css";
 import { useData, useSetData, useSelectedSpecialization, useSetSelectedSpecialization } from "@components/providers/dataProvider";
 import { useContext, useState } from "react";
+import DarkModeToggle from "@components/ui/DarkModeToggle";
 
 
 type SidebarProps = {
@@ -60,6 +61,7 @@ function SideBar({scale, setScale} : SidebarProps) {
                    width: `${Layout.sidebarWidth}px` 
                 }}>
             <RangeScaler scale={scale} setScale={setScale} />
+            <DarkModeToggle/>
             <h1 className="sideBarTitle">Preferovaná oblast</h1>
             <CheckboxField checked={false} onChange={() => {}}>Preferuji informatiku</CheckboxField>
             <CheckboxField checked={false} onChange={() => {}}>Preferuji matematiku</CheckboxField>

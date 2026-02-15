@@ -1,3 +1,71 @@
 body {
   margin: 0;
+  background-color: var(--background);
+}
+
+ :root {
+  --visualisation-background: rgb(201, 201, 201);
+  --backround: white;
+  --background-secondary: rgb(192, 192, 192);
+  --column-odd: #e8e8e8;
+  --column-even: white;
+  --text-primary: black;
+  --text-secondary: #4e4e4e;
+  --button: #e6e6e6;
+  --button-hover: #b8b8b8;
+  --subject-menu-background: white;
+  --menu-background-overlay: rgba(0, 0, 0, 0.7);
+  --subject-background: white;
+  --subject-shadow: rgba(0, 0, 0, 0.2);
+  --warning-background: orange;
+  --warning-text: white;
+  --divider-color: #929292;
+  --choice: #a000a0;
+  --choice-background: #fdd1ff;
+  --choice-menu-background-gradient: #fdd1ff;
+  --choice-background-hover: #fba9ff;
+  --informatics: orange;
+  --informatics-background: #ffee8d;
+  --biology: #108a00;
+  --biology-background: #bdffcd;
+  --math: #009cfd;
+  --math-background: #87fffd;
+  --other: #333333;
+  --other-background: #bdbdbd;
+  --connection-primary: #000000;
+  --connection-secondary: gray;
+} 
+
+[data-theme="dark"] {
+  --visualisation-background: #181818;
+  --background: #0a0a0a; 
+  --background-secondary: rgb(46, 46, 46);
+  --column-odd: #141414;
+  --column-even: var(--background);
+  --text-primary: #dedede;
+  --text-secondary: #b8b8b8;
+  --button: #292929;
+  --button-hover: #414141;
+  --subject-title: #f0f0f0;
+  --menu-background-overlay: rgba(12, 12, 12, 0.8);
+  --subject-background: #171717;
+  --subject-shadow: rgba(0, 0, 0, 0.4);
+  --divider-color: #2d3748;
+  --warning-background: #ed8936;
+  --warning-text: white;
+  --choice: #d277e9;
+  --choice-background: #5c325c;
+  --choice-menu-background: var(--background);
+  --choice-menu-background-gradient: var(--background);
+  --choice-background-hover: #684168;
+  --informatics: #fbd38d;
+  --informatics-background: #4a412a;
+  --biology: #92cda7;
+  --biology-background: #274d3e;
+  --math: #90cdf4;
+  --math-background: #2c4a63;
+  --other: #adadad;
+  --other-background: #666666;
+  --connection-primary: #ffffff;
+  --connection-secondary: #aaaaaa;
 }
