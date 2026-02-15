@@ -19,12 +19,22 @@ export function addHelperNodesAndGetOffsets(subjectData: SubjectData, selectedSp
     removeTransitiveEdges(subjectData.details);
     const newDetails = structuredClone(subjectData.details);
 
+    const currentSpecializationCodes = new Set(Object.values(subjectData.spec[selectedSpecialization].plan)
+                                            .flat()
+                                            .map(subject => "code" in subject ? subject.code : subject.choice));
+    removeForwardEdgesToNonExistingNodes(newDetails, currentSpecializationCodes);
+
     Object.entries(oldDetails).forEach(([parentCode, course]) => {
         const { successors: newSuccessors, semester: parentSemester } = course;
         
         newSuccessors.forEach((successorInfo, i) => {
             const successor = oldDetails[successorInfo.code];
-            if (!successor || successor.semester == null || successor.semester <= (course.semester ?? 0)) {return;}
+            if (!successor || successor.semester == null 
+                    || successor.semester <= (course.semester ?? 0)
+                    || !currentSpecializationCodes.has(successorInfo.code)) 
+            {
+                return;
+            }
 
             const { code: succCode, groups } = successorInfo;
             let succSemester = successor.semester
@@ -48,6 +58,14 @@ export function addHelperNodesAndGetOffsets(subjectData: SubjectData, selectedSp
     fillEdgeXOffsets(edgeXOffsets, newDetails, newOrder[selectedSpecialization].plan);
     return [newDetails, newOrder, edgeXOffsets, edgeYOffsets];
 }
+
+
+function removeForwardEdgesToNonExistingNodes(details: Details, currentSpecializationCodes: Set<string>) : void {
+    Object.entries(details).forEach(([code, course]) => {
+        course.successors = course.successors.filter(succ => currentSpecializationCodes.has(succ.code));
+    });
+}
+
 
 
 function removeIllogicalEdges(details: Details) : void {

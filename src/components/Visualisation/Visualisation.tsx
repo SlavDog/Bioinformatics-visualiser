@@ -84,6 +84,7 @@ function Visualisation({scale, setDragEnabled}: VisualisationProps) {
                     edgeYOffsets={visState.yOffsets}
                     positions={visState.positions}
                     processedSubjects={visState.subjects}
+                    specialization={visState.spec[selectedSpecialization] ?? {plan: {}}}
                     choices={subjectInfoData.choices}
                     SubjectComponent={SubjectComponent}
                     setDragEnabled={setDragEnabled}
