@@ -31,7 +31,8 @@ function VisualisationBackground({children, maxX, maxY, semesterCount, processed
             {Array.from({ length: semesterCount }).map((_, i) => {
                 const subjects = currentSpec.plan[i + 1] || [];
                 return (
-                    <SemesterColumn 
+                    <SemesterColumn
+                        key={`semester-column-${i}`}
                         index={i} 
                         semesterSubjects={subjects}
                         processedSubjects={processedSubjects}

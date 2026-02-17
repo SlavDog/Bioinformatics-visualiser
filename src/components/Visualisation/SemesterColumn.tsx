@@ -23,7 +23,7 @@ function SemesterColumn({index, semesterSubjects, processedSubjects, maxY, semes
         .reduce((acc, c) => acc + c, 0);
 
     return (
-     <div key={index} className="semesterColumn" style={{
+     <div className="semesterColumn" style={{
         backgroundColor: index % 2 == 0 ? "var(--column-even)" : "var(--column-odd)",
         left: index * Layout.columnWidth,
         width: Layout.columnWidth,

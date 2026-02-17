@@ -41,7 +41,6 @@ function visualisationForeground({edgeXOffsets, edgeYOffsets,
 
                 const orGatesPositions = getOrGatesPositionsForSubject(code, course, processedSubjects, edgeYOffsets);
                 return (
-                    <>
                         <SubjectComponent
                             code={code}
                             key={code}
@@ -57,7 +56,6 @@ function visualisationForeground({edgeXOffsets, edgeYOffsets,
                                 padding: Layout.subjectPadding
                             }}
                         />
-                    </>
                 );
             })}
         </div>
