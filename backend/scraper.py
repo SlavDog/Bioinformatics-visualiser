@@ -65,6 +65,10 @@ def extract_codes(filename: str) -> ResultData:
                 result_data["codes"].append(subject["code"])                
             elif "choice" in subject:
                 continue
+        for spec in data["spec"].values():
+            for subject in spec["base"]:
+                if "code" in subject:
+                    result_data["codes"].append(subject["code"])
 
         # Write down every subject from a certain choice group
         for choice in data["choices"]:
