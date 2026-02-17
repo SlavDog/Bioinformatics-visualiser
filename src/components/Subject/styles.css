@@ -113,7 +113,7 @@
   margin: 0;
   text-decoration: none;
   margin-top: 100px;
-  color: var(--subject-text-primary);
+  color: var(--subject-title);
 }
 
 .smallSubjectCredits {
@@ -121,7 +121,7 @@
   font-weight: 300;
   font-size: 24px;
   margin: 0;
-  color: var(--subject-text-secondary);
+  color: var(--text-secondary);
 }
 
 .smallTopSubjectContainer {
