@@ -8,7 +8,6 @@ function SelectField({options, placeholder} : SelectFieldProps) {
     return (
         <div className="field">
             <select>
-                <option value="" disabled selected>{placeholder}</option>
                 {options.sort().map((code) => {
                     return (
                         <option key={code} value={code}>
