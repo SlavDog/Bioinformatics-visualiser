@@ -2,7 +2,7 @@ import Connections from "@components/Visualisation/Connections";
 import { getOrGatesYOffsetsForSubject } from "@utils/Graph";
 import { Layout } from "@/consts/VisualisationParameters";
 import OrGates from "@components/Visualisation/OrGates";
-import { Choices, Details, EdgeOffsets, RealPositions } from "@/types/subjects";
+import { Choices, Details, EdgeOffsets, RealPositions, Spec, Specialization } from "@/types/subjects";
 import { Dispatch, SetStateAction } from "react";
 import { SubjectProps } from "@components/Subject/Subject";
 
@@ -11,6 +11,7 @@ type VisualisationForegroundProps = {
     edgeYOffsets: EdgeOffsets,
     positions: RealPositions,
     processedSubjects: Details,
+    specialization: Specialization,
     choices: Choices,
     SubjectComponent: React.ComponentType<SubjectProps>,
     setDragEnabled: Dispatch<SetStateAction<boolean>>
@@ -18,7 +19,7 @@ type VisualisationForegroundProps = {
 }
 
 function visualisationForeground({edgeXOffsets, edgeYOffsets, 
-        positions, processedSubjects, choices,
+        positions, processedSubjects, specialization, choices,
         SubjectComponent, setDragEnabled,
         orGatesPositions} : VisualisationForegroundProps) {
     return (
@@ -33,13 +34,14 @@ function visualisationForeground({edgeXOffsets, edgeYOffsets,
                 yOffsets={edgeYOffsets}
             />
             <OrGates orGatesPositions={orGatesPositions}/>
-            {Object.entries(processedSubjects).map(([code, course]) => {
+            {Object.values(specialization.plan).flat().map((orderSubject) => {
+                const code = "code" in orderSubject ? orderSubject.code : orderSubject.choice;
                 const pos = positions[code];
                 if (!pos) {return null;}
-                if (course.name == "") { return <p key={code} style={{position: "absolute", left: positions[code].x,
+                const course = processedSubjects[code];
+                if (course.name == "") { return <p key={code} style={{position: "absolute", color: "red", left: positions[code].x,
                                 top: positions[code].y}}>{code}</p>; }
 
-                const orGatesPositions = getOrGatesPositionsForSubject(code, course, processedSubjects, edgeYOffsets);
                 return (
                         <SubjectComponent
                             code={code}
