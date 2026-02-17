@@ -14,7 +14,7 @@ SuccessorCodes = dict[str, tuple[list[list[str]], bool]]
 class ResultData(TypedDict):
     codes: list[str]
     choices: dict[str, Any]
-    order: dict[str, dict[int, list[str]]]
+    spec: dict[str, dict[int, list[str]]]
     codes_to_sem: CodesToSem
 
 class SubjectLink(TypedDict):
@@ -38,7 +38,7 @@ SubjectSuccessors = dict[str, SubjectDict]
 
 class FinalJson(TypedDict):
     details: SubjectSuccessors
-    order: dict[str, dict[int, list[str]]]
+    spec: dict[str, dict[int, list[str]]]
     choices: dict[str, Any]
 
 
@@ -84,7 +84,7 @@ def extract_codes(filename: str) -> ResultData:
     return result_data
 
 
-def get_codes_to_sem(filename: str) -> tuple[list[tuple[str, SemToCodes]], CodesToSem]:
+def get_codes_to_sem(filename: str) -> CodesToSem:
     codes_to_sem: CodesToSem = {}
     with open(filename, "r", encoding='utf-8') as source:
         data = json.load(source)
@@ -98,7 +98,7 @@ def get_codes_to_sem(filename: str) -> tuple[list[tuple[str, SemToCodes]], Codes
                             codes_to_sem[choice_subject_code] = i + 1
                     else:
                         codes_to_sem[subject["code"]] = i + 1
-        return codes_to_sem
+    return codes_to_sem
 
 
 def find_successor_codes(html: str, code: str, by_prerequisites: bool = True) -> SuccessorCodes:
