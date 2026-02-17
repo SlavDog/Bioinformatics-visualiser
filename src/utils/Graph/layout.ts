@@ -1,7 +1,7 @@
 import { Layout } from "@/consts/VisualisationParameters";
 import { getUniquePredGroups } from "@utils/Graph/orGroups";
 import { getYOffsetForOrGroup } from "@utils/Graph/offsets";
-import { Choices, CodeToCoordinates, Course, Details, EdgeOffsets, PositionsToCode, RealPositions, Spec} from "@/types/subjects";
+import { Choices, CodeToCoordinates, Course, Details, EdgeOffsets, PositionsToCode, RealPositions, Spec, Specialization} from "@/types/subjects";
 
 export function getPositions(details: Details, spec: Spec, selectedSpecialization: string) : [RealPositions, number, number] {
     let semestersCount = Object.keys(spec[selectedSpecialization].plan).length;
@@ -11,14 +11,12 @@ export function getPositions(details: Details, spec: Spec, selectedSpecializatio
                                             .flat()
                                             .map(subject => "code" in subject ? subject.code : subject.choice));
 
-
     Object.values(spec[selectedSpecialization].plan).forEach((semesterArray, semesterIndex) => {
         semesterArray.forEach((subject) => {
             let tempCodeToCoordinates = {};
             let tempPositionsToCode = Array.from({ length: semestersCount }, () => []);
             let positionIndex = 0;
-            const code = "code" in subject ? subject.code : subject.choice;
-            
+            let code = "code" in subject ? subject.code : subject.choice;
             if (codeToCoordinates[code]
                 || !details[code]
                 || details[code].semester == null
@@ -31,7 +29,8 @@ export function getPositions(details: Details, spec: Spec, selectedSpecializatio
                                      positionIndex, code, codeToCoordinates,
                                      positionsToCode, tempCodeToCoordinates,
                                      tempPositionsToCode, currentSpecializationCodes)
-                    || !addMissedPredecessorsPositions(details, positionsToCode, tempCodeToCoordinates, tempPositionsToCode, selectedSpecialization)) {
+                    || !addMissedPredecessorsPositions(details, codeToCoordinates, positionsToCode, tempCodeToCoordinates, tempPositionsToCode, selectedSpecialization)
+                    && positionIndex < 20) {
                 positionIndex++;
                 tempCodeToCoordinates = {};
                 tempPositionsToCode = Array.from({ length: semestersCount }, () => []);
@@ -46,7 +45,6 @@ export function getPositions(details: Details, spec: Spec, selectedSpecializatio
             })
         });
     })
-
     return getRealPositionsAndBoundaries(codeToCoordinates);
 }
 
@@ -77,9 +75,10 @@ export function getReachableCodes(startCode: string, details: Details, searchPre
 }
 
 
-function addMissedPredecessorsPositions(details: Details, positionsToCode: PositionsToCode, tempCodeToCoordinates: CodeToCoordinates, tempPositionsToCode: PositionsToCode, selectedSpecialization: string) : boolean {
+function addMissedPredecessorsPositions(details: Details, codesToCoordinates: CodeToCoordinates, positionsToCode: PositionsToCode, tempCodeToCoordinates: CodeToCoordinates, tempPositionsToCode: PositionsToCode, selectedSpecialization: string) : boolean {
     const missedCodes: string[] = getReachableCodes(Object.keys(tempCodeToCoordinates)[0], details)
-        .filter(code => !tempCodeToCoordinates[code] && details[code].semester != null);
+        .filter(code => !tempCodeToCoordinates[code] && details[code].semester != null)
+        .filter(code => !codesToCoordinates[code]);
 
     for (let i = 0; i < missedCodes.length; i++) {
         const code = missedCodes[i];
@@ -132,7 +131,8 @@ export function getTreePositions(details: Details, semesterIndex: number,
                                  tempPositionsToCode: PositionsToCode,
                                  currentSpecializationCodes: Set<string>
                              ) : boolean {
-    console.log(`Trying to place ${code} at semester ${semesterIndex + 1}, position ${positionIndex}`);
+                                    
+    
     // Position already occupied
     if ((positionsToCode[semesterIndex]
         && positionsToCode[semesterIndex][positionIndex])) {
@@ -191,10 +191,11 @@ export function getOrGatesYOffsetsForSubject(code: string, course: Course,
 }
 
 
-export function getAllOrGatesPositions(details: Details, positions: RealPositions, edgeYOffsets: EdgeOffsets) : Array<{x: number, y: number}> {
+export function getAllOrGatesPositions(details: Details, specialization: Specialization, positions: RealPositions, edgeYOffsets: EdgeOffsets) : Array<{x: number, y: number}> {
     let orGatesPositions: Array<{x: number, y: number}> = [];
+    const specializationCodes = new Set(Object.values(specialization.plan).flat().map(subject => "code" in subject ? subject.code : subject.choice));
     Object.entries(details).forEach(([code, course]) => {
-        if (!hasOrGate(course, details)) { return; }
+        if (!specializationCodes.has(code) || !hasOrGate(course, details)) { return; }
         const x = positions[code].x;
         const yOffsets = getOrGatesYOffsetsForSubject(code, course, details, edgeYOffsets);
 

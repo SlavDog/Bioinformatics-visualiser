@@ -34,10 +34,15 @@ function connectPredsOrSuccs(connectSuccs: boolean, subjChoices: Choice, details
     neighboursArray = subjChoices.list
         .map(item => {
             const code = typeof item === "string" ? item : item.code;
+            console.log(code);
             return details[code][predsOrSuccs];
         })
         .flat()
         .filter((edge => edge.code in details))
+        // filter out duplicates
+        .filter((value, index, self) =>
+            index === self.findIndex((t) => t.code === value.code)
+        );
 
     neighboursArray.forEach(neighbour => {
         const shouldDrawFullLine = details[neighbour.code][inversePredsOrSuccs]
@@ -57,6 +62,34 @@ function connectPredsOrSuccs(connectSuccs: boolean, subjChoices: Choice, details
             });
         }
     });
+
+    // remove choice node subjects from successors groups
+    if (connectSuccs) {
+        neighboursArray.forEach(neighbourEdge => {
+            neighbourEdge.groups = neighbourEdge.groups.map(group => {
+                if (group.some(subject => subjChoices.list.includes(subject))) {
+                    group.push(`${choiceCode}-${semester}`);
+                    return group.filter(subject => !subjChoices.list.includes(subject))
+                }
+                return group;
+            });
+            details[neighbourEdge.code][inversePredsOrSuccs] = details[neighbourEdge.code][inversePredsOrSuccs].map(edge => {
+                if (edge.code === `${choiceCode}-${semester}`) {
+                    return {
+                        ...edge,
+                        groups: edge.groups.map(group => {
+                            if (group.some(subject => subjChoices.list.includes(subject))) {
+                                group.push(`${choiceCode}-${semester}`);
+                                return group.filter(subject => !subjChoices.list.includes(subject))
+                            }
+                            return group;
+                        })
+                    }
+                }                
+                return edge;
+            });
+        });
+    } 
     return neighboursArray
 }
 
@@ -64,7 +97,6 @@ function connectPredsOrSuccs(connectSuccs: boolean, subjChoices: Choice, details
 function saveChoiceNode(details: Details, newSpec: Spec, choiceCode: string, orderSubject: OrderSubject,
                         semester: number, choices: Choices, successors: Array<Edge>,
                         predecessors: Array<Edge>, selectedSpecialization: string) : void {
-    if (!("credits" in orderSubject)) {return; }
     details[`${choiceCode}-${semester}`] = {
         ...emptyNode,
         name: choices[choiceCode].refnCZ,
@@ -82,7 +114,7 @@ function saveChoiceNode(details: Details, newSpec: Spec, choiceCode: string, ord
     newSpec[selectedSpecialization]["plan"][semester].push(
         {
             "choice": `${choiceCode}-${semester}`,
-            "credits": orderSubject.credits
+            "credits": orderSubject.credits ?? 0
         }
     )
 

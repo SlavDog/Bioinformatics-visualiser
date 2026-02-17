@@ -47,7 +47,7 @@ function Visualisation({scale, setDragEnabled}: VisualisationProps) {
     useEffect(() => {
         const [newDetails, newSpec, xOff, yOff] = addHelperNodesAndGetOffsets(subjectInfoData, selectedSpecialization);
         const [pos, maxX, maxY] = getPositions(newDetails, newSpec, selectedSpecialization);
-        const orGatesPositions = getAllOrGatesPositions(newDetails, pos, yOff);
+        const orGatesPositions = getAllOrGatesPositions(newDetails, newSpec[selectedSpecialization], pos, yOff);
         
         setVisState({
             subjects: newDetails,

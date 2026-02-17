@@ -1,9 +1,10 @@
-import { addChoiceNodes } from "@utils/Graph/choiceNodes";
+import { addChoiceNodes, isInSomeChoice } from "@utils/Graph/choiceNodes";
 import { ensureOffset } from "@utils/Graph/dataUtils";
 import { fillOrGroupOffsets, fillEdgeXOffsets } from "@utils/Graph/offsets";
 import { createSuccessingHelperNodes } from "@utils/Graph/helperNodes";
 import { Details, Edge, EdgeOffsets, Spec, SubjectData } from "@/types/subjects";
 import { getReachableCodes } from "./layout";
+import { spec } from "node:test/reporters";
 
 const OFFSET_STEP = 12;
 
@@ -17,21 +18,26 @@ export function addHelperNodesAndGetOffsets(subjectData: SubjectData, selectedSp
     const newOrder = addChoiceNodes(subjectData.details, subjectData.spec, subjectData.choices, selectedSpecialization);
     removeIllogicalEdges(subjectData.details);
     removeTransitiveEdges(subjectData.details);
-    const newDetails = structuredClone(subjectData.details);
 
     const currentSpecializationCodes = new Set(Object.values(subjectData.spec[selectedSpecialization].plan)
                                             .flat()
                                             .map(subject => "code" in subject ? subject.code : subject.choice));
-    removeForwardEdgesToNonExistingNodes(newDetails, currentSpecializationCodes);
+    removeForwardEdgesToNonExistingNodes(subjectData.details, currentSpecializationCodes);
+    const newDetails = structuredClone(subjectData).details;
 
-    Object.entries(oldDetails).forEach(([parentCode, course]) => {
+    Object.values(newOrder[selectedSpecialization].plan)
+            .flat()
+            .map(subject => "code" in subject ? subject.code : subject.choice)
+            .filter((parentCode) => !isInSomeChoice(parentCode, newOrder[selectedSpecialization].plan, subjectData.choices))
+            .forEach((parentCode) => {
+        const course = oldDetails[parentCode];
         const { successors: newSuccessors, semester: parentSemester } = course;
         
         newSuccessors.forEach((successorInfo, i) => {
             const successor = oldDetails[successorInfo.code];
             if (!successor || successor.semester == null 
                     || successor.semester <= (course.semester ?? 0)
-                    || !currentSpecializationCodes.has(successorInfo.code)) 
+                    || !currentSpecializationCodes.has(successorInfo.code.replace(/-\d+$/, "")))
             {
                 return;
             }
@@ -62,7 +68,18 @@ export function addHelperNodesAndGetOffsets(subjectData: SubjectData, selectedSp
 
 function removeForwardEdgesToNonExistingNodes(details: Details, currentSpecializationCodes: Set<string>) : void {
     Object.entries(details).forEach(([code, course]) => {
-        course.successors = course.successors.filter(succ => currentSpecializationCodes.has(succ.code));
+        course.successors = course.successors.filter(succ => currentSpecializationCodes.has(succ.code.replace(/-\d+$/, "")));
+        course.predecessors = course.predecessors.filter(pred => currentSpecializationCodes.has(pred.code.replace(/-\d+$/, "")));
+        course.successors.forEach(succ => {
+            succ.groups = succ.groups.map(group => {
+                return group.filter(subject => currentSpecializationCodes.has(subject));
+            });
+        });
+        course.predecessors.forEach(pred => {
+            pred.groups = pred.groups.map(group => {
+                return group.filter(subject => currentSpecializationCodes.has(subject));
+            });
+        });
     });
 }
 
@@ -96,6 +113,7 @@ function removeTransitiveEdges(details: Details) : void {
                 .forEach(code => redundantCodes.add(code));
         });
 
+        console.log(code, "-> redundant codes: ", redundantCodes);
         details[code].successors = successors.filter(succ => !redundantCodes.has(succ.code));
 
         redundantCodes.forEach(redundantCode => {
@@ -104,8 +122,8 @@ function removeTransitiveEdges(details: Details) : void {
                     .filter(pred => pred.code !== code);
             }
         });
-    })
-}
+    });
+};
 
 
 function shouldCreateHelperNodes(parentSemester: number | null, 
