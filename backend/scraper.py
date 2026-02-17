@@ -150,8 +150,8 @@ def find_successor_codes(html: str, code: str, by_prerequisites: bool = True) ->
             if required:
                 result.append((successor_subject, groups))
         except Exception as e:
-            print(e)
-            print(f"Couldn't evaluate prerequisite formula {formula} for subject {successor_subject}. Skipping.")
+            printRed(e)
+            printRed(f"Couldn't evaluate prerequisite formula {formula} for subject {successor_subject}. Skipping.")
     return {code : (group, True) for code, group in result}
     
 
@@ -292,7 +292,7 @@ def build_successor_dict(data: ResultData) \
             semester = None if not code in data["codes_to_sem"] else data["codes_to_sem"][code]
             subject_data[code] = get_subject(html, code, semester, predecessors)
         else:
-            print("Failed to fetch page:", response.status_code)
+            printRed(f"Failed to fetch page: {response.status_code}")
 
         time.sleep(1)
 
@@ -310,13 +310,14 @@ def get_subject(html: str, code: str, semester: int | None, predecessors: dict[s
     name_match = re.search(re.compile(rf"<H2>{code}\s([^<]+)", re.IGNORECASE), html)
     if name_match:
         name = name_match.group(1).strip()
-    print(f"{code} - {name}")
+    printYellow(f"{code} - {name}")
 
     faculty = ""
     faculty_match = re.search(re.compile(r"</H2>\s*\n\s*<b>([^<]+)</b>", re.IGNORECASE), html)
     if faculty_match:
         faculty = faculty_match.group(1).strip()
-    print(transform_code_to_link(code, faculty))
+    printCyan(f"   Link: ", end="")
+    print(f"{transform_code_to_link(code, faculty)}")
 
     language = "Čeština"
     language_match = re.search(re.compile(r"<DT>\s*<B>Vyučovací jazyk</B>\s*</DT>\s*\n\s*<DD>([^<]+)</DD>"), html)
@@ -327,7 +328,8 @@ def get_subject(html: str, code: str, semester: int | None, predecessors: dict[s
     completion_match = re.search(re.compile(r"Ukončení:\s*(z|k|zk|SZk|SDzk)\.", re.IGNORECASE), html)
     if completion_match:
         completion = completion_match.group(1)
-    print(f"    {faculty} / {language} / {completion}")
+    printCyan("   Information: ", end="")
+    print(f"{faculty} / {language} / {completion}")
 
     credit = 0
     credit_match = re.search(re.compile(r"[0-9]/[0-9](?:/[0-9])?\.\s([0-9][0-9]?)\skr\.\s(\(plus ukončení\)\.)?", re.IGNORECASE), html)
@@ -339,7 +341,8 @@ def get_subject(html: str, code: str, semester: int | None, predecessors: dict[s
                 credit = int(credit) + 2
             if completion == "k":
                 credit = int(credit) + 1
-    print(f"    {credit} kr.")
+    printCyan("   Credits: ", end="")
+    print(f"{credit} kr.")
 
 
     successor_codes = find_successor_codes(html, code, True)
@@ -350,7 +353,10 @@ def get_subject(html: str, code: str, semester: int | None, predecessors: dict[s
 
     formatted_successors: list[SubjectLink] = [{"code" : code, "groups": groups, "by_prerequisites": by_prerequisites}
                                                for code, (groups, by_prerequisites) in successor_codes.items()]
-    print(f"    {formatted_successors if formatted_successors else "{}"}")
+    for successor in formatted_successors:
+        printCyan("   Successor: ", end="")
+        print(f"{successor['code']} (groups: {successor['groups']}, by_prerequisites: {successor['by_prerequisites']})")
+    print("")
 
     for successor in formatted_successors:
         temp_subject: SubjectLink = {"code" : code, "groups": successor["groups"], "by_prerequisites": successor["by_prerequisites"]}
@@ -397,25 +403,27 @@ def code_to_subj_type(code: str) -> str:
         return "MA"
     return "OT"
 
+def printYellow(s, end="\n"): print("\033[93m {}\033[00m".format(s), end=end)
+def printCyan(s, end="\n"): print("\033[96m {}\033[00m".format(s), end=end)
+def printRed(s, end="\n"): print("\033[91m {}\033[00m".format(s), end=end)
 
-def build_final_json(data: ResultData, successors: SubjectSuccessors) -> None:
+def build_final_json(data: ResultData, successors: SubjectSuccessors, path: str) -> None:
     final_json: FinalJson = {
                         "details": successors,
                         "spec": data["spec"],
                         "choices": data["choices"]
                     }
-    print(final_json["spec"])
-    with open("../src/data/inf_tree_cz.json", "w", encoding="utf-8") as f:
+    with open(path, "w", encoding="utf-8") as f:
         json.dump(final_json, f, indent=4, ensure_ascii=False)
 
 
 def main() -> None:
-    print("Extracting names from input JSON file.")
-    data = extract_codes("../src/data/inf_cz.json")
+    print("Extracting names from input JSON file...")
+    data = extract_codes("../src/data/bc_bio_cz.json")
     successors = build_successor_dict(data)
 
-    print("Building the final JSON files.")
-    build_final_json(data, successors)
+    print("Almost finished. Building the final JSON file...")
+    build_final_json(data, successors, "../src/data/final_tree.json")
 
 if __name__ == "__main__":
     main()
