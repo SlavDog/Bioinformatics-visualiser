@@ -34,7 +34,6 @@ function connectPredsOrSuccs(connectSuccs: boolean, subjChoices: Choice, details
     neighboursArray = subjChoices.list
         .map(item => {
             const code = typeof item === "string" ? item : item.code;
-            console.log(code);
             return details[code][predsOrSuccs];
         })
         .flat()

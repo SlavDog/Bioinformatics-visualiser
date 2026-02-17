@@ -31,6 +31,10 @@ export function addHelperNodesAndGetOffsets(subjectData: SubjectData, selectedSp
             .filter((parentCode) => !isInSomeChoice(parentCode, newOrder[selectedSpecialization].plan, subjectData.choices))
             .forEach((parentCode) => {
         const course = oldDetails[parentCode];
+        if (!course) {
+            console.warn(`Course with code ${parentCode} not found in details.`);
+            return;
+        }
         const { successors: newSuccessors, semester: parentSemester } = course;
         
         newSuccessors.forEach((successorInfo, i) => {
@@ -113,7 +117,6 @@ function removeTransitiveEdges(details: Details) : void {
                 .forEach(code => redundantCodes.add(code));
         });
 
-        console.log(code, "-> redundant codes: ", redundantCodes);
         details[code].successors = successors.filter(succ => !redundantCodes.has(succ.code));
 
         redundantCodes.forEach(redundantCode => {
