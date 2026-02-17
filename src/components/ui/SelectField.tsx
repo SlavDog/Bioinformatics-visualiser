@@ -17,7 +17,7 @@ function SelectField({options, placeholder} : SelectFieldProps) {
                     );
                 })}
             </select>
-            <input className="submitButton" type="submit" value="Submit"></input>
+            <input className="submitButton" type="submit" value="Zvolit"></input>
         </div>
     );
 }
