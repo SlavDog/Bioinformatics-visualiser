@@ -2,13 +2,13 @@ import { Details, EdgeOffsets, Spec, OrderSubject, Choices } from '@/types/subje
 import { emptyNode, ensureOffset } from '@utils/Graph/dataUtils.js';
 import { deleteCodeFromOrGroups } from '@utils/Graph/orGroups.js';
 import { isInSomeChoice } from './choiceNodes';
-export function createSuccessingHelperNodes(parentCode: string, parentSemester: number,
-                                     successorCode: string, succSemester: number,
+export function createSuccessingHelperNodes(parentCode: string, parentSemester: number | null,
+                                     successorCode: string, succSemester: number | null,
                                      newDetails: Details, order: Record<string, Array<OrderSubject>>, choices: Choices,
                                      edgeYOffsets: EdgeOffsets, startOffset: number,
                                      endOffset: number, groups: Array<Array<string>>) : void {
     if (!newDetails[parentCode].successors.some(succ => succ.code == successorCode)
-            || isInSomeChoice(parentCode, order, choices)) {
+            || isInSomeChoice(parentCode, order, choices) || parentSemester == null || succSemester == null) {
         return;
     }
 

@@ -2,19 +2,73 @@ import { addChoiceNodes, isInSomeChoice } from "@utils/Graph/choiceNodes";
 import { ensureOffset } from "@utils/Graph/dataUtils";
 import { fillOrGroupOffsets, fillEdgeXOffsets } from "@utils/Graph/offsets";
 import { createSuccessingHelperNodes } from "@utils/Graph/helperNodes";
-import { Details, Edge, EdgeOffsets, Spec, SubjectData } from "@/types/subjects";
+import { Course, Details, Edge, EdgeOffsets, Spec, SubjectData } from "@/types/subjects";
 import { getReachableCodes } from "./layout";
-import { spec } from "node:test/reporters";
 
 const OFFSET_STEP = 12;
 
-export function addHelperNodesAndGetOffsets(subjectData: SubjectData, selectedSpecialization: string) : [Details, Spec, EdgeOffsets, EdgeOffsets] {
+export function addAuxNodesAndGetOffsets(subjectData: SubjectData, selectedSpecialization: string) : [Details, Spec, EdgeOffsets, EdgeOffsets] {
     const oldDetails = subjectData.details;
     const orGroupEndOffsets: Record<string, number> = {};
     const successorInDegreeCounter: Record<string, number> = {};
     const edgeXOffsets = {};
     const edgeYOffsets = {};
 
+    const [newDetails, newOrder, currentSpecializationCodes] = preprocessGraph(subjectData, selectedSpecialization);
+    const currentPlan = newOrder[selectedSpecialization].plan;
+
+    Object.values(currentPlan).flat().forEach((subject) => {
+        const parentCode = "code" in subject ? subject.code : subject.choice;
+        if (isInSomeChoice(parentCode, currentPlan, subjectData.choices)) { return;}
+
+        const parent = oldDetails[parentCode];
+        if (!parent) {
+            console.warn(`Course with code ${parentCode} not found in details.`);
+            return;
+        }
+        
+        parent.successors.forEach((successorInfo, i) => {
+            const successor = oldDetails[successorInfo.code];
+            if (isInvalidEdge(parent, successor, currentSpecializationCodes, successorInfo)) { return; }
+
+            const [offset, endOffset] = assignOffsets(parentCode, successorInfo, oldDetails,
+                                                      edgeYOffsets, orGroupEndOffsets,
+                                                      successorInDegreeCounter, i);
+
+            if (shouldCreateHelperNodes(parent.semester, successor.semester)) {
+                createSuccessingHelperNodes(parentCode, parent.semester, successorInfo.code,
+                                            successor.semester, newDetails, currentPlan,
+                                            subjectData.choices, edgeYOffsets, offset, endOffset, successorInfo.groups);
+            }
+        })
+    });
+    fillEdgeXOffsets(edgeXOffsets, newDetails, newOrder[selectedSpecialization].plan);
+    return [newDetails, newOrder, edgeXOffsets, edgeYOffsets];
+}
+
+
+function assignOffsets(parentCode: string, successorInfo: Edge, 
+                       oldDetails: Details, edgeYOffsets: Record<string, number>,
+                       orGroupEndOffsets: Record<string, number>, 
+                       successorInDegreeCounter: Record<string, number>, i: number) : [number, number] {
+    let offset = (i - (oldDetails[parentCode].successors.length - 1) / 2) * OFFSET_STEP;
+    ensureOffset(edgeYOffsets, `${parentCode}-${successorInfo.code}-start`, offset);
+
+    const endOffset = getEndOffset(successorInfo.code, oldDetails, successorInDegreeCounter);
+    resolveEndOffset(edgeYOffsets, orGroupEndOffsets, parentCode,
+                        successorInfo.code, successorInfo.groups, endOffset, successorInfo);
+    return [offset, endOffset];
+}
+
+
+function isInvalidEdge(parent: Course, successor: Course, currentSpecializationCodes: Set<string>, successorInfo: Edge) : boolean {
+    return !successor || successor.semester == null 
+        || successor.semester <= (parent.semester ?? 0)
+        || !currentSpecializationCodes.has(successorInfo.code.replace(/-\d+$/, ""));
+}
+
+
+function preprocessGraph(subjectData: SubjectData, selectedSpecialization: string) : [Details, Spec, Set<string>] {
     const newOrder = addChoiceNodes(subjectData.details, subjectData.spec, subjectData.choices, selectedSpecialization);
     removeIllogicalEdges(subjectData.details);
     removeTransitiveEdges(subjectData.details);
@@ -24,49 +78,7 @@ export function addHelperNodesAndGetOffsets(subjectData: SubjectData, selectedSp
                                             .map(subject => "code" in subject ? subject.code : subject.choice));
     removeForwardEdgesToNonExistingNodes(subjectData.details, currentSpecializationCodes);
     const newDetails = structuredClone(subjectData).details;
-
-    Object.values(newOrder[selectedSpecialization].plan)
-            .flat()
-            .map(subject => "code" in subject ? subject.code : subject.choice)
-            .filter((parentCode) => !isInSomeChoice(parentCode, newOrder[selectedSpecialization].plan, subjectData.choices))
-            .forEach((parentCode) => {
-        const course = oldDetails[parentCode];
-        if (!course) {
-            console.warn(`Course with code ${parentCode} not found in details.`);
-            return;
-        }
-        const { successors: newSuccessors, semester: parentSemester } = course;
-        
-        newSuccessors.forEach((successorInfo, i) => {
-            const successor = oldDetails[successorInfo.code];
-            if (!successor || successor.semester == null 
-                    || successor.semester <= (course.semester ?? 0)
-                    || !currentSpecializationCodes.has(successorInfo.code.replace(/-\d+$/, "")))
-            {
-                return;
-            }
-
-            const { code: succCode, groups } = successorInfo;
-            let succSemester = successor.semester
-
-            // Assign start and end offsets
-            let offset = (i - (newSuccessors.length - 1) / 2) * OFFSET_STEP;
-            ensureOffset(edgeYOffsets, `${parentCode}-${succCode}-start`, offset);
-
-            const endOffset = getEndOffset(succCode, oldDetails, successorInDegreeCounter);
-            resolveEndOffset(edgeYOffsets, orGroupEndOffsets, parentCode,
-                             succCode, groups, endOffset, successorInfo);
-
-            if (parentSemester != null && succSemester != null
-                    && shouldCreateHelperNodes(parentSemester, succSemester)) {
-                createSuccessingHelperNodes(parentCode, parentSemester, succCode,
-                                            succSemester, newDetails, newOrder[selectedSpecialization].plan,
-                                            subjectData.choices, edgeYOffsets, offset, endOffset, groups);
-            }
-        })
-    });
-    fillEdgeXOffsets(edgeXOffsets, newDetails, newOrder[selectedSpecialization].plan);
-    return [newDetails, newOrder, edgeXOffsets, edgeYOffsets];
+    return [newDetails, newOrder, currentSpecializationCodes];
 }
 
 
@@ -131,10 +143,12 @@ function removeTransitiveEdges(details: Details) : void {
 
 function shouldCreateHelperNodes(parentSemester: number | null, 
                                  succSemester: number | null) : boolean {
-    return !(parentSemester == null ||
-            succSemester == null ||
-            parentSemester + 1 == succSemester ||
-            parentSemester > succSemester);
+    return parentSemester != null 
+        && succSemester != null
+        && !(parentSemester == null
+        || succSemester == null
+        || parentSemester + 1 == succSemester
+        || parentSemester > succSemester);
 }
 
 

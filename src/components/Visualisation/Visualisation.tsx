@@ -1,6 +1,6 @@
 import Subject from '@components/Subject/Subject';
 import SmallSubject from '@components/Subject/SmallSubject';
-import {addHelperNodesAndGetOffsets, getAllOrGatesPositions, getPositions} from '@utils/Graph';
+import {addAuxNodesAndGetOffsets, getAllOrGatesPositions, getPositions} from '@utils/Graph';
 import VisualisationForeground from '@components/Visualisation/VisualisationForeground';
 import VisualisationBackground from '@components/Visualisation/VisualisationBackground';
 import { Layout } from '@/consts/VisualisationParameters';
@@ -45,7 +45,7 @@ function Visualisation({scale, setDragEnabled}: VisualisationProps) {
 
     // Calculate positions when new data is loaded
     useEffect(() => {
-        const [newDetails, newSpec, xOff, yOff] = addHelperNodesAndGetOffsets(subjectInfoData, selectedSpecialization);
+        const [newDetails, newSpec, xOff, yOff] = addAuxNodesAndGetOffsets(subjectInfoData, selectedSpecialization);
         const [pos, maxX, maxY] = getPositions(newDetails, newSpec, selectedSpecialization);
         const orGatesPositions = getAllOrGatesPositions(newDetails, newSpec[selectedSpecialization], pos, yOff);
         
