@@ -6,7 +6,7 @@ type OrGatesProps = {
 
 function OrGates({orGatesPositions} : OrGatesProps) {
     return (<>
-        {orGatesPositions.map((pos, i) =>
+        {orGatesPositions.map((pos) =>
             <img src={orGateIcon} alt="OR Gate Icon" className="orGateIcon" key={`orGate-${pos.x}-${pos.y}`} style={{
                 position: "absolute",
                 left: pos.x - 30,
