@@ -1,16 +1,16 @@
-type CheckBoxFieldProps = {
+type RadioFieldProps = {
     children: React.ReactNode,
     checked: boolean,
     onChange: () => void;
 }
 
-function CheckBoxField({children, checked, onChange} : CheckBoxFieldProps) {
+function RadioField({children, checked, onChange} : RadioFieldProps) {
     return (
         <div className="field">
             <label className="preferenceFieldLabel">{children}</label>
-            <input id="check" type="checkbox" checked={checked} onChange={onChange}/>
+            <input id="check" type="radio" checked={checked} onChange={onChange}/>
         </div>
     )
 }
 
-export default CheckBoxField
+export default RadioField

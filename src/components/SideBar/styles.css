@@ -14,9 +14,8 @@
 
 .sideBarTitle {
   font-size: large;
-  padding-bottom: 10px;
-  border-bottom: 1px solid var(--divider-color);
   color: var(--text-primary);
+  margin: 0px;
 }
 
 .sideBarSubtitle {
@@ -73,4 +72,35 @@ select, .submitButton {
   z-index: 10;
   color: var(--text-primary);
   align-items: center;
+}
+
+.titleBox {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--divider-color);
+  padding-top: 20px;
+  margin-bottom: 10px;
+}
+
+.helpIcon {
+  background-color: var(--background);
+  border: 2px solid var(--text-primary);
+  color: var(--text-primary);
+  font-family: Inter;
+  font-weight: 600; 
+  font-size: 12px;
+  display: flex; 
+  padding: 0px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  align-items: center;
+  justify-content: center;
+}
+
+.helpIcon:hover {
+  cursor: help;
 }

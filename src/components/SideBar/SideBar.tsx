@@ -1,5 +1,4 @@
-import CheckboxField from "@components/SideBar/CheckboxField";
-import SelectField from "@components/SideBar/SelectField";
+import RadioField from "@components/SideBar/RadioField";
 import TagsBox from "@components/SideBar/TagsBox";
 import RangeScaler from "@components/SideBar/RangeScaler";
 import { Layout } from "@/consts/VisualisationParameters";
@@ -7,6 +6,8 @@ import "./styles.css";
 import { useData, useSetData, useSelectedSpecialization, useSetSelectedSpecialization } from "@components/providers/dataProvider";
 import { useContext, useState } from "react";
 import DarkModeToggle from "@components/SideBar/DarkModeToggle";
+import SideBarTitle from "./SideBarTitle";
+import CheckBoxField from "./CheckboxField";
 
 
 type SidebarProps = {
@@ -62,27 +63,26 @@ function SideBar({scale, setScale} : SidebarProps) {
                 }}>
             <RangeScaler scale={scale} setScale={setScale} />
             <DarkModeToggle/>
-            <h1 className="sideBarTitle">Preferovaná oblast</h1>
-            <CheckboxField checked={false} onChange={() => {}}>Preferuji informatiku</CheckboxField>
-            <CheckboxField checked={false} onChange={() => {}}>Preferuji matematiku</CheckboxField>
-            <CheckboxField checked={false} onChange={() => {}}>Preferuji biologii</CheckboxField>
+            {/* <SideBarTitle>Preferovaná oblast</SideBarTitle>
             <h1 className="sideBarSubtitle">Předměty, které chci:</h1>
             <SelectField placeholder="Vyberte předmět" options={Object.keys(subjectInfoData["details"])}/>
             <h1 className="sideBarSubtitle">Předměty, které nechci:</h1>
             <SelectField placeholder="Vyberte předmět" options={Object.keys(subjectInfoData["details"])}/>
             <h1 className="sideBarSubtitle">Aktuální filtry:</h1>
-            <TagsBox/>
-            <h1 className="sideBarTitle">Zaměření</h1>
+            <TagsBox/> */}
+            <SideBarTitle>Zaměření</SideBarTitle>
             {Object.entries(subjectInfoData.spec).map(([specCode, spec]) => {
                 return (
-                    <CheckboxField key={specCode} checked={selectedSpecialization === specCode} 
+                    <RadioField key={specCode} checked={selectedSpecialization === specCode} 
                         onChange={() => setSelectedSpecialization(specCode)}>
                         {spec.nameCZ}
-                    </CheckboxField>
+                    </RadioField>
                 );
             })}
-            <h1 className="sideBarTitle">Volba matematiky</h1>
-
+            <SideBarTitle tooltip="Studenti toužící po hlubším studiu některých z oblastí bioinformatiky si mohou zvolit průchod s pokročilejšími (nepovinnými) kurzy.">Pokročilejší kurzy</SideBarTitle>
+            <CheckBoxField checked={true} onChange={() => {}}>Pokročilejší matematika</CheckBoxField>
+            <CheckBoxField checked={true} onChange={() => {}}>Pokročilejší biologie</CheckBoxField>
+            <CheckBoxField checked={true} onChange={() => {}}>Pokročilejší informatika</CheckBoxField>
             {/* <input type="text" className="sideBarInput" placeholder="Zadejte kód" value={code} onChange={(e) => setCode(e.target.value)} />
             <select value={semester} onChange={(e) => setSemester(Number(e.target.value))}>
                 {["1", "2", "3", "4", "5", "6"].map((number) => {
