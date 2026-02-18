@@ -1,22 +1,26 @@
 import { Layout } from "@/consts/VisualisationParameters";
 import { EdgeOffsets, RealPositions } from "@/types/subjects";
 
-export function getPath(positions: RealPositions, startCode: string, endCode: string, xOffsets: EdgeOffsets, yOffsets: EdgeOffsets) : string | null {
+export function getPath(positions: RealPositions, startCode: string,
+                        endCode: string, xOffsets: EdgeOffsets,
+                        yOffsets: EdgeOffsets) : string | null {
     const start = positions[startCode];
     const end = positions[endCode];
     if (!start || !end) { return null; }
-    const startX = start.x + Layout.subjectWidth / 2 + Layout.subjectPadding;
-    const startY = start.y + Layout.subjectHeight / 2 + Layout.subjectPadding;
-    const endX = end.x + Layout.subjectWidth / 2 + Layout.subjectPadding;
-    const endY = end.y + Layout.subjectHeight / 2 + Layout.subjectPadding;
-    const midX = (startX + endX) / 2;
+
+    const centerX = Layout.subjectWidth / 2 + Layout.subjectPadding;
+    const centerY = Layout.subjectHeight / 2 + Layout.subjectPadding;
+
+    const startX = start.x + centerX;
+    const startY = start.y + centerY + (yOffsets[`${startCode}-${endCode}-start`] || 0);
+    const endX = end.x + centerX;
+    const endY = end.y + centerY + (yOffsets[`${startCode}-${endCode}-end`] || 0);
     if (startX > endX) { return null; }
     
-    let yStartOffset = yOffsets[`${startCode}-${endCode}-start`];
-    let yEndOffset = yOffsets[`${startCode}-${endCode}-end`];
-    let xOffset = xOffsets[`${startCode}-${endCode}`];
+    const midX = (startX + endX) / 2;
+    let xOffset = xOffsets[`${startCode}-${endCode}`] || 0;
 
-    const yDiff = (endY + yEndOffset) - (startY + yStartOffset);
+    const yDiff = endY - startY;
     const xDiff = endX - startX;
 
     if (Math.abs(yDiff) < Layout.subjectHeight) {
@@ -25,10 +29,10 @@ export function getPath(positions: RealPositions, startCode: string, endCode: st
         const cp2x = endX - (startX - endX) * -curvature;
 
         return `
-            M ${startX} ${startY + yStartOffset}
-            C ${cp1x} ${startY + yStartOffset}, 
-            ${cp2x} ${endY + yEndOffset}, 
-            ${endX} ${endY + yEndOffset}
+            M ${startX} ${startY}
+            C ${cp1x} ${startY}, 
+            ${cp2x} ${endY}, 
+            ${endX} ${endY}
         `;
     }
 
@@ -37,12 +41,12 @@ export function getPath(positions: RealPositions, startCode: string, endCode: st
     const dirY = Math.sign(yDiff);
 
     let path = `
-        M ${startX} ${startY + yStartOffset}
-        L ${midX + xOffset - actualR} ${startY + yStartOffset}
-        Q ${midX + xOffset} ${startY + yStartOffset}, ${midX + xOffset} ${startY + yStartOffset + (actualR * dirY)}
-        L ${midX + xOffset} ${endY + yEndOffset - (actualR * dirY)}
-        Q ${midX + xOffset} ${endY + yEndOffset}, ${midX + xOffset + actualR} ${endY + yEndOffset}
-        L ${endX} ${endY + yEndOffset}
+        M ${startX} ${startY}
+        L ${midX + xOffset - actualR} ${startY}
+        Q ${midX + xOffset} ${startY}, ${midX + xOffset} ${startY + (actualR * dirY)}
+        L ${midX + xOffset} ${endY - (actualR * dirY)}
+        Q ${midX + xOffset} ${endY}, ${midX + xOffset + actualR} ${endY}
+        L ${endX} ${endY}
     `;
     return path;
 }
