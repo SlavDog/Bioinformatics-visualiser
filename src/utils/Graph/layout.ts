@@ -1,22 +1,22 @@
 import { Layout } from "@/consts/VisualisationParameters";
 import { getUniquePredGroups } from "@utils/Graph/orGroups";
 import { getYOffsetForOrGroup } from "@utils/Graph/offsets";
-import { Choices, CodeToCoordinates, Course, Details, EdgeOffsets, PositionsToCode, RealPositions, Spec, Specialization} from "@/types/subjects";
+import { CodeToCoordinates, Course, Details, EdgeOffsets, OrderSubject, PositionsToCode, RealPositions, Spec, Specialization} from "@/types/subjects";
 
 export function getPositions(details: Details, spec: Spec, selectedSpecialization: string) : [RealPositions, number, number] {
-    let semestersCount = Object.keys(spec[selectedSpecialization].plan).length;
+    const plan = spec[selectedSpecialization].plan;
+    let semestersCount = Object.keys(plan).length;
     const codeToCoordinates: CodeToCoordinates = {};
     const positionsToCode: PositionsToCode = Array.from({ length: semestersCount }, () => []);
-    const currentSpecializationCodes = new Set(Object.values(spec[selectedSpecialization].plan)
-                                            .flat()
-                                            .map(subject => "code" in subject ? subject.code : subject.choice));
 
-    Object.values(spec[selectedSpecialization].plan).forEach((semesterArray, semesterIndex) => {
+    const currentSpecializationCodes = new Set(Object.values(plan)
+                                            .flat()
+                                            .map(subject => getSubjectCode(subject)));
+
+    Object.values(plan).forEach((semesterArray, semesterIndex) => {
         semesterArray.forEach((subject) => {
-            let tempCodeToCoordinates = {};
-            let tempPositionsToCode = Array.from({ length: semestersCount }, () => []);
-            let positionIndex = 0;
-            let code = "code" in subject ? subject.code : subject.choice;
+            let code = getSubjectCode(subject);
+
             if (codeToCoordinates[code]
                 || !details[code]
                 || details[code].semester == null
@@ -24,29 +24,56 @@ export function getPositions(details: Details, spec: Spec, selectedSpecializatio
             ) {
                 return;
             }
-
-            while (!getTreePositions(details, semesterIndex, 
-                                     positionIndex, code, codeToCoordinates,
-                                     positionsToCode, tempCodeToCoordinates,
-                                     tempPositionsToCode, currentSpecializationCodes)
-                    || !addMissedPredecessorsPositions(details, codeToCoordinates, positionsToCode, tempCodeToCoordinates, tempPositionsToCode, selectedSpecialization)
-                    && positionIndex < 20) {
-                positionIndex++;
-                tempCodeToCoordinates = {};
-                tempPositionsToCode = Array.from({ length: semestersCount }, () => []);
-            }
             
+            const placement = findValidPlacement(
+                code, semesterIndex, semestersCount, details, 
+                codeToCoordinates, positionsToCode, currentSpecializationCodes,
+                selectedSpecialization
+            );
 
-            Object.assign(codeToCoordinates, tempCodeToCoordinates);
-            tempPositionsToCode.forEach((semesterArray, semesterIdx) => {
-                semesterArray.forEach((code, positionIdx) => {
-                    positionsToCode[semesterIdx][positionIdx] = code;
-                })
-            })
+            if (placement) {
+                mergePlacements(codeToCoordinates, positionsToCode, placement);
+            }
         });
     })
     return getRealPositionsAndBoundaries(codeToCoordinates);
 }
+
+
+function mergePlacements(destCoords: CodeToCoordinates, destPos: PositionsToCode, src: [CodeToCoordinates, PositionsToCode]) {
+    const [srcCoords, srcPos] = src;
+    Object.assign(destCoords, srcCoords);
+    srcPos.forEach((semesterArray, semesterIdx) => {
+        semesterArray.forEach((code, positionIdx) => {
+            if (code) destPos[semesterIdx][positionIdx] = code;
+        });
+    });
+}
+
+
+function findValidPlacement(code: string, semesterIndex: number, semestersCount: number, details: Details,
+                            globalCoords: CodeToCoordinates, globalPos: PositionsToCode,
+                            specCodes: Set<string>, specName: string) : [CodeToCoordinates, PositionsToCode] | null {
+    for (let positionIndex = 0; positionIndex < 20; positionIndex++) {
+        let tempCoords = {};
+        let tempPos = Array.from({ length: semestersCount }, () => []);
+
+        const isTreeOk = getTreePositions(details, semesterIndex, positionIndex, code,
+                                          globalCoords, globalPos, tempCoords, tempPos, specCodes);
+        const arePredsOk = addMissedPredecessorsPositions(details, globalCoords, globalPos, 
+                                                          tempCoords, tempPos, specName);
+
+        if (isTreeOk && arePredsOk) {
+            return [tempCoords, tempPos];
+        }
+    }
+    return null;
+}
+
+
+function getSubjectCode(s: OrderSubject) : string {
+    return ("code" in s ? s.code : s.choice)
+};
 
 
 export function getReachableCodes(startCode: string, details: Details, searchPredecessorEdges: boolean = true): string[] {
@@ -62,14 +89,14 @@ export function getReachableCodes(startCode: string, details: Details, searchPre
 
         const succs = (course.successors ?? []).map(s => s.code);
         const preds = searchPredecessorEdges ? (course.predecessors ?? []).map(p => p.code) : [];
-        const neighbors = [...succs, ...preds];
+        const neighbours = [...succs, ...preds];
 
-        for (const neighbor of neighbors) {
-            if (neighbor && !visited.has(neighbor) && details[neighbor]) {
-                visited.add(neighbor);
-                queue.push(neighbor);
+        neighbours.forEach((neighbour) => {
+            if (neighbour && !visited.has(neighbour) && details[neighbour]) {
+                visited.add(neighbour);
+                queue.push(neighbour);
             }
-        }
+        });
     }
     return Array.from(visited);
 }
@@ -77,16 +104,16 @@ export function getReachableCodes(startCode: string, details: Details, searchPre
 
 function addMissedPredecessorsPositions(details: Details, codesToCoordinates: CodeToCoordinates, positionsToCode: PositionsToCode, tempCodeToCoordinates: CodeToCoordinates, tempPositionsToCode: PositionsToCode, selectedSpecialization: string) : boolean {
     const missedCodes: string[] = getReachableCodes(Object.keys(tempCodeToCoordinates)[0], details)
-        .filter(code => !tempCodeToCoordinates[code] && details[code].semester != null)
-        .filter(code => !codesToCoordinates[code]);
+        .filter(code => !tempCodeToCoordinates[code] && !codesToCoordinates[code] && details[code].semester != null)
 
     for (let i = 0; i < missedCodes.length; i++) {
         const code = missedCodes[i];
         let currentSemester = details[code]?.semester;
-        if (currentSemester == null) { return false; }
-        const currentSemesterData = positionsToCode[currentSemester - 1];
-        const tempSemesterData = tempPositionsToCode[currentSemester - 1];
-        let positionIndex =  tempPositionsToCode[currentSemester - 1].length;
+        const semesterIndex = currentSemester! - 1; // can't be null because of the filtering above
+
+        const currentSemesterData = positionsToCode[semesterIndex];
+        const tempSemesterData = tempPositionsToCode[semesterIndex];
+        let positionIndex =  tempPositionsToCode[semesterIndex].length;
 
         if (!currentSemesterData || currentSemesterData[positionIndex]) {
             return false;
@@ -94,13 +121,12 @@ function addMissedPredecessorsPositions(details: Details, codesToCoordinates: Co
 
         while (tempSemesterData[positionIndex]) {
             positionIndex++;
-
             if (currentSemesterData[positionIndex]) {
                 return false;
             }
         }
-        tempCodeToCoordinates[code] = {x: currentSemester - 1, y: positionIndex};
-        tempPositionsToCode[currentSemester - 1][positionIndex] = code;
+        tempCodeToCoordinates[code] = {x: semesterIndex, y: positionIndex};
+        tempPositionsToCode[semesterIndex][positionIndex] = code;
     }
     return true;
 }
@@ -134,29 +160,29 @@ export function getTreePositions(details: Details, semesterIndex: number,
                                     
     
     // Position already occupied
-    if ((positionsToCode[semesterIndex]
-        && positionsToCode[semesterIndex][positionIndex])) {
+    if ((positionsToCode[semesterIndex]?.[positionIndex])) {
             return false;
     }
 
     // Node already placed or semester doesn't match the one in data
-    if (codeToCoordinates[code] 
+    if (codeToCoordinates[code] || tempCodeToCoordinates[code] 
             || (details[code].semester != null 
-            && details[code].semester != semesterIndex + 1 && details[code].predecessors.length > 0)
+                && details[code].semester != semesterIndex + 1
+                && details[code].predecessors.length > 0)
             || !currentSpecializationCodes.has(code)) {
         return true;
     }
 
     let succs = details[code].successors;
-    let currentY = positionIndex;
+    let nextAvailableY = positionIndex;
     for (let i = 0; i < succs.length; i++) {
         if (!details[succs[i].code] || details[succs[i].code].semester == null) { continue; }   // successor not in data, move to another one
         if (!getTreePositions(details, semesterIndex + 1,
-                              currentY, succs[i].code, codeToCoordinates,
+                              nextAvailableY, succs[i].code, codeToCoordinates,
                               positionsToCode, tempCodeToCoordinates, tempPositionsToCode, currentSpecializationCodes)) {
             return false;
         }
-        currentY += 1;
+        nextAvailableY += 1;
     }
     tempCodeToCoordinates[code] = {x: semesterIndex, y: positionIndex};
     tempPositionsToCode[semesterIndex][positionIndex] = code;
@@ -193,7 +219,7 @@ export function getOrGatesYOffsetsForSubject(code: string, course: Course,
 
 export function getAllOrGatesPositions(details: Details, specialization: Specialization, positions: RealPositions, edgeYOffsets: EdgeOffsets) : Array<{x: number, y: number}> {
     let orGatesPositions: Array<{x: number, y: number}> = [];
-    const specializationCodes = new Set(Object.values(specialization.plan).flat().map(subject => "code" in subject ? subject.code : subject.choice));
+    const specializationCodes = new Set(Object.values(specialization.plan).flat().map(subject => getSubjectCode(subject)));
     Object.entries(details).forEach(([code, course]) => {
         if (!specializationCodes.has(code) || !hasOrGate(course, details)) { return; }
         const x = positions[code].x;
