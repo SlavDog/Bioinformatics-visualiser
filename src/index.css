@@ -5,7 +5,7 @@ body {
 
  :root {
   --visualisation-background: rgb(201, 201, 201);
-  --backround: white;
+  --background: white;
   --background-secondary: rgb(192, 192, 192);
   --column-odd: #e8e8e8;
   --column-even: white;
