@@ -1,7 +1,7 @@
 import CheckboxField from "@components/SideBar/CheckboxField";
 import SelectField from "@components/SideBar/SelectField";
 import TagsBox from "@components/SideBar/TagsBox";
-import RangeScaler from "@components/SideBar/RangeScaler/RangeScaler";
+import RangeScaler from "@components/SideBar/RangeScaler";
 import { Layout } from "@/consts/VisualisationParameters";
 import "./styles.css";
 import { useData, useSetData, useSelectedSpecialization, useSetSelectedSpecialization } from "@components/providers/dataProvider";
@@ -81,6 +81,7 @@ function SideBar({scale, setScale} : SidebarProps) {
                     </CheckboxField>
                 );
             })}
+            <h1 className="sideBarTitle">Volba matematiky</h1>
 
             {/* <input type="text" className="sideBarInput" placeholder="Zadejte kód" value={code} onChange={(e) => setCode(e.target.value)} />
             <select value={semester} onChange={(e) => setSemester(Number(e.target.value))}>

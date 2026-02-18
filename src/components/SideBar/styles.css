@@ -60,3 +60,17 @@ select, .submitButton {
   background-color: var(--button-hover);
   cursor: pointer;
 }
+
+.rangeScaler {
+  display: flex;
+  flex-direction: row; 
+  width: 100%;
+  justify-content: space-evenly;
+  padding: 10px 0 10px 0;
+  font-family: Inter;
+  font-weight: 500;
+  font-size: small;
+  z-index: 10;
+  color: var(--text-primary);
+  align-items: center;
+}
