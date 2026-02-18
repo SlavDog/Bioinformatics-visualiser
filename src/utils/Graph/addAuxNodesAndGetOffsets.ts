@@ -91,10 +91,10 @@ function removeEdgesToNonExistingNodes(details: Details, currentSpecializationCo
 
 
 function cleanNodeFromNonExistingNodes(cleanSuccessors: boolean, course: Course, currentSpecializationCodes: Set<string>) : void {
-    const succsOrPreds = cleanSuccessors ? "successors" : "predecessors"
+    const key = cleanSuccessors ? "successors" : "predecessors"
 
-    course[succsOrPreds] = course[succsOrPreds].filter(succ => currentSpecializationCodes.has(succ.code.replace(/-\d+$/, "")));
-    course[succsOrPreds].forEach(succ => {
+    course[key] = course[key].filter(succ => currentSpecializationCodes.has(succ.code.replace(/-\d+$/, "")));
+    course[key].forEach(succ => {
         succ.groups = succ.groups.map(group => {
             return group.filter(subject => currentSpecializationCodes.has(subject));
         });
@@ -111,9 +111,9 @@ function removeIllogicalEdges(details: Details) : void {
 
 
 function cleanNodeFromIllogicalEdges(cleanSuccessors: boolean, course: Course, details: Details) {
-    const succsOrPreds = cleanSuccessors ? "successors" : "predecessors"
+    const key = cleanSuccessors ? "successors" : "predecessors"
 
-    course[succsOrPreds] = course[succsOrPreds].filter(neighbour => {
+    course[key] = course[key].filter(neighbour => {
         const neighbourSemester = details[neighbour.code]?.semester;
         if (course.semester == null || neighbourSemester == null) { return false; }
         if (cleanSuccessors) { return neighbourSemester > course.semester; }
