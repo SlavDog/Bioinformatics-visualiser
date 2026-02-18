@@ -1,4 +1,4 @@
-import { Details, EdgeOffsets, Spec, OrderSubject, Choices } from '@/types/subjects';
+import { Details, EdgeOffsets, Spec, OrderSubject, Choices, Edge } from '@/types/subjects';
 import { emptyNode, ensureOffset } from '@utils/Graph/dataUtils.js';
 import { deleteCodeFromOrGroups } from '@utils/Graph/orGroups.js';
 import { isInSomeChoice } from './choiceNodes';
@@ -7,52 +7,77 @@ export function createSuccessingHelperNodes(parentCode: string, parentSemester: 
                                      newDetails: Details, order: Record<string, Array<OrderSubject>>, choices: Choices,
                                      edgeYOffsets: EdgeOffsets, startOffset: number,
                                      endOffset: number, groups: Array<Array<string>>) : void {
-    if (!newDetails[parentCode].successors.some(succ => succ.code == successorCode)
-            || isInSomeChoice(parentCode, order, choices) || parentSemester == null || succSemester == null) {
-        return;
-    }
-
-    const byPrerequisites = newDetails[parentCode].successors
-        .filter(successor => successor.code == successorCode)[0].by_prerequisites;
+    const targetEdge = newDetails[parentCode]?.successors.find(s => s.code === successorCode);
+    if (!targetEdge || parentSemester == null || succSemester == null
+        || isInSomeChoice(parentCode, order, choices)) { return; }
     
-    // remove direct link
-    newDetails[parentCode].successors = newDetails[parentCode].successors
-        .filter(item => item.code !== successorCode);
-    newDetails[successorCode].predecessors = newDetails[successorCode].predecessors
-        .filter(item => item.code !== parentCode);
-    let prevNode = parentCode;
+    const byPrerequisites = targetEdge.by_prerequisites;
 
-    // insert new helper nodes
+    removeDirectLink(parentCode, successorCode, newDetails);
+    let lastNode = buildHelperChain(parentCode, successorCode, parentSemester, succSemester,
+                                    startOffset, endOffset, byPrerequisites, newDetails, 
+                                    order, edgeYOffsets);
+
+    // set correct groups
+    const successorNode = newDetails[successorCode];
+    updateGroupsInEdges(successorNode.predecessors, parentCode, lastNode);
+
+    successorNode.predecessors.forEach(pred => {
+        const predNode = newDetails[pred.code];
+        if (predNode) {
+            updateGroupsInEdges(predNode.successors, parentCode, lastNode);
+        }
+    });
+
+    connectFinalHelper(lastNode, successorCode, groups, byPrerequisites, parentCode, newDetails, edgeYOffsets, endOffset);
+}
+
+
+function connectFinalHelper(helperCode: string, successorCode: string, groups: string[][], byPrereq: boolean, parentCode: string, newDetails: Details, edgeYOffsets: any, endOffset: number) {
+    const cleanedGroups = deleteCodeFromOrGroups(groups, parentCode).map(group => [...group, helperCode]);
+    const edge = { code: successorCode, groups: cleanedGroups, by_prerequisites: byPrereq };
+    
+    newDetails[helperCode].successors.push(edge);
+    newDetails[successorCode].predecessors.push({ ...edge, code: helperCode });
+    ensureOffset(edgeYOffsets, `${helperCode}-${successorCode}-start`, endOffset);
+    ensureOffset(edgeYOffsets, `${helperCode}-${successorCode}-end`, endOffset);
+}
+
+
+function buildHelperChain(parentCode: string, successorCode: string,
+                          parentSemester: number, succSemester: number,
+                          startOffset: number, endOffset: number, byPrerequisites: boolean,
+                          newDetails: Details, order: Record<string, Array<OrderSubject>>,
+                          edgeYOffsets: EdgeOffsets) : string {
+    let prevNode = parentCode;
     for (let i = parentSemester + 1; i < succSemester; i++) {
-        let helperNodeCode = `HELPER_${successorCode}_${i}`;
+        const helperNodeCode = `HELPER_${successorCode}_${i}`;
+        const currentStartOffset = i == parentSemester + 1 ? startOffset : endOffset;
+
         createHelperNode(newDetails, order, prevNode, helperNodeCode, i, byPrerequisites);
-        ensureOffset(edgeYOffsets, `${prevNode}-${helperNodeCode}-start`, i == parentSemester + 1 ? startOffset : endOffset);
+        ensureOffset(edgeYOffsets, `${prevNode}-${helperNodeCode}-start`, currentStartOffset);
         ensureOffset(edgeYOffsets, `${prevNode}-${helperNodeCode}-end`, endOffset);
         prevNode = helperNodeCode;
     }
+    return prevNode;
+}
 
-    newDetails[successorCode].predecessors.forEach(predecessor => {
-        for (let i = 0; i < predecessor.groups.length; i++) {
-            let group = predecessor.groups[i];
-            group.push(prevNode);
-            predecessor.groups[i] = group.filter(code => code !== parentCode);
-        }
-        newDetails[predecessor.code].successors.forEach(successor => {
-            for (let i = 0; i < successor.groups.length; i++) {
-                let group = successor.groups[i];
-                group.push(prevNode);
-                successor.groups[i] = group.filter(code => code !== parentCode);
+
+function removeDirectLink(parentCode: string, successorCode: string, newDetails: Details) {
+    newDetails[parentCode].successors = newDetails[parentCode].successors.filter(item => item.code !== successorCode);
+    newDetails[successorCode].predecessors = newDetails[successorCode].predecessors.filter(item => item.code !== parentCode);
+}
+
+
+function updateGroupsInEdges(edges: Edge[], oldCode: string, newCode: string) {
+    edges.forEach((edge) => {
+        edge.groups = edge.groups.map(group => {
+            if (group.includes(oldCode)) {
+                return [...group.filter(c => c !== oldCode), newCode];
             }
+            return group;
         })
-    })
-
-    // connect last helper to successor
-    groups = deleteCodeFromOrGroups(groups, parentCode);
-    groups.forEach(group => group.push(prevNode));
-    newDetails[prevNode].successors.push({"code": successorCode, "groups": groups, "by_prerequisites": byPrerequisites});
-    newDetails[successorCode].predecessors.push({"code": prevNode, "groups": groups, "by_prerequisites": byPrerequisites});
-    ensureOffset(edgeYOffsets, `${prevNode}-${successorCode}-start`, endOffset);
-    ensureOffset(edgeYOffsets, `${prevNode}-${successorCode}-end`, endOffset);
+    });
 }
 
 
