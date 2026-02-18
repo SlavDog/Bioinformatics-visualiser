@@ -10,7 +10,7 @@ function SubjectDetailMenuHeader({ choiceName, limitText, onClose } : SubjectDet
         <header>
             <p className='bigTitle'>Předměty volby <u>{choiceName}</u></p>
             <p className='bigSubTitle'>{limitText}</p>
-            <button onClick={onClose} className='zoomButton' style={{position: "absolute", right: "14px", top: "14px"}}>❌</button>
+            <button onClick={onClose} className='submitButton' style={{position: "absolute", right: "14px", top: "14px"}}>❌</button>
         </header>
     );
 }
