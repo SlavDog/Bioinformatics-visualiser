@@ -1,6 +1,6 @@
 import { Course } from "@/types/subjects";
 import { useData } from "@components/providers/dataProvider";
-import ChoiceConnection from '@components/ui/ChoiceConnection';
+import ChoiceConnection from '@components/SubjectDetailMenu/ChoiceConnection';
 
 
 type ChoiceConnectionsProps = {

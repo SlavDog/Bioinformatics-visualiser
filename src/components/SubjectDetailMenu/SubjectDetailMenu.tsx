@@ -1,4 +1,4 @@
-import SubjectDetailMenuHeader from '@components/ui/SubjectDetailMenuHeader';
+import SubjectDetailMenuHeader from '@components/SubjectDetailMenu/SubjectDetailMenuHeader';
 import SubjectList from '@components/SubjectDetailMenu/SubjectList';
 import { getChoiceLimitText } from '@utils/textHelpers';
 import { useData } from "@components/providers/dataProvider";

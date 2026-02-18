@@ -1,12 +1,12 @@
-import CheckboxField from "@components/ui/CheckboxField";
-import SelectField from "@components/ui/SelectField";
-import TagsBox from "@components/ui/TagsBox";
-import RangeScaler from "@components/ui/RangeScaler/RangeScaler";
+import CheckboxField from "@components/SideBar/CheckboxField";
+import SelectField from "@components/SideBar/SelectField";
+import TagsBox from "@components/SideBar/TagsBox";
+import RangeScaler from "@components/SideBar/RangeScaler/RangeScaler";
 import { Layout } from "@/consts/VisualisationParameters";
 import "./styles.css";
 import { useData, useSetData, useSelectedSpecialization, useSetSelectedSpecialization } from "@components/providers/dataProvider";
 import { useContext, useState } from "react";
-import DarkModeToggle from "@components/ui/DarkModeToggle";
+import DarkModeToggle from "@components/SideBar/DarkModeToggle";
 
 
 type SidebarProps = {

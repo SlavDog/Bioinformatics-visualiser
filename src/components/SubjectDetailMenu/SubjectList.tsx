@@ -1,5 +1,5 @@
 import SubjectListItem from "@components/SubjectDetailMenu/SubjectListItem";
-import BigButton from "@components/ui/BigButton/BigButton";
+import BigButton from "@components/SubjectDetailMenu/BigButton/BigButton";
 import { useData } from "@components/providers/dataProvider";
 
 

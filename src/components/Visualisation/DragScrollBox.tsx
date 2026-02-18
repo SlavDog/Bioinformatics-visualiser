@@ -1,6 +1,6 @@
 import { useRef, useState} from 'react';
 import Visualisation from '@components/Visualisation/Visualisation';
-import SideBar from '@components/layouts//SideBar/SideBar';
+import SideBar from '@components/SideBar/SideBar';
 import { Layout } from '@/consts/VisualisationParameters';
 import useDragScroll from '@/hooks/useDragScroll';
 import useWheelZoom from '@/hooks/useWheelZoom';
