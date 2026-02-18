@@ -76,43 +76,48 @@ function preprocessGraph(subjectData: SubjectData, selectedSpecialization: strin
     const currentSpecializationCodes = new Set(Object.values(subjectData.spec[selectedSpecialization].plan)
                                             .flat()
                                             .map(subject => "code" in subject ? subject.code : subject.choice));
-    removeForwardEdgesToNonExistingNodes(subjectData.details, currentSpecializationCodes);
+    removeEdgesToNonExistingNodes(subjectData.details, currentSpecializationCodes);
     const newDetails = structuredClone(subjectData).details;
     return [newDetails, newOrder, currentSpecializationCodes];
 }
 
 
-function removeForwardEdgesToNonExistingNodes(details: Details, currentSpecializationCodes: Set<string>) : void {
-    Object.entries(details).forEach(([code, course]) => {
-        course.successors = course.successors.filter(succ => currentSpecializationCodes.has(succ.code.replace(/-\d+$/, "")));
-        course.predecessors = course.predecessors.filter(pred => currentSpecializationCodes.has(pred.code.replace(/-\d+$/, "")));
-        course.successors.forEach(succ => {
-            succ.groups = succ.groups.map(group => {
-                return group.filter(subject => currentSpecializationCodes.has(subject));
-            });
-        });
-        course.predecessors.forEach(pred => {
-            pred.groups = pred.groups.map(group => {
-                return group.filter(subject => currentSpecializationCodes.has(subject));
-            });
+function removeEdgesToNonExistingNodes(details: Details, currentSpecializationCodes: Set<string>) : void {
+    Object.values(details).forEach((course) => {
+        cleanNodeFromNonExistingNodes(true, course, currentSpecializationCodes);
+        cleanNodeFromNonExistingNodes(false, course, currentSpecializationCodes);
+    });
+}
+
+
+function cleanNodeFromNonExistingNodes(cleanSuccessors: boolean, course: Course, currentSpecializationCodes: Set<string>) : void {
+    const succsOrPreds = cleanSuccessors ? "successors" : "predecessors"
+
+    course[succsOrPreds] = course[succsOrPreds].filter(succ => currentSpecializationCodes.has(succ.code.replace(/-\d+$/, "")));
+    course[succsOrPreds].forEach(succ => {
+        succ.groups = succ.groups.map(group => {
+            return group.filter(subject => currentSpecializationCodes.has(subject));
         });
     });
 }
 
 
-
 function removeIllogicalEdges(details: Details) : void {
-    Object.entries(details).forEach(([code, course]) => {
-        const courseSemester = course.semester;
-        course.successors = course.successors.filter(succ => {
-            const succSemester = details[succ.code]?.semester;
-            return !(courseSemester != null && succSemester != null && succSemester <= courseSemester);
-        });
-        course.predecessors = course.predecessors.filter(pred => {
-            const predSemester = details[pred.code]?.semester;
-            return !(courseSemester != null && predSemester != null && predSemester >= courseSemester);
-        }
-        );
+    Object.values(details).forEach((course) => {
+        cleanNodeFromIllogicalEdges(true, course, details);
+        cleanNodeFromIllogicalEdges(false, course, details);
+    });
+}
+
+
+function cleanNodeFromIllogicalEdges(cleanSuccessors: boolean, course: Course, details: Details) {
+    const succsOrPreds = cleanSuccessors ? "successors" : "predecessors"
+
+    course[succsOrPreds] = course[succsOrPreds].filter(neighbour => {
+        const neighbourSemester = details[neighbour.code]?.semester;
+        if (course.semester == null || neighbourSemester == null) { return false; }
+        if (cleanSuccessors) { return neighbourSemester > course.semester; }
+        return neighbourSemester < course.semester;
     });
 }
 
@@ -164,6 +169,7 @@ function resolveEndOffset(edgeYOffsets: EdgeOffsets, orGroupEndOffsets: Record<s
     }
     ensureOffset(edgeYOffsets, `${parentCode}-${succCode}-end`, orGroupEndOffsets[`${parentCode}-${succCode}`]);
 }
+
 
 function getEndOffset(succCode: string, oldDetails: Details, successorInDegreeCounter: Record<string, number>) : number {
     if (!(succCode in successorInDegreeCounter)) {
