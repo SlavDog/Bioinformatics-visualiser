@@ -3,13 +3,14 @@ import { emptyNode } from "@utils/Graph/dataUtils";
 
 export function addChoiceNodes(details: Details, spec: Spec, choices: Choices, selectedSpecialization: string) : Spec {
     const newOrder = structuredClone(spec);
-    let successors: Array<Edge> = [];
-    let predecessors: Array<Edge> = [];
+    const plan = spec[selectedSpecialization].plan;
 
-    Object.entries(spec[selectedSpecialization].plan).forEach(([semester, subjectList]) => {
+    Object.entries(plan).forEach(([semester, subjectList]) => {
         subjectList
             .filter((subject) => "choice" in subject)
             .forEach((choiceSubject) => {
+                    let successors: Array<Edge> = [];
+                    let predecessors: Array<Edge> = [];
                 const choiceCode = choiceSubject.choice;
 
                 if (!choiceCode.includes("core") && !choiceCode.includes("tv")) { 
@@ -27,81 +28,95 @@ export function addChoiceNodes(details: Details, spec: Spec, choices: Choices, s
 
 function connectPredsOrSuccs(connectSuccs: boolean, subjChoices: Choice, details: Details,
                              choiceCode: string, semester: number) : Edge[] {
-    let neighboursArray: Array<Edge> = [];
-    const predsOrSuccs = connectSuccs ? "successors" : "predecessors";
-    const inversePredsOrSuccs = connectSuccs ? "predecessors" : "successors";
+    const key = connectSuccs ? "successors" : "predecessors";
+    const inverseKey = connectSuccs ? "predecessors" : "successors";
+    const choiceNodeCode = `${choiceCode}-${semester}`;
 
-    neighboursArray = subjChoices.list
-        .map(item => {
+    const choiceListCodes = new Set(subjChoices.list.map(item => typeof item === "string" ? item : item.code));
+
+    const allNeighbours = subjChoices.list
+        .flatMap(item => {
             const code = typeof item === "string" ? item : item.code;
-            return details[code][predsOrSuccs];
+            return details[code][key] || [];
         })
-        .flat()
         .filter((edge => edge.code in details))
         // filter out duplicates
-        .filter((value, index, self) =>
-            index === self.findIndex((t) => t.code === value.code)
-        );
+    
+    const neighboursArray = allNeighbours
+        .filter((value, index, self) => index === self.findIndex((t) => t.code === value.code));
 
     neighboursArray.forEach(neighbour => {
-        const shouldDrawFullLine = details[neighbour.code][inversePredsOrSuccs]
-            .filter(subject => subjChoices.list.includes(subject.code))
+        const shouldDrawFullLine = details[neighbour.code][inverseKey]
+            .filter(subject => choiceListCodes.has(subject.code))
             .some(subject => subject.by_prerequisites);
 
-        // Remove direct links to choice subjects
-        details[neighbour.code][inversePredsOrSuccs] = details[neighbour.code][inversePredsOrSuccs]
-            .filter(subject => !subjChoices.list.includes(subject.code));
+        // Remove direct links to same choice subjects
+        details[neighbour.code][inverseKey] = details[neighbour.code][inverseKey]
+            .filter(subject => !choiceListCodes.has(subject.code));
 
         // Add a new link to choice node
-        if (!details[neighbour.code][inversePredsOrSuccs].some(succ => succ.code == `${choiceCode}-${semester}`)) {
-            details[neighbour.code][inversePredsOrSuccs].push({
-                "code": `${choiceCode}-${semester}`,
+        if (!details[neighbour.code][inverseKey].some(succ => succ.code == choiceNodeCode)) {
+            details[neighbour.code][inverseKey].push({
+                "code": choiceNodeCode,
                 "groups" : neighbour.groups,
                 "by_prerequisites": shouldDrawFullLine
             });
         }
     });
 
-    // remove choice node subjects from successors groups
+    // replace choice node subjects from successors groups by choice code
     if (connectSuccs) {
-        neighboursArray.forEach(neighbourEdge => {
-            neighbourEdge.groups = neighbourEdge.groups.map(group => {
-                if (group.some(subject => subjChoices.list.includes(subject))) {
-                    group.push(`${choiceCode}-${semester}`);
-                    return group.filter(subject => !subjChoices.list.includes(subject))
-                }
-                return group;
-            });
-            details[neighbourEdge.code][inversePredsOrSuccs] = details[neighbourEdge.code][inversePredsOrSuccs].map(edge => {
-                if (edge.code === `${choiceCode}-${semester}`) {
+        replaceChoiceSubjectsFromSuccGroups(neighboursArray, choiceNodeCode, choiceListCodes, details, inverseKey);
+    } 
+    return neighboursArray
+}
+
+
+function replaceChoiceSubjectsFromSuccGroups(neighboursArray: Edge[], choiceNodeCode: string,
+                                             choiceListCodes: Set<string>, details: Details,
+                                             inverseKey: "successors" | "predecessors") {    
+    neighboursArray.forEach(neighbourEdge => {
+            neighbourEdge.groups = processGroups(neighbourEdge.groups, choiceListCodes, choiceNodeCode);
+
+            const neighbourNode = details[neighbourEdge.code];
+            if (!neighbourNode) { return; }
+
+            neighbourNode[inverseKey] = neighbourNode[inverseKey].map(edge => {
+                if (edge.code === choiceNodeCode) {
                     return {
                         ...edge,
-                        groups: edge.groups.map(group => {
-                            if (group.some(subject => subjChoices.list.includes(subject))) {
-                                group.push(`${choiceCode}-${semester}`);
-                                return group.filter(subject => !subjChoices.list.includes(subject))
-                            }
-                            return group;
-                        })
+                        groups: processGroups(edge.groups, choiceListCodes, choiceNodeCode)
                     }
                 }                
                 return edge;
             });
         });
-    } 
-    return neighboursArray
+}
+
+
+function processGroups(groups: string[][], choiceListCodes: Set<string>, choiceNodeCode: string) {
+    return groups.map(group => {
+        const containsSubject = group.some(subject => choiceListCodes.has(subject));
+        if (containsSubject) {
+            const cleanedGroup = group.filter(subject => !choiceListCodes.has(subject));
+            return [...cleanedGroup, choiceNodeCode];
+        }
+        return group;
+    });
 }
 
 
 function saveChoiceNode(details: Details, newSpec: Spec, choiceCode: string, orderSubject: OrderSubject,
                         semester: number, choices: Choices, successors: Array<Edge>,
                         predecessors: Array<Edge>, selectedSpecialization: string) : void {
+    const credits = ("credits" in orderSubject ? orderSubject.credits : 0) ?? 0;
+
     details[`${choiceCode}-${semester}`] = {
         ...emptyNode,
         name: choices[choiceCode].refnCZ,
         successors: successors, 
         predecessors: predecessors,
-        credits: orderSubject.credits ?? 0,
+        credits: credits,
         subjects: [],
         semester: semester,
         type: "choice"
@@ -113,10 +128,9 @@ function saveChoiceNode(details: Details, newSpec: Spec, choiceCode: string, ord
     newSpec[selectedSpecialization]["plan"][semester].push(
         {
             "choice": `${choiceCode}-${semester}`,
-            "credits": orderSubject.credits ?? 0
+            "credits": credits
         }
     )
-
 }
 
 
@@ -124,7 +138,7 @@ export function isInSomeChoice(code: string, order: Record<string, Array<OrderSu
     return Object.values(order).some(semester => {
         return semester.some(subject => {
             if ("choice" in subject) {
-                const choiceCode = subject.choice.replace(/-\d+$/, "");  // Remove semester suffix
+                const choiceCode = subject.choice.replace(/-\d+$/, "");
                 return choices[choiceCode].list.some(item => item == code);
             }
             return false;
