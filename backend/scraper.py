@@ -42,6 +42,18 @@ class FinalJson(TypedDict):
     choices: dict[str, Any]
 
 
+MANUAL_SUBSTITUTIONS = {
+    "advanced_math": {
+        "nameCZ": "Pokročilá matematika",
+        "removes": ["MB141", "MB142", "MB143"],
+        "adds": [{"code": "MB151", "semester": 2},
+                 {"code": "MB152", "semester": 3},
+                 {"code": "MB153", "semester": 4},
+                 {"code": "MB154", "semester": 3}]
+    }
+}
+
+
 def extract_codes(filename: str) -> ResultData:
     """
     Extract all subject codes from MUNI-style JSON file.
@@ -83,6 +95,11 @@ def extract_codes(filename: str) -> ResultData:
                 if "choice" in subject:
                     continue
                 result_data["codes"].append(subject["code"])
+
+
+    for element in MANUAL_SUBSTITUTIONS.values():
+        for subject in element["adds"]:
+            result_data["codes"].append(subject["code"])
 
     result_data["spec"] = data["spec"]
     return result_data
@@ -411,7 +428,8 @@ def build_final_json(data: ResultData, successors: SubjectSuccessors, path: str)
     final_json: FinalJson = {
                         "details": successors,
                         "spec": data["spec"],
-                        "choices": data["choices"]
+                        "choices": data["choices"],
+                        "substitutions": MANUAL_SUBSTITUTIONS
                     }
     with open(path, "w", encoding="utf-8") as f:
         json.dump(final_json, f, indent=4, ensure_ascii=False)
@@ -424,6 +442,7 @@ def main() -> None:
 
     print("Almost finished. Building the final JSON file...")
     build_final_json(data, successors, "../src/data/final_tree.json")
+    print("Done.")
 
 if __name__ == "__main__":
     main()
