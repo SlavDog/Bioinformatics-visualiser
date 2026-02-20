@@ -1,4 +1,4 @@
-export * from "./addAuxNodesAndGetOffsets"
+export * from "./addAuxNodes"
 export * from "./choiceNodes"
 export * from "./dataUtils"
 export * from "./helperNodes"

@@ -5,7 +5,7 @@ import { createSuccessingHelperNodes } from "@utils/Graph/helperNodes";
 import { AdvancedSwitch, Course, Details, Edge, EdgeOffsets, Spec, SubjectData } from "@/types/subjects";
 import { getReachableCodes } from "./layout";
 
-export function addAuxNodesAndGetOffsets(subjectData: SubjectData, selectedSpecialization: string, advancedSwitch: AdvancedSwitch) : [Details, Spec] {
+export function addAuxNodes(subjectData: SubjectData, selectedSpecialization: string, advancedSwitch: AdvancedSwitch) : [Details, Spec] {
     const [newDetails, newOrder, currentSpecializationCodes] = preprocessGraph(subjectData, selectedSpecialization, advancedSwitch);
     const currentPlan = newOrder[selectedSpecialization].plan;
     const subjectsToProcess = Object.values(currentPlan).flat();
