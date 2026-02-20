@@ -5,8 +5,7 @@ import { isInSomeChoice } from './choiceNodes';
 export function createSuccessingHelperNodes(parentCode: string, parentSemester: number | null,
                                      successorCode: string, succSemester: number | null,
                                      newDetails: Details, order: Record<string, Array<OrderSubject>>, choices: Choices,
-                                     edgeYOffsets: EdgeOffsets, startOffset: number,
-                                     endOffset: number, groups: Array<Array<string>>) : void {
+                                    groups: Array<Array<string>>) : void {
     const targetEdge = newDetails[parentCode]?.successors.find(s => s.code === successorCode);
     if (!targetEdge || parentSemester == null || succSemester == null
         || isInSomeChoice(parentCode, order, choices)) { return; }
@@ -14,9 +13,8 @@ export function createSuccessingHelperNodes(parentCode: string, parentSemester: 
     const byPrerequisites = targetEdge.by_prerequisites;
 
     removeDirectLink(parentCode, successorCode, newDetails);
-    let lastNode = buildHelperChain(parentCode, successorCode, parentSemester, succSemester,
-                                    startOffset, endOffset, byPrerequisites, newDetails, 
-                                    order, edgeYOffsets);
+    let lastNode = buildHelperChain(parentCode, successorCode, parentSemester, succSemester, 
+                                    byPrerequisites, newDetails, order);
 
     // set correct groups
     const successorNode = newDetails[successorCode];
@@ -29,34 +27,28 @@ export function createSuccessingHelperNodes(parentCode: string, parentSemester: 
         }
     });
 
-    connectFinalHelper(lastNode, successorCode, groups, byPrerequisites, parentCode, newDetails, edgeYOffsets, endOffset);
+    connectFinalHelper(lastNode, successorCode, groups, byPrerequisites, parentCode, newDetails);
 }
 
 
-function connectFinalHelper(helperCode: string, successorCode: string, groups: string[][], byPrereq: boolean, parentCode: string, newDetails: Details, edgeYOffsets: any, endOffset: number) {
+function connectFinalHelper(helperCode: string, successorCode: string, groups: string[][], byPrereq: boolean, parentCode: string, newDetails: Details) {
     const cleanedGroups = deleteCodeFromOrGroups(groups, parentCode).map(group => [...group, helperCode]);
     const edge = { code: successorCode, groups: cleanedGroups, by_prerequisites: byPrereq };
     
     newDetails[helperCode].successors.push(edge);
     newDetails[successorCode].predecessors.push({ ...edge, code: helperCode });
-    ensureOffset(edgeYOffsets, `${helperCode}-${successorCode}-start`, endOffset);
-    ensureOffset(edgeYOffsets, `${helperCode}-${successorCode}-end`, endOffset);
 }
 
 
 function buildHelperChain(parentCode: string, successorCode: string,
                           parentSemester: number, succSemester: number,
-                          startOffset: number, endOffset: number, byPrerequisites: boolean,
-                          newDetails: Details, order: Record<string, Array<OrderSubject>>,
-                          edgeYOffsets: EdgeOffsets) : string {
+                          byPrerequisites: boolean,
+                          newDetails: Details, order: Record<string, Array<OrderSubject>>) : string {
     let prevNode = parentCode;
     for (let i = parentSemester + 1; i < succSemester; i++) {
         const helperNodeCode = `HELPER_${successorCode}_${i}`;
-        const currentStartOffset = i == parentSemester + 1 ? startOffset : endOffset;
 
         createHelperNode(newDetails, order, prevNode, helperNodeCode, i, byPrerequisites);
-        ensureOffset(edgeYOffsets, `${prevNode}-${helperNodeCode}-start`, currentStartOffset);
-        ensureOffset(edgeYOffsets, `${prevNode}-${helperNodeCode}-end`, endOffset);
         prevNode = helperNodeCode;
     }
     return prevNode;

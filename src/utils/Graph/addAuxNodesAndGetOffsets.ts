@@ -1,19 +1,11 @@
 import { addChoiceNodes, isInSomeChoice } from "@utils/Graph/choiceNodes";
 import { ensureOffset } from "@utils/Graph/dataUtils";
-import { fillOrGroupOffsets, fillEdgeXOffsets } from "@utils/Graph/offsets";
+import { fillOrGroupOffsets, fillEdgeXOffsets, fillEdgeYOffsets } from "@utils/Graph/offsets";
 import { createSuccessingHelperNodes } from "@utils/Graph/helperNodes";
 import { AdvancedSwitch, Course, Details, Edge, EdgeOffsets, Spec, SubjectData } from "@/types/subjects";
 import { getReachableCodes } from "./layout";
 
-const OFFSET_STEP = 12;
-
-export function addAuxNodesAndGetOffsets(subjectData: SubjectData, selectedSpecialization: string, advancedSwitch: AdvancedSwitch) : [Details, Spec, EdgeOffsets, EdgeOffsets] {
-    const oldDetails = subjectData.details;
-    const orGroupEndOffsets: Record<string, number> = {};
-    const successorInDegreeCounter: Record<string, number> = {};
-    const edgeXOffsets = {};
-    const edgeYOffsets = {};
-
+export function addAuxNodesAndGetOffsets(subjectData: SubjectData, selectedSpecialization: string, advancedSwitch: AdvancedSwitch) : [Details, Spec] {
     const [newDetails, newOrder, currentSpecializationCodes] = preprocessGraph(subjectData, selectedSpecialization, advancedSwitch);
     const currentPlan = newOrder[selectedSpecialization].plan;
     const subjectsToProcess = Object.values(currentPlan).flat();
@@ -31,34 +23,14 @@ export function addAuxNodesAndGetOffsets(subjectData: SubjectData, selectedSpeci
         currentSuccessors.forEach((successorInfo, i) => {
             const successor = newDetails[successorInfo.code];
             if (isInvalidEdge(parent, successor, currentSpecializationCodes, successorInfo)) { return; }
-
-            const [offset, endOffset] = assignOffsets(parentCode, successorInfo, newDetails,
-                                                      edgeYOffsets, orGroupEndOffsets,
-                                                      successorInDegreeCounter, i);
-
             if (shouldCreateHelperNodes(parent.semester, successor.semester)) {
                 createSuccessingHelperNodes(parentCode, parent.semester, successorInfo.code,
                                             successor.semester, newDetails, currentPlan,
-                                            subjectData.choices, edgeYOffsets, offset, endOffset, successorInfo.groups);
+                                            subjectData.choices, successorInfo.groups);
             }
         })
     });
-    fillEdgeXOffsets(edgeXOffsets, newDetails, newOrder[selectedSpecialization].plan);
-    return [newDetails, newOrder, edgeXOffsets, edgeYOffsets];
-}
-
-
-function assignOffsets(parentCode: string, successorInfo: Edge, 
-                       oldDetails: Details, edgeYOffsets: Record<string, number>,
-                       orGroupEndOffsets: Record<string, number>, 
-                       successorInDegreeCounter: Record<string, number>, i: number) : [number, number] {
-    let offset = (i - (oldDetails[parentCode].successors.length - 1) / 2) * OFFSET_STEP;
-    ensureOffset(edgeYOffsets, `${parentCode}-${successorInfo.code}-start`, offset);
-
-    const endOffset = getEndOffset(successorInfo.code, oldDetails, successorInDegreeCounter);
-    resolveEndOffset(edgeYOffsets, orGroupEndOffsets, parentCode,
-                        successorInfo.code, successorInfo.groups, endOffset, successorInfo);
-    return [offset, endOffset];
+    return [newDetails, newOrder];
 }
 
 
@@ -214,29 +186,4 @@ function shouldCreateHelperNodes(parentSemester: number | null,
         || succSemester == null
         || parentSemester + 1 == succSemester
         || parentSemester > succSemester);
-}
-
-
-function resolveEndOffset(edgeYOffsets: EdgeOffsets, orGroupEndOffsets: Record<string, number>,
-                          parentCode: string, succCode: string, groups: string[][],
-                          offset: number, successorInfo: Edge) : void {
-    if (!groups || groups.length == 0) {
-        ensureOffset(edgeYOffsets, `${parentCode}-${succCode}-end`, offset);
-        return;
-    }
-    if (orGroupEndOffsets[`${parentCode}-${succCode}`] === undefined) {
-        fillOrGroupOffsets(orGroupEndOffsets, successorInfo, offset);
-    }
-    ensureOffset(edgeYOffsets, `${parentCode}-${succCode}-end`, orGroupEndOffsets[`${parentCode}-${succCode}`]);
-}
-
-
-function getEndOffset(succCode: string, oldDetails: Details, successorInDegreeCounter: Record<string, number>) : number {
-    if (!(succCode in successorInDegreeCounter)) {
-        successorInDegreeCounter[succCode] = 0;
-    }
-    const inDegree = oldDetails[succCode].predecessors.length;
-    let endOffset = (successorInDegreeCounter[succCode] - (inDegree - 1) / 2) * OFFSET_STEP;
-    successorInDegreeCounter[succCode]++;
-    return endOffset;
 }
