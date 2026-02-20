@@ -9,7 +9,6 @@ export type Course = {
     link: string,
     semester: number | null,
     type: string,
-    subjects?: Array<Course>
 }
 
 export type Edge = {

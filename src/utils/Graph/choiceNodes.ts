@@ -117,7 +117,6 @@ function saveChoiceNode(details: Details, newSpec: Spec, choiceCode: string, ord
         successors: successors, 
         predecessors: predecessors,
         credits: credits,
-        subjects: [],
         semester: semester,
         type: "choice"
     };
