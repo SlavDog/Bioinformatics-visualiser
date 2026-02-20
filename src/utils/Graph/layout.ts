@@ -19,7 +19,6 @@ export function getPositions(details: Details, spec: Spec, selectedSpecializatio
 
             if (codeToCoordinates[code]
                 || !details[code]
-                || details[code].semester == null
                 || !currentSpecializationCodes.has(code)
             ) {
                 return;

@@ -8,6 +8,12 @@ type SubjectDataContextType = {
   setData: React.Dispatch<React.SetStateAction<SubjectData>>;
   selectedSpecialization: string;
   setSelectedSpecialization: React.Dispatch<React.SetStateAction<string>>;
+  showAdvancedMath: boolean;
+  setShowAdvancedMath: React.Dispatch<React.SetStateAction<boolean>>;
+  showAdvancedInformatics: boolean;
+  setShowAdvancedInformatics: React.Dispatch<React.SetStateAction<boolean>>;
+  showAdvancedBiology: boolean;
+  setShowAdvancedBiology: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const SubjectDataContext = createContext<SubjectDataContextType | null>(null);
@@ -19,9 +25,16 @@ type SubjectDataProvider = {
 export function SubjectDataProvider({ children }: SubjectDataProvider) {
   const [data, setData] = useState<SubjectData>(subjectInfoData);
   const [selectedSpecialization, setSelectedSpecialization] = useState<string>(Object.keys(subjectInfoData.spec)[0]);
+  const [showAdvancedMath, setShowAdvancedMath] = useState<boolean>(false);
+  const [showAdvancedInformatics, setShowAdvancedInformatics] = useState<boolean>(false);
+  const [showAdvancedBiology, setShowAdvancedBiology] = useState<boolean>(false);
 
   return (
-    <SubjectDataContext value={{ data, setData, selectedSpecialization, setSelectedSpecialization}}>
+    <SubjectDataContext value={{ data, setData, selectedSpecialization, setSelectedSpecialization,
+                                 showAdvancedMath, setShowAdvancedMath,
+                                 showAdvancedInformatics, setShowAdvancedInformatics,
+                                 showAdvancedBiology, setShowAdvancedBiology    
+    }}>
       {children}
     </SubjectDataContext>
   );
@@ -47,4 +60,28 @@ export function useSelectedSpecialization() : string {
 
 export function useSetSelectedSpecialization() : React.Dispatch<React.SetStateAction<string>> {
   return useSubjectContext().setSelectedSpecialization;
+}
+
+export function useSetShowAdvancedMath() : React.Dispatch<React.SetStateAction<boolean>> {
+  return useSubjectContext().setShowAdvancedMath;
+}
+
+export function useShowAdvancedMath() : boolean {
+  return useSubjectContext().showAdvancedMath;
+}
+
+export function useSetShowAdvancedInformatics() : React.Dispatch<React.SetStateAction<boolean>> {
+  return useSubjectContext().setShowAdvancedInformatics;
+}
+
+export function useShowAdvancedInformatics() : boolean {
+  return useSubjectContext().showAdvancedInformatics;
+}
+
+export function useSetShowAdvancedBiology() : React.Dispatch<React.SetStateAction<boolean>> {
+  return useSubjectContext().setShowAdvancedBiology;
+}
+
+export function useShowAdvancedBiology() : boolean {
+  return useSubjectContext().showAdvancedBiology;
 }

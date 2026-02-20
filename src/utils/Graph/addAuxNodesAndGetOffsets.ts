@@ -2,36 +2,37 @@ import { addChoiceNodes, isInSomeChoice } from "@utils/Graph/choiceNodes";
 import { ensureOffset } from "@utils/Graph/dataUtils";
 import { fillOrGroupOffsets, fillEdgeXOffsets } from "@utils/Graph/offsets";
 import { createSuccessingHelperNodes } from "@utils/Graph/helperNodes";
-import { Course, Details, Edge, EdgeOffsets, Spec, SubjectData } from "@/types/subjects";
+import { AdvancedSwitch, Course, Details, Edge, EdgeOffsets, Spec, SubjectData } from "@/types/subjects";
 import { getReachableCodes } from "./layout";
 
 const OFFSET_STEP = 12;
 
-export function addAuxNodesAndGetOffsets(subjectData: SubjectData, selectedSpecialization: string) : [Details, Spec, EdgeOffsets, EdgeOffsets] {
+export function addAuxNodesAndGetOffsets(subjectData: SubjectData, selectedSpecialization: string, advancedSwitch: AdvancedSwitch) : [Details, Spec, EdgeOffsets, EdgeOffsets] {
     const oldDetails = subjectData.details;
     const orGroupEndOffsets: Record<string, number> = {};
     const successorInDegreeCounter: Record<string, number> = {};
     const edgeXOffsets = {};
     const edgeYOffsets = {};
 
-    const [newDetails, newOrder, currentSpecializationCodes] = preprocessGraph(subjectData, selectedSpecialization);
+    const [newDetails, newOrder, currentSpecializationCodes] = preprocessGraph(subjectData, selectedSpecialization, advancedSwitch);
     const currentPlan = newOrder[selectedSpecialization].plan;
+    const subjectsToProcess = Object.values(currentPlan).flat();
 
-    Object.values(currentPlan).flat().forEach((subject) => {
+    subjectsToProcess.forEach((subject) => {
         const parentCode = "code" in subject ? subject.code : subject.choice;
         if (isInSomeChoice(parentCode, currentPlan, subjectData.choices)) { return;}
 
-        const parent = oldDetails[parentCode];
+        const parent = newDetails[parentCode];
         if (!parent) {
             console.warn(`Course with code ${parentCode} not found in details.`);
             return;
         }
-        
-        parent.successors.forEach((successorInfo, i) => {
-            const successor = oldDetails[successorInfo.code];
+        const currentSuccessors = [...parent.successors];
+        currentSuccessors.forEach((successorInfo, i) => {
+            const successor = newDetails[successorInfo.code];
             if (isInvalidEdge(parent, successor, currentSpecializationCodes, successorInfo)) { return; }
 
-            const [offset, endOffset] = assignOffsets(parentCode, successorInfo, oldDetails,
+            const [offset, endOffset] = assignOffsets(parentCode, successorInfo, newDetails,
                                                       edgeYOffsets, orGroupEndOffsets,
                                                       successorInDegreeCounter, i);
 
@@ -68,17 +69,76 @@ function isInvalidEdge(parent: Course, successor: Course, currentSpecializationC
 }
 
 
-function preprocessGraph(subjectData: SubjectData, selectedSpecialization: string) : [Details, Spec, Set<string>] {
-    const newOrder = addChoiceNodes(subjectData.details, subjectData.spec, subjectData.choices, selectedSpecialization);
-    removeIllogicalEdges(subjectData.details);
-    removeTransitiveEdges(subjectData.details);
+function preprocessGraph(subjectData: SubjectData, selectedSpecialization: string, advancedSwitch: AdvancedSwitch) : [Details, Spec, Set<string>] {
+    const data = structuredClone(subjectData);
 
-    const currentSpecializationCodes = new Set(Object.values(subjectData.spec[selectedSpecialization].plan)
-                                            .flat()
-                                            .map(subject => "code" in subject ? subject.code : subject.choice));
-    removeEdgesToNonExistingNodes(subjectData.details, currentSpecializationCodes);
-    const newDetails = structuredClone(subjectData).details;
-    return [newDetails, newOrder, currentSpecializationCodes];
+    const updatedData = replaceWithAdvancedCourses(data, advancedSwitch, selectedSpecialization);
+
+    const currentSpecializationCodes = new Set(
+        Object.values(updatedData.spec[selectedSpecialization].plan)
+            .flat()
+            .map(subject => "code" in subject ? subject.code : subject.choice)
+    );
+
+    removeEdgesToNonExistingNodes(updatedData.details, currentSpecializationCodes);
+    removeIllogicalEdges(updatedData.details);
+    
+    const newOrder = addChoiceNodes(updatedData.details, updatedData.spec, updatedData.choices, selectedSpecialization);
+    removeTransitiveEdges(updatedData.details);
+
+    return [updatedData.details, newOrder, currentSpecializationCodes];
+}
+
+
+function replaceWithAdvancedCourses(subjectData: SubjectData, advancedSwitch: AdvancedSwitch, selectedSpecialization: string) : SubjectData {
+    const substitutionCodes = Object.entries(advancedSwitch)
+        .filter(([_, toBeReplaced]) => toBeReplaced)
+        .map(([code, _]) => code);
+
+    const codesToBeRemoved = substitutionCodes
+        .flatMap((code) => subjectData.substitutions[code].removes)
+    
+    const codesToBeAdded = substitutionCodes
+        .flatMap((code) => subjectData.substitutions[code].adds.map((subj) => subj.code))
+
+    const updatedCodes = new Set(Object.keys(subjectData.details));
+    codesToBeRemoved.forEach(c => updatedCodes.delete(c));
+    codesToBeAdded.forEach(c => updatedCodes.add(c));
+
+    const filteredDetails = Object.fromEntries(
+        Object.entries(subjectData.details)
+            .filter(([code]) => updatedCodes.has(code))
+    );
+
+    const filteredChoices = structuredClone(subjectData.choices);
+    Object.values(filteredChoices).forEach((choiceGroup) => {
+        choiceGroup.list = choiceGroup.list.filter((choiceSubj) => {
+            const subjectCode = typeof choiceSubj === 'string' ? choiceSubj : choiceSubj.code;
+            return !codesToBeRemoved.includes(subjectCode);
+        });
+    });
+
+    const addedSubjectsWithSem = substitutionCodes.flatMap(key => subjectData.substitutions[key].adds);
+    const filteredSpec = structuredClone(subjectData.spec);
+    const specialization = filteredSpec[selectedSpecialization];
+    Object.entries(specialization.plan).forEach(([semKey, subjects]) => {
+        let updatedSubjects = subjects.filter((item) => {
+            const code = "code" in item ? item.code : item.choice;
+            return !codesToBeRemoved.includes(code);
+        });
+        const toAdd = addedSubjectsWithSem
+            .filter(obj => obj.semester.toString() === semKey)
+            .map(obj => ({code: obj.code}));
+
+        specialization.plan[semKey] = [...toAdd, ...updatedSubjects];
+    });
+
+    return {
+        ...subjectData,
+        details: filteredDetails,
+        choices: filteredChoices,
+        spec: filteredSpec // Vrátíš aktualizovaný plán
+    };
 }
 
 

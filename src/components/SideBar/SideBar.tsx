@@ -3,11 +3,11 @@ import TagsBox from "@components/SideBar/TagsBox";
 import RangeScaler from "@components/SideBar/RangeScaler";
 import { Layout } from "@/consts/VisualisationParameters";
 import "./styles.css";
-import { useData, useSetData, useSelectedSpecialization, useSetSelectedSpecialization } from "@components/providers/dataProvider";
+import { useData, useSetData, useSelectedSpecialization, useSetSelectedSpecialization, useShowAdvancedMath, useSetShowAdvancedMath, useShowAdvancedBiology, useSetShowAdvancedBiology, useShowAdvancedInformatics, useSetShowAdvancedInformatics } from "@components/providers/dataProvider";
 import { useContext, useState } from "react";
 import DarkModeToggle from "@components/SideBar/DarkModeToggle";
 import SideBarTitle from "./SideBarTitle";
-import CheckBoxField from "./CheckboxField";
+import CheckBoxField from "./CheckBoxField";
 
 
 type SidebarProps = {
@@ -21,11 +21,16 @@ function SideBar({scale, setScale} : SidebarProps) {
     const subjectInfoData = useData();
     const selectedSpecialization = useSelectedSpecialization();
     const setSelectedSpecialization = useSetSelectedSpecialization();
-    const setData = useSetData();
-    const [code, setCode] = useState("");
-    const [semester, setSemester] = useState(1);
-    
+    const showAdvancedMath = useShowAdvancedMath();
+    const setShowAdvancedMath = useSetShowAdvancedMath();
+    const showAdvancedBiology = useShowAdvancedBiology();
+    const setShowAdvancedBiology = useSetShowAdvancedBiology();
+    const showAdvancedInformatics = useShowAdvancedInformatics();
+    const setShowAdvancedInformatics = useSetShowAdvancedInformatics();
 
+    // const setData = useSetData();
+    // const [code, setCode] = useState("");
+    // const [semester, setSemester] = useState(1);
     // const sendToBackend = async () => {
     //     const res = await fetch("http://localhost:8000/run-script", {
     //         method: "POST",
@@ -80,9 +85,9 @@ function SideBar({scale, setScale} : SidebarProps) {
                 );
             })}
             <SideBarTitle tooltip="Studenti toužící po hlubším studiu některých z oblastí bioinformatiky si mohou zvolit průchod s pokročilejšími (nepovinnými) kurzy.">Pokročilejší kurzy</SideBarTitle>
-            <CheckBoxField checked={true} onChange={() => {}}>Pokročilejší matematika</CheckBoxField>
-            <CheckBoxField checked={true} onChange={() => {}}>Pokročilejší biologie</CheckBoxField>
-            <CheckBoxField checked={true} onChange={() => {}}>Pokročilejší informatika</CheckBoxField>
+            <CheckBoxField checked={showAdvancedMath} onChange={() => setShowAdvancedMath(!showAdvancedMath)}>{subjectInfoData.substitutions.advanced_math.nameCZ}</CheckBoxField>
+            {/* <CheckBoxField checked={showAdvancedBiology} onChange={() => setShowAdvancedBiology(!showAdvancedBiology)}>{subjectInfoData.substitutions.advanced_bi.nameCZ}</CheckBoxField>
+            <CheckBoxField checked={showAdvancedInformatics} onChange={() => setShowAdvancedInformatics(!showAdvancedInformatics)}>{subjectInfoData.substitutions.advanced_inf.nameCZ}</CheckBoxField> */}
             {/* <input type="text" className="sideBarInput" placeholder="Zadejte kód" value={code} onChange={(e) => setCode(e.target.value)} />
             <select value={semester} onChange={(e) => setSemester(Number(e.target.value))}>
                 {["1", "2", "3", "4", "5", "6"].map((number) => {

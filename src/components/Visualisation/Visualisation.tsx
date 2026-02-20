@@ -4,7 +4,7 @@ import {addAuxNodesAndGetOffsets, getAllOrGatesPositions, getPositions} from '@u
 import VisualisationForeground from '@components/Visualisation/VisualisationForeground';
 import VisualisationBackground from '@components/Visualisation/VisualisationBackground';
 import { Layout } from '@/consts/VisualisationParameters';
-import { useData, useSelectedSpecialization } from "@components/providers/dataProvider";
+import { useData, useSelectedSpecialization, useShowAdvancedBiology, useShowAdvancedInformatics, useShowAdvancedMath } from "@components/providers/dataProvider";
 import { Details, EdgeOffsets, RealPositions, Spec, SubjectData } from '@/types/subjects';
 
 import "./styles.css";
@@ -28,7 +28,7 @@ type VisualisationState = {
 };
 
 function Visualisation({scale, setDragEnabled}: VisualisationProps) {
-    const subjectInfoData: SubjectData = useData();;
+    const subjectInfoData: SubjectData = useData();
     const [visState, setVisState] = useState<VisualisationState>({
         subjects: {},
         spec: {},
@@ -40,12 +40,16 @@ function Visualisation({scale, setDragEnabled}: VisualisationProps) {
         orGatesPositions: []
     });
     const selectedSpecialization = useSelectedSpecialization();
-
+    const advancedSwitch = {
+        advanced_math: useShowAdvancedMath(),
+        advanced_inf: useShowAdvancedInformatics(),
+        advanced_bi: useShowAdvancedBiology(),
+    }
     const SubjectComponent = scale < 0.7 ? SmallSubject : Subject;
 
     // Calculate positions when new data is loaded
     useEffect(() => {
-        const [newDetails, newSpec, xOff, yOff] = addAuxNodesAndGetOffsets(subjectInfoData, selectedSpecialization);
+        const [newDetails, newSpec, xOff, yOff] = addAuxNodesAndGetOffsets(subjectInfoData, selectedSpecialization, advancedSwitch);
         const [pos, maxX, maxY] = getPositions(newDetails, newSpec, selectedSpecialization);
         const orGatesPositions = getAllOrGatesPositions(newDetails, newSpec[selectedSpecialization], pos, yOff);
         
@@ -59,7 +63,8 @@ function Visualisation({scale, setDragEnabled}: VisualisationProps) {
             maxY: maxY,
             orGatesPositions: orGatesPositions
         });
-    }, [subjectInfoData, selectedSpecialization]);
+    }, [subjectInfoData, selectedSpecialization,
+        advancedSwitch.advanced_math, advancedSwitch.advanced_bi, advancedSwitch.advanced_inf]);
 
     const width = (visState.maxX + 2 * Layout.paddingHorizontal) * scale;
     const height = (visState.maxY + Layout.semesterTitleInset + Layout.semesterColumnBottomPadding + 2 * Layout.paddingVertical) * scale;

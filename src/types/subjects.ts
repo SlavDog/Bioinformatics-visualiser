@@ -58,6 +58,14 @@ export type SubjectData = {
     details: Details,
     spec: Spec,
     choices: Choices,
+    substitutions: Substitutions
+}
+
+type Substitutions = Record<string, Substitution>
+type Substitution = {
+    nameCZ: string,
+    removes: Array<string>,
+    adds: Array<{code: string, semester: number}>
 }
 
 export type EdgeOffsets = Record<string, number>;
@@ -67,3 +75,9 @@ export type RealCoordinates = {x: number, y: number};
 export type CodeToCoordinates = Record<string, Coordinates>;
 export type PositionsToCode = Array<Array<string>>;
 export type RealPositions = Record<string, RealCoordinates>;
+
+export type AdvancedSwitch = {
+    advanced_math: boolean,
+    advanced_inf: boolean,
+    advanced_bi: boolean
+}
