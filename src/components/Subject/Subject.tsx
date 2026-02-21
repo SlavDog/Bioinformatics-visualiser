@@ -58,7 +58,7 @@ function Subject({ code, course, isAlsoOutside = false, style, setDragEnabled } 
                         <img src={course.type === "IN" ? InfIcon : course.type === "BI" ? BioIcon : course.type === "MA" ? MathIcon : course.type === "choice" ? ChoiceIcon : OtherIcon} title={typeCodeToName(course.type)} draggable="false" className='circle' />
                         {WarningComponent}
                     </div>
-                    <p className="subjectCredits">{limit} {course.credits ? "kr." : "předm."}</p>
+                    <p className="subjectCredits">{limit} {course.credits != undefined ? "kr." : "předm."}</p>
                 </div>
             </div>
             <SubjectDetailMenu
