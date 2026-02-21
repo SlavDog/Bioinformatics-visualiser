@@ -9,6 +9,7 @@ export type Course = {
     link: string,
     semester: number | null,
     type: string,
+    unshownNeededPredecessors?: string[];
 }
 
 export type Edge = {
