@@ -213,7 +213,8 @@ def parse_and_evaluate_formula(code: str, formula: str) -> tuple[bool, list[list
     all_codes = re.findall(r"[A-Za-z0-9:_ř]+", formula)
     for i, subject_code in enumerate(set(all_codes)):
         symbols_dict[subject_code.capitalize()] = Symbol(f"a{i}")
-        formula = formula.replace(subject_code, f"a{i}")
+        pattern = r'\b' + re.escape(subject_code) + r'\b'
+        formula = re.sub(pattern, f"a{i}", formula)
 
     reverse_dict = {v: k for k, v in symbols_dict.items()}
     groups = extract_or_groups(simplify_logic(formula), reverse_dict)
