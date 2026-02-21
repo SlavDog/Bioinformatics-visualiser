@@ -39,21 +39,24 @@ function Subject({ code, course, isAlsoOutside = false, style, setDragEnabled } 
         detailMenuSourceName = code;
     }
 
-    const WarningComponent = isAlsoOutside ? <Warning/> : null;
+    let warnings: Set<string> = new Set();
+    if (isAlsoOutside) { warnings.add("isAlsoOutside"); }
+    if (course.unshownNeededPredecessors != undefined && course.unshownNeededPredecessors.length != 0) { warnings.add("unshownPredecessors"); }
 
-    let limit = course.credits ?? course.subjects;
+    const WarningComponent =  <Warning warnings={warnings} course={course}/>;
+
+    let limit = course.credits;
 
     return (
         <>
             <div onClick={onClick} className={`subject subjectType${course.type}`} style={style}>
                 <div className="topSubjectContainer">
                     {Info}
-                    {WarningComponent}
                 </div>
                 <div className="bottomSubjectContainer">
                     <div className="iconContainer">
                         <img src={course.type === "IN" ? InfIcon : course.type === "BI" ? BioIcon : course.type === "MA" ? MathIcon : course.type === "choice" ? ChoiceIcon : OtherIcon} title={typeCodeToName(course.type)} draggable="false" className='circle' />
-                        <div className="circle"></div>
+                        {WarningComponent}
                     </div>
                     <p className="subjectCredits">{limit} {course.credits ? "kr." : "předm."}</p>
                 </div>

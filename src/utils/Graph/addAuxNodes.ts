@@ -52,7 +52,7 @@ function preprocessGraph(subjectData: SubjectData, selectedSpecialization: strin
             .map(subject => "code" in subject ? subject.code : subject.choice)
     );
 
-    removeEdgesToNonExistingNodes(updatedData.details, currentSpecializationCodes);
+    removeEdgesToNonExistingNodes(updatedData, currentSpecializationCodes, selectedSpecialization);
     removeIllogicalEdges(updatedData.details);
     
     const newOrder = addChoiceNodes(updatedData.details, updatedData.spec, updatedData.choices, selectedSpecialization);
@@ -114,17 +114,27 @@ function replaceWithAdvancedCourses(subjectData: SubjectData, advancedSwitch: Ad
 }
 
 
-function removeEdgesToNonExistingNodes(details: Details, currentSpecializationCodes: Set<string>) : void {
-    Object.values(details).forEach((course) => {
-        cleanNodeFromNonExistingNodes(true, course, currentSpecializationCodes);
-        cleanNodeFromNonExistingNodes(false, course, currentSpecializationCodes);
+function removeEdgesToNonExistingNodes(data: SubjectData, currentSpecializationCodes: Set<string>, selectedSpecialization: string) : void {
+    Object.values(data.details).forEach((course) => {
+        cleanNodeFromNonExistingNodes(true, course, currentSpecializationCodes, data, selectedSpecialization);
+        cleanNodeFromNonExistingNodes(false, course, currentSpecializationCodes, data, selectedSpecialization);
     });
 }
 
 
-function cleanNodeFromNonExistingNodes(cleanSuccessors: boolean, course: Course, currentSpecializationCodes: Set<string>) : void {
+function cleanNodeFromNonExistingNodes(cleanSuccessors: boolean, course: Course, currentSpecializationCodes: Set<string>, data: SubjectData, selectedSpecialization: string) : void {
     const key = cleanSuccessors ? "successors" : "predecessors"
 
+    if (key == "predecessors") { 
+        course.unshownNeededPredecessors = course[key]
+            .filter((neighbour) =>
+                !currentSpecializationCodes.has(neighbour.code.replace(/-\d+$/, ""))
+                && neighbour.groups.every((group) => group.every((code) => !currentSpecializationCodes.has(code.replace(/-\d+$/, "")) && !isInSomeChoice(code, data.spec[selectedSpecialization].plan, data.choices)))
+                && !isInSomeChoice(neighbour.code, data.spec[selectedSpecialization].plan, data.choices) 
+                && neighbour.by_prerequisites == true)
+            .map((edge) => edge.code);
+    }
+    console.log(data.details["SBAPR"]);
     course[key] = course[key].filter(succ => currentSpecializationCodes.has(succ.code.replace(/-\d+$/, "")));
     course[key].forEach(succ => {
         succ.groups = succ.groups.map(group => {

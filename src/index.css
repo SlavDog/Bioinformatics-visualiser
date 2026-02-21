@@ -17,7 +17,8 @@ body {
   --menu-background-overlay: rgba(0, 0, 0, 0.7);
   --subject-background: white;
   --subject-shadow: rgba(0, 0, 0, 0.2);
-  --warning-background: orange;
+  --subjects-outside-warning-background: orange;
+  --unshown-preds-warning-background: red;
   --warning-text: white;
   --divider-color: #929292;
   --choice: #a000a0;
@@ -43,7 +44,7 @@ body {
   --column-odd: #141414;
   --column-even: var(--background);
   --text-primary: #dedede;
-  --text-secondary: #b8b8b8;
+  --text-secondary: #878787;
   --button: #292929;
   --button-hover: #414141;
   --subject-title: #f0f0f0;
@@ -51,7 +52,8 @@ body {
   --subject-background: #000000;
   --subject-shadow: rgba(0, 0, 0, 0.4);
   --divider-color: #2d3748;
-  --warning-background: #ed8936;
+  --subjects-outside-warning-background: orange;
+  --unshown-preds-warning-background: red;
   --warning-text: white;
   --choice: #d277e9;
   --choice-background: #5c325c;
