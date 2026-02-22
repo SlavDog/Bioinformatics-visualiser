@@ -58,27 +58,27 @@ function getShouldReverse(pos: RealPositions, parentCode: string, successors: Ed
 }
 
 
-function getYIndexes(orderData: Record<string, Array<OrderSubject>>) : Record<string, number> {
-    const yIndexes: Record<string, number> = {};
-    Object.values(orderData).flat().forEach((subject, indexInSemester) => {
-        const code = "code" in subject ? subject.code : subject.choice;
-        yIndexes[code] = indexInSemester;
-    });
-    return yIndexes;
-}
-
-
-
 export function fillEdgeYOffsets(edgeYOffsets: EdgeOffsets, newDetails: Details, plan: Record<string, Array<OrderSubject>>, pos: RealPositions) {
     const orGroupEndOffsets: Record<string, number> = {};
     const successorInDegreeCounter: Record<string, number> = {};
+    const pathTargetOffsets: Record<string, number> = {};
     Object.values(plan).flat().forEach((subj) => {
         const parentCode = "code" in subj ? subj.code : subj.choice;
         if (!newDetails[parentCode]) {return;}
         sortSuccessorsByPositions(newDetails[parentCode].successors, pos).forEach((succ, i) => {
-            assignOffsets(parentCode, succ, newDetails, edgeYOffsets, orGroupEndOffsets, successorInDegreeCounter, i);
+            assignOffsets(parentCode, succ, newDetails, edgeYOffsets, orGroupEndOffsets, successorInDegreeCounter, i, pathTargetOffsets);
         })
     })
+}
+
+function findRealSuccessor(currentCode: string, details: Details): string {
+    if (currentCode.includes("HELPER")) {
+        const succs = details[currentCode]?.successors;
+        if (succs && succs.length > 0) {
+            return findRealSuccessor(succs[0].code, details);
+        }
+    }
+    return currentCode;
 }
 
 
@@ -94,14 +94,52 @@ function sortSuccessorsByPositions(successors: Array<Edge>, pos: RealPositions):
 function assignOffsets(parentCode: string, successorInfo: Edge, 
                        oldDetails: Details, edgeYOffsets: Record<string, number>,
                        orGroupEndOffsets: Record<string, number>, 
-                       successorInDegreeCounter: Record<string, number>, i: number) : [number, number] {
-    let startOffset = (i - (oldDetails[parentCode].successors.length - 1) / 2) * OFFSET_STEP;
-    let endOffset = getEndOffset(successorInfo.code, oldDetails, successorInDegreeCounter);
+                       successorInDegreeCounter: Record<string, number>, i: number, pathTargetOffsets: Record<string, number>) {
+    const realSuccessorCode = findRealSuccessor(successorInfo.code, oldDetails);
+    const isParentHelper = parentCode.startsWith("HELPER");
 
-    ensureOffset(edgeYOffsets, `${parentCode}-${successorInfo.code}-start`, startOffset);
+    const pathKey = getPathCode(parentCode, realSuccessorCode, isParentHelper);
+    
+    const myGroup = successorInfo.groups?.find(g => g.includes(parentCode));
+    const definedSubject = myGroup
+        ?.find((subj) => pathTargetOffsets[getPathCode(subj, realSuccessorCode, subj.startsWith("HELPER"))] != undefined);
+
+    if (pathTargetOffsets[pathKey] == undefined) {
+        let newOffset: number;
+        
+        if (definedSubject) { // some subject from the OR-group is already defined
+            newOffset = pathTargetOffsets[getPathCode(definedSubject, realSuccessorCode, definedSubject.startsWith("HELPER"))] ;
+        } else {
+            newOffset = getEndOffset(realSuccessorCode, oldDetails, successorInDegreeCounter);
+        }
+
+        if (myGroup) {
+            myGroup.forEach((memberCode) => {
+                const memberPathId = getPathCode(memberCode, realSuccessorCode, 
+                                                 memberCode.startsWith("HELPER"));
+                pathTargetOffsets[memberPathId] = newOffset;
+            });
+        } else {
+            pathTargetOffsets[pathKey] = newOffset;
+        }
+    }
+
+    const endOffset = pathTargetOffsets[pathKey];
+
+    let startOffset = (i - (oldDetails[parentCode].successors.length - 1) / 2) * OFFSET_STEP;
+
+    const finalStartOffset = isParentHelper ? endOffset : startOffset;
+    const finalEndOffset = endOffset;
+
+    ensureOffset(edgeYOffsets, `${parentCode}-${successorInfo.code}-start`, finalStartOffset);
     resolveEndOffset(edgeYOffsets, orGroupEndOffsets, parentCode,
-                        successorInfo.code, successorInfo.groups, endOffset, successorInfo);
-    return [startOffset, endOffset];
+                     successorInfo.code, successorInfo.groups, finalEndOffset, successorInfo);
+}
+
+function getPathCode(startCode: string, endCode: string, isParentHelper: boolean) {
+    return (isParentHelper 
+        ? startCode.replace(/^HELPER_/, "").replace(/_\d+$/, "") 
+        : `${startCode}_${endCode}`);
 }
 
 
