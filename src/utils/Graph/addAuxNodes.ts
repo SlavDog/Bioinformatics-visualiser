@@ -187,6 +187,30 @@ function removeTransitiveEdges(details: Details) : void {
             }
         });
     });
+
+    Object.keys(details).forEach(code => {
+        const node = details[code];
+
+        node.successors.forEach(succ => {
+            if (succ.groups) {
+                succ.groups = succ.groups.map(group => 
+                    group.filter(mCode => 
+                        details[mCode] && details[mCode].successors.some(edge => edge.code === succ.code)
+                    )
+                ).filter(group => group.length > 1);
+            }
+        });
+
+        node.predecessors.forEach(pred => {
+            if (pred.groups) {
+                pred.groups = pred.groups.map(group => 
+                    group.filter(mCode => 
+                        details[mCode] && details[mCode].successors.some(edge => edge.code === code)
+                    )
+                ).filter(group => group.length > 1);
+            }
+        });
+    });
 };
 
 
