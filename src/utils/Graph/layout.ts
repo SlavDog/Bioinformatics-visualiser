@@ -3,7 +3,7 @@ import { getUniquePredGroups } from "@utils/Graph/orGroups";
 import { getYOffsetForOrGroup } from "@utils/Graph/offsets";
 import { CodeToCoordinates, Course, Details, EdgeOffsets, OrderSubject, PositionsToCode, RealPositions, Spec, Specialization} from "@/types/subjects";
 
-export function getPositions(details: Details, spec: Spec, selectedSpecialization: string) : [RealPositions, number, number] {
+export function getPositions(details: Details, spec: Spec, selectedSpecialization: string, codesToSem: Record<string, number>) : [RealPositions, number, number] {
     const plan = spec[selectedSpecialization].plan;
     let semestersCount = Object.keys(plan).length;
     const codeToCoordinates: CodeToCoordinates = {};
@@ -24,10 +24,11 @@ export function getPositions(details: Details, spec: Spec, selectedSpecializatio
                 return;
             }
             
+            console.log("Placing", code);
             const placement = findValidPlacement(
                 code, semesterIndex, semestersCount, details, 
                 codeToCoordinates, positionsToCode, currentSpecializationCodes,
-                selectedSpecialization
+                selectedSpecialization, codesToSem
             );
 
             if (placement) {
@@ -52,15 +53,15 @@ function mergePlacements(destCoords: CodeToCoordinates, destPos: PositionsToCode
 
 function findValidPlacement(code: string, semesterIndex: number, semestersCount: number, details: Details,
                             globalCoords: CodeToCoordinates, globalPos: PositionsToCode,
-                            specCodes: Set<string>, specName: string) : [CodeToCoordinates, PositionsToCode] | null {
+                            specCodes: Set<string>, specName: string, codesToSem: Record<string, number>) : [CodeToCoordinates, PositionsToCode] | null {
     for (let positionIndex = 0; positionIndex < 20; positionIndex++) {
         let tempCoords = {};
         let tempPos = Array.from({ length: semestersCount }, () => []);
 
         const isTreeOk = getTreePositions(details, semesterIndex, positionIndex, code,
-                                          globalCoords, globalPos, tempCoords, tempPos, specCodes);
+                                          globalCoords, globalPos, tempCoords, tempPos, specCodes, codesToSem);
         const arePredsOk = addMissedPredecessorsPositions(details, globalCoords, globalPos, 
-                                                          tempCoords, tempPos, specName);
+                                                          tempCoords, tempPos, specName, codesToSem);
 
         if (isTreeOk && arePredsOk) {
             return [tempCoords, tempPos];
@@ -101,13 +102,13 @@ export function getReachableCodes(startCode: string, details: Details, searchPre
 }
 
 
-function addMissedPredecessorsPositions(details: Details, codesToCoordinates: CodeToCoordinates, positionsToCode: PositionsToCode, tempCodeToCoordinates: CodeToCoordinates, tempPositionsToCode: PositionsToCode, selectedSpecialization: string) : boolean {
+function addMissedPredecessorsPositions(details: Details, codesToCoordinates: CodeToCoordinates, positionsToCode: PositionsToCode, tempCodeToCoordinates: CodeToCoordinates, tempPositionsToCode: PositionsToCode, selectedSpecialization: string, codesToSem: Record<string, number>) : boolean {
     const missedCodes: string[] = getReachableCodes(Object.keys(tempCodeToCoordinates)[0], details)
-        .filter(code => !tempCodeToCoordinates[code] && !codesToCoordinates[code] && details[code].semester != null)
+        .filter(code => !tempCodeToCoordinates[code] && !codesToCoordinates[code] && codesToSem[code] != null)
 
     for (let i = 0; i < missedCodes.length; i++) {
         const code = missedCodes[i];
-        let currentSemester = details[code]?.semester;
+        let currentSemester = codesToSem[code];
         const semesterIndex = currentSemester! - 1; // can't be null because of the filtering above
 
         const currentSemesterData = positionsToCode[semesterIndex];
@@ -154,7 +155,8 @@ export function getTreePositions(details: Details, semesterIndex: number,
                                  positionsToCode: PositionsToCode, 
                                  tempCodeToCoordinates: CodeToCoordinates, 
                                  tempPositionsToCode: PositionsToCode,
-                                 currentSpecializationCodes: Set<string>
+                                 currentSpecializationCodes: Set<string>,
+                                 codesToSem: Record<string, number>
                              ) : boolean {
                                     
     
@@ -165,8 +167,8 @@ export function getTreePositions(details: Details, semesterIndex: number,
 
     // Node already placed or semester doesn't match the one in data
     if (codeToCoordinates[code] || tempCodeToCoordinates[code] 
-            || (details[code].semester != null 
-                && details[code].semester != semesterIndex + 1
+            || (codesToSem[code] != null 
+                && codesToSem[code] != semesterIndex + 1
                 && details[code].predecessors.length > 0)
             || !currentSpecializationCodes.has(code)) {
         return true;
@@ -175,10 +177,10 @@ export function getTreePositions(details: Details, semesterIndex: number,
     let succs = details[code].successors;
     let nextAvailableY = positionIndex;
     for (let i = 0; i < succs.length; i++) {
-        if (!details[succs[i].code] || details[succs[i].code].semester == null) { continue; }   // successor not in data, move to another one
+        if (!details[succs[i].code] || codesToSem[succs[i].code] == null) { continue; }   // successor not in data, move to another one
         if (!getTreePositions(details, semesterIndex + 1,
                               nextAvailableY, succs[i].code, codeToCoordinates,
-                              positionsToCode, tempCodeToCoordinates, tempPositionsToCode, currentSpecializationCodes)) {
+                              positionsToCode, tempCodeToCoordinates, tempPositionsToCode, currentSpecializationCodes, codesToSem)) {
             return false;
         }
         nextAvailableY += 1;
@@ -189,20 +191,20 @@ export function getTreePositions(details: Details, semesterIndex: number,
 }
 
 
-function hasOrGate(course: Course, processedSubjects: Details) : boolean {
+function hasOrGate(code: string, course: Course, processedSubjects: Details, codesToSem: Record<string, number>) : boolean {
     return course.predecessors.some(pred => pred.groups.length > 0)
         && course.predecessors
             .some(pred => pred.groups
             .some(g => g
-                .filter(s => processedSubjects[s]?.semester != null 
-                            && processedSubjects[s].semester < (course.semester ?? 0))
+                .filter(s => codesToSem[s] != null 
+                            && codesToSem[s] < (codesToSem[code] ?? 0))
                 .filter(s => processedSubjects[s]).length > 1));
 }
 
 
 export function getOrGatesYOffsetsForSubject(code: string, course: Course,
-        processedSubjects: Details, edgeYOffsets: EdgeOffsets) : Array<number> {
-    if (!hasOrGate(course, processedSubjects)) { return []; }
+        processedSubjects: Details, edgeYOffsets: EdgeOffsets, codesToSem: Record<string, number>) : Array<number> {
+    if (!hasOrGate(code, course, processedSubjects, codesToSem)) { return []; }
 
     return getUniquePredGroups(course)
         .filter(group => group.length > 1)
@@ -216,13 +218,13 @@ export function getOrGatesYOffsetsForSubject(code: string, course: Course,
 }
 
 
-export function getAllOrGatesPositions(details: Details, specialization: Specialization, positions: RealPositions, edgeYOffsets: EdgeOffsets) : Array<{x: number, y: number}> {
+export function getAllOrGatesPositions(details: Details, specialization: Specialization, positions: RealPositions, edgeYOffsets: EdgeOffsets, codesToSem: Record<string, number>) : Array<{x: number, y: number}> {
     let orGatesPositions: Array<{x: number, y: number}> = [];
     const specializationCodes = new Set(Object.values(specialization.plan).flat().map(subject => getSubjectCode(subject)));
     Object.entries(details).forEach(([code, course]) => {
-        if (!specializationCodes.has(code) || !hasOrGate(course, details)) { return; }
+        if (!specializationCodes.has(code) || !hasOrGate(code,course, details, codesToSem)) { return; }
         const x = positions[code].x;
-        const yOffsets = getOrGatesYOffsetsForSubject(code, course, details, edgeYOffsets);
+        const yOffsets = getOrGatesYOffsetsForSubject(code, course, details, edgeYOffsets, codesToSem);
 
         yOffsets.forEach(yOffset => {
             orGatesPositions.push({x, y: yOffset + positions[code].y - 15});

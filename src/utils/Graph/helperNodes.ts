@@ -5,7 +5,7 @@ import { isInSomeChoice } from './choiceNodes';
 export function createSuccessingHelperNodes(parentCode: string, parentSemester: number | null,
                                      successorCode: string, succSemester: number | null,
                                      newDetails: Details, order: Record<string, Array<OrderSubject>>, choices: Choices,
-                                    groups: Array<Array<string>>) : void {
+                                    groups: Array<Array<string>>, codesToSem: Record<string, number>) : void {
     const targetEdge = newDetails[parentCode]?.successors.find(s => s.code === successorCode);
     if (!targetEdge || parentSemester == null || succSemester == null
         || isInSomeChoice(parentCode, order, choices)) { return; }
@@ -14,7 +14,7 @@ export function createSuccessingHelperNodes(parentCode: string, parentSemester: 
 
     removeDirectLink(parentCode, successorCode, newDetails);
     let lastNode = buildHelperChain(parentCode, successorCode, parentSemester, succSemester, 
-                                    byPrerequisites, newDetails, order);
+                                    byPrerequisites, newDetails, order, codesToSem);
 
     // set correct groups
     const successorNode = newDetails[successorCode];
@@ -43,12 +43,12 @@ function connectFinalHelper(helperCode: string, successorCode: string, groups: s
 function buildHelperChain(parentCode: string, successorCode: string,
                           parentSemester: number, succSemester: number,
                           byPrerequisites: boolean,
-                          newDetails: Details, order: Record<string, Array<OrderSubject>>) : string {
+                          newDetails: Details, order: Record<string, Array<OrderSubject>>, codesToSem: Record<string, number>) : string {
     let prevNode = parentCode;
     for (let i = parentSemester + 1; i < succSemester; i++) {
         const helperNodeCode = `HELPER_${parentCode}_${successorCode}_${i}`;
 
-        createHelperNode(newDetails, order, prevNode, helperNodeCode, i, byPrerequisites);
+        createHelperNode(newDetails, order, prevNode, helperNodeCode, i, byPrerequisites, codesToSem);
         prevNode = helperNodeCode;
     }
     return prevNode;
@@ -75,17 +75,17 @@ function updateGroupsInEdges(edges: Edge[], oldCode: string, newCode: string) {
 
 export function createHelperNode(details: Details, plan: Record<string, Array<OrderSubject>>, 
         prevNodeCode: string, currentNodeCode: string, 
-        semester: number, byPrerequisites: boolean) : void {
+        semester: number, byPrerequisites: boolean, codesToSem: Record<string, number>) : void {
     if (!details[currentNodeCode]) {
         details[currentNodeCode] = {
             ...emptyNode,
             successors: [],
             predecessors: [],
-            semester: semester,
         };
     if (!plan[semester].some(s => "code" in s && s.code === currentNodeCode))
         plan[semester].push({"code": currentNodeCode});
     }
+    codesToSem[currentNodeCode] = semester;
     details[prevNodeCode].successors.push({"code": currentNodeCode, groups: [], "by_prerequisites": byPrerequisites});
     details[currentNodeCode].predecessors.push({"code": prevNodeCode, groups: [], "by_prerequisites": byPrerequisites});
 }
