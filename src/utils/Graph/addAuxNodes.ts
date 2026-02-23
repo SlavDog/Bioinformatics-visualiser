@@ -30,6 +30,7 @@ export function addAuxNodes(subjectData: SubjectData, selectedSpecialization: st
             }
         })
     });
+    console.log(newDetails);
     return [newDetails, newOrder];
 }
 
@@ -109,7 +110,7 @@ function replaceWithAdvancedCourses(subjectData: SubjectData, advancedSwitch: Ad
         ...subjectData,
         details: filteredDetails,
         choices: filteredChoices,
-        spec: filteredSpec // Vrátíš aktualizovaný plán
+        spec: filteredSpec
     };
 }
 
@@ -129,12 +130,13 @@ function cleanNodeFromNonExistingNodes(cleanSuccessors: boolean, course: Course,
         course.unshownNeededPredecessors = course[key]
             .filter((neighbour) =>
                 !currentSpecializationCodes.has(neighbour.code.replace(/-\d+$/, ""))
-                && neighbour.groups.every((group) => group.every((code) => !currentSpecializationCodes.has(code.replace(/-\d+$/, "")) && !isInSomeChoice(code, data.spec[selectedSpecialization].plan, data.choices)))
+                && neighbour.groups.every((group) => group
+                    .every((code) => !currentSpecializationCodes.has(code.replace(/-\d+$/, "")) 
+                        && !isInSomeChoice(code, data.spec[selectedSpecialization].plan, data.choices)))
                 && !isInSomeChoice(neighbour.code, data.spec[selectedSpecialization].plan, data.choices) 
                 && neighbour.by_prerequisites == true)
             .map((edge) => edge.code);
     }
-    console.log(data.details["SBAPR"]);
     course[key] = course[key].filter(succ => currentSpecializationCodes.has(succ.code.replace(/-\d+$/, "")));
     course[key].forEach(succ => {
         succ.groups = succ.groups.map(group => {
@@ -167,7 +169,7 @@ function cleanNodeFromIllogicalEdges(cleanSuccessors: boolean, course: Course, d
 function removeTransitiveEdges(details: Details) : void {
     Object.keys(details).forEach(code => {
         const successors = details[code].successors;
-        if (!successors || successors.length == 0) return;
+        if (!successors || successors.length == 0) { return; }
         const redundantCodes = new Set<string>();
         successors.forEach(succ => {
             const reachable = getReachableCodes(succ.code, details, false);
