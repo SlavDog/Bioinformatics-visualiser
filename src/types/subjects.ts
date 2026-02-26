@@ -61,7 +61,7 @@ export type SubjectData = {
     substitutions: Substitutions
 }
 
-type Substitutions = Record<string, Substitution>
+export type Substitutions = Record<string, Substitution>
 type Substitution = {
     nameCZ: string,
     removes: Array<string>,

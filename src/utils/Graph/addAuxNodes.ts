@@ -2,11 +2,11 @@ import { addChoiceNodes, isInSomeChoice } from "@utils/Graph/choiceNodes";
 import { ensureOffset } from "@utils/Graph/dataUtils";
 import { fillOrGroupOffsets, fillEdgeXOffsets, fillEdgeYOffsets } from "@utils/Graph/offsets";
 import { createSuccessingHelperNodes } from "@utils/Graph/helperNodes";
-import { AdvancedSwitch, Course, Details, Edge, EdgeOffsets, Spec, SubjectData } from "@/types/subjects";
+import { AdvancedSwitch, Choices, Course, Details, Edge, EdgeOffsets, OrderSubject, Spec, SubjectData, Substitutions } from "@/types/subjects";
 import { getReachableCodes } from "./layout";
 
-export function addAuxNodes(subjectData: SubjectData, selectedSpecialization: string, advancedSwitch: AdvancedSwitch) : [Details, Spec] {
-    const [newDetails, newOrder, currentSpecializationCodes] = preprocessGraph(subjectData, selectedSpecialization, advancedSwitch);
+export function addAuxNodes(subjectData: SubjectData, selectedSpecialization: string, advancedSwitch: AdvancedSwitch, codesToSem: Record<string, number>) : [Details, Spec] {
+    const [newDetails, newOrder, currentSpecializationCodes] = preprocessGraph(subjectData, selectedSpecialization, advancedSwitch, codesToSem);
     const currentPlan = newOrder[selectedSpecialization].plan;
     const subjectsToProcess = Object.values(currentPlan).flat();
 
@@ -22,10 +22,10 @@ export function addAuxNodes(subjectData: SubjectData, selectedSpecialization: st
         const currentSuccessors = [...parent.successors];
         currentSuccessors.forEach((successorInfo, i) => {
             const successor = newDetails[successorInfo.code];
-            if (isInvalidEdge(parent, successor, currentSpecializationCodes, successorInfo)) { return; }
-            if (shouldCreateHelperNodes(parent.semester, successor.semester)) {
-                createSuccessingHelperNodes(parentCode, parent.semester, successorInfo.code,
-                                            successor.semester, newDetails, currentPlan,
+            if (isInvalidEdge(parentCode, successor, currentSpecializationCodes, successorInfo, codesToSem)) { return; }
+            if (shouldCreateHelperNodes(codesToSem[parentCode], codesToSem[successorInfo.code])) {
+                createSuccessingHelperNodes(parentCode, codesToSem[parentCode], successorInfo.code,
+                                            codesToSem[successorInfo.code], newDetails, currentPlan,
                                             subjectData.choices, successorInfo.groups);
             }
         })
@@ -35,14 +35,14 @@ export function addAuxNodes(subjectData: SubjectData, selectedSpecialization: st
 }
 
 
-function isInvalidEdge(parent: Course, successor: Course, currentSpecializationCodes: Set<string>, successorInfo: Edge) : boolean {
-    return !successor || successor.semester == null 
-        || successor.semester <= (parent.semester ?? 0)
+function isInvalidEdge(parentCode: string, successor: Course, currentSpecializationCodes: Set<string>, successorInfo: Edge, codesToSem: Record<string, number>) : boolean {
+    return !successor || codesToSem[successorInfo.code] == null
+        || codesToSem[successorInfo.code] <= (codesToSem[parentCode] ?? 0)
         || !currentSpecializationCodes.has(successorInfo.code.replace(/-\d+$/, ""));
 }
 
 
-function preprocessGraph(subjectData: SubjectData, selectedSpecialization: string, advancedSwitch: AdvancedSwitch) : [Details, Spec, Set<string>] {
+function preprocessGraph(subjectData: SubjectData, selectedSpecialization: string, advancedSwitch: AdvancedSwitch, codesToSem: Record<string, number>) : [Details, Spec, Set<string>] {
     const data = structuredClone(subjectData);
 
     const updatedData = replaceWithAdvancedCourses(data, advancedSwitch, selectedSpecialization);
@@ -54,7 +54,7 @@ function preprocessGraph(subjectData: SubjectData, selectedSpecialization: strin
     );
 
     removeEdgesToNonExistingNodes(updatedData, currentSpecializationCodes, selectedSpecialization);
-    removeIllogicalEdges(updatedData.details);
+    removeIllogicalEdges(updatedData.details, codesToSem);
     
     const newOrder = addChoiceNodes(updatedData.details, updatedData.spec, updatedData.choices, selectedSpecialization);
     removeTransitiveEdges(updatedData.details);
@@ -146,22 +146,22 @@ function cleanNodeFromNonExistingNodes(cleanSuccessors: boolean, course: Course,
 }
 
 
-function removeIllogicalEdges(details: Details) : void {
-    Object.values(details).forEach((course) => {
-        cleanNodeFromIllogicalEdges(true, course, details);
-        cleanNodeFromIllogicalEdges(false, course, details);
+function removeIllogicalEdges(details: Details, codesToSem: Record<string, number>) : void {
+    Object.entries(details).forEach(([code, course]) => {
+        cleanNodeFromIllogicalEdges(true, code, course, codesToSem);
+        cleanNodeFromIllogicalEdges(false, code, course, codesToSem);
     });
 }
 
 
-function cleanNodeFromIllogicalEdges(cleanSuccessors: boolean, course: Course, details: Details) {
+function cleanNodeFromIllogicalEdges(cleanSuccessors: boolean, code: string, course: Course, codesToSem: Record<string, number>) {
     const key = cleanSuccessors ? "successors" : "predecessors"
-
+    const courseSemester = codesToSem[code];
     course[key] = course[key].filter(neighbour => {
-        const neighbourSemester = details[neighbour.code]?.semester;
-        if (course.semester == null || neighbourSemester == null) { return false; }
-        if (cleanSuccessors) { return neighbourSemester > course.semester; }
-        return neighbourSemester < course.semester;
+        const neighbourSemester = codesToSem[neighbour.code];
+        if (courseSemester == null || neighbourSemester == null) { return false; }
+        if (cleanSuccessors) { return neighbourSemester > courseSemester; }
+        return neighbourSemester < courseSemester;
     });
 }
 
@@ -212,6 +212,27 @@ function removeTransitiveEdges(details: Details) : void {
         });
     });
 };
+
+
+export function getCodesToSem(choices: Choices, plan: Record<string, Array<OrderSubject>>, substitutions: Substitutions) : Record<string,number> {
+    const result: Record<string, number> = {};
+    Object.entries(plan)
+        .forEach(([semesterNumber, semester]) => semester
+            .forEach((subject) => {
+                const isNotChoice = "code" in subject;
+                result[isNotChoice ? subject.code : `${subject.choice}-${semesterNumber}`] = Number(semesterNumber);
+                if (!isNotChoice) {
+                    choices[subject.choice].list.forEach((choiceSubject) => {
+                        if (typeof choiceSubject === 'string') {
+                            result[choiceSubject] = Number(semesterNumber);
+                        }
+                    })
+                }
+            }
+        ))
+    Object.values(substitutions).forEach((substitution) => substitution.adds.forEach(subject => result[subject.code] = subject.semester))
+    return result;
+}
 
 
 function shouldCreateHelperNodes(parentSemester: number | null, 

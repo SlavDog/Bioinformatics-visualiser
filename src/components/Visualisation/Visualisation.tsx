@@ -50,6 +50,7 @@ function Visualisation({scale, setDragEnabled}: VisualisationProps) {
     // Calculate positions when new data is loaded
     useEffect(() => {
         const codesToSem = getCodesToSem(subjectInfoData.choices, subjectInfoData.spec[selectedSpecialization].plan, subjectInfoData.substitutions);
+        const [newDetails, newSpec] = addAuxNodes(subjectInfoData, selectedSpecialization, advancedSwitch, codesToSem);
         const [pos, maxX, maxY] = getPositions(newDetails, newSpec, selectedSpecialization);
         const [xOff, yOff] = getOffsets(newDetails, pos, newSpec[selectedSpecialization].plan);
         const orGatesPositions = getAllOrGatesPositions(newDetails, newSpec[selectedSpecialization], pos, yOff);
