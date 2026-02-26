@@ -1,6 +1,6 @@
 import Subject from '@components/Subject/Subject';
 import SmallSubject from '@components/Subject/SmallSubject';
-import {addAuxNodes, getAllOrGatesPositions, getCodesToSem, getOffsets, getPositions} from '@utils/Graph';
+import {addAuxNodes, getAllOrGatesPositions, getOffsets, getPositions} from '@utils/Graph';
 import VisualisationForeground from '@components/Visualisation/VisualisationForeground';
 import VisualisationBackground from '@components/Visualisation/VisualisationBackground';
 import { Layout } from '@/consts/VisualisationParameters';
@@ -49,11 +49,10 @@ function Visualisation({scale, setDragEnabled}: VisualisationProps) {
 
     // Calculate positions when new data is loaded
     useEffect(() => {
-        const codesToSem = getCodesToSem(subjectInfoData.spec[selectedSpecialization].plan, subjectInfoData.substitutions);
-        const [newDetails, newSpec] = addAuxNodes(subjectInfoData, selectedSpecialization, advancedSwitch, codesToSem);
-        const [pos, maxX, maxY] = getPositions(newDetails, newSpec, selectedSpecialization, codesToSem);
-        const [xOff, yOff] = getOffsets(newDetails, pos, newSpec[selectedSpecialization].plan, codesToSem);
-        const orGatesPositions = getAllOrGatesPositions(newDetails, newSpec[selectedSpecialization], pos, yOff, codesToSem);
+        const [newDetails, newSpec] = addAuxNodes(subjectInfoData, selectedSpecialization, advancedSwitch);
+        const [pos, maxX, maxY] = getPositions(newDetails, newSpec, selectedSpecialization);
+        const [xOff, yOff] = getOffsets(newDetails, pos, newSpec[selectedSpecialization].plan);
+        const orGatesPositions = getAllOrGatesPositions(newDetails, newSpec[selectedSpecialization], pos, yOff);
         
         setVisState({
             subjects: newDetails,

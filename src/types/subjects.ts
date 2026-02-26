@@ -7,6 +7,7 @@ export type Course = {
     completion: string,
     credits: number
     link: string,
+    semester: number | null,
     type: string,
     unshownNeededPredecessors?: string[];
 }
@@ -60,7 +61,7 @@ export type SubjectData = {
     substitutions: Substitutions
 }
 
-export type Substitutions = Record<string, Substitution>
+type Substitutions = Record<string, Substitution>
 type Substitution = {
     nameCZ: string,
     removes: Array<string>,

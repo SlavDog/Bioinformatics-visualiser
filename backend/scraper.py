@@ -8,12 +8,14 @@ import os
 from typing import Any, TypedDict
 
 SemToCodes = dict[int, list[str]]
+CodesToSem = dict[str, int]
 SuccessorCodes = dict[str, tuple[list[list[str]], bool]]
 
 class ResultData(TypedDict):
     codes: list[str]
     choices: dict[str, Any]
     spec: dict[str, dict[int, list[str]]]
+    codes_to_sem: CodesToSem
 
 class SubjectLink(TypedDict):
     code: str
@@ -29,6 +31,7 @@ class SubjectDict(TypedDict):
     completion: str
     credits: int
     link: str
+    semester: int | None
     type: str
 
 SubjectSuccessors = dict[str, SubjectDict]
@@ -63,7 +66,8 @@ def extract_codes(filename: str) -> ResultData:
     """
     result_data: ResultData = {"codes": [],
                                "choices": {},
-                               "spec": {}}
+                               "spec": {},
+                               "codes_to_sem": get_codes_to_sem(filename)}
     with open(filename, "r", encoding='utf-8') as source:
         data = json.load(source)
 
@@ -99,6 +103,23 @@ def extract_codes(filename: str) -> ResultData:
 
     result_data["spec"] = data["spec"]
     return result_data
+
+
+def get_codes_to_sem(filename: str) -> CodesToSem:
+    codes_to_sem: CodesToSem = {}
+    with open(filename, "r", encoding='utf-8') as source:
+        data = json.load(source)
+        for spec in data["spec"]:
+            for i, semester in enumerate(data["spec"][spec]["plan"].values()):
+                for subject in semester:
+                    if "choice" in subject:
+                        if "tv" == subject["choice"] or "core" == subject["choice"]:
+                            continue
+                        for choice_subject_code in data["choices"][subject["choice"]]["list"]:
+                            codes_to_sem[choice_subject_code] = i + 1
+                    else:
+                        codes_to_sem[subject["code"]] = i + 1
+    return codes_to_sem
 
 
 def find_successor_codes(html: str, code: str, by_prerequisites: bool = True) -> SuccessorCodes:
@@ -286,7 +307,8 @@ def build_successor_dict(data: ResultData) \
         response = requests.get(f"https://is.muni.cz" + link)
         if response.status_code == 200:
             html = response.text
-            subject_data[code] = get_subject(html, code, predecessors)
+            semester = None if not code in data["codes_to_sem"] else data["codes_to_sem"][code]
+            subject_data[code] = get_subject(html, code, semester, predecessors)
         else:
             printRed(f"Failed to fetch page: {response.status_code}")
 
@@ -298,7 +320,7 @@ def build_successor_dict(data: ResultData) \
     return subject_data
 
 
-def get_subject(html: str, code: str, predecessors: dict[str, list[SubjectLink]]) \
+def get_subject(html: str, code: str, semester: int | None, predecessors: dict[str, list[SubjectLink]]) \
         -> SubjectDict:
     code = re.sub(r"^[^:]*:(.*)", r"\1", code)
 
@@ -366,7 +388,7 @@ def get_subject(html: str, code: str, predecessors: dict[str, list[SubjectLink]]
             "predecessors": [],
             "completion": completion,
             "credits": int(credit), "link": transform_code_to_link(code, faculty),
-            "type" : code_to_subj_type(code)}
+            "semester" : semester, "type" : code_to_subj_type(code)}
 
 
 def transform_faculty(full_faculty_name: str) -> str:

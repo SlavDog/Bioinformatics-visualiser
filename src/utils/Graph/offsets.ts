@@ -5,18 +5,18 @@ import { Layout } from '@/consts/VisualisationParameters';
 const OFFSET_STEP = 12;
 
 
-export function getOffsets(details: Details, pos: RealPositions, plan: Record<string, Array<OrderSubject>>, codesToSem: Record<string, number>) {
+export function getOffsets(details: Details, pos: RealPositions, plan: Record<string, Array<OrderSubject>>) {
     const edgeXOffsets = {};
     const edgeYOffsets = {};
     fillEdgeYOffsets(edgeYOffsets, details, plan, pos)
-    fillEdgeXOffsets(edgeXOffsets, details, plan, pos, codesToSem);
+    fillEdgeXOffsets(edgeXOffsets, details, plan, pos);
     return [edgeXOffsets, edgeYOffsets];
 }
 
 
 export function fillEdgeXOffsets(edgeXOffsets: EdgeOffsets, infoData: Details,
-                                 orderData: Record<string, Array<OrderSubject>>, pos: RealPositions, codesToSem: Record<string, number>) : void {
-    const numberOfSuccsBySemester = getNumberOfSuccsBySemester(orderData, infoData, codesToSem);
+                                 orderData: Record<string, Array<OrderSubject>>, pos: RealPositions) : void {
+    const numberOfSuccsBySemester = getNumberOfSuccsBySemester(orderData, infoData);
 
     // assign x offsets
     Object.entries(orderData).forEach(([semester, subjects]) => {
@@ -43,7 +43,6 @@ export function fillEdgeXOffsets(edgeXOffsets: EdgeOffsets, infoData: Details,
 
 
 function getShouldReverse(pos: RealPositions, parentCode: string, successors: Edge[]) {
-    console.log(parentCode);
     const parentY = pos[parentCode].y ?? 0;
     let totalDiff = 0;
     let validSuccs = 0;
@@ -169,12 +168,12 @@ function getEndOffset(succCode: string, oldDetails: Details, successorInDegreeCo
 }
 
 
-function getNumberOfSuccsBySemester(orderData: Record<string, Array<OrderSubject>>, infoData: Details, codesToSem: Record<string, number>) : Array<number> {
+function getNumberOfSuccsBySemester(orderData: Record<string, Array<OrderSubject>>, infoData: Details) : Array<number> {
     const numberOfSuccsBySemester = Array(Object.keys(orderData).length).fill(0);
-    Object.entries(infoData).forEach(([code, course]) => {
+    Object.values(infoData).forEach(course => {
         course.successors.forEach((successor) => {
-            if (!infoData[successor.code] || codesToSem[successor.code] == null) {return;}
-            numberOfSuccsBySemester[Number(codesToSem[code]) - 1] += 1;
+            if (!infoData[successor.code] || infoData[successor.code].semester == null) {return;}
+            numberOfSuccsBySemester[Number(course.semester) - 1] += 1;
         });
     });
     return numberOfSuccsBySemester;
