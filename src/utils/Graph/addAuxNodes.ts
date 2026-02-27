@@ -26,7 +26,7 @@ export function addAuxNodes(subjectData: SubjectData, selectedSpecialization: st
             if (shouldCreateHelperNodes(codesToSem[parentCode], codesToSem[successorInfo.code])) {
                 createSuccessingHelperNodes(parentCode, codesToSem[parentCode], successorInfo.code,
                                             codesToSem[successorInfo.code], newDetails, currentPlan,
-                                            subjectData.choices, successorInfo.groups);
+                                            subjectData.choices, successorInfo.groups, codesToSem);
             }
         })
     });

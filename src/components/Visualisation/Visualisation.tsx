@@ -51,9 +51,9 @@ function Visualisation({scale, setDragEnabled}: VisualisationProps) {
     useEffect(() => {
         const codesToSem = getCodesToSem(subjectInfoData.choices, subjectInfoData.spec[selectedSpecialization].plan, subjectInfoData.substitutions);
         const [newDetails, newSpec] = addAuxNodes(subjectInfoData, selectedSpecialization, advancedSwitch, codesToSem);
-        const [pos, maxX, maxY] = getPositions(newDetails, newSpec, selectedSpecialization);
-        const [xOff, yOff] = getOffsets(newDetails, pos, newSpec[selectedSpecialization].plan);
-        const orGatesPositions = getAllOrGatesPositions(newDetails, newSpec[selectedSpecialization], pos, yOff);
+        const [pos, maxX, maxY] = getPositions(newDetails, newSpec, selectedSpecialization, codesToSem);
+        const [xOff, yOff] = getOffsets(newDetails, pos, newSpec[selectedSpecialization].plan, codesToSem);
+        const orGatesPositions = getAllOrGatesPositions(newDetails, newSpec[selectedSpecialization], pos, yOff, codesToSem);
         
         setVisState({
             subjects: newDetails,

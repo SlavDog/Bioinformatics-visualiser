@@ -5,18 +5,18 @@ import { Layout } from '@/consts/VisualisationParameters';
 const OFFSET_STEP = 12;
 
 
-export function getOffsets(details: Details, pos: RealPositions, plan: Record<string, Array<OrderSubject>>) {
+export function getOffsets(details: Details, pos: RealPositions, plan: Record<string, Array<OrderSubject>>, codesToSem: Record<string, number>) {
     const edgeXOffsets = {};
     const edgeYOffsets = {};
     fillEdgeYOffsets(edgeYOffsets, details, plan, pos)
-    fillEdgeXOffsets(edgeXOffsets, details, plan, pos);
+    fillEdgeXOffsets(edgeXOffsets, details, plan, pos, codesToSem);
     return [edgeXOffsets, edgeYOffsets];
 }
 
 
 export function fillEdgeXOffsets(edgeXOffsets: EdgeOffsets, infoData: Details,
-                                 orderData: Record<string, Array<OrderSubject>>, pos: RealPositions) : void {
-    const numberOfSuccsBySemester = getNumberOfSuccsBySemester(orderData, infoData);
+                                 orderData: Record<string, Array<OrderSubject>>, pos: RealPositions, codesToSem: Record<string, number>) : void {
+    const numberOfSuccsBySemester = getNumberOfSuccsBySemester(orderData, infoData, codesToSem);
 
     // assign x offsets
     Object.entries(orderData).forEach(([semester, subjects]) => {
@@ -168,12 +168,12 @@ function getEndOffset(succCode: string, oldDetails: Details, successorInDegreeCo
 }
 
 
-function getNumberOfSuccsBySemester(orderData: Record<string, Array<OrderSubject>>, infoData: Details) : Array<number> {
+function getNumberOfSuccsBySemester(orderData: Record<string, Array<OrderSubject>>, infoData: Details, codesToSem: Record<string, number>) : Array<number> {
     const numberOfSuccsBySemester = Array(Object.keys(orderData).length).fill(0);
-    Object.values(infoData).forEach(course => {
+    Object.entries(infoData).forEach(([code, course]) => {
         course.successors.forEach((successor) => {
-            if (!infoData[successor.code] || infoData[successor.code].semester == null) {return;}
-            numberOfSuccsBySemester[Number(course.semester) - 1] += 1;
+            if (!infoData[successor.code] || codesToSem[successor.code] == null) {return;}
+            numberOfSuccsBySemester[Number(codesToSem[code]) - 1] += 1;
         });
     });
     return numberOfSuccsBySemester;
