@@ -81,8 +81,7 @@ export function createHelperNode(details: Details, plan: Record<string, Array<Or
         details[currentNodeCode] = {
             ...emptyNode,
             successors: [],
-            predecessors: [],
-            semester: semester,
+            predecessors: []
         };
     if (!plan[semester].some(s => "code" in s && s.code === currentNodeCode))
         plan[semester].push({"code": currentNodeCode});

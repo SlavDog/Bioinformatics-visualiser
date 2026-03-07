@@ -8,7 +8,6 @@ export const emptyNode = {
     has_successors: true,
     has_parent: true,
     credits: 0,
-    semester: null,
     link: "",
     type: ""
 };

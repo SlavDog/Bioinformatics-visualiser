@@ -7,7 +7,6 @@ export type Course = {
     completion: string,
     credits: number
     link: string,
-    semester: number | null,
     type: string,
     unshownNeededPredecessors?: string[];
 }
