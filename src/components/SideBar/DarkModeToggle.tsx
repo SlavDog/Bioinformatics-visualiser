@@ -12,7 +12,7 @@ function DarkModeToggle() {
   }, [isDark]);
 
   return (
-    <button className="submitButton" style={{width: "100%"}} onClick={() => setIsDark(!isDark)}>
+    <button className="submitButton" style={{width: "100%", height: "25px"}} onClick={() => setIsDark(!isDark)}>
       Přepnout na {isDark ? 'Light' : 'Dark'} Mode
     </button>
   );

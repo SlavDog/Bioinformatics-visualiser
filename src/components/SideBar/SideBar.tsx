@@ -8,6 +8,7 @@ import { useContext, useState } from "react";
 import DarkModeToggle from "@components/SideBar/DarkModeToggle";
 import SideBarTitle from "./SideBarTitle";
 import CheckBoxField from "./CheckBoxField";
+import HintBox from "./HintBox";
 
 
 type SidebarProps = {
@@ -64,28 +65,36 @@ function SideBar({scale, setScale} : SidebarProps) {
     return (
         <div className="sideBar"
                 style={{
-                   width: `${Layout.sidebarWidth}px` 
-                }}>
-            <RangeScaler scale={scale} setScale={setScale} />
-            <DarkModeToggle/>
-            {/* <SideBarTitle>Preferovaná oblast</SideBarTitle>
-            <h1 className="sideBarSubtitle">Předměty, které chci:</h1>
-            <SelectField placeholder="Vyberte předmět" options={Object.keys(subjectInfoData["details"])}/>
-            <h1 className="sideBarSubtitle">Předměty, které nechci:</h1>
-            <SelectField placeholder="Vyberte předmět" options={Object.keys(subjectInfoData["details"])}/>
-            <h1 className="sideBarSubtitle">Aktuální filtry:</h1>
-            <TagsBox/> */}
-            <SideBarTitle>Zaměření</SideBarTitle>
-            {Object.entries(subjectInfoData.spec).map(([specCode, spec]) => {
-                return (
-                    <RadioField key={specCode} checked={selectedSpecialization === specCode} 
-                        onChange={() => setSelectedSpecialization(specCode)}>
-                        {spec.nameCZ}
-                    </RadioField>
-                );
-            })}
-            <SideBarTitle tooltip="Studenti toužící po hlubším studiu některých z oblastí bioinformatiky si mohou zvolit průchod s pokročilejšími (nepovinnými) kurzy.">Pokročilejší kurzy</SideBarTitle>
-            <CheckBoxField checked={showAdvancedMath} onChange={() => setShowAdvancedMath(!showAdvancedMath)}>{subjectInfoData.substitutions.advanced_math.nameCZ}</CheckBoxField>
+                   width: `${Layout.sidebarWidth}px`,
+                   display: "flex",
+                   justifyContent: "space-between"
+                }}
+        >
+            <div>
+                <RangeScaler scale={scale} setScale={setScale} />
+                <DarkModeToggle/>
+                {/* <SideBarTitle>Preferovaná oblast</SideBarTitle>
+                <h1 className="sideBarSubtitle">Předměty, které chci:</h1>
+                <SelectField placeholder="Vyberte předmět" options={Object.keys(subjectInfoData["details"])}/>
+                <h1 className="sideBarSubtitle">Předměty, které nechci:</h1>
+                <SelectField placeholder="Vyberte předmět" options={Object.keys(subjectInfoData["details"])}/>
+                <h1 className="sideBarSubtitle">Aktuální filtry:</h1>
+                <TagsBox/> */}
+                <SideBarTitle>Zaměření</SideBarTitle>
+                {Object.entries(subjectInfoData.spec).map(([specCode, spec]) => {
+                    return (
+                        <RadioField key={specCode} checked={selectedSpecialization === specCode} 
+                            onChange={() => setSelectedSpecialization(specCode)}>
+                            {spec.nameCZ}
+                        </RadioField>
+                    );
+                })}
+                <SideBarTitle tooltip="Studenti toužící po hlubším studiu některých z oblastí bioinformatiky si mohou zvolit průchod s pokročilejšími (nepovinnými) kurzy.">Pokročilejší kurzy</SideBarTitle>
+                <CheckBoxField checked={showAdvancedMath} onChange={() => setShowAdvancedMath(!showAdvancedMath)}>{subjectInfoData.substitutions.advanced_math.nameCZ}</CheckBoxField>
+            </div>
+            <div>
+                <HintBox/>
+            </div>
             {/* <CheckBoxField checked={showAdvancedBiology} onChange={() => setShowAdvancedBiology(!showAdvancedBiology)}>{subjectInfoData.substitutions.advanced_bi.nameCZ}</CheckBoxField>
             <CheckBoxField checked={showAdvancedInformatics} onChange={() => setShowAdvancedInformatics(!showAdvancedInformatics)}>{subjectInfoData.substitutions.advanced_inf.nameCZ}</CheckBoxField> */}
             {/* <input type="text" className="sideBarInput" placeholder="Zadejte kód" value={code} onChange={(e) => setCode(e.target.value)} />

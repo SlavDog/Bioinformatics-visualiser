@@ -39,8 +39,11 @@ function visualisationForeground({edgeXOffsets, edgeYOffsets,
                 const pos = positions[code];
                 if (!pos) {return null;}
                 const course = processedSubjects[code];
-                if (course.name == "") { return <p key={code} style={{position: "absolute", color: "red", left: positions[code].x,
-                                top: positions[code].y}}>{code}</p>; }
+                // if (course.name == "") { return <p key={code} style={{position: "absolute", color: "red", left: positions[code].x,
+                //                 top: positions[code].y}}>{code}</p>; }
+                if (course.name == "") {
+                    return null;
+                }
 
                 return (
                         <SubjectComponent

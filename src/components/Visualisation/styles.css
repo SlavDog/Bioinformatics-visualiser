@@ -19,9 +19,8 @@
 }
 
 .visualisationBox {
-  width: 90vw;
-  height: 90vh;
-  margin: 20px auto;
+  width: 100vw;
+  height: 100vh;
   user-select: none;
   position: relative;
 }
