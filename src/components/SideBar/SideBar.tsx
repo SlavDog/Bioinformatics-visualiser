@@ -7,7 +7,7 @@ import { useData, useSetData, useSelectedSpecialization, useSetSelectedSpecializ
 import { useContext, useState } from "react";
 import DarkModeToggle from "@components/SideBar/DarkModeToggle";
 import SideBarTitle from "./SideBarTitle";
-import CheckBoxField from "./CheckBoxField";
+import CheckBoxField from "./CheckboxField";
 import HintBox from "./HintBox";
 
 
