@@ -18,7 +18,7 @@ type VisualisationForegroundProps = {
     orGatesPositions: Array<{x: number, y: number}>
 }
 
-function visualisationForeground({edgeXOffsets, edgeYOffsets, 
+function VisualisationForeground({edgeXOffsets, edgeYOffsets, 
         positions, processedSubjects, specialization, choices,
         SubjectComponent, setDragEnabled,
         orGatesPositions} : VisualisationForegroundProps) {
@@ -67,4 +67,4 @@ function visualisationForeground({edgeXOffsets, edgeYOffsets,
     );
 }
 
-export default visualisationForeground;
+export default VisualisationForeground;
