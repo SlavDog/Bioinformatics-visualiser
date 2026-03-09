@@ -41,25 +41,32 @@
   cursor: pointer;
 }
 
-.advancedMathField {
+.advancedField {
   position: relative;
 }
 
-.advancedMathField::after {
+.advancedField::after {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(to right, var(--background), var(--math-background));
   opacity: 0;
   transition: opacity 0.3s ease;
   border-radius: inherit;
 }
 
-.advancedMathField:hover::after {
+.advancedMathField::after {
+  background: linear-gradient(to right, var(--background), var(--math-background));
+}
+
+.advancedInfField::after {
+  background: linear-gradient(to right, var(--background), var(--informatics-background));
+}
+
+.advancedField:hover::after {
   opacity: 1;
 }
 
-.advancedMathField > * {
+.advancedField > * {
   position: relative;
   z-index: 1;
 }

@@ -34,6 +34,10 @@ function SideBar({scale, setScale} : SidebarProps) {
         ...subjectInfoData.substitutions.advanced_math.removes,
         ...subjectInfoData.substitutions.advanced_math.adds.map(s => s.code)
     ];
+    const advancedInfCodes = [
+        ...subjectInfoData.substitutions.advanced_inf.removes,
+        ...subjectInfoData.substitutions.advanced_inf.adds.map(s => s.code)
+    ];
     const [isOpen, setIsOpen] = useState(false);
 
     // const setData = useSetData();
@@ -104,8 +108,17 @@ function SideBar({scale, setScale} : SidebarProps) {
                         onChange={() => setShowAdvancedMath(!showAdvancedMath)}
                         onMouseEnter={() => setHighlightedSubjects(new Set(advancedMathCodes))}
                         onMouseLeave={() => setHighlightedSubjects(new Set())}
+                        fieldType="Math"
                     >
                         {subjectInfoData.substitutions.advanced_math.nameCZ}
+                    </CheckBoxField>
+                    <CheckBoxField checked={showAdvancedInformatics}
+                        onChange={() => setShowAdvancedInformatics(!showAdvancedInformatics)}
+                        onMouseEnter={() => setHighlightedSubjects(new Set(advancedInfCodes))}
+                        onMouseLeave={() => setHighlightedSubjects(new Set())}
+                        fieldType="Inf"
+                    >
+                        {subjectInfoData.substitutions.advanced_inf.nameCZ}
                     </CheckBoxField>
                 </div>
                 <div>
