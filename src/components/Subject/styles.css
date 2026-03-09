@@ -188,9 +188,9 @@
 }
 
 .subjectHighlighted {
-  box-shadow: 0 0 0 2px var(--background), 0 0 12px 4px var(--text-primary);
+  box-shadow: 0 0 0 5px var(--background), 0 0 50px 4px var(--text-primary);
 }
 
 .subjectDimmed {
-  filter: blur(2px);
+  filter: blur(4px) grayscale(1);
 }
