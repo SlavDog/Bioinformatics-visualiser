@@ -9,6 +9,7 @@ import MathIcon from '@/assets/math.svg'
 import ChoiceIcon from '@/assets/choice.svg'
 import OtherIcon from '@/assets/other.svg'
 import { typeCodeToName } from '@utils/textHelpers';
+import { useHighlightedSubjects } from '@components/providers/dataProvider';
 
 
 export type SubjectProps = {
@@ -22,6 +23,11 @@ export type SubjectProps = {
 
 function Subject({ code, course, isAlsoOutside = false, style, setDragEnabled } : SubjectProps) {
     const [isOpen, setIsOpen] = useState(false);
+    const highlightedSubjects = useHighlightedSubjects();
+
+    const isHighlighted = highlightedSubjects.size > 0 && highlightedSubjects.has(code);
+    const isDimmed = highlightedSubjects.size > 0 && !highlightedSubjects.has(code);
+
     const link = "https://is.muni.cz" + course.link;
 
     let Info = <><p className="subjectCode">{code}</p>
@@ -49,7 +55,7 @@ function Subject({ code, course, isAlsoOutside = false, style, setDragEnabled } 
 
     return (
         <>
-            <div onClick={onClick} className={`subject subjectType${course.type}`} style={style}>
+            <div onClick={onClick} className={`subject subjectType${course.type} ${isHighlighted ? "subjectHighlighted" : ""} ${isDimmed ? "subjectDimmed" : ""}`} style={style}>
                 <div className="topSubjectContainer">
                     {Info}
                 </div>

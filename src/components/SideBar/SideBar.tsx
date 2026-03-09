@@ -3,7 +3,7 @@ import TagsBox from "@components/SideBar/TagsBox";
 import RangeScaler from "@components/SideBar/RangeScaler";
 import { Layout } from "@/consts/VisualisationParameters";
 import "./styles.css";
-import { useData, useSetData, useSelectedSpecialization, useSetSelectedSpecialization, useShowAdvancedMath, useSetShowAdvancedMath, useShowAdvancedBiology, useSetShowAdvancedBiology, useShowAdvancedInformatics, useSetShowAdvancedInformatics } from "@components/providers/dataProvider";
+import { useData, useSetData, useSelectedSpecialization, useSetSelectedSpecialization, useShowAdvancedMath, useSetShowAdvancedMath, useShowAdvancedBiology, useSetShowAdvancedBiology, useShowAdvancedInformatics, useSetShowAdvancedInformatics, useSetHighlightedSubjects } from "@components/providers/dataProvider";
 import { useContext, useState } from "react";
 import DarkModeToggle from "@components/SideBar/DarkModeToggle";
 import SideBarTitle from "./SideBarTitle";
@@ -28,6 +28,12 @@ function SideBar({scale, setScale} : SidebarProps) {
     const setShowAdvancedBiology = useSetShowAdvancedBiology();
     const showAdvancedInformatics = useShowAdvancedInformatics();
     const setShowAdvancedInformatics = useSetShowAdvancedInformatics();
+    const setHighlightedSubjects = useSetHighlightedSubjects();
+
+    const advancedMathCodes = [
+        ...subjectInfoData.substitutions.advanced_math.removes,
+        ...subjectInfoData.substitutions.advanced_math.adds.map(s => s.code)
+    ];
     const [isOpen, setIsOpen] = useState(false);
 
     // const setData = useSetData();
@@ -94,7 +100,13 @@ function SideBar({scale, setScale} : SidebarProps) {
                         );
                     })}
                     <SideBarTitle tooltip="Studenti toužící po hlubším studiu některých z oblastí bioinformatiky si mohou zvolit průchod s pokročilejšími (nepovinnými) kurzy.">Pokročilejší kurzy</SideBarTitle>
-                    <CheckBoxField checked={showAdvancedMath} onChange={() => setShowAdvancedMath(!showAdvancedMath)}>{subjectInfoData.substitutions.advanced_math.nameCZ}</CheckBoxField>
+                    <CheckBoxField checked={showAdvancedMath}
+                        onChange={() => setShowAdvancedMath(!showAdvancedMath)}
+                        onMouseEnter={() => setHighlightedSubjects(new Set(advancedMathCodes))}
+                        onMouseLeave={() => setHighlightedSubjects(new Set())}
+                    >
+                        {subjectInfoData.substitutions.advanced_math.nameCZ}
+                    </CheckBoxField>
                 </div>
                 <div>
                     <HintBox/>

@@ -31,14 +31,44 @@
   width: 100%;
   justify-content: space-between;
   align-items: center;
-  padding: 0px 0 3px 0px;
+  padding: 0px 5px 3px 0px;
   color: var(--text-primary);
   margin: 8px 0px 5px 0px;
+  border-radius: 2px;
+}
+
+.field, .field * {
+  cursor: pointer;
+}
+
+.advancedMathField {
+  position: relative;
+}
+
+.advancedMathField::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, var(--background), var(--math-background));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  border-radius: inherit;
+}
+
+.advancedMathField:hover::after {
+  opacity: 1;
+}
+
+.advancedMathField > * {
+  position: relative;
+  z-index: 1;
 }
 
 .preferenceFieldLabel {
   font-size: small;
   margin: 0px;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .tagsBox {

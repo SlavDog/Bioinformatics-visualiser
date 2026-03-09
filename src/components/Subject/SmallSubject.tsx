@@ -2,6 +2,7 @@ import { Course } from '@/types/subjects';
 import './styles.css'
 import SubjectDetailMenu from '@components/SubjectDetailMenu/SubjectDetailMenu';
 import { useState } from 'react';
+import { useHighlightedSubjects } from '@components/providers/dataProvider';
 
 
 type SmallSubjectProps = {
@@ -14,6 +15,12 @@ type SmallSubjectProps = {
 
 function SmallSubject({ code, course, style, setDragEnabled } : SmallSubjectProps) {
     const [isOpen, setIsOpen] = useState(false);
+
+    const highlightedSubjects = useHighlightedSubjects();
+
+    const isHighlighted = highlightedSubjects.size > 0 && highlightedSubjects.has(code);
+    const isDimmed = highlightedSubjects.size > 0 && !highlightedSubjects.has(code);
+
     const link = "https://is.muni.cz" + course.link;
     let Info = <a className="smallSubjectCode" draggable="false" href={link}>{code}</a>;
     let onClick = () => {};
@@ -31,7 +38,7 @@ function SmallSubject({ code, course, style, setDragEnabled } : SmallSubjectProp
 
     return (
         <>
-            <div onClick={onClick} className={`subject subjectType${course.type}`} style={{...style, borderRadius: "0px", borderWidth: "4px"}}>
+            <div onClick={onClick} className={`subject subjectType${course.type} ${isHighlighted ? "subjectHighlighted" : ""} ${isDimmed ? "subjectDimmed" : ""}`} style={{...style, borderRadius: "0px", borderWidth: "4px"}}>
                 <div className="smallTopSubjectContainer">
                     {Info}
                 </div>

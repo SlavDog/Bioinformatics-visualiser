@@ -14,6 +14,8 @@ type SubjectDataContextType = {
   setShowAdvancedInformatics: React.Dispatch<React.SetStateAction<boolean>>;
   showAdvancedBiology: boolean;
   setShowAdvancedBiology: React.Dispatch<React.SetStateAction<boolean>>;
+  highlightedSubjects: Set<string>;
+  setHighlightedSubjects: React.Dispatch<React.SetStateAction<Set<string>>>;
 }
 
 const SubjectDataContext = createContext<SubjectDataContextType | null>(null);
@@ -28,12 +30,13 @@ export function SubjectDataProvider({ children }: SubjectDataProvider) {
   const [showAdvancedMath, setShowAdvancedMath] = useState<boolean>(false);
   const [showAdvancedInformatics, setShowAdvancedInformatics] = useState<boolean>(false);
   const [showAdvancedBiology, setShowAdvancedBiology] = useState<boolean>(false);
+  const [highlightedSubjects, setHighlightedSubjects] = useState<Set<string>>(new Set());
 
   return (
     <SubjectDataContext value={{ data, setData, selectedSpecialization, setSelectedSpecialization,
                                  showAdvancedMath, setShowAdvancedMath,
                                  showAdvancedInformatics, setShowAdvancedInformatics,
-                                 showAdvancedBiology, setShowAdvancedBiology    
+                                 showAdvancedBiology, setShowAdvancedBiology, highlightedSubjects, setHighlightedSubjects   
     }}>
       {children}
     </SubjectDataContext>
@@ -84,4 +87,11 @@ export function useSetShowAdvancedBiology() : React.Dispatch<React.SetStateActio
 
 export function useShowAdvancedBiology() : boolean {
   return useSubjectContext().showAdvancedBiology;
+}
+
+export function useHighlightedSubjects(): Set<string> {
+  return useSubjectContext().highlightedSubjects;
+}
+export function useSetHighlightedSubjects() {
+  return useSubjectContext().setHighlightedSubjects;
 }
