@@ -5,7 +5,9 @@
 .visualisationBackground {
   position: relative;
   transform-origin: 0 0;
-  transition: transform 0.1s ease-in;
+  transition: transform 0.2s cubic-bezier(0.25, 0.1, 0.25, 1),
+            width 0.2s cubic-bezier(0.25, 0.1, 0.25, 1),
+            height 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
 .visualisationForeground {
