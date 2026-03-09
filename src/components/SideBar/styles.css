@@ -130,3 +130,48 @@ select, .submitButton {
   border: 1px dashed var(--background-secondary);
   width: 100%;
 }
+
+@media (min-width: 768px) {
+  .sideBar {
+    width: var(--sidebar-width);
+  }
+}
+
+@media (max-width: 767px) {
+  .sideBar {
+    width: 60vw;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    padding-top: 45px;
+  }
+  
+  .sideBar.open {
+    transform: translateX(0);
+  }
+}
+
+.scrollableBox {
+  margin-left: 0;
+}
+
+@media (min-width: 768px) {
+  .scrollableBox {
+    margin-left: calc(var(--sidebar-width) + 42px);
+  }
+}
+
+.mobileToggle {
+  display: block;
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  z-index: 100;
+  width: 35px;
+  height: 35px;
+}
+
+@media (min-width: 768px) {
+  .mobileToggle {
+    display: none;
+  }
+}

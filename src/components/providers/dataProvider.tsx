@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from "react";
-import subjectInfoData from "@/data/inf_tree_cz.json";
+import subjectInfoData from "@/data/final_tree.json";
 import { SubjectData } from "@/types/subjects";
 
 

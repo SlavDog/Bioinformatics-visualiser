@@ -4,6 +4,7 @@ import InfIcon from '@/assets/inf.svg'
 import MathIcon from '@/assets/math.svg'
 import ChoiceIcon from '@/assets/choice.svg'
 import OtherIcon from '@/assets/other.svg'
+import OrGateIcon from '@/assets/or_gate.svg';
 import SideBarTitle from "./SideBarTitle"
 import { useState } from "react"
 
@@ -70,6 +71,21 @@ function HintBox() {
                         </div>
                     </div>
                     <svg style={{width: "70px", height: "20px"}}><path d="M 10 10 h 50" stroke="var(--connection-secondary)" fill="transparent" strokeWidth="2" strokeDasharray={"2 3"}/></svg>
+                </div>
+                <div className="hintSeparator"></div>
+                <div className="field">
+                    <div style={{display: "flex", alignContent: "center"}}>
+                        <p className="preferenceFieldLabel">OR brána</p>
+                        <div className="helpIcon" style={{width: "12px", height: "12px", fontSize: "10px", marginLeft: "5px"}} title={"OR brána znamená, že je potřeba splnit některé z prerekvizit, které do ní vstupují, nemusí však být nutně splněny všechny z nich."}>
+                            ?
+                        </div>
+                    </div>
+                    <svg width="70" height="25">
+                        <path d="M 10 10 C 20 10 20 12.5 30 12.5" stroke="var(--connection-primary)" fill="transparent" strokeWidth="2"/>
+                        <path d="M 10 15 C 20 15 20 12.5 30 12.5" stroke="var(--connection-primary)" fill="transparent" strokeWidth="2"/>  
+                        <path d="M 42 12.5 H 58" stroke="var(--connection-primary)" fill="transparent" strokeWidth="2"/>
+                        <image href={OrGateIcon} x="22" y="0" width="25" height="25"/>
+                    </svg>
                 </div>
             </div>
         );

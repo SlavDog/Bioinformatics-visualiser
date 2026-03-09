@@ -28,6 +28,7 @@ function SideBar({scale, setScale} : SidebarProps) {
     const setShowAdvancedBiology = useSetShowAdvancedBiology();
     const showAdvancedInformatics = useShowAdvancedInformatics();
     const setShowAdvancedInformatics = useSetShowAdvancedInformatics();
+    const [isOpen, setIsOpen] = useState(false);
 
     // const setData = useSetData();
     // const [code, setCode] = useState("");
@@ -63,52 +64,56 @@ function SideBar({scale, setScale} : SidebarProps) {
     // }
 
     return (
-        <div className="sideBar"
-                style={{
-                   width: `${Layout.sidebarWidth}px`,
-                   display: "flex",
-                   justifyContent: "space-between"
-                }}
-        >
-            <div>
-                <RangeScaler scale={scale} setScale={setScale} />
-                <DarkModeToggle/>
-                {/* <SideBarTitle>Preferovaná oblast</SideBarTitle>
-                <h1 className="sideBarSubtitle">Předměty, které chci:</h1>
-                <SelectField placeholder="Vyberte předmět" options={Object.keys(subjectInfoData["details"])}/>
-                <h1 className="sideBarSubtitle">Předměty, které nechci:</h1>
-                <SelectField placeholder="Vyberte předmět" options={Object.keys(subjectInfoData["details"])}/>
-                <h1 className="sideBarSubtitle">Aktuální filtry:</h1>
-                <TagsBox/> */}
-                <SideBarTitle>Zaměření</SideBarTitle>
-                {Object.entries(subjectInfoData.spec).map(([specCode, spec]) => {
-                    return (
-                        <RadioField key={specCode} checked={selectedSpecialization === specCode} 
-                            onChange={() => setSelectedSpecialization(specCode)}>
-                            {spec.nameCZ}
-                        </RadioField>
-                    );
-                })}
-                <SideBarTitle tooltip="Studenti toužící po hlubším studiu některých z oblastí bioinformatiky si mohou zvolit průchod s pokročilejšími (nepovinnými) kurzy.">Pokročilejší kurzy</SideBarTitle>
-                <CheckBoxField checked={showAdvancedMath} onChange={() => setShowAdvancedMath(!showAdvancedMath)}>{subjectInfoData.substitutions.advanced_math.nameCZ}</CheckBoxField>
+        <>
+        <button className="mobileToggle submitButton" onClick={() => setIsOpen(!isOpen)}>
+            {isOpen ? '✕' : '☰'}
+        </button>
+            <div className={`sideBar ${isOpen ? 'open' : ''}`}
+                    style={{
+                        display: "flex",
+                        justifyContent: "space-between"
+                    }}
+            >
+                <div>
+                    <RangeScaler scale={scale} setScale={setScale} />
+                    <DarkModeToggle/>
+                    {/* <SideBarTitle>Preferovaná oblast</SideBarTitle>
+                    <h1 className="sideBarSubtitle">Předměty, které chci:</h1>
+                    <SelectField placeholder="Vyberte předmět" options={Object.keys(subjectInfoData["details"])}/>
+                    <h1 className="sideBarSubtitle">Předměty, které nechci:</h1>
+                    <SelectField placeholder="Vyberte předmět" options={Object.keys(subjectInfoData["details"])}/>
+                    <h1 className="sideBarSubtitle">Aktuální filtry:</h1>
+                    <TagsBox/> */}
+                    <SideBarTitle>Zaměření</SideBarTitle>
+                    {Object.entries(subjectInfoData.spec).map(([specCode, spec]) => {
+                        return (
+                            <RadioField key={specCode} checked={selectedSpecialization === specCode} 
+                                onChange={() => setSelectedSpecialization(specCode)}>
+                                {spec.nameCZ}
+                            </RadioField>
+                        );
+                    })}
+                    <SideBarTitle tooltip="Studenti toužící po hlubším studiu některých z oblastí bioinformatiky si mohou zvolit průchod s pokročilejšími (nepovinnými) kurzy.">Pokročilejší kurzy</SideBarTitle>
+                    <CheckBoxField checked={showAdvancedMath} onChange={() => setShowAdvancedMath(!showAdvancedMath)}>{subjectInfoData.substitutions.advanced_math.nameCZ}</CheckBoxField>
+                </div>
+                <div>
+                    <HintBox/>
+                </div>
+                {/* <CheckBoxField checked={showAdvancedBiology} onChange={() => setShowAdvancedBiology(!showAdvancedBiology)}>{subjectInfoData.substitutions.advanced_bi.nameCZ}</CheckBoxField>
+                <CheckBoxField checked={showAdvancedInformatics} onChange={() => setShowAdvancedInformatics(!showAdvancedInformatics)}>{subjectInfoData.substitutions.advanced_inf.nameCZ}</CheckBoxField> */}
+                {/* <input type="text" className="sideBarInput" placeholder="Zadejte kód" value={code} onChange={(e) => setCode(e.target.value)} />
+                <select value={semester} onChange={(e) => setSemester(Number(e.target.value))}>
+                    {["1", "2", "3", "4", "5", "6"].map((number) => {
+                        return (
+                            <option key={number} value={number}>
+                                {number}
+                            </option>
+                        );
+                    })}
+                </select>
+                <button disabled={code === ""} className="sideBarButton" onClick={sendToBackend}>Přidat předmět</button> */}
             </div>
-            <div>
-                <HintBox/>
-            </div>
-            {/* <CheckBoxField checked={showAdvancedBiology} onChange={() => setShowAdvancedBiology(!showAdvancedBiology)}>{subjectInfoData.substitutions.advanced_bi.nameCZ}</CheckBoxField>
-            <CheckBoxField checked={showAdvancedInformatics} onChange={() => setShowAdvancedInformatics(!showAdvancedInformatics)}>{subjectInfoData.substitutions.advanced_inf.nameCZ}</CheckBoxField> */}
-            {/* <input type="text" className="sideBarInput" placeholder="Zadejte kód" value={code} onChange={(e) => setCode(e.target.value)} />
-            <select value={semester} onChange={(e) => setSemester(Number(e.target.value))}>
-                {["1", "2", "3", "4", "5", "6"].map((number) => {
-                    return (
-                        <option key={number} value={number}>
-                            {number}
-                        </option>
-                    );
-                })}
-            </select>
-            <button disabled={code === ""} className="sideBarButton" onClick={sendToBackend}>Přidat předmět</button> */}
-        </div>
+        </>
     );
 }
 
