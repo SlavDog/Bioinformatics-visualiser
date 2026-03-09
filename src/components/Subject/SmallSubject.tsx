@@ -34,7 +34,7 @@ function SmallSubject({ code, course, style, setDragEnabled } : SmallSubjectProp
         Info = <a className="smallSubjectCode">{code}</a>
     }
 
-    let limit = course.credits ?? course.subjects;
+    let limit = course.credits;
 
     return (
         <>
