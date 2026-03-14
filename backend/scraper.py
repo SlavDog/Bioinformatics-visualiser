@@ -47,6 +47,15 @@ MANUAL_SUBSTITUTIONS = {
                  {"code": "MB152", "semester": 3},
                  {"code": "MB153", "semester": 4},
                  {"code": "MB154", "semester": 3}]
+    },
+    "advanced_inf": {
+        "nameCZ": "Pokročilá informatika",
+        "removes": ["IB000ext", "IB113", "IB114"],
+        "adds": [
+            {"code": "IB000", "semester": 1},
+            {"code": "IB111", "semester": 1},
+            {"code": "IB002", "semester": 2}
+        ]
     }
 }
 
