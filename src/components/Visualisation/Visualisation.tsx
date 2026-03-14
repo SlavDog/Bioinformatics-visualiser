@@ -29,6 +29,7 @@ type VisualisationState = {
 
 function Visualisation({scale, setDragEnabled}: VisualisationProps) {
     const subjectInfoData: SubjectData = useData();
+
     const [visState, setVisState] = useState<VisualisationState>({
         subjects: {},
         spec: {},
@@ -40,6 +41,9 @@ function Visualisation({scale, setDragEnabled}: VisualisationProps) {
         orGatesPositions: []
     });
     const selectedSpecialization = useSelectedSpecialization();
+    const [visible, setVisible] = useState(true);
+    const [pendingUpdate, setPendingUpdate] = useState(false);
+    const [displayedSpecialization, setDisplayedSpecialization] = useState(selectedSpecialization);
     const advancedSwitch = {
         advanced_math: useShowAdvancedMath(),
         advanced_inf: useShowAdvancedInformatics(),
@@ -47,26 +51,39 @@ function Visualisation({scale, setDragEnabled}: VisualisationProps) {
     }
     const SubjectComponent = scale < 0.7 ? SmallSubject : Subject;
 
-    // Calculate positions when new data is loaded
+
     useEffect(() => {
-        const codesToSem = getCodesToSem(subjectInfoData.choices, subjectInfoData.spec[selectedSpecialization].plan, subjectInfoData.substitutions);
-        const [newDetails, newSpec] = addAuxNodes(subjectInfoData, selectedSpecialization, advancedSwitch, codesToSem);
-        const [pos, maxX, maxY] = getPositions(newDetails, newSpec, selectedSpecialization, codesToSem);
-        const [xOff, yOff] = getOffsets(newDetails, pos, newSpec[selectedSpecialization].plan, codesToSem);
-        const orGatesPositions = getAllOrGatesPositions(newDetails, newSpec[selectedSpecialization], pos, yOff, codesToSem);
-        
-        setVisState({
-            subjects: newDetails,
-            spec: newSpec,
-            xOffsets: xOff,
-            yOffsets: yOff,
-            positions: pos,
-            maxX: maxX,
-            maxY: maxY,
-            orGatesPositions: orGatesPositions
-        });
+        setVisible(false);
+        setPendingUpdate(true);
     }, [subjectInfoData, selectedSpecialization,
         advancedSwitch.advanced_math, advancedSwitch.advanced_bi, advancedSwitch.advanced_inf]);
+
+    // Calculate positions when new data is loaded
+    useEffect(() => {
+        if (!pendingUpdate) return;
+        const timeout = setTimeout(() => {
+            const codesToSem = getCodesToSem(subjectInfoData.choices, subjectInfoData.spec[selectedSpecialization].plan, subjectInfoData.substitutions);
+            const [newDetails, newSpec] = addAuxNodes(subjectInfoData, selectedSpecialization, advancedSwitch, codesToSem);
+            const [pos, maxX, maxY] = getPositions(newDetails, newSpec, selectedSpecialization, codesToSem);
+            const [xOff, yOff] = getOffsets(newDetails, pos, newSpec[selectedSpecialization].plan, codesToSem);
+            const orGatesPositions = getAllOrGatesPositions(newDetails, newSpec[selectedSpecialization], pos, yOff, codesToSem);
+            
+            setVisState({
+                subjects: newDetails,
+                spec: newSpec,
+                xOffsets: xOff,
+                yOffsets: yOff,
+                positions: pos,
+                maxX: maxX,
+                maxY: maxY,
+                orGatesPositions: orGatesPositions
+            });
+            setDisplayedSpecialization(selectedSpecialization);
+            setPendingUpdate(false);
+            setVisible(true);
+        }, 150);
+        return () => clearTimeout(timeout);
+    }, [pendingUpdate]);
 
     const width = (visState.maxX + 2 * Layout.paddingHorizontal) * scale;
     const height = (visState.maxY + Layout.semesterTitleInset + Layout.semesterColumnBottomPadding + 2 * Layout.paddingVertical) * scale;
@@ -76,12 +93,14 @@ function Visualisation({scale, setDragEnabled}: VisualisationProps) {
             style = {{
                 width: width,
                 height: height,
+                opacity: visible ? 1 : 0,
+                transition: "opacity 0.3s ease"
             }}
         >
             <VisualisationBackground
                 maxX={visState.maxX} 
                 maxY={visState.maxY}
-                semesterCount={Object.keys(visState.spec[selectedSpecialization] ?? []).length}
+                semesterCount={Object.keys(visState.spec[displayedSpecialization] ?? []).length}
                 processedSpec={visState.spec}
                 processedSubjects={visState.subjects}
                 scale={scale}
@@ -91,7 +110,7 @@ function Visualisation({scale, setDragEnabled}: VisualisationProps) {
                     edgeYOffsets={visState.yOffsets}
                     positions={visState.positions}
                     processedSubjects={visState.subjects}
-                    specialization={visState.spec[selectedSpecialization] ?? {plan: {}}}
+                    specialization={visState.spec[displayedSpecialization] ?? {plan: {}}}
                     choices={subjectInfoData.choices}
                     SubjectComponent={SubjectComponent}
                     setDragEnabled={setDragEnabled}
