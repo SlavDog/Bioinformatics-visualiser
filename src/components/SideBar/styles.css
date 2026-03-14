@@ -155,6 +155,11 @@ select, .submitButton {
   position: relative;
 }
 
+.hintBox .field,
+.hintBox .field * {
+  cursor: default;
+}
+
 .hintCircle {
   width: 20px;
   height: 20px;
