@@ -40,39 +40,6 @@ function SideBar({scale, setScale} : SidebarProps) {
     ];
     const [isOpen, setIsOpen] = useState(false);
 
-    // const setData = useSetData();
-    // const [code, setCode] = useState("");
-    // const [semester, setSemester] = useState(1);
-    // const sendToBackend = async () => {
-    //     const res = await fetch("http://localhost:8000/run-script", {
-    //         method: "POST",
-    //         headers: { "Content-Type": "application/json" },
-    //         body: JSON.stringify({
-    //             code: code,
-    //             semester: semester
-    //         })
-    //     });
-
-    //     const newValue = await res.json();
-    //     setData(prev => ({
-    //         ...prev,
-    //         details: {
-    //             ...prev.details,
-    //             [code]: newValue,
-    //         },
-    //         order: {
-    //             ...prev.order,
-    //             [selectedSpecialization]: {
-    //                 ...prev.order[selectedSpecialization],
-    //                 [semester]: [
-    //                     ...prev.order[selectedSpecialization][semester],
-    //                     {code: code}
-    //                 ]
-    //             }
-    //         }
-    //     }));
-    // }
-
     return (
         <>
         <button className="mobileToggle submitButton" onClick={() => setIsOpen(!isOpen)}>
@@ -87,13 +54,6 @@ function SideBar({scale, setScale} : SidebarProps) {
                 <div>
                     <RangeScaler scale={scale} setScale={setScale} />
                     <DarkModeToggle/>
-                    {/* <SideBarTitle>Preferovaná oblast</SideBarTitle>
-                    <h1 className="sideBarSubtitle">Předměty, které chci:</h1>
-                    <SelectField placeholder="Vyberte předmět" options={Object.keys(subjectInfoData["details"])}/>
-                    <h1 className="sideBarSubtitle">Předměty, které nechci:</h1>
-                    <SelectField placeholder="Vyberte předmět" options={Object.keys(subjectInfoData["details"])}/>
-                    <h1 className="sideBarSubtitle">Aktuální filtry:</h1>
-                    <TagsBox/> */}
                     <SideBarTitle>Zaměření</SideBarTitle>
                     {Object.entries(subjectInfoData.spec).map(([specCode, spec]) => {
                         return (
@@ -124,19 +84,6 @@ function SideBar({scale, setScale} : SidebarProps) {
                 <div>
                     <HintBox/>
                 </div>
-                {/* <CheckBoxField checked={showAdvancedBiology} onChange={() => setShowAdvancedBiology(!showAdvancedBiology)}>{subjectInfoData.substitutions.advanced_bi.nameCZ}</CheckBoxField>
-                <CheckBoxField checked={showAdvancedInformatics} onChange={() => setShowAdvancedInformatics(!showAdvancedInformatics)}>{subjectInfoData.substitutions.advanced_inf.nameCZ}</CheckBoxField> */}
-                {/* <input type="text" className="sideBarInput" placeholder="Zadejte kód" value={code} onChange={(e) => setCode(e.target.value)} />
-                <select value={semester} onChange={(e) => setSemester(Number(e.target.value))}>
-                    {["1", "2", "3", "4", "5", "6"].map((number) => {
-                        return (
-                            <option key={number} value={number}>
-                                {number}
-                            </option>
-                        );
-                    })}
-                </select>
-                <button disabled={code === ""} className="sideBarButton" onClick={sendToBackend}>Přidat předmět</button> */}
             </div>
         </>
     );
