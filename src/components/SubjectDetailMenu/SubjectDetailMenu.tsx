@@ -53,7 +53,7 @@ function SubjectDetailMenu({open, onClose, source, credits} : SubjectDetailMenuP
         <div className={`overlay ${isClosing ? "closingOverlay" : isAnimatingOpen ? "openingOverlay" : ""}`} onClick={onClose}></div>
         <div className={`subjectDetailMenuBox ${isClosing ? "closingBox" : isAnimatingOpen ? "openingBox" : ""}`}>
             <SubjectDetailMenuHeader choiceName={subjectInfoData["choices"][sourceChoiceCode]["refnCZ"]} limitText={limitText} onClose={onClose} />
-            <SubjectList source={sourceChoiceCode}/>
+            <SubjectList source={sourceChoiceCode} currentCode={source}/>
         </div>
     </>, portalRoot)
 }

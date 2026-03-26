@@ -4,13 +4,15 @@ import { useData } from "@components/providers/dataProvider";
 
 
 type SubjectListProps = {
-    source: string
+    source: string,
+    currentCode: string
 }
 
 
-function SubjectList({source} : SubjectListProps) {
+function SubjectList({source, currentCode} : SubjectListProps) {
     const subjectInfoData = useData();
     const choice = subjectInfoData.choices[source];
+    console.log(source);
     if (source == "tv") { 
         return <BigButton color={"#b400d8"} onClick={() => window.open('https://www.fsps.muni.cz/cus/vyuka/predmety-povinne-telesne-vychovy', '_blank')} text="Zobrazit aktuální nabídku tělocviků!"></BigButton>
     }
@@ -22,7 +24,7 @@ function SubjectList({source} : SubjectListProps) {
             {Object.values(choice["list"]).map((code) => {
                 if (typeof code != "string") { return null; }
                 let course = subjectInfoData.details[code];
-                return <SubjectListItem code={code} course={course}/>
+                return <SubjectListItem code={code} course={course} choiceCode={currentCode}/>
             })}
         </div>
     )

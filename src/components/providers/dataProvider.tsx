@@ -16,6 +16,8 @@ type SubjectDataContextType = {
   setShowAdvancedBiology: React.Dispatch<React.SetStateAction<boolean>>;
   highlightedSubjects: Set<string>;
   setHighlightedSubjects: React.Dispatch<React.SetStateAction<Set<string>>>;
+  selectedChoices: Record<string, Set<string>>;
+  toggleChoice: (choiceCode: string, subjectCode: string, multi?: boolean) => void;
 }
 
 const SubjectDataContext = createContext<SubjectDataContextType | null>(null);
@@ -31,12 +33,27 @@ export function SubjectDataProvider({ children }: SubjectDataProvider) {
   const [showAdvancedInformatics, setShowAdvancedInformatics] = useState<boolean>(false);
   const [showAdvancedBiology, setShowAdvancedBiology] = useState<boolean>(false);
   const [highlightedSubjects, setHighlightedSubjects] = useState<Set<string>>(new Set());
+  const [selectedChoices, setSelectedChoices] = useState<Record<string, Set<string>>>({});
+
+  const toggleChoice = (choiceCode: string, subjectCode: string) => {
+      setSelectedChoices(prev => {
+          const current = new Set(prev[choiceCode] ?? []);
+          if (current.has(subjectCode)) {
+              current.delete(subjectCode);
+          } else {
+              current.add(subjectCode);
+          }
+          return { ...prev, [choiceCode]: current };
+      });
+  };
 
   return (
     <SubjectDataContext value={{ data, setData, selectedSpecialization, setSelectedSpecialization,
                                  showAdvancedMath, setShowAdvancedMath,
                                  showAdvancedInformatics, setShowAdvancedInformatics,
-                                 showAdvancedBiology, setShowAdvancedBiology, highlightedSubjects, setHighlightedSubjects   
+                                 showAdvancedBiology, setShowAdvancedBiology,
+                                 highlightedSubjects, setHighlightedSubjects,
+                                 selectedChoices, toggleChoice  
     }}>
       {children}
     </SubjectDataContext>
@@ -94,4 +111,12 @@ export function useHighlightedSubjects(): Set<string> {
 }
 export function useSetHighlightedSubjects() {
   return useSubjectContext().setHighlightedSubjects;
+}
+
+export function useSelectedChoices(): Record<string, Set<string>> {
+    return useSubjectContext().selectedChoices;
+}
+
+export function useToggleChoice() {
+    return useSubjectContext().toggleChoice;
 }

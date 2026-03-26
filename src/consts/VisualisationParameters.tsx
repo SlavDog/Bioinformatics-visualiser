@@ -1,7 +1,7 @@
 export const Layout = {
     columnWidth: 350,
-    rowHeight: 175,
-    subjectHeight: 115,
+    rowHeight: 185,
+    subjectHeight: 125,
     subjectWidth: 200,
     paddingHorizontal: 120,
     paddingVertical: 120,

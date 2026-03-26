@@ -9,7 +9,7 @@ import MathIcon from '@/assets/math.svg'
 import ChoiceIcon from '@/assets/choice.svg'
 import OtherIcon from '@/assets/other.svg'
 import { typeCodeToName } from '@utils/textHelpers';
-import { useHighlightedSubjects } from '@components/providers/dataProvider';
+import { useData, useHighlightedSubjects, useSelectedChoices } from '@components/providers/dataProvider';
 
 
 export type SubjectProps = {
@@ -20,10 +20,19 @@ export type SubjectProps = {
     setDragEnabled: (b: boolean) => void;
 }
 
+const typeToColor: Record<string, string> = {
+    IN: "var(--informatics)",
+    BI: "var(--biology)",
+    MA: "var(--math)",
+    choice: "var(--choice)",
+};
+
 
 function Subject({ code, course, isAlsoOutside = false, style, setDragEnabled } : SubjectProps) {
     const [isOpen, setIsOpen] = useState(false);
     const highlightedSubjects = useHighlightedSubjects();
+    const selectedChoices = useSelectedChoices();
+    const subjectInfoData = useData();
 
     const isHighlighted = highlightedSubjects.size > 0 && highlightedSubjects.has(code);
     const isDimmed = highlightedSubjects.size > 0 && !highlightedSubjects.has(code);
@@ -51,6 +60,9 @@ function Subject({ code, course, isAlsoOutside = false, style, setDragEnabled } 
 
     const WarningComponent =  <Warning warnings={warnings} course={course}/>;
 
+    const selectedCodes = course.type === "choice"
+        ? [...(selectedChoices[code] ?? [])].slice(0, 2)
+        : [];
     let limit = course.credits;
 
     return (
@@ -58,6 +70,19 @@ function Subject({ code, course, isAlsoOutside = false, style, setDragEnabled } 
             <div onClick={onClick} className={`subject subjectType${course.type} ${isHighlighted ? "subjectHighlighted" : ""} ${isDimmed ? "subjectDimmed" : ""}`} style={style}>
                 <div className="topSubjectContainer">
                     {Info}
+                    {course.type === "choice" && selectedCodes.length > 0 && (
+                        <div className="subjectSelectedLabels">
+                            {selectedCodes.map((selectedCode, i) => {
+                                const type = subjectInfoData.details[selectedCode]?.type;
+                                return (
+                                    <p key={selectedCode} className={`subjectSelectedLabel`} style={{ color: typeToColor[type] ?? "var(--text-secondary)" }}>
+                                        {selectedCode}
+                                    </p>
+                                );
+                            })}
+                        {selectedChoices[code].size > 2 && <p className={`subjectSelectedLabel`} style={{color: "var(--text-secondary)"}}>+{selectedChoices[code].size - 2}</p>}
+                        </div>
+                    )}
                 </div>
                 <div className="bottomSubjectContainer">
                     <div className="iconContainer">
