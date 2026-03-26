@@ -25,7 +25,7 @@ export function fillEdgeXOffsets(edgeXOffsets: EdgeOffsets, infoData: Details,
         subjects.forEach(parent => {
             const parentCode = "code" in parent ? parent.code : parent.choice;
             if (!infoData[parentCode]) { return; }
-            const successors = sortSuccessorsByPositions(infoData[parentCode].successors, pos);
+            const successors = sortByPositions(infoData[parentCode].successors, pos);
             if (successors.length == 0) { return; }
 
             const shouldReverse = getShouldReverse(pos, parentCode, successors);
@@ -62,13 +62,18 @@ export function fillEdgeYOffsets(edgeYOffsets: EdgeOffsets, newDetails: Details,
     const orGroupEndOffsets: Record<string, number> = {};
     const successorInDegreeCounter: Record<string, number> = {};
     const pathTargetOffsets: Record<string, number> = {};
-    Object.values(plan).flat().forEach((subj) => {
-        const parentCode = "code" in subj ? subj.code : subj.choice;
-        if (!newDetails[parentCode]) {return;}
-        sortSuccessorsByPositions(newDetails[parentCode].successors, pos).forEach((succ, i) => {
-            assignOffsets(parentCode, succ, newDetails, edgeYOffsets, orGroupEndOffsets, successorInDegreeCounter, i, pathTargetOffsets);
+    Object.values(plan).forEach(semester => {
+        
+        sortByPositions(semester, pos).forEach((subj) => {
+            const parentCode = "code" in subj ? subj.code : subj.choice;
+            if (!newDetails[parentCode]) {return;}
+            sortByPositions(newDetails[parentCode].successors, pos).forEach((succ, i) => {
+                console.log(parentCode, succ);
+                assignOffsets(parentCode, succ, newDetails, edgeYOffsets, orGroupEndOffsets, successorInDegreeCounter, i, pathTargetOffsets);
+            })
         })
-    })
+    }
+    )
 }
 
 function findRealSuccessor(currentCode: string, details: Details): string {
@@ -82,10 +87,12 @@ function findRealSuccessor(currentCode: string, details: Details): string {
 }
 
 
-function sortSuccessorsByPositions(successors: Array<Edge>, pos: RealPositions): Array<Edge> {
-    return [...successors].sort((a, b) => {
-        const yA = pos[a.code]?.y ?? 0;
-        const yB = pos[b.code]?.y ?? 0;
+function sortByPositions<T extends { code: string } | { choice: string }>(array: Array<T>, pos: RealPositions): Array<T> {
+    return [...array].sort((a, b) => {
+        const codeA = "code" in a ? a.code : a.choice;
+        const codeB = "code" in b ? b.code : b.choice;
+        const yA = pos[codeA]?.y ?? 0;
+        const yB = pos[codeB]?.y ?? 0;
         return yA - yB;
     });
 }

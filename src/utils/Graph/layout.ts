@@ -105,6 +105,20 @@ function addMissedPredecessorsPositions(details: Details, codesToCoordinates: Co
     const missedCodes: string[] = getReachableCodes(Object.keys(tempCodeToCoordinates)[0], details)
         .filter(code => !tempCodeToCoordinates[code] && !codesToCoordinates[code] && codesToSem[code] != null)
 
+
+    missedCodes.sort((a, b) => {
+        const avgY = (code: string) => {
+            const succYs = (details[code].successors ?? [])
+                .map(s => s.code)
+                .map(c => tempCodeToCoordinates[c]?.y ?? codesToCoordinates[c]?.y)
+                .filter(y => y != null) as number[];
+            return succYs.length > 0 
+                ? succYs.reduce((sum, y) => sum + y, 0) / succYs.length 
+                : Infinity;
+        };
+        return avgY(a) - avgY(b);
+    });
+
     for (let i = 0; i < missedCodes.length; i++) {
         const code = missedCodes[i];
         let currentSemester = codesToSem[code];

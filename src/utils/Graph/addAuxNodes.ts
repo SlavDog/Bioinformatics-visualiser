@@ -30,7 +30,17 @@ export function addAuxNodes(subjectData: SubjectData, selectedSpecialization: st
             }
         })
     });
-    console.log(newDetails);
+
+    Object.keys(newOrder[selectedSpecialization].plan).forEach(sem => {
+        newOrder[selectedSpecialization].plan[Number(sem)].sort((a, b) => {
+            const codeA = "code" in a ? a.code : a.choice;
+            const codeB = "code" in b ? b.code : b.choice;
+            const succsA = newDetails[codeA]?.successors?.length ?? 0;
+            const succsB = newDetails[codeB]?.successors?.length ?? 0;
+            return succsB - succsA;
+        });
+    });
+
     return [newDetails, newOrder];
 }
 
