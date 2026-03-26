@@ -14,3 +14,11 @@ export const Layout = {
     detailMenuSubjectWidth: 250,
     detailMenuSubjectPadding: 16,
 };
+
+export const ZoomScale = {
+    min: 0.3,
+    max: 1.5,
+    default: 0.7,
+    logMin: Math.log(0.3),
+    logMax: Math.log(1.5),
+};

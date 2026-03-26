@@ -1,3 +1,4 @@
+import { ZoomScale } from "@/consts/VisualisationParameters";
 import { useEffect } from "react";
 
 function useWheelZoom(setScale: React.Dispatch<React.SetStateAction<number>>) {
@@ -7,11 +8,10 @@ function useWheelZoom(setScale: React.Dispatch<React.SetStateAction<number>>) {
             e.preventDefault();  // turns off the default page zoom
 
 
-            if (e.deltaY < 0) {
-                setScale(prev => Math.min(prev + 0.1, 1.5));
-            } else {
-                setScale(prev => Math.max(prev - 0.1, 0.5));
-            }
+            setScale(prev => {
+                const logScale = Math.log(prev) - e.deltaY * 0.01;
+                return Math.min(Math.max(Math.exp(logScale), ZoomScale.min), ZoomScale.max);
+            });
         };
 
         window.addEventListener("wheel", onWheel, { passive: false });

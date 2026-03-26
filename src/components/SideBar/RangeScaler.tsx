@@ -1,5 +1,5 @@
 import "./styles.css"
-
+import { ZoomScale } from "@/consts/VisualisationParameters";
 
 type RangeScalerProps = {
     scale: number,
@@ -14,8 +14,15 @@ function RangeScaler({scale, setScale} : RangeScalerProps) {
             <div className="helpIcon" style={{ width: "12px", height: "12px", marginLeft: "2px", fontSize: "10px" }} title="Velikost lze měnit také pomocí Ctrl + scroll">
                 ?
             </div>
-            <input type="range" id="volume" min="0.3" max="1.5" step="0.1" value={scale} onChange={(e) => setScale(Number(e.target.value))} />
-        </div>
+            <input    
+                type="range"
+                min={ZoomScale.logMin}
+                max={ZoomScale.logMax}
+                step="0.01"
+                value={Math.log(scale)}
+                onChange={(e) => setScale(Math.exp(Number(e.target.value)))}
+            ></input>
+            </div>
     );
 }
 

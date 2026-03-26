@@ -1,12 +1,12 @@
 import { useRef, useState} from 'react';
 import Visualisation from '@components/Visualisation/Visualisation';
 import SideBar from '@components/SideBar/SideBar';
-import { Layout } from '@/consts/VisualisationParameters';
+import { Layout, ZoomScale } from '@/consts/VisualisationParameters';
 import useDragScroll from '@/hooks/useDragScroll';
 import useWheelZoom from '@/hooks/useWheelZoom';
 
 function DragScrollBox() {
-    const [scale, setScale] = useState(0.7);
+    const [scale, setScale] = useState(ZoomScale.default);
     const [dragEnabled, setDragEnabled] = useState(true);
     const boxRef = useRef(null);
 
