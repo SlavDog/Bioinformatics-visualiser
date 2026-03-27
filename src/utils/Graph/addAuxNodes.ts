@@ -224,24 +224,62 @@ function removeTransitiveEdges(details: Details) : void {
 };
 
 
-export function getCodesToSem(choices: Choices, plan: Record<string, Array<OrderSubject>>, substitutions: Substitutions) : Record<string,number> {
-    const result: Record<string, number> = {};
-    Object.entries(plan)
-        .forEach(([semesterNumber, semester]) => semester
-            .forEach((subject) => {
-                const isNotChoice = "code" in subject;
-                result[isNotChoice ? subject.code : `${subject.choice}-${semesterNumber}`] = Number(semesterNumber);
-                if (!isNotChoice) {
-                    choices[subject.choice].list.forEach((choiceSubject) => {
-                        if (typeof choiceSubject === 'string') {
-                            result[choiceSubject] = Number(semesterNumber);
-                        }
-                    })
-                }
+export function createDuplicateSubjectDetails(
+    subjectInfoData: SubjectData,
+    dedupedPlan: Record<string, Array<OrderSubject>>,
+    selectedSpecialization: string
+): SubjectData {
+    const patchedData = structuredClone(subjectInfoData);
+    Object.keys(dedupedPlan).forEach(sem => {
+        dedupedPlan[sem].forEach(subject => {
+            if ("code" in subject && subject.code.includes("-DUP-")) {
+                const originalCode = subject.code.split("-DUP-")[0];
+                patchedData.details[subject.code] = structuredClone(patchedData.details[originalCode]);
             }
-        ))
-    Object.values(substitutions).forEach((substitution) => substitution.adds.forEach(subject => result[subject.code] = subject.semester))
-    return result;
+        });
+    });
+    patchedData.spec[selectedSpecialization].plan = dedupedPlan;
+    return patchedData;
+}
+
+
+export function getCodesToSem(
+    choices: Choices, 
+    plan: Record<string, Array<OrderSubject>>, 
+    substitutions: Substitutions
+) : [Record<string, number>, Record<string, Array<OrderSubject>>] {
+    const result: Record<string, number> = {};
+    const seen = new Set<string>();
+    const newPlan: Record<string, Array<OrderSubject>> = {};
+
+    Object.entries(plan).forEach(([semesterNumber, semester]) => {
+        newPlan[semesterNumber] = [];
+        semester.forEach((subject) => {
+            let code = "code" in subject ? subject.code : `${subject.choice}-${semesterNumber}`;
+            
+            if (seen.has(code)) {
+                code = `${code}-DUP-${semesterNumber}`;
+            }
+            seen.add(code);
+
+            newPlan[semesterNumber].push("code" in subject ? { code } : subject);
+            result[code] = Number(semesterNumber);
+
+            if (!("code" in subject)) {
+                choices[subject.choice].list.forEach((choiceSubject) => {
+                    if (typeof choiceSubject === 'string') {
+                        result[choiceSubject] = Number(semesterNumber);
+                    }
+                });
+            }
+        });
+    });
+
+    Object.values(substitutions).forEach((substitution) => 
+        substitution.adds.forEach(subject => result[subject.code] = subject.semester)
+    );
+
+    return [result, newPlan];
 }
 
 

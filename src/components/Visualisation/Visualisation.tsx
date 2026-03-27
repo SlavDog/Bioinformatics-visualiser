@@ -1,11 +1,11 @@
 import Subject from '@components/Subject/Subject';
 import SmallSubject from '@components/Subject/SmallSubject';
-import {addAuxNodes, getAllOrGatesPositions, getCodesToSem, getOffsets, getPositions} from '@utils/Graph';
+import {addAuxNodes, createDuplicateSubjectDetails, getAllOrGatesPositions, getCodesToSem, getOffsets, getPositions} from '@utils/Graph';
 import VisualisationForeground from '@components/Visualisation/VisualisationForeground';
 import VisualisationBackground from '@components/Visualisation/VisualisationBackground';
 import { Layout } from '@/consts/VisualisationParameters';
 import { useData, useSelectedSpecialization, useShowAdvancedBiology, useShowAdvancedInformatics, useShowAdvancedMath } from "@components/providers/dataProvider";
-import { Details, EdgeOffsets, RealPositions, Spec, SubjectData } from '@/types/subjects';
+import { Details, EdgeOffsets, OrderSubject, RealPositions, Spec, SubjectData } from '@/types/subjects';
 
 import "./styles.css";
 
@@ -62,8 +62,9 @@ function Visualisation({scale, setDragEnabled}: VisualisationProps) {
     useEffect(() => {
         if (!pendingUpdate) return;
         const timeout = setTimeout(() => {
-            const codesToSem = getCodesToSem(subjectInfoData.choices, subjectInfoData.spec[selectedSpecialization].plan, subjectInfoData.substitutions);
-            const [newDetails, newSpec] = addAuxNodes(subjectInfoData, selectedSpecialization, advancedSwitch, codesToSem);
+            const [codesToSem, dedupedPlan] = getCodesToSem(subjectInfoData.choices, subjectInfoData.spec[selectedSpecialization].plan, subjectInfoData.substitutions);
+            const patchedData = createDuplicateSubjectDetails(subjectInfoData, dedupedPlan, selectedSpecialization);
+            const [newDetails, newSpec] = addAuxNodes(patchedData, selectedSpecialization, advancedSwitch, codesToSem);
             const [pos, maxX, maxY] = getPositions(newDetails, newSpec, selectedSpecialization, codesToSem);
             const [xOff, yOff] = getOffsets(newDetails, pos, newSpec[selectedSpecialization].plan, codesToSem);
             const orGatesPositions = getAllOrGatesPositions(newDetails, newSpec[selectedSpecialization], pos, yOff, codesToSem);

@@ -38,8 +38,9 @@ function Subject({ code, course, isAlsoOutside = false, style, setDragEnabled } 
     const isDimmed = highlightedSubjects.size > 0 && !highlightedSubjects.has(code);
 
     const link = "https://is.muni.cz" + course.link;
+    const displayCode = code.replace(/-DUP-\d+$/, "");
 
-    let Info = <><p className="subjectCode">{code}</p>
+    let Info = <><p className="subjectCode">{displayCode}</p>
                  <a className="subjectName" draggable="false" href={link} target='_blank'>{course.name}</a>
                  <p className="subjectInfo">{course.faculty} / {course.language} / {course.completion}</p></>;
     let onClick = () => {};

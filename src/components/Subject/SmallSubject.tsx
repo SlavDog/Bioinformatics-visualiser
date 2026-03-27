@@ -23,7 +23,8 @@ function SmallSubject({ code, course, style, setDragEnabled } : SmallSubjectProp
     const isDimmed = highlightedSubjects.size > 0 && !highlightedSubjects.has(code);
 
     const link = "https://is.muni.cz" + course.link;
-    let Info = <a className="smallSubjectCode" draggable="false" href={link}>{code}</a>;
+    const displayCode = code.replace(/-DUP-\d+$/, "");
+    let Info = <a className="smallSubjectCode" draggable="false" href={link}>{displayCode}</a>;
     let onClick = () => {};
     let detailMenuSourceName = "";
     if (course.type == "choice") {
