@@ -68,7 +68,6 @@ export function fillEdgeYOffsets(edgeYOffsets: EdgeOffsets, newDetails: Details,
             const parentCode = "code" in subj ? subj.code : subj.choice;
             if (!newDetails[parentCode]) {return;}
             sortByPositions(newDetails[parentCode].successors, pos).forEach((succ, i) => {
-                console.log(parentCode, succ);
                 assignOffsets(parentCode, succ, newDetails, edgeYOffsets, orGroupEndOffsets, successorInDegreeCounter, i, pathTargetOffsets);
             })
         })
