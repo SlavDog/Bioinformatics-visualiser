@@ -81,3 +81,9 @@
    border: 2px solid var(--background-secondary);
    border-radius: 5px;
 }
+
+.tippy-box {
+  font-family: 'Inter', sans-serif; /* Tvůj preferovaný font */
+  font-size: 14px;
+  line-height: 1.4;
+}

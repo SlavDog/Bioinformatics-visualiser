@@ -37,7 +37,7 @@ function SubjectListItem({code, course, choiceCode} : SubjectListItemProps) {
                 borderRadius: 8,
                 cursor: "pointer",
                 transition: "all 0.2s ease-in-out",
-                padding: "20px 10px"
+                padding: "20px 10px",
             }}>
             <ChoiceConnections
                 course={course}

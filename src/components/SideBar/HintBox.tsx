@@ -7,6 +7,8 @@ import OtherIcon from '@/assets/other.svg'
 import OrGateIcon from '@/assets/or_gate.svg';
 import SideBarTitle from "./SideBarTitle"
 import { useState } from "react"
+import Tippy from '@tippyjs/react';
+import 'tippy.js/dist/tippy.css';
 
 function HintBox() {
     const [isOpen, setIsOpen] = useState(true);
@@ -28,7 +30,6 @@ function HintBox() {
                 }}
             >
                 <button
-                    title="Zavřít legendu"
                     onClick={() => setIsOpen(false)}
                     className='submitButton'
                     style={{ position: "absolute", right: "15px", top: "20px", height: "20px", width: "20px" }}
@@ -40,47 +41,56 @@ function HintBox() {
                 <div className="field">
                     <p className="preferenceFieldLabel">Informatika</p>
                     <div style={{ display: "flex" }}>
-                        
-                        <div className='hintCircle' title="Informatika" style={{ backgroundColor: "var(--informatics)" }}>
-                            <img src={InfIcon} title="Informatika" draggable="false" className='hintCircle' />
-                        </div>
+                        <Tippy content="Informatika" placement="right">
+                            <div className='hintCircle' style={{ backgroundColor: "var(--informatics)" }}>
+                                <img src={InfIcon} draggable="false" className='hintCircle' />
+                            </div>
+                        </Tippy>
                     </div>
                 </div>
                 <div className="hintSeparator"></div>
                 <div className="field">
                     <p className="preferenceFieldLabel">Biologie</p>
-                    <div style={{ display: "flex" }}>
-                        <div className='hintCircle' title="Biologie" style={{ backgroundColor: "var(--biology)" }}>
-                            <img src={BioIcon} title="Biologie" draggable="false" className='hintCircle' />
+                    <Tippy content="Biologie" placement="right">
+                        <div style={{ display: "flex" }}>
+                            <div className='hintCircle' style={{ backgroundColor: "var(--biology)" }}>
+                                <img src={BioIcon} draggable="false" className='hintCircle' />
+                            </div>
                         </div>
-                    </div>
+                    </Tippy>
                 </div>
                 <div className="hintSeparator"></div>
                 <div className="field">
                     <p className="preferenceFieldLabel">Matematika</p>
-                    <div style={{ display: "flex" }}>
-                        <div className='hintCircle' title="Matematika" style={{ backgroundColor: "var(--math)" }}>
-                            <img src={MathIcon} title="Matematika" draggable="false" className='hintCircle' />
+                    <Tippy content="Matematika" placement="right">
+                        <div style={{ display: "flex" }}>
+                            <div className='hintCircle' style={{ backgroundColor: "var(--math)" }}>
+                                <img src={MathIcon} draggable="false" className='hintCircle' />
+                            </div>
                         </div>
-                    </div>
+                    </Tippy>
                 </div>
                 <div className="hintSeparator"></div>
                 <div className="field">
                     <p className="preferenceFieldLabel">Volba</p>
-                    <div style={{ display: "flex" }}>
-                        <div className='hintCircle' title="Volba" style={{ backgroundColor: "var(--choice)" }}>
-                            <img src={ChoiceIcon} title="Volba" draggable="false" className='hintCircle' />
+                    <Tippy content="Volba" placement="right">
+                        <div style={{ display: "flex" }}>
+                            <div className='hintCircle' style={{ backgroundColor: "var(--choice)" }}>
+                                <img src={ChoiceIcon} draggable="false" className='hintCircle' />
+                            </div>
                         </div>
-                    </div>
+                    </Tippy>
                 </div>
                 <div className="hintSeparator"></div>
                 <div className="field">
                     <p className="preferenceFieldLabel">Ostatní</p>
-                    <div style={{ display: "flex" }}>
-                        <div className='hintCircle' title="Ostatní" style={{ backgroundColor: "var(--other)" }}>
-                            <img src={OtherIcon} title="Ostatní" draggable="false" className='hintCircle' />
+                    <Tippy content="Ostatní" placement="right">
+                        <div style={{ display: "flex" }}>
+                            <div className='hintCircle' style={{ backgroundColor: "var(--other)" }}>
+                                <img src={OtherIcon} draggable="false" className='hintCircle' />
+                            </div>
                         </div>
-                    </div>
+                    </Tippy>
                 </div>
                 <div className="hintSeparator"></div>
                 <div className="field">
@@ -93,9 +103,11 @@ function HintBox() {
                 <div className="field">
                     <div style={{ display: "flex", alignContent: "center" }}>
                         <p className="preferenceFieldLabel">Soft prerekvizita</p>
-                        <div className="helpIcon" style={{ width: "12px", height: "12px", fontSize: "10px", marginLeft: "5px" }} title="Soft prerekvizity slouží pouze jako doporučení. Není nutné absolvovat předměty v jimi daném pořadí.">
-                            ?
-                        </div>
+                        <Tippy content="Soft prerekvizity slouží pouze jako doporučení. Není nutné absolvovat předměty v jimi daném pořadí.">
+                            <div className="helpIcon" style={{ width: "12px", height: "12px", fontSize: "10px", marginLeft: "5px" }}>
+                                ?
+                            </div>
+                        </Tippy>
                     </div>
                     <svg style={{ width: "70px", height: "20px" }}>
                         <path d="M 10 10 h 50" stroke="var(--connection-secondary)" fill="transparent" strokeWidth="2" strokeDasharray="2 3" />
@@ -105,9 +117,11 @@ function HintBox() {
                 <div className="field">
                     <div style={{ display: "flex", alignContent: "center" }}>
                         <p className="preferenceFieldLabel">OR brána</p>
-                        <div className="helpIcon" style={{ width: "12px", height: "12px", fontSize: "10px", marginLeft: "5px" }} title="OR brána znamená, že je potřeba splnit některé z prerekvizit, které do ní vstupují, nemusí však být nutně splněny všechny z nich.">
-                            ?
-                        </div>
+                        <Tippy content="OR brána znamená, že je potřeba splnit některé z prerekvizit, které do ní vstupují, nemusí však být nutně splněny všechny z nich.">
+                            <div className="helpIcon" style={{ width: "12px", height: "12px", fontSize: "10px", marginLeft: "5px" }}>
+                                ?
+                            </div>
+                        </Tippy>
                     </div>
                     <svg width="70" height="25">
                         <path d="M 10 10 C 20 10 20 12.5 30 12.5" stroke="var(--connection-primary)" fill="transparent" strokeWidth="2" />

@@ -1,3 +1,4 @@
+import Tippy from "@tippyjs/react";
 import "./styles.css"
 import { ZoomScale } from "@/consts/VisualisationParameters";
 
@@ -11,9 +12,11 @@ function RangeScaler({scale, setScale} : RangeScalerProps) {
     return (
         <div className='rangeScaler desktopOnly'>
             <label>Velikost</label>
-            <div className="helpIcon" style={{ width: "12px", height: "12px", marginLeft: "2px", fontSize: "10px" }} title="Velikost lze měnit také pomocí Ctrl + scroll">
-                ?
-            </div>
+            <Tippy placement="bottom-end" content="Velikost lze měnit také pomocí Ctrl + scroll">
+                <div className="helpIcon" style={{ width: "12px", height: "12px", marginLeft: "2px", fontSize: "10px" }}>
+                    ?
+                </div>
+            </Tippy>
             <input    
                 type="range"
                 min={ZoomScale.logMin}

@@ -1,5 +1,4 @@
 import RadioField from "@components/SideBar/RadioField";
-import TagsBox from "@components/SideBar/TagsBox";
 import RangeScaler from "@components/SideBar/RangeScaler";
 import { Layout, ZoomScale } from "@/consts/VisualisationParameters";
 import "./styles.css";

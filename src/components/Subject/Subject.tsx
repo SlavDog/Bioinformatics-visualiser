@@ -10,6 +10,7 @@ import ChoiceIcon from '@/assets/choice.svg'
 import OtherIcon from '@/assets/other.svg'
 import { typeCodeToName } from '@utils/textHelpers';
 import { useData, useHighlightedSubjects, useSelectedChoices } from '@components/providers/dataProvider';
+import Tippy from '@tippyjs/react';
 
 
 export type SubjectProps = {
@@ -86,10 +87,12 @@ function Subject({ code, course, isAlsoOutside = false, style, setDragEnabled } 
                     )}
                 </div>
                 <div className="bottomSubjectContainer">
-                    <div className="iconContainer">
-                        <img src={course.type === "IN" ? InfIcon : course.type === "BI" ? BioIcon : course.type === "MA" ? MathIcon : course.type === "choice" ? ChoiceIcon : OtherIcon} title={typeCodeToName(course.type)} draggable="false" className='circle' />
-                        {WarningComponent}
-                    </div>
+                    <Tippy placement='bottom' content={typeCodeToName(course.type)}>
+                        <div className="iconContainer">
+                            <img src={course.type === "IN" ? InfIcon : course.type === "BI" ? BioIcon : course.type === "MA" ? MathIcon : course.type === "choice" ? ChoiceIcon : OtherIcon} draggable="false" className='circle' />
+                            {WarningComponent}
+                        </div>
+                    </Tippy>
                     <p className="subjectCredits">{limit} {course.credits != undefined ? "kr." : "předm."}</p>
                 </div>
             </div>
