@@ -13,27 +13,37 @@
 
 .subjectTypeIN {
   border-color: var(--informatics);
+  --shadow-color: var(--informatics);
+  --icon-color: var(--informatics);
   background-image: linear-gradient(160deg, var(--subject-background) 60%, var(--informatics-background) 100%);
 }
 
 .subjectTypeBI {
   border-color: var(--biology);
+  --shadow-color: var(--biology);
+  --icon-color: var(--biology);
   background-image: linear-gradient(160deg, var(--subject-background) 60%, var(--biology-background) 100%);
 }
 
 .subjectTypeMA {
   border-color: var(--math);
+  --shadow-color: var(--math);
+  --icon-color: var(--math);
   background-image: linear-gradient(160deg, var(--subject-background) 60%, var(--math-background) 100%);
 }
 
 .subjectTypeOT {
   border-color: var(--other);
+  --shadow-color: var(--other);
+  --icon-color: var(--other);
   background-image: linear-gradient(160deg, var(--subject-background) 60%, var(--other-background) 100%);
 }
 
 .subjectTypechoice {
   position: relative;
   border-color: var(--choice);
+  --shadow-color: var(--choice);
+  --icon-color: var(--choice);
   background-image: linear-gradient(160deg, var(--subject-background) 60%, var(--choice-background) 100%);
   cursor: pointer;
 }
@@ -101,6 +111,8 @@
   width: 38px;
   height: 38px;
   margin-right: 10px;
+  border-radius: 50%;
+  background-color: var(--icon-color);
 }
 
 .bottomSubjectContainer {
@@ -188,7 +200,7 @@
 }
 
 .subjectHighlighted {
-  box-shadow: 0 0 0 5px var(--background), 0 0 50px 4px var(--text-primary);
+  box-shadow: 0 0 0 5px var(--background), 0 0 50px 4px var(--shadow-color);
 }
 
 .subjectDimmed {

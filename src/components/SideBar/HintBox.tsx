@@ -40,40 +40,46 @@ function HintBox() {
                 <div className="field">
                     <p className="preferenceFieldLabel">Informatika</p>
                     <div style={{ display: "flex" }}>
-                        <img src={InfIcon} title="Informatika" draggable="false" className='hintCircle' />
-                        <div className='hintCircle' title="Informatika" style={{ backgroundColor: "var(--informatics)" }} />
+                        
+                        <div className='hintCircle' title="Informatika" style={{ backgroundColor: "var(--informatics)" }}>
+                            <img src={InfIcon} title="Informatika" draggable="false" className='hintCircle' />
+                        </div>
                     </div>
                 </div>
                 <div className="hintSeparator"></div>
                 <div className="field">
                     <p className="preferenceFieldLabel">Biologie</p>
                     <div style={{ display: "flex" }}>
-                        <img src={BioIcon} title="Biologie" draggable="false" className='hintCircle' />
-                        <div className='hintCircle' title="Biologie" style={{ backgroundColor: "var(--biology)" }} />
+                        <div className='hintCircle' title="Biologie" style={{ backgroundColor: "var(--biology)" }}>
+                            <img src={BioIcon} title="Biologie" draggable="false" className='hintCircle' />
+                        </div>
                     </div>
                 </div>
                 <div className="hintSeparator"></div>
                 <div className="field">
                     <p className="preferenceFieldLabel">Matematika</p>
                     <div style={{ display: "flex" }}>
-                        <img src={MathIcon} title="Matematika" draggable="false" className='hintCircle' />
-                        <div className='hintCircle' title="Matematika" style={{ backgroundColor: "var(--math)" }} />
+                        <div className='hintCircle' title="Matematika" style={{ backgroundColor: "var(--math)" }}>
+                            <img src={MathIcon} title="Matematika" draggable="false" className='hintCircle' />
+                        </div>
                     </div>
                 </div>
                 <div className="hintSeparator"></div>
                 <div className="field">
                     <p className="preferenceFieldLabel">Volba</p>
                     <div style={{ display: "flex" }}>
-                        <img src={ChoiceIcon} title="Volba" draggable="false" className='hintCircle' />
-                        <div className='hintCircle' title="Volba" style={{ backgroundColor: "var(--choice)" }} />
+                        <div className='hintCircle' title="Volba" style={{ backgroundColor: "var(--choice)" }}>
+                            <img src={ChoiceIcon} title="Volba" draggable="false" className='hintCircle' />
+                        </div>
                     </div>
                 </div>
                 <div className="hintSeparator"></div>
                 <div className="field">
                     <p className="preferenceFieldLabel">Ostatní</p>
                     <div style={{ display: "flex" }}>
-                        <img src={OtherIcon} title="Ostatní" draggable="false" className='hintCircle' />
-                        <div className='hintCircle' title="Ostatní" style={{ backgroundColor: "var(--other)" }} />
+                        <div className='hintCircle' title="Ostatní" style={{ backgroundColor: "var(--other)" }}>
+                            <img src={OtherIcon} title="Ostatní" draggable="false" className='hintCircle' />
+                        </div>
                     </div>
                 </div>
                 <div className="hintSeparator"></div>
