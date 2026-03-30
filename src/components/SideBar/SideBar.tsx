@@ -1,7 +1,7 @@
 import RadioField from "@components/SideBar/RadioField";
 import TagsBox from "@components/SideBar/TagsBox";
 import RangeScaler from "@components/SideBar/RangeScaler";
-import { Layout } from "@/consts/VisualisationParameters";
+import { Layout, ZoomScale } from "@/consts/VisualisationParameters";
 import "./styles.css";
 import { useData, useSetData, useSelectedSpecialization, useSetSelectedSpecialization, useShowAdvancedMath, useSetShowAdvancedMath, useShowAdvancedBiology, useSetShowAdvancedBiology, useShowAdvancedInformatics, useSetShowAdvancedInformatics, useSetHighlightedSubjects } from "@components/providers/dataProvider";
 import { useContext, useState } from "react";
@@ -42,9 +42,21 @@ function SideBar({scale, setScale} : SidebarProps) {
 
     return (
         <>
-        <button className="mobileToggle submitButton" onClick={() => setIsOpen(!isOpen)}>
-            {isOpen ? '✕' : '☰'}
-        </button>
+            <button className="mobileToggle submitButton phoneOnly" onClick={() => setIsOpen(!isOpen)}>
+                {isOpen ? '✕' : '☰'}
+            </button>
+            <input
+                style={{
+                    opacity: isOpen ? "0" : "0.5" 
+                }}
+                className="mobileZoomSlider phoneOnly"
+                type="range"
+                min={ZoomScale.logMin}
+                max={ZoomScale.logMax}
+                step="0.01"
+                value={Math.log(scale)}
+                onChange={(e) => setScale(Math.exp(Number(e.target.value)))}
+            ></input>
             <div className={`sideBar ${isOpen ? 'open' : ''}`}
                     style={{
                         display: "flex",
@@ -53,6 +65,7 @@ function SideBar({scale, setScale} : SidebarProps) {
             >
                 <div>
                     <RangeScaler scale={scale} setScale={setScale} />
+                    <div style={{height: "20px"}} className="phoneOnly" />
                     <DarkModeToggle/>
                     <SideBarTitle>Zaměření</SideBarTitle>
                     {Object.entries(subjectInfoData.spec).map(([specCode, spec]) => {

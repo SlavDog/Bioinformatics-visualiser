@@ -9,7 +9,7 @@ type RangeScalerProps = {
 
 function RangeScaler({scale, setScale} : RangeScalerProps) {
     return (
-        <div className='rangeScaler'>
+        <div className='rangeScaler desktopOnly'>
             <label>Velikost</label>
             <div className="helpIcon" style={{ width: "12px", height: "12px", marginLeft: "2px", fontSize: "10px" }} title="Velikost lze měnit také pomocí Ctrl + scroll">
                 ?

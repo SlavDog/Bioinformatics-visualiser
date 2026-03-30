@@ -8,7 +8,7 @@ import useWheelZoom from '@/hooks/useWheelZoom';
 function DragScrollBox() {
     const [scale, setScale] = useState(ZoomScale.default);
     const [dragEnabled, setDragEnabled] = useState(true);
-    const boxRef = useRef(null);
+    const boxRef = useRef<HTMLDivElement>(null);
 
     useWheelZoom(setScale);
     const onMouseDown = useDragScroll(boxRef, dragEnabled);

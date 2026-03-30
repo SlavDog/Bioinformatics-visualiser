@@ -173,12 +173,6 @@ select, .submitButton {
   width: 100%;
 }
 
-@media (min-width: 768px) {
-  .sideBar {
-    width: var(--sidebar-width);
-  }
-}
-
 @media (max-width: 767px) {
   .sideBar {
     width: 60vw;
@@ -192,6 +186,14 @@ select, .submitButton {
   }
 }
 
+.desktopOnly {
+  display: none;
+}
+
+.phoneOnly {
+  display: block;
+}
+
 .scrollableBox {
   margin-left: 0;
 }
@@ -199,11 +201,27 @@ select, .submitButton {
 @media (min-width: 768px) {
   .scrollableBox {
     margin-left: calc(var(--sidebar-width) + 42px);
+  }  
+
+  .desktopOnly {
+    display: flex;
+  }
+
+  .phoneOnly {
+    display: none;
+  }
+
+  .mobileToggle {
+    display: none;
+  }
+
+  .sideBar {
+    width: var(--sidebar-width);
   }
 }
 
+
 .mobileToggle {
-  display: block;
   position: fixed;
   top: 15px;
   left: 15px;
@@ -212,8 +230,15 @@ select, .submitButton {
   height: 35px;
 }
 
-@media (min-width: 768px) {
-  .mobileToggle {
-    display: none;
-  }
+.mobileZoomSlider {
+  position: fixed;
+  top: 60px;
+  left: calc(15px + 35px / 2);
+  transform: translateX(-50%);
+  z-index: 100;
+  height: 150px;
+  writing-mode: vertical-lr;
+  direction: rtl;
+  transition: opacity 0.3s ease;
+  filter: saturate(0);
 }
