@@ -1,15 +1,15 @@
 .subjectDetailMenuBox {
   position: fixed;
-  top: 55%;
+  top: 50%;
   left: 50%;
-  transform: translate(-50%, -40%);
+  transform: translate(-50%, -50%);
   z-index: 1000;
   background-color: var(--choice-menu-background);
   padding: 15px;
   border: 3px solid var(--choice);
   border-radius: 14px;
-  height: 70vh;
-  width: 90vw;
+  height: 70dvh;
+  width: 70dvw;
   opacity: 0;
   transition: opacity 0.2s ease, transform 0.3s ease;
   display: flex;
@@ -18,6 +18,17 @@
   align-items: center;
   overflow: scroll;
   background-image: linear-gradient(160deg, var(--subject-background) 0%, var(--choice-menu-background-gradient) 100%);
+}
+
+.choiceMenuSelectionBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  padding: 20px 20px;
+  margin: 10px;
 }
 
 .menuBoxSubjectsContainer {
@@ -31,7 +42,48 @@
     width: 100%;
     overflow-y: hidden;
     overflow-x: auto;
+    position: relative;
   }
+
+.choiceConnectionsWrapper {
+  display: flex;
+  flex-direction: row;
+  user-select: none;
+  pointer-events: none;
+}
+
+  @media (max-width: 768px) {
+  .subjectDetailMenuBox {
+    width: 85dvw;
+    height: 90dvh;
+    padding: 10px;
+  }
+
+  .choiceMenuSelectionBox {
+    zoom: 0.53;
+    transform: none;
+    padding: 5px 10px;
+  }
+}
+
+@media (max-width: 768px) and (orientation: portrait) {
+  .menuBoxSubjectsContainer {
+    flex-direction: column;
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: 70%;
+  }
+
+  .choiceMenuSelectionBox {
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .choiceConnectionsWrapper {
+    display: flex;
+    flex-direction: column;
+  }
+}
 
 .overlay {
   position: fixed;

@@ -1,3 +1,4 @@
+import useIsPortrait from "@/hooks/useIsPortrait";
 import { Course } from "@/types/subjects";
 import { useData } from "@components/providers/dataProvider";
 import ChoiceConnection from '@components/SubjectDetailMenu/ChoiceConnection';
@@ -12,6 +13,7 @@ type ChoiceConnectionsProps = {
 
 function ChoiceConnections({course, subjectWidth, isPredecessor} : ChoiceConnectionsProps) {
     const subjectInfoData = useData();
+    const horizontal = useIsPortrait();
     let subjectsList = isPredecessor ? course.predecessors : course.successors;
     let voluntarySubjectsArray = subjectsList.map(subject => subject.code).filter(code => !Object.keys(subjectInfoData["details"]).includes(code));
     let compulsorySubjectsArray = subjectsList.map(subject => subject.code).filter(code => Object.keys(subjectInfoData["details"]).includes(code));
@@ -28,8 +30,9 @@ function ChoiceConnections({course, subjectWidth, isPredecessor} : ChoiceConnect
     let voluntaryColor = voluntarySubjectsArray.length == 0 ? "transparent" : "var(--text-secondary)";
 
     return (
-        <div style={{display: "flex", flexDirection: "row", userSelect: "none"}}>
-            <ChoiceConnection 
+        <div className="choiceConnectionsWrapper">
+            <ChoiceConnection
+                horizontal={horizontal}
                 color={compulsoryColor}
                 x={x}
                 yStart={yStart}
@@ -37,9 +40,9 @@ function ChoiceConnections({course, subjectWidth, isPredecessor} : ChoiceConnect
                 isPredecessor={isPredecessor}
                 allSoft={allSoft}
                 text={compulsorySubjectsText}
-                subjectWidth={subjectWidth}
             />
             <ChoiceConnection 
+                horizontal={horizontal}
                 color={voluntaryColor}
                 x={x}
                 yStart={yStart}
@@ -47,7 +50,6 @@ function ChoiceConnections({course, subjectWidth, isPredecessor} : ChoiceConnect
                 isPredecessor={isPredecessor}
                 allSoft={false}
                 text={voluntarySubjectsText}
-                subjectWidth={subjectWidth}
             />
         </div>
     )

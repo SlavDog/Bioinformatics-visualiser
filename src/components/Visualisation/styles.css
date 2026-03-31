@@ -75,6 +75,16 @@
   color: var(--text-primary);
 }
 
+@media (max-width: 768px) {
+  .bigTitle {
+    font-size: 18px;
+  }
+
+  .bigSubTitle {
+    font-size: 12px;
+  }
+}
+
 .zoomButton {
    font-family: "Inter", sans-serif;
    font-weight: 500;

@@ -12,7 +12,7 @@ type SubjectListProps = {
 function SubjectList({source, currentCode} : SubjectListProps) {
     const subjectInfoData = useData();
     const choice = subjectInfoData.choices[source];
-    console.log(source);
+
     if (source == "tv") { 
         return <BigButton color={"#b400d8"} onClick={() => window.open('https://www.fsps.muni.cz/cus/vyuka/predmety-povinne-telesne-vychovy', '_blank')} text="Zobrazit aktuální nabídku tělocviků!"></BigButton>
     }
