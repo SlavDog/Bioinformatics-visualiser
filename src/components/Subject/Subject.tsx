@@ -66,7 +66,17 @@ function Subject({ code, course, isAlsoOutside = false, style, setDragEnabled } 
         ? [...(selectedChoices[code] ?? [])].slice(0, 2)
         : [];
     let limit = course.credits;
-
+    let hasSubjectLimit = false;
+    if (course.type === "choice") {
+        const choiceLimit = subjectInfoData.choices[code.replace(/-\d+$/, "")]?.type;
+        console.log(code, choiceLimit);
+        if (choiceLimit) {
+            const [subjectsLimit, _] = choiceLimit.split(":").map(Number);
+            if (subjectsLimit != 0) {
+                hasSubjectLimit = true;
+            }
+        }
+    }
     return (
         <>
             <div onClick={onClick} className={`subject subjectType${course.type} ${isHighlighted ? "subjectHighlighted" : ""} ${isDimmed ? "subjectDimmed" : ""}`} style={style}>
@@ -93,7 +103,7 @@ function Subject({ code, course, isAlsoOutside = false, style, setDragEnabled } 
                             {WarningComponent}
                         </div>
                     </Tippy>
-                    <p className="subjectCredits">{limit} {course.credits != undefined ? "kr." : "předm."}</p>
+                    <p className="subjectCredits">{limit} {!hasSubjectLimit ? "kr." : "předm."}</p>
                 </div>
             </div>
             <SubjectDetailMenu
