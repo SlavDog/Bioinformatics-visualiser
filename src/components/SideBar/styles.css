@@ -1,244 +1,251 @@
 .sideBar {
-  z-index: 10;
-  background-color: var(--background);
-  border: 2px solid var(--background-secondary);
-  padding: 20px;
-  font-family: "Inter", sans-serif;
-  position: absolute;
-  flex-direction: column;
-  overflow-y: scroll;
-  overflow-x: hidden;
-  top: 0;
-  bottom: 0;
+    z-index: 10;
+    background-color: var(--background);
+    box-shadow: 3px 0px 4px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    font-family: 'Inter', sans-serif;
+    position: absolute;
+    flex-direction: column;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    top: 0;
+    bottom: 0;
 }
 
 .sideBarTitle {
-  font-size: large;
-  color: var(--text-primary);
-  margin: 0px;
+    font-size: large;
+    color: var(--text-primary);
+    margin: 0px;
 }
 
 .sideBarSubtitle {
-  font-size: small;
-  font-weight: 600;
-  padding-top: 10px;
-  color: var(--text-primary);
+    font-size: small;
+    font-weight: 600;
+    padding-top: 10px;
+    color: var(--text-primary);
 }
 
 .field {
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0px 5px 3px 0px;
-  color: var(--text-primary);
-  margin: 8px 0px 5px 0px;
-  border-radius: 2px;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px 5px 3px 0px;
+    color: var(--text-primary);
+    margin: 8px 0px 5px 0px;
+    border-radius: 2px;
 }
 
-.field, .field * {
-  cursor: pointer;
+.field,
+.field * {
+    cursor: pointer;
 }
 
 .advancedField {
-  position: relative;
+    position: relative;
 }
 
 .advancedField::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  border-radius: inherit;
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    border-radius: inherit;
 }
 
 .advancedMathField::after {
-  background: linear-gradient(to right, var(--background), var(--math-background));
+    background: linear-gradient(to right, var(--background), var(--math-background));
 }
 
 .advancedInfField::after {
-  background: linear-gradient(to right, var(--background), var(--informatics-background));
+    background: linear-gradient(to right, var(--background), var(--informatics-background));
 }
 
 .advancedField:hover::after {
-  opacity: 1;
+    opacity: 1;
 }
 
 .advancedField > * {
-  position: relative;
-  z-index: 1;
+    position: relative;
+    z-index: 1;
 }
 
 .preferenceFieldLabel {
-  font-size: small;
-  margin: 0px;
-  overflow-wrap: break-word;
-  word-break: break-word;
+    font-size: small;
+    margin: 0px;
+    overflow-wrap: break-word;
+    word-break: break-word;
 }
 
 .tagsBox {
-  height: 100px;
-  border: 1px solid var(--background-secondary);
-  border-radius: 5px;
-  margin-top: 10px;
+    height: 100px;
+    border: 1px solid var(--background-secondary);
+    border-radius: 5px;
+    margin-top: 10px;
 }
 
-select, .submitButton {
-  font-family: 'Inter', sans-serif;
-  background-color: var(--button);
-  color: var(--text-primary);
-  transition: background-color 0.2s ease;
-  border-radius: 5px;
-  border-width: 0px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: -1px;
-  padding: 5px;
+select,
+.submitButton {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--button);
+    color: var(--text-primary);
+    transition:
+        background-color 0.2s ease,
+        box-shadow 0.2s ease;
+    border-radius: 5px;
+    border-width: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: -1px;
+    padding: 5px;
 }
 
 .submitButton:hover {
-  background-color: var(--button-hover);
-  cursor: pointer;
+    background-color: var(--button-hover);
+    cursor: pointer;
 }
 
 .rangeScaler {
-  display: flex;
-  flex-direction: row; 
-  width: 100%;
-  justify-content: space-evenly;
-  padding: 10px 0 10px 0;
-  font-family: Inter;
-  font-weight: 500;
-  font-size: small;
-  z-index: 10;
-  color: var(--text-primary);
-  align-items: center;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-evenly;
+    padding: 10px 0 10px 0;
+    font-family: Inter;
+    font-weight: 500;
+    font-size: small;
+    z-index: 10;
+    color: var(--text-primary);
+    align-items: center;
 }
 
 .titleBox {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  padding-bottom: 10px;
-  border-bottom: 1px solid var(--divider-color);
-  padding-top: 20px;
-  margin-bottom: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--divider-color);
+    padding-top: 20px;
+    margin-bottom: 10px;
 }
 
 .helpIcon {
-  border: 2px solid var(--text-primary);
-  color: var(--text-primary);
-  font-family: Inter;
-  font-weight: 600; 
-  font-size: 12px;
-  display: flex; 
-  padding: 0px;
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  align-items: center;
-  justify-content: center;
+    border: 2px solid var(--text-primary);
+    color: var(--text-primary);
+    font-family: Inter;
+    font-weight: 600;
+    font-size: 12px;
+    display: flex;
+    padding: 0px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    align-items: center;
+    justify-content: center;
 }
 
 .helpIcon:hover {
-  cursor: help;
+    cursor: help;
 }
 
 .hintBox {
-  border: 2px solid var(--background-secondary);
-  border-radius: 10px;
-  padding: 10px 15px;
-  position: relative;
+    border: 2px solid var(--background-secondary);
+    border-radius: 10px;
+    padding: 10px 15px;
+    position: relative;
 }
 
 .hintBox .field,
 .hintBox .field * {
-  cursor: default;
+    cursor: default;
 }
 
 .hintCircle {
-  width: 20px;
-  height: 20px;
-  margin-right: 10px;
-  border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    border-radius: 50%;
 }
 
 .hintSeparator {
-  height: 0px;
-  border: 1px dashed var(--background-secondary);
-  width: 100%;
+    height: 0px;
+    border: 1px dashed var(--background-secondary);
+    width: 100%;
 }
 
 @media (max-width: 767px) {
-  .sideBar {
-    width: 60vw;
-    transform: translateX(-100%);
-    transition: transform 0.3s ease;
-    padding-top: 45px;
-  }
-  
-  .sideBar.open {
-    transform: translateX(0);
-  }
+    .sideBar {
+        width: 60vw;
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+        padding-top: 45px;
+    }
+
+    .sideBar.open {
+        transform: translateX(0);
+    }
+
+    .sideBar {
+        box-shadow: 3px 0px 4px rgba(0, 0, 0, 0);
+    }
 }
 
 .desktopOnly {
-  display: none;
+    display: none;
 }
 
 .phoneOnly {
-  display: block;
+    display: block;
 }
 
 .scrollableBox {
-  margin-left: 0;
+    margin-left: 0;
 }
 
 @media (min-width: 768px) {
-  .scrollableBox {
-    margin-left: calc(var(--sidebar-width) + 42px);
-  }  
+    .scrollableBox {
+        margin-left: calc(var(--sidebar-width) + 42px);
+    }
 
-  .desktopOnly {
-    display: flex;
-  }
+    .desktopOnly {
+        display: flex;
+    }
 
-  .phoneOnly {
-    display: none;
-  }
+    .phoneOnly {
+        display: none;
+    }
 
-  .mobileToggle {
-    display: none;
-  }
+    .mobileToggle {
+        display: none;
+    }
 
-  .sideBar {
-    width: var(--sidebar-width);
-  }
+    .sideBar {
+        width: var(--sidebar-width);
+    }
 }
 
-
 .mobileToggle {
-  position: fixed;
-  top: 15px;
-  left: 15px;
-  z-index: 100;
-  width: 35px;
-  height: 35px;
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    z-index: 100;
+    width: 35px;
+    height: 35px;
 }
 
 .mobileZoomSlider {
-  position: fixed;
-  top: 60px;
-  left: calc(15px + 35px / 2);
-  transform: translateX(-50%);
-  z-index: 100;
-  height: 150px;
-  writing-mode: vertical-lr;
-  direction: rtl;
-  transition: opacity 0.3s ease;
-  filter: saturate(0);
+    position: fixed;
+    top: 60px;
+    left: calc(15px + 35px / 2);
+    transform: translateX(-50%);
+    z-index: 100;
+    height: 150px;
+    writing-mode: vertical-lr;
+    direction: rtl;
+    transition: opacity 0.3s ease;
+    filter: saturate(0);
 }

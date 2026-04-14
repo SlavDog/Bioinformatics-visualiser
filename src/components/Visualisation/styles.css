@@ -93,7 +93,14 @@
 }
 
 .tippy-box {
-  font-family: 'Inter', sans-serif; /* Tvůj preferovaný font */
+  font-family: 'Inter', sans-serif;
   font-size: 14px;
   line-height: 1.4;
+  box-shadow: 0 0 15px -3px rgba(0, 0, 0, 0.5);
+  background-color: var(--tippy-background) !important;
+  color: var(--tippy-text) !important;
+}
+
+.tippy-box .tippy-arrow {
+  color: var(--tippy-arrow) !important;
 }

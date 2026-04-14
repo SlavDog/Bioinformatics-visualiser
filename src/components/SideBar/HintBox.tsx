@@ -141,6 +141,7 @@ function HintBox() {
                     transform: isOpen ? "translateY(-4px)" : "translateY(0)",
                     transition: "max-height 0.3s ease 0.1s, opacity 0.2s ease 0.15s, transform 0.2s ease 0.15s",
                     pointerEvents: isOpen ? "none" : "auto",
+                    paddingBottom: "5px"
                 }}
             >
                 <button onClick={() => setIsOpen(true)} className='submitButton' style={{ width: "100%", padding: "1px 10px", height: "30px" }}>

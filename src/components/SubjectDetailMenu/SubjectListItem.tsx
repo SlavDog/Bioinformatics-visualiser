@@ -30,7 +30,7 @@ function SubjectListItem({code, course, choiceCode} : SubjectListItemProps) {
             onClick={() => toggle(choiceCode, code)}
             style={{
                 outline: isSelected ? "2px solid var(--connection-primary)" : "2px solid transparent",
-                boxShadow: isSelected ? "0px 0px 30px var(--choice)" : "0px 0px 12px transparent"
+                boxShadow: isSelected ? "0px 0px 12px var(--choice)" : "0px 0px 12px transparent"
             }}>
             <ChoiceConnections
                 course={course}
