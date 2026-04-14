@@ -70,10 +70,8 @@ type Substitution = {
 export type EdgeOffsets = Record<string, number>;
 
 export type Coordinates = {x: number, y: number};
-export type RealCoordinates = {x: number, y: number};
-export type CodeToCoordinates = Record<string, Coordinates>;
-export type PositionsToCode = Array<Array<string>>;
-export type RealPositions = Record<string, RealCoordinates>;
+export type CodeToPosition = Record<string, Coordinates>;
+export type PositionToCode = Array<Array<string>>;
 
 export type AdvancedSwitch = {
     advanced_math: boolean,

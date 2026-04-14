@@ -5,7 +5,7 @@ import VisualisationForeground from '@components/Visualisation/VisualisationFore
 import VisualisationBackground from '@components/Visualisation/VisualisationBackground';
 import { Layout } from '@/consts/VisualisationParameters';
 import { useData, useSelectedSpecialization, useShowAdvancedBiology, useShowAdvancedInformatics, useShowAdvancedMath } from "@components/providers/dataProvider";
-import { Details, EdgeOffsets, OrderSubject, RealPositions, Spec, SubjectData } from '@/types/subjects';
+import { Details, EdgeOffsets, OrderSubject, CodeToPosition, Spec, SubjectData } from '@/types/subjects';
 
 import "./styles.css";
 
@@ -21,7 +21,7 @@ type VisualisationState = {
     spec: Spec;
     xOffsets: EdgeOffsets;
     yOffsets: EdgeOffsets;
-    positions: RealPositions;
+    positions: CodeToPosition;
     maxX: number;
     maxY: number;
     orGatesPositions: Array<{x: number, y: number}>;
