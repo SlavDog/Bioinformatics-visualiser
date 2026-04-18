@@ -22,9 +22,9 @@ const MAX_POSITION_ATTEMPTS = 20;
  * Main entry point for the layout calculation.
  * Converts a study plan structure into specific pixel coordinates for rendering.
  * @param {Details} details - Catalog of all subjects and their metadata.
- * @param {Spec} spec - Specification of study programs/specializations.
+ * @param {Spec} spec - Specification of study specializations.
  * @param {string} selectedSpecialization - ID of the currently active specialization.
- * @param {Record<string, number>} codesToSem - Mapping of subject codes to their recommended semester indices.
+ * @param {Record<string, number>} codesToSem - Mapping of subject codes to their recommended semesters.
  * @returns {[CodeToPosition, number, number]} A tuple containing [coordinate map, total width, total height].
  */
 export function getPositions(
@@ -179,7 +179,7 @@ export function getReachableCodes(
  * Calculates Y-axis offsets for visualizing "OR gates" (logical prerequisite groups).
  * @param {string} code - The subject code.
  * @param {Course} course - The course object.
- * @param {Details} processedSubjects - Map of already processed subjects.
+ * @param {Details} details - Map of already processed subjects.
  * @param {EdgeOffsets} edgeYOffsets - Existing edge offsets.
  * @param {Record<string, number>} codesToSem - Recommended semesters mapping.
  * @returns {Array<number>} An array of Y-offsets for the gate connection points.
@@ -187,11 +187,11 @@ export function getReachableCodes(
 export function getOrGatesYOffsetsForSubject(
     code: string,
     course: Course,
-    processedSubjects: Details,
+    details: Details,
     edgeYOffsets: EdgeOffsets,
     codesToSem: Record<string, number>
 ): Array<number> {
-    if (!hasOrGate(code, course, processedSubjects, codesToSem)) {
+    if (!hasOrGate(code, course, details, codesToSem)) {
         return [];
     }
 
@@ -491,7 +491,7 @@ function shouldSkipPlacement(
 function hasOrGate(
     code: string,
     course: Course,
-    processedSubjects: Details,
+    details: Details,
     codesToSem: Record<string, number>
 ): boolean {
     return (
@@ -503,7 +503,7 @@ function hasOrGate(
                         .filter(
                             (s) => codesToSem[s] != null && codesToSem[s] < (codesToSem[code] ?? 0)
                         )
-                        .filter((s) => processedSubjects[s]).length > 1
+                        .filter((s) => details[s]).length > 1
             )
         )
     );
