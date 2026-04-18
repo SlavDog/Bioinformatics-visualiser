@@ -479,6 +479,11 @@ function shouldSkipPlacement(
         codesToSem[code] !== semesterIndex + 1 &&
         details[code].predecessors.length > 0;
     const notInSpec = !currentSpecializationCodes.has(code);
+    if (wrongSemester) {
+        console.warn(
+            `Subject ${code} is being placed as a part of tree at semester ${semesterIndex + 1}, but recommended semester is ${codesToSem[code]}. Remove the edges leading to this subject or adjust the recommended semester to fix this. The subject will be placed in the recommended semester, but the layout might look suboptimal.`
+        );
+    }
     return isPlaced || wrongSemester || notInSpec;
 }
 
