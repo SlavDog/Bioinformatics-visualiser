@@ -96,10 +96,6 @@ export function getTreePositions(
     currentSpecializationCodes: Set<string>,
     codesToSem: Record<string, number>
 ): false | number {
-    if (isPositionOccupied(semesterIndex, positionIndex, positionToCode, tempPositionsToCode)) {
-        return false;
-    }
-
     // Node already placed or semester doesn't match the one in data
     if (
         shouldSkipPlacement(
@@ -113,6 +109,10 @@ export function getTreePositions(
         )
     ) {
         return 0;
+    }
+
+    if (isPositionOccupied(semesterIndex, positionIndex, positionToCode, tempPositionsToCode)) {
+        return false;
     }
 
     const nextAvailableY = placeSuccessors(
