@@ -2,14 +2,22 @@ import { ensureOffset } from '@utils/Graph/dataUtils.js';
 import { EdgeOffsets, Details, Edge, OrderSubject, CodeToPosition } from '@/types/subjects';
 import { Layout } from '@/consts/VisualisationParameters';
 
-const OFFSET_STEP = 12;
+// ─── Public API ──────────────────────────────────────────────────────────────
 
+/**
+ * Calculates the necessary X and Y offsets for edges in the graph to minimize crossings and improve readability.
+ * @param details - Catalog of all subjects and their metadata.
+ * @param pos - The calculated positions of subjects in the layout.
+ * @param plan - The study plan containing the order of subjects by semester.
+ * @param codesToSem - Mapping of subject codes to their recommended semesters.
+ * @returns A tuple containing the X offsets and Y offsets for edges.
+ */
 export function getOffsets(
     details: Details,
     pos: CodeToPosition,
     plan: Record<string, Array<OrderSubject>>,
     codesToSem: Record<string, number>
-) {
+): [EdgeOffsets, EdgeOffsets] {
     const edgeXOffsets = {};
     const edgeYOffsets = {};
     fillEdgeYOffsets(edgeYOffsets, details, plan, pos);
@@ -17,38 +25,49 @@ export function getOffsets(
     return [edgeXOffsets, edgeYOffsets];
 }
 
+// ─── X offsets  ──────────────────────────────────────────────────────────────
+
+/**
+ * Calculates the X offsets for edges based on the positions of subjects and their successors.
+ * @param edgeXOffsets - The object to be filled with calculated X offsets for edges.
+ * @param details - Catalog of all subjects and their metadata.
+ * @param plan - The study plan containing the order of subjects by semester.
+ * @param pos - The calculated positions of subjects in the layout.
+ * @param codesToSem - Mapping of subject codes to their recommended semesters.
+ */
 export function fillEdgeXOffsets(
     edgeXOffsets: EdgeOffsets,
-    infoData: Details,
-    orderData: Record<string, Array<OrderSubject>>,
+    details: Details,
+    plan: Record<string, Array<OrderSubject>>,
     pos: CodeToPosition,
     codesToSem: Record<string, number>
 ): void {
-    const numberOfSuccsBySemester = getNumberOfSuccsBySemester(orderData, infoData, codesToSem);
+    const numberOfSuccsBySemester = getNumberOfSuccsBySemester(plan, details, codesToSem);
 
     // assign x offsets
-    Object.entries(orderData).forEach(([semester, subjects]) => {
+    Object.entries(plan).forEach(([semester, subjects]) => {
         const centerOffset = (numberOfSuccsBySemester[Number(semester) - 1] - 1) / 2;
         let edgeIndex = 0;
-        const shouldReverseSemester = shouldReverseSemesterSubjects(subjects, infoData, pos);
+
+        const shouldReverseSemester = shouldReverseSemesterSubjects(subjects, details, pos);
         const sortedSubjects = sortByPositions(subjects, pos);
         const processedSubjects = shouldReverseSemester ? sortedSubjects.reverse() : sortedSubjects;
 
         processedSubjects.forEach((parent) => {
-            const parentCode = 'code' in parent ? parent.code : parent.choice;
-            if (!infoData[parentCode]) {
+            const parentCode = getSubjectCode(parent);
+            if (!details[parentCode]) {
                 return;
             }
-            const successors = sortByPositions(infoData[parentCode].successors, pos);
+            const successors = sortByPositions(details[parentCode].successors, pos);
             if (successors.length == 0) {
                 return;
             }
 
-            const shouldReverse = getShouldReverse(pos, parentCode, successors);
-            const processedSuccessors = shouldReverse ? [...successors].reverse() : successors;
+            const shouldReverse = shouldReverseSuccs(pos, parentCode, successors);
+            const orderedSuccessors = shouldReverse ? [...successors].reverse() : successors;
 
-            processedSuccessors.forEach((successor) => {
-                if (!infoData[successor.code]) {
+            orderedSuccessors.forEach((successor) => {
+                if (!details[successor.code]) {
                     return;
                 }
                 ensureOffset(
@@ -62,17 +81,25 @@ export function fillEdgeXOffsets(
     });
 }
 
+/**
+ * Determines whether the subjects in a semester should be processed in reverse order based on the average Y coordinate of their successors.
+ * This is a heuristic to minimize edge crossings by ordering the x-offsets.
+ * @param subjects - The list of subjects in the semester.
+ * @param details - Catalog of all subjects and their metadata.
+ * @param pos - The calculated positions of subjects in the layout.
+ * @returns True if the subjects should be processed in reverse order, false otherwise.
+ */
 function shouldReverseSemesterSubjects(
     subjects: Array<OrderSubject>,
-    infoData: Details,
+    details: Details,
     pos: CodeToPosition
 ): boolean {
     let totalDiff = 0;
     let validPairs = 0;
 
     for (const subject of subjects) {
-        const parentCode = 'code' in subject ? subject.code : subject.choice;
-        const parentData = infoData[parentCode];
+        const parentCode = getSubjectCode(subject);
+        const parentData = details[parentCode];
         if (!parentData) continue;
 
         const parentY = pos[parentCode]?.y ?? 0;
@@ -80,17 +107,23 @@ function shouldReverseSemesterSubjects(
         for (const successor of parentData.successors) {
             const succY = pos[successor.code]?.y;
             if (succY !== undefined) {
-                totalDiff += succY - parentY; // Pozitivní = nástupce je NÍŽE
+                totalDiff += succY - parentY;
                 validPairs++;
             }
         }
     }
 
-    // Reverse pokud jsou nástupci průměrně NÍŽE než rodiče
     return validPairs > 0 && totalDiff / validPairs > 0;
 }
 
-function getShouldReverse(pos: CodeToPosition, parentCode: string, successors: Edge[]) {
+/**
+ * Determines whether the successors of a subject should be processed in reverse order based on their Y coordinates.
+ * @param pos - The calculated positions of subjects in the layout.
+ * @param parentCode - The code of the parent subject.
+ * @param successors - The list of successor subjects.
+ * @returns True if the successors should be processed in reverse order, false otherwise.
+ */
+function shouldReverseSuccs(pos: CodeToPosition, parentCode: string, successors: Edge[]) {
     const parentY = pos[parentCode].y ?? 0;
     let totalDiff = 0;
     let validSuccs = 0;
@@ -105,9 +138,36 @@ function getShouldReverse(pos: CodeToPosition, parentCode: string, successors: E
     return validSuccs > 0 && totalDiff / validSuccs > 0;
 }
 
+/** Calculates the number of successors for each semester. */
+function getNumberOfSuccsBySemester(
+    orderData: Record<string, Array<OrderSubject>>,
+    infoData: Details,
+    codesToSem: Record<string, number>
+): Array<number> {
+    const numberOfSuccsBySemester = Array(Object.keys(orderData).length).fill(0);
+    Object.entries(infoData).forEach(([code, course]) => {
+        course.successors.forEach((successor) => {
+            if (!infoData[successor.code] || codesToSem[successor.code] == null) {
+                return;
+            }
+            numberOfSuccsBySemester[Number(codesToSem[code]) - 1] += 1;
+        });
+    });
+    return numberOfSuccsBySemester;
+}
+
+// ─── Y offsets  ──────────────────────────────────────────────────────────────
+
+/**
+ * Calculates the Y offsets for edges based on the positions of subjects and their successors, as well as the structure of the graph (e.g., OR groups).
+ * @param edgeYOffsets - The object to be filled with calculated Y offsets for edges.
+ * @param details - Catalog of all subjects and their metadata.
+ * @param plan - The plan containing the subjects for each semester.
+ * @param pos - The calculated positions of subjects in the layout.
+ */
 export function fillEdgeYOffsets(
     edgeYOffsets: EdgeOffsets,
-    newDetails: Details,
+    details: Details,
     plan: Record<string, Array<OrderSubject>>,
     pos: CodeToPosition
 ) {
@@ -115,15 +175,15 @@ export function fillEdgeYOffsets(
     const pathTargetOffsets: Record<string, number> = {};
     Object.values(plan).forEach((semester) => {
         sortByPositions(semester, pos).forEach((subj) => {
-            const parentCode = 'code' in subj ? subj.code : subj.choice;
-            if (!newDetails[parentCode]) {
+            const parentCode = getSubjectCode(subj);
+            if (!details[parentCode]) {
                 return;
             }
-            sortByPositions(newDetails[parentCode].successors, pos).forEach((succ, i) => {
+            sortByPositions(details[parentCode].successors, pos).forEach((succ, i) => {
                 assignOffsets(
                     parentCode,
                     succ,
-                    newDetails,
+                    details,
                     edgeYOffsets,
                     orGroupEndOffsets,
                     i,
@@ -135,112 +195,182 @@ export function fillEdgeYOffsets(
     });
 }
 
-function findRealSuccessor(currentCode: string, details: Details): string {
-    if (currentCode.includes('HELPER')) {
-        const succs = details[currentCode]?.successors;
-        if (succs && succs.length > 0) {
-            return findRealSuccessor(succs[0].code, details);
-        }
-    }
-    return currentCode;
-}
-
-function sortByPositions<T extends { code: string } | { choice: string }>(
-    array: Array<T>,
-    pos: CodeToPosition
-): Array<T> {
-    return [...array].sort((a, b) => {
-        const codeA = 'code' in a ? a.code : a.choice;
-        const codeB = 'code' in b ? b.code : b.choice;
-        const yA = pos[codeA]?.y ?? 0;
-        const yB = pos[codeB]?.y ?? 0;
-        return yA - yB;
-    });
-}
-
+/**
+ * Assigns Y offsets to edges based on their positions and the structure of the graph.
+ * @param parentCode - The code of the parent subject.
+ * @param successorInfo - Information about the successor subject.
+ * @param details - The catalog of all subjects and their metadata.
+ * @param edgeYOffsets - The object to be filled with calculated Y offsets for edges.
+ * @param orGroupEndOffsets - A record of end offsets for OR groups.
+ * @param i - The index of the successor in the list of successors.
+ * @param pathTargetOffsets - A record of target offsets for paths.
+ * @param pos - The calculated positions of subjects in the layout.
+ */
 function assignOffsets(
     parentCode: string,
     successorInfo: Edge,
-    oldDetails: Details,
+    details: Details,
     edgeYOffsets: Record<string, number>,
     orGroupEndOffsets: Record<string, number>,
     i: number,
     pathTargetOffsets: Record<string, number>,
     pos: CodeToPosition
 ) {
-    const realSuccessorCode = findRealSuccessor(successorInfo.code, oldDetails);
+    const realSuccessorCode = findRealSuccessor(successorInfo.code, details);
     const isParentHelper = parentCode.startsWith('HELPER');
-
     const pathKey = getPathCode(parentCode, realSuccessorCode, isParentHelper);
 
-    const myGroup = successorInfo.groups?.find((g) => g.includes(parentCode));
-    const definedSubject = myGroup?.find(
-        (subj) =>
-            pathTargetOffsets[getPathCode(subj, realSuccessorCode, subj.startsWith('HELPER'))] !=
-            undefined
+    const endOffset = computeEndOffset(
+        parentCode,
+        realSuccessorCode,
+        isParentHelper,
+        pathKey,
+        successorInfo,
+        pathTargetOffsets,
+        details,
+        pos
     );
+    const startOffset = computeStartOffset(i, parentCode, isParentHelper, endOffset, details);
 
-    let endOffset: number;
-
-    if (myGroup) {
-        if (pathTargetOffsets[pathKey] == undefined) {
-            const newOffset = definedSubject
-                ? pathTargetOffsets[
-                      getPathCode(
-                          definedSubject,
-                          realSuccessorCode,
-                          definedSubject.startsWith('HELPER')
-                      )
-                  ]
-                : getEndOffset(parentCode, realSuccessorCode, oldDetails, pos);
-
-            myGroup.forEach((memberCode) => {
-                const memberPathId = getPathCode(
-                    memberCode,
-                    realSuccessorCode,
-                    memberCode.startsWith('HELPER')
-                );
-                pathTargetOffsets[memberPathId] = newOffset;
-            });
-        }
-        endOffset = pathTargetOffsets[pathKey];
-    } else {
-        if (isParentHelper) {
-            const originalCode = parentCode.replace(/^HELPER_/, '').split('_')[0];
-            const originalPathKey = `${originalCode}_${realSuccessorCode}`;
-            endOffset =
-                pathTargetOffsets[originalPathKey] ??
-                getEndOffset(originalCode, realSuccessorCode, oldDetails, pos);
-            pathTargetOffsets[pathKey] = endOffset;
-        } else {
-            endOffset = getEndOffset(parentCode, realSuccessorCode, oldDetails, pos);
-            pathTargetOffsets[pathKey] = endOffset;
-        }
-    }
-
-    let startOffset = (i - (oldDetails[parentCode].successors.length - 1) / 2) * OFFSET_STEP;
-
-    const finalStartOffset = isParentHelper ? endOffset : startOffset;
-    const finalEndOffset = endOffset;
-
-    ensureOffset(edgeYOffsets, `${parentCode}-${successorInfo.code}-start`, finalStartOffset);
+    ensureOffset(edgeYOffsets, `${parentCode}-${successorInfo.code}-start`, startOffset);
     resolveEndOffset(
         edgeYOffsets,
         orGroupEndOffsets,
         parentCode,
         successorInfo.code,
         successorInfo.groups,
-        finalEndOffset,
+        endOffset,
         successorInfo
     );
 }
 
-function getPathCode(startCode: string, endCode: string, isParentHelper: boolean) {
-    return isParentHelper
-        ? startCode.replace(/^HELPER_/, '').replace(/_\d+$/, '')
-        : `${startCode}_${endCode}`;
+/**
+ * Computes the start offset of an edge from the parent's side.
+ * HELPER parents use the same value as the end offset (straight pass-through).
+ */
+function computeStartOffset(
+    i: number,
+    parentCode: string,
+    isParentHelper: boolean,
+    endOffset: number,
+    details: Details
+): number {
+    if (isParentHelper) return endOffset;
+    return (i - (details[parentCode].successors.length - 1) / 2) * Layout.offsetStep;
 }
 
+/**
+ * Computes the end offset of an edge by looking up which OR group
+ * the parent belongs to (if any), and delegating accordingly.
+ */
+function computeEndOffset(
+    parentCode: string,
+    realSuccessorCode: string,
+    isParentHelper: boolean,
+    pathKey: string,
+    successorInfo: Edge,
+    pathTargetOffsets: Record<string, number>,
+    details: Details,
+    pos: CodeToPosition
+): number {
+    const myGroup = successorInfo.groups?.find((g) => g.includes(parentCode));
+
+    if (myGroup) {
+        const definedSubject = myGroup.find(
+            (subj) =>
+                pathTargetOffsets[
+                    getPathCode(subj, realSuccessorCode, subj.startsWith('HELPER'))
+                ] !== undefined
+        );
+        return resolveGroupEndOffset(
+            myGroup,
+            pathKey,
+            definedSubject,
+            parentCode,
+            realSuccessorCode,
+            pathTargetOffsets,
+            details,
+            pos
+        );
+    }
+
+    return resolveIndividualEndOffset(
+        parentCode,
+        realSuccessorCode,
+        isParentHelper,
+        pathKey,
+        pathTargetOffsets,
+        details,
+        pos
+    );
+}
+
+/**
+ * Resolves the end offset for a path that belongs to an OR group.
+ * If the path offset is already cached, returns it directly.
+ * Otherwise computes a new shared offset for all group members and caches it.
+ */
+function resolveGroupEndOffset(
+    myGroup: string[],
+    pathKey: string,
+    definedSubject: string | undefined,
+    parentCode: string,
+    realSuccessorCode: string,
+    pathTargetOffsets: Record<string, number>,
+    details: Details,
+    pos: CodeToPosition
+): number {
+    if (pathTargetOffsets[pathKey] !== undefined) {
+        return pathTargetOffsets[pathKey];
+    }
+
+    const newOffset = definedSubject
+        ? pathTargetOffsets[
+              getPathCode(definedSubject, realSuccessorCode, definedSubject.startsWith('HELPER'))
+          ]
+        : getEndOffset(parentCode, realSuccessorCode, details, pos);
+
+    myGroup.forEach((memberCode) => {
+        const memberPathId = getPathCode(
+            memberCode,
+            realSuccessorCode,
+            memberCode.startsWith('HELPER')
+        );
+        pathTargetOffsets[memberPathId] = newOffset;
+    });
+
+    return pathTargetOffsets[pathKey];
+}
+
+/**
+ * Resolves the end offset for a path that does NOT belong to any OR group.
+ * HELPER parents share the offset of their real (non-helper) counterpart.
+ */
+function resolveIndividualEndOffset(
+    parentCode: string,
+    realSuccessorCode: string,
+    isParentHelper: boolean,
+    pathKey: string,
+    pathTargetOffsets: Record<string, number>,
+    details: Details,
+    pos: CodeToPosition
+): number {
+    if (!isParentHelper) {
+        const offset = getEndOffset(parentCode, realSuccessorCode, details, pos);
+        pathTargetOffsets[pathKey] = offset;
+        return offset;
+    }
+
+    const originalCode = parentCode.replace(/^HELPER_/, '').split('_')[0];
+    const originalPathKey = `${originalCode}_${realSuccessorCode}`;
+    const offset =
+        pathTargetOffsets[originalPathKey] ??
+        getEndOffset(originalCode, realSuccessorCode, details, pos);
+    pathTargetOffsets[pathKey] = offset;
+    return offset;
+}
+
+/** Resolves the end offset for an edge, taking into account OR groups and previously calculated offsets. */
 function resolveEndOffset(
     edgeYOffsets: EdgeOffsets,
     orGroupEndOffsets: Record<string, number>,
@@ -264,17 +394,22 @@ function resolveEndOffset(
     );
 }
 
+/**
+ * Calculates the Y offset for the end of an edge based on its predecessors' positions.
+ * @param parentCode - The code of the parent subject.
+ * @param succCode - The code of the successor subject.
+ * @param details - The catalog of all subjects and their metadata.
+ * @param pos - The calculated positions of subjects in the layout.
+ */
 function getEndOffset(
     parentCode: string,
     succCode: string,
-    oldDetails: Details,
+    details: Details,
     pos: CodeToPosition
 ): number {
-    const realParent = parentCode.startsWith('HELPER')
-        ? parentCode.replace(/^HELPER_/, '').split('_')[0]
-        : parentCode;
+    const realParent = resolveHelperCode(parentCode);
 
-    const sortedPreds = [...oldDetails[succCode].predecessors].sort((a, b) => {
+    const sortedPreds = [...details[succCode].predecessors].sort((a, b) => {
         const realA = a.code;
         const realB = b.code;
         const yDiff = (pos[realA]?.y ?? 0) - (pos[realB]?.y ?? 0);
@@ -289,33 +424,24 @@ function getEndOffset(
     });
 
     const predIndex = sortedPreds.findIndex((p) => {
-        const realP = p.code.startsWith('HELPER')
-            ? p.code.replace(/^HELPER_/, '').split('_')[0]
-            : p.code;
+        const realP = resolveHelperCode(p.code);
         return realP === realParent;
     });
 
     const inDegree = sortedPreds.length;
-    return (predIndex - (inDegree - 1) / 2) * OFFSET_STEP;
+    return (predIndex - (inDegree - 1) / 2) * Layout.offsetStep;
 }
 
-function getNumberOfSuccsBySemester(
-    orderData: Record<string, Array<OrderSubject>>,
-    infoData: Details,
-    codesToSem: Record<string, number>
-): Array<number> {
-    const numberOfSuccsBySemester = Array(Object.keys(orderData).length).fill(0);
-    Object.entries(infoData).forEach(([code, course]) => {
-        course.successors.forEach((successor) => {
-            if (!infoData[successor.code] || codesToSem[successor.code] == null) {
-                return;
-            }
-            numberOfSuccsBySemester[Number(codesToSem[code]) - 1] += 1;
-        });
-    });
-    return numberOfSuccsBySemester;
+// ─── OR groups  ──────────────────────────────────────────────────────────────
+
+/** Generates a unique key for a path between a parent and successor, accounting for HELPER subjects. */
+function getPathCode(startCode: string, endCode: string, isParentHelper: boolean) {
+    return isParentHelper
+        ? startCode.replace(/^HELPER_/, '').replace(/_\d+$/, '')
+        : `${startCode}_${endCode}`;
 }
 
+/** Fills the OR group end offsets for a given edge and its groups. */
 export function fillOrGroupOffsets(
     orGroupEndOffsets: Record<string, number>,
     edge: Edge,
@@ -328,6 +454,7 @@ export function fillOrGroupOffsets(
     });
 }
 
+/** Retrieves the Y offset for an edge that belongs to an OR group, if it exists. */
 export function getYOffsetForOrGroup(
     edgeYOffsets: EdgeOffsets,
     group: Array<string>,
@@ -341,4 +468,41 @@ export function getYOffsetForOrGroup(
         i++;
     }
     console.warn('No offset found for OR group', group, 'to', succCode);
+}
+
+// ─── Helper functions  ──────────────────────────────────────────────────────
+
+//** Finds the real successor of a subject, accounting for HELPER subjects. */
+function findRealSuccessor(currentCode: string, details: Details): string {
+    if (currentCode.includes('HELPER')) {
+        const succs = details[currentCode]?.successors;
+        if (succs && succs.length > 0) {
+            return findRealSuccessor(succs[0].code, details);
+        }
+    }
+    return currentCode;
+}
+
+//** Sorts an array of subjects (or choices) based on their Y coordinate in the layout. */
+function sortByPositions<T extends { code: string } | { choice: string }>(
+    array: Array<T>,
+    pos: CodeToPosition
+): Array<T> {
+    return [...array].sort((a, b) => {
+        const codeA = getSubjectCode(a);
+        const codeB = getSubjectCode(b);
+        const yA = pos[codeA]?.y ?? 0;
+        const yB = pos[codeB]?.y ?? 0;
+        return yA - yB;
+    });
+}
+
+/** Returns the code of a subject regardless of whether it's a `{ code }` or `{ choice }` object. */
+function getSubjectCode(subject: { code: string } | { choice: string }): string {
+    return 'code' in subject ? subject.code : subject.choice;
+}
+
+/** Returns the code of the real parent subject, accounting for HELPER subjects. */
+function resolveHelperCode(code: string): string {
+    return code.startsWith('HELPER') ? code.replace(/^HELPER_/, '').split('_')[0] : code;
 }
