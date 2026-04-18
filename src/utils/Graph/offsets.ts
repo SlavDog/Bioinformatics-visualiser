@@ -264,17 +264,40 @@ function resolveEndOffset(
     );
 }
 
+function getEndOffset(
+    parentCode: string,
+    succCode: string,
+    oldDetails: Details,
+    pos: CodeToPosition
+): number {
+    const realParent = parentCode.startsWith('HELPER')
+        ? parentCode.replace(/^HELPER_/, '').split('_')[0]
+        : parentCode;
 
-function getEndOffset(succCode: string, oldDetails: Details, successorInDegreeCounter: Record<string, number>) : number {
-    if (!(succCode in successorInDegreeCounter)) {
-        successorInDegreeCounter[succCode] = 0;
-    }
-    const inDegree = oldDetails[succCode].predecessors.length;
-    let endOffset = (successorInDegreeCounter[succCode] - (inDegree - 1) / 2) * OFFSET_STEP;
-    successorInDegreeCounter[succCode]++;
-    return endOffset;
+    const sortedPreds = [...oldDetails[succCode].predecessors].sort((a, b) => {
+        const realA = a.code;
+        const realB = b.code;
+        const yDiff = (pos[realA]?.y ?? 0) - (pos[realB]?.y ?? 0);
+        if (yDiff !== 0) return yDiff;
+
+        // If Y coordinates are the same, sort by X coordinate
+        if (pos[realA]?.y < pos[succCode]?.y) {
+            return (pos[realB]?.x ?? 0) - (pos[realA]?.x ?? 0);
+        } else {
+            return (pos[realA]?.x ?? 0) - (pos[realB]?.x ?? 0);
+        }
+    });
+
+    const predIndex = sortedPreds.findIndex((p) => {
+        const realP = p.code.startsWith('HELPER')
+            ? p.code.replace(/^HELPER_/, '').split('_')[0]
+            : p.code;
+        return realP === realParent;
+    });
+
+    const inDegree = sortedPreds.length;
+    return (predIndex - (inDegree - 1) / 2) * OFFSET_STEP;
 }
-
 
 function getNumberOfSuccsBySemester(
     orderData: Record<string, Array<OrderSubject>>,
