@@ -13,34 +13,78 @@ export function getOffsets(details: Details, pos: RealPositions, plan: Record<st
     return [edgeXOffsets, edgeYOffsets];
 }
 
-
-export function fillEdgeXOffsets(edgeXOffsets: EdgeOffsets, infoData: Details,
-                                 orderData: Record<string, Array<OrderSubject>>, pos: RealPositions, codesToSem: Record<string, number>) : void {
+export function fillEdgeXOffsets(
+    edgeXOffsets: EdgeOffsets,
+    infoData: Details,
+    orderData: Record<string, Array<OrderSubject>>,
+    pos: CodeToPosition,
+    codesToSem: Record<string, number>
+): void {
     const numberOfSuccsBySemester = getNumberOfSuccsBySemester(orderData, infoData, codesToSem);
 
     // assign x offsets
     Object.entries(orderData).forEach(([semester, subjects]) => {
         const centerOffset = (numberOfSuccsBySemester[Number(semester) - 1] - 1) / 2;
         let edgeIndex = 0;
-        subjects.forEach(parent => {
-            const parentCode = "code" in parent ? parent.code : parent.choice;
-            if (!infoData[parentCode]) { return; }
+        const shouldReverseSemester = shouldReverseSemesterSubjects(subjects, infoData, pos);
+        const sortedSubjects = sortByPositions(subjects, pos);
+        const processedSubjects = shouldReverseSemester ? sortedSubjects.reverse() : sortedSubjects;
+
+        processedSubjects.forEach((parent) => {
+            const parentCode = 'code' in parent ? parent.code : parent.choice;
+            if (!infoData[parentCode]) {
+                return;
+            }
             const successors = sortByPositions(infoData[parentCode].successors, pos);
-            if (successors.length == 0) { return; }
+            if (successors.length == 0) {
+                return;
+            }
 
             const shouldReverse = getShouldReverse(pos, parentCode, successors);
             const processedSuccessors = shouldReverse ? [...successors].reverse() : successors;
 
-            processedSuccessors.forEach(successor => {
-                if (!infoData[successor.code]) {return;}
-                ensureOffset(edgeXOffsets, `${parentCode}-${successor.code}`,
-                             (edgeIndex - centerOffset) * Layout.edgeXOffsetStep);
+            processedSuccessors.forEach((successor) => {
+                if (!infoData[successor.code]) {
+                    return;
+                }
+                ensureOffset(
+                    edgeXOffsets,
+                    `${parentCode}-${successor.code}`,
+                    (edgeIndex - centerOffset) * Layout.edgeXOffsetStep
+                );
                 edgeIndex += 1;
-           })
+            });
         });
     });
 }
 
+function shouldReverseSemesterSubjects(
+    subjects: Array<OrderSubject>,
+    infoData: Details,
+    pos: CodeToPosition
+): boolean {
+    let totalDiff = 0;
+    let validPairs = 0;
+
+    for (const subject of subjects) {
+        const parentCode = 'code' in subject ? subject.code : subject.choice;
+        const parentData = infoData[parentCode];
+        if (!parentData) continue;
+
+        const parentY = pos[parentCode]?.y ?? 0;
+
+        for (const successor of parentData.successors) {
+            const succY = pos[successor.code]?.y;
+            if (succY !== undefined) {
+                totalDiff += succY - parentY; // Pozitivní = nástupce je NÍŽE
+                validPairs++;
+            }
+        }
+    }
+
+    // Reverse pokud jsou nástupci průměrně NÍŽE než rodiče
+    return validPairs > 0 && totalDiff / validPairs > 0;
+}
 
 function getShouldReverse(pos: RealPositions, parentCode: string, successors: Edge[]) {
     const parentY = pos[parentCode].y ?? 0;
