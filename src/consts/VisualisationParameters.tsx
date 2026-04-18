@@ -1,5 +1,5 @@
 export const Layout = {
-    columnWidth: 350,
+    columnWidth: 400,
     rowHeight: 185,
     subjectHeight: 125,
     subjectWidth: 200,
@@ -13,6 +13,7 @@ export const Layout = {
     detailMenuSubjectHeight: 140,
     detailMenuSubjectWidth: 250,
     detailMenuSubjectPadding: 16,
+    offsetStep: 12
 };
 
 export const ZoomScale = {
