@@ -31,19 +31,6 @@ export function getPath(
     const yDiff = endY - startY;
     const xDiff = endX - startX;
 
-    if (Math.abs(yDiff) < Layout.subjectHeight) {
-        const curvature = 0.9;
-        const cp1x = startX + (endX - startX) * curvature;
-        const cp2x = endX - (startX - endX) * -curvature;
-
-        return `
-            M ${startX} ${startY}
-            C ${cp1x} ${startY}, 
-            ${cp2x} ${endY}, 
-            ${endX} ${endY}
-        `;
-    }
-
     const r = 20;
     const actualR = Math.min(r, Math.abs(yDiff / 2), Math.abs(xDiff / 2));
     const dirY = Math.sign(yDiff);
