@@ -245,7 +245,10 @@ function cleanNodeFromNonExistingNodes(
                     neighbour.by_prerequisites == true
             )
             .map((edge) => edge.code);
-        if (course.unshownNeededPredecessors.length > 0) {
+        if (
+            course.unshownNeededPredecessors.length > 0 &&
+            currentSpecializationCodes.has(course.name)
+        ) {
             console.warn(
                 `Course ${course.name} lacks predecessors: ${course.unshownNeededPredecessors.join(', ')}`
             );
