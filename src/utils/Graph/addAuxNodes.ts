@@ -3,7 +3,6 @@ import { ensureOffset } from '@utils/Graph/dataUtils';
 import { fillOrGroupOffsets, fillEdgeXOffsets, fillEdgeYOffsets } from '@utils/Graph/offsets';
 import { createSuccessingHelperNodes } from '@utils/Graph/helperNodes';
 import {
-    AdvancedSwitch,
     Choices,
     Course,
     Details,
@@ -19,13 +18,13 @@ import { getReachableCodes } from './layout';
 export function addAuxNodes(
     subjectData: SubjectData,
     selectedSpecialization: string,
-    advancedSwitch: AdvancedSwitch,
+    activeSubstitutions: Set<string>,
     codesToSem: Record<string, number>
 ): [Details, Spec] {
     const [newDetails, newOrder, currentSpecializationCodes] = preprocessGraph(
         subjectData,
         selectedSpecialization,
-        advancedSwitch,
+        activeSubstitutions,
         codesToSem
     );
     const currentPlan = newOrder[selectedSpecialization].plan;
@@ -103,12 +102,16 @@ function isInvalidEdge(
 function preprocessGraph(
     subjectData: SubjectData,
     selectedSpecialization: string,
-    advancedSwitch: AdvancedSwitch,
+    activeSubstitutions: Set<string>,
     codesToSem: Record<string, number>
 ): [Details, Spec, Set<string>] {
     const data = structuredClone(subjectData);
 
-    const updatedData = replaceWithAdvancedCourses(data, advancedSwitch, selectedSpecialization);
+    const updatedData = replaceWithAdvancedCourses(
+        data,
+        activeSubstitutions,
+        selectedSpecialization
+    );
 
     const currentSpecializationCodes = new Set(
         Object.values(updatedData.spec[selectedSpecialization].plan)
@@ -132,12 +135,10 @@ function preprocessGraph(
 
 function replaceWithAdvancedCourses(
     subjectData: SubjectData,
-    advancedSwitch: AdvancedSwitch,
+    activeSubstitutions: Set<string>,
     selectedSpecialization: string
 ): SubjectData {
-    const substitutionCodes = Object.entries(advancedSwitch)
-        .filter(([_, toBeReplaced]) => toBeReplaced)
-        .map(([code, _]) => code);
+    const substitutionCodes = Array.from(activeSubstitutions);
 
     const codesToBeRemoved = substitutionCodes.flatMap(
         (code) => subjectData.substitutions[code].removes

@@ -42,6 +42,7 @@ MANUAL_SUBSTITUTIONS = {
     "advanced_math": {
         "nameCZ": "Pokročilá matematika",
         "removes": ["MB141", "MB142", "MB143"],
+        "type": "MA",
         "adds": [{"code": "MB151", "semester": 2},
                  {"code": "MB152", "semester": 3},
                  {"code": "MB153", "semester": 4},
@@ -50,6 +51,7 @@ MANUAL_SUBSTITUTIONS = {
     "advanced_inf": {
         "nameCZ": "Pokročilá informatika",
         "removes": ["IB000ext", "IB113", "IB114"],
+        "type": "IN",
         "adds": [
             {"code": "IB000", "semester": 1},
             {"code": "IB111", "semester": 1},

@@ -55,12 +55,16 @@
     border-radius: inherit;
 }
 
-.advancedMathField::after {
+.advancedMAField::after {
     background: linear-gradient(to right, var(--background), var(--math-background));
 }
 
-.advancedInfField::after {
+.advancedINField::after {
     background: linear-gradient(to right, var(--background), var(--informatics-background));
+}
+
+.advancedBIField::after {
+    background: linear-gradient(to right, var(--background), var(--biology-background));
 }
 
 .advancedField:hover::after {
