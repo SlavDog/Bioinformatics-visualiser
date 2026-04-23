@@ -366,7 +366,7 @@ def get_subject(html: str, code: str, predecessors: dict[str, list[SubjectLink]]
         temp_subject: SubjectLink = {"code" : code, "groups": successor["groups"], "by_prerequisites": successor["by_prerequisites"]}
         if not successor["code"] in predecessors:
             predecessors[successor["code"]] = [temp_subject]
-        else:
+        elif temp_subject not in predecessors[successor["code"]]:
             predecessors[successor["code"]].append(temp_subject)
 
     return {"name": name, "faculty": transform_faculty(faculty),
