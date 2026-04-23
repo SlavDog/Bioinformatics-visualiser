@@ -1,4 +1,4 @@
-import { Course } from '@/types/subjects';
+import { Course } from '@/types';
 import Tippy from '@tippyjs/react';
 
 type WarningProps = {

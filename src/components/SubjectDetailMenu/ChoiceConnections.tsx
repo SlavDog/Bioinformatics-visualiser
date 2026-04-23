@@ -1,33 +1,37 @@
-import useIsPortrait from "@/hooks/useIsPortrait";
-import { Course } from "@/types/subjects";
-import { useData } from "@components/providers/dataProvider";
+import useIsPortrait from '@/hooks/useIsPortrait';
+import { Course } from '@/types';
+import { useData } from '@components/providers/dataProvider';
 import ChoiceConnection from '@components/SubjectDetailMenu/ChoiceConnection';
 
-
 type ChoiceConnectionsProps = {
-    course: Course,
+    course: Course;
     subjectWidth: number;
-    isPredecessor: boolean
-}
+    isPredecessor: boolean;
+};
 
-
-function ChoiceConnections({course, subjectWidth, isPredecessor} : ChoiceConnectionsProps) {
+function ChoiceConnections({ course, subjectWidth, isPredecessor }: ChoiceConnectionsProps) {
     const subjectInfoData = useData();
     const horizontal = useIsPortrait();
     let subjectsList = isPredecessor ? course.predecessors : course.successors;
-    let voluntarySubjectsArray = subjectsList.map(subject => subject.code).filter(code => !Object.keys(subjectInfoData["details"]).includes(code));
-    let compulsorySubjectsArray = subjectsList.map(subject => subject.code).filter(code => Object.keys(subjectInfoData["details"]).includes(code));
-    let voluntarySubjectsText = `${isPredecessor ? "Je následníkem" : "Je předchůdcem"} některých předmětů,\nkteré nejsou povinné: ${voluntarySubjectsArray.join(", ")}`;
-    let compulsorySubjectsText = `${isPredecessor ? "Je následníkem" : "Je předchůdcem"} některých předmětů,\nkteré jsou povinné: ${compulsorySubjectsArray.join(", ")}`;
-    
-    let allSoft = subjectsList.every(edge => edge.by_prerequisites == false);
+    let voluntarySubjectsArray = subjectsList
+        .map((subject) => subject.code)
+        .filter((code) => !Object.keys(subjectInfoData['details']).includes(code));
+    let compulsorySubjectsArray = subjectsList
+        .map((subject) => subject.code)
+        .filter((code) => Object.keys(subjectInfoData['details']).includes(code));
+    let voluntarySubjectsText = `${isPredecessor ? 'Je následníkem' : 'Je předchůdcem'} některých předmětů,\nkteré nejsou povinné: ${voluntarySubjectsArray.join(', ')}`;
+    let compulsorySubjectsText = `${isPredecessor ? 'Je následníkem' : 'Je předchůdcem'} některých předmětů,\nkteré jsou povinné: ${compulsorySubjectsArray.join(', ')}`;
+
+    let allSoft = subjectsList.every((edge) => edge.by_prerequisites == false);
 
     let yStart = isPredecessor ? 25 : 5;
     let yEnd = isPredecessor ? 55 : 30;
     let x = subjectWidth / 4;
 
-    let compulsoryColor = compulsorySubjectsArray.length == 0 ? "transparent" : "var(--text-primary)";
-    let voluntaryColor = voluntarySubjectsArray.length == 0 ? "transparent" : "var(--text-secondary)";
+    let compulsoryColor =
+        compulsorySubjectsArray.length == 0 ? 'transparent' : 'var(--text-primary)';
+    let voluntaryColor =
+        voluntarySubjectsArray.length == 0 ? 'transparent' : 'var(--text-secondary)';
 
     return (
         <div className="choiceConnectionsWrapper">
@@ -41,7 +45,7 @@ function ChoiceConnections({course, subjectWidth, isPredecessor} : ChoiceConnect
                 allSoft={allSoft}
                 text={compulsorySubjectsText}
             />
-            <ChoiceConnection 
+            <ChoiceConnection
                 horizontal={horizontal}
                 color={voluntaryColor}
                 x={x}
@@ -52,7 +56,7 @@ function ChoiceConnections({course, subjectWidth, isPredecessor} : ChoiceConnect
                 text={voluntarySubjectsText}
             />
         </div>
-    )
+    );
 }
 
 export default ChoiceConnections;

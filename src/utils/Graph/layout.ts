@@ -11,7 +11,7 @@ import {
     PositionToCode,
     Spec,
     Specialization
-} from '@/types/subjects';
+} from '@/types';
 
 /** Maximum number of attempts to find a valid position for a subject */
 const MAX_POSITION_ATTEMPTS = 20;

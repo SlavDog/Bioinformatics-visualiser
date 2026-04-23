@@ -12,7 +12,7 @@ import {
     Spec,
     SubjectData,
     Substitutions
-} from '@/types/subjects';
+} from '@/types';
 import { getReachableCodes } from './layout';
 
 export function addAuxNodes(

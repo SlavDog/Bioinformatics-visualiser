@@ -1,6 +1,6 @@
 import { createContext, useContext, useState } from 'react';
 import subjectInfoData from '@/data/final_tree.json';
-import { SubjectData } from '@/types/subjects';
+import { SubjectData } from '@/types';
 
 type SubjectDataContextType = {
     data: SubjectData;

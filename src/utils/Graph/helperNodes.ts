@@ -1,4 +1,4 @@
-import { Details, EdgeOffsets, Spec, OrderSubject, Choices, Edge } from '@/types/subjects';
+import { Details, EdgeOffsets, Spec, OrderSubject, Choices, Edge } from '@/types';
 import { emptyNode, ensureOffset } from '@utils/Graph/dataUtils.js';
 import { deleteCodeFromOrGroups } from '@utils/Graph/orGroups.js';
 import { isInSomeChoice } from './choiceNodes';

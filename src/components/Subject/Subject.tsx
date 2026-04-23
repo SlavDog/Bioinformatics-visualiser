@@ -1,7 +1,7 @@
 import './styles.css';
 import { useState } from 'react';
 import SubjectDetailMenu from '@components/SubjectDetailMenu/SubjectDetailMenu';
-import { Course } from '@/types/subjects';
+import { Course } from '@/types';
 import Warning from '@components/Subject/Warning';
 import BioIcon from '@/assets/bio.svg';
 import InfIcon from '@/assets/inf.svg';

@@ -1,4 +1,4 @@
-import { Details, EdgeOffsets, Positions } from '@/types/subjects';
+import { Details, EdgeOffsets, Positions } from '@/types';
 import { getPath } from '@utils/Graph/connectionHelpers';
 
 type ConnectionsProps = {

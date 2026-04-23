@@ -1,4 +1,4 @@
-import { Course } from '@/types/subjects';
+import { Course } from '@/types';
 import Subject from '@components/Subject/Subject';
 import ChoiceConnections from '@components/SubjectDetailMenu/ChoiceConnections';
 import {
@@ -10,7 +10,7 @@ import {
     useToggleChoice
 } from '@components/providers/dataProvider';
 import { Layout } from '@/consts/VisualisationParameters';
-import { OrderSubject } from '@/types/subjects';
+import { OrderSubject } from '@/types';
 import { useEffect } from 'react';
 
 type SubjectListItemProps = {

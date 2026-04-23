@@ -16,14 +16,7 @@ import {
     useSelectedSpecialization,
     useActiveSubstitutions
 } from '@components/providers/dataProvider';
-import {
-    Details,
-    EdgeOffsets,
-    OrderSubject,
-    CodeToPosition,
-    Spec,
-    SubjectData
-} from '@/types/subjects';
+import { Details, EdgeOffsets, OrderSubject, CodeToPosition, Spec, SubjectData } from '@/types';
 
 import './styles.css';
 

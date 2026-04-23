@@ -1,5 +1,5 @@
 import { ensureOffset } from '@utils/Graph/dataUtils.js';
-import { EdgeOffsets, Details, Edge, OrderSubject, CodeToPosition } from '@/types/subjects';
+import { EdgeOffsets, Details, Edge, OrderSubject, CodeToPosition } from '@/types';
 import { Layout } from '@/consts/VisualisationParameters';
 
 // ─── Public API ──────────────────────────────────────────────────────────────
