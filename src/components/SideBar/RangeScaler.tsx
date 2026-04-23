@@ -21,7 +21,7 @@ function RangeScaler({scale, setScale} : RangeScalerProps) {
                 type="range"
                 min={ZoomScale.logMin}
                 max={ZoomScale.logMax}
-                step="0.01"
+                step="any"
                 value={Math.log(scale)}
                 onChange={(e) => setScale(Math.exp(Number(e.target.value)))}
             ></input>
