@@ -2,9 +2,8 @@ import re
 import json
 import requests
 import time
-from sympy import Not, Symbol, simplify_logic, Or, And  # type: ignore
+from sympy import Not, Symbol, simplify_logic, Or, And
 from bs4 import BeautifulSoup
-import os
 from typing import Any, TypedDict
 
 SemToCodes = dict[int, list[str]]
