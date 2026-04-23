@@ -47,7 +47,14 @@ function SubjectList({ source, currentCode }: SubjectListProps) {
                     return null;
                 }
                 let course = subjectInfoData.details[code];
-                return <SubjectListItem code={code} course={course} choiceCode={currentCode} />;
+                return (
+                    <SubjectListItem
+                        key={`${source}-${code}`}
+                        code={code}
+                        course={course}
+                        choiceCode={currentCode}
+                    />
+                );
             })}
         </div>
     );
