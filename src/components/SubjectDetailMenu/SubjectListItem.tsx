@@ -1,30 +1,48 @@
-import { Course } from "@/types/subjects";
-import Subject from "@components/Subject/Subject"
-import ChoiceConnections from "@components/SubjectDetailMenu/ChoiceConnections";
-import { useData, useSelectedChoices, useSelectedSpecialization, useToggleChoice } from "@components/providers/dataProvider";
-import { Layout } from "@/consts/VisualisationParameters";
-import { OrderSubject } from "@/types/subjects";
-
+import { Course } from '@/types/subjects';
+import Subject from '@components/Subject/Subject';
+import ChoiceConnections from '@components/SubjectDetailMenu/ChoiceConnections';
+import {
+    useData,
+    useHighlightedSubjects,
+    useSelectedChoices,
+    useSelectedSpecialization,
+    useSetHighlightedSubjects,
+    useToggleChoice
+} from '@components/providers/dataProvider';
+import { Layout } from '@/consts/VisualisationParameters';
+import { OrderSubject } from '@/types/subjects';
+import { useEffect } from 'react';
 
 type SubjectListItemProps = {
-    code: string,
-    course: Course,
-    choiceCode: string,
-}
+    code: string;
+    course: Course;
+    choiceCode: string;
+};
 
-
-function SubjectListItem({code, course, choiceCode} : SubjectListItemProps) {
-    const spec = useSelectedSpecialization();
+function SubjectListItem({ code, course, choiceCode }: SubjectListItemProps) {
     const subjectInfoData = useData();
 
     const toggle = useToggleChoice();
     const selectedChoices = useSelectedChoices();
-    const isSelected = selectedChoices[choiceCode]?.has(code) ?? false;
+    const setHighlightedSubjects = useSetHighlightedSubjects();
 
-    let isAlsoOutside = Object.values(subjectInfoData.spec)
-        .some(specializationObj => Object.values(specializationObj.plan)
-                    .some(semester => semester
-                        .some(subject => "code" in subject && subject.code == code)));
+    useEffect(() => {
+        if (selectedChoices[choiceCode]?.has(code)) {
+            setHighlightedSubjects((prev) => new Set([...prev, code]));
+        } else {
+            setHighlightedSubjects((prev) => {
+                const newSet = new Set(prev);
+                newSet.delete(code);
+                return newSet;
+            });
+        }
+    }, [selectedChoices, choiceCode, code]);
+
+    let isAlsoOutside = Object.values(subjectInfoData.spec).some((specializationObj) =>
+        Object.values(specializationObj.plan).some((semester) =>
+            semester.some((subject) => 'code' in subject && subject.code == code)
+        )
+    );
     return (
         <div className="choiceMenuSelectionBox"
             onClick={() => toggle(choiceCode, code)}
@@ -49,14 +67,13 @@ function SubjectListItem({code, course, choiceCode} : SubjectListItemProps) {
                     }}
                     setDragEnabled={() => {}}
             />
-            <ChoiceConnections 
+            <ChoiceConnections
                 course={course}
                 subjectWidth={Layout.detailMenuSubjectWidth}
                 isPredecessor={false}
             />
         </div>
-    )
-
+    );
 }
 
-export default SubjectListItem
+export default SubjectListItem;
