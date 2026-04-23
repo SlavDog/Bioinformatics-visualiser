@@ -361,7 +361,7 @@ function resolveIndividualEndOffset(
         return offset;
     }
 
-    const originalCode = parentCode.replace(/^HELPER_/, '').split('_')[0];
+    const originalCode = parentCode.replace(/^HELPER_/, '').split('__')[0];
     const originalPathKey = `${originalCode}_${realSuccessorCode}`;
     const offset =
         pathTargetOffsets[originalPathKey] ??
@@ -504,5 +504,5 @@ function getSubjectCode(subject: { code: string } | { choice: string }): string 
 
 /** Returns the code of the real parent subject, accounting for HELPER subjects. */
 function resolveHelperCode(code: string): string {
-    return code.startsWith('HELPER') ? code.replace(/^HELPER_/, '').split('_')[0] : code;
+    return code.startsWith('HELPER') ? code.replace(/^HELPER_/, '').split('__')[0] : code;
 }

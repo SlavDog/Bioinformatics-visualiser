@@ -81,7 +81,7 @@ function buildHelperChain(
 ): string {
     let prevNode = parentCode;
     for (let i = parentSemester + 1; i < succSemester; i++) {
-        const helperNodeCode = `HELPER_${parentCode}_${successorCode}_${i}`;
+        const helperNodeCode = `HELPER_${parentCode}__${successorCode}_${i}`;
 
         createHelperNode(
             newDetails,
