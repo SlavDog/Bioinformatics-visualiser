@@ -227,7 +227,9 @@
 }
 
 .subjectHighlighted {
-  box-shadow: 0 0 0 5px var(--background), 0 0 50px 4px var(--shadow-color);
+    box-shadow:
+        0 0 0 5px var(--background),
+        0 0 20px 4px var(--shadow-color);
 }
 
 .subjectDimmed {
