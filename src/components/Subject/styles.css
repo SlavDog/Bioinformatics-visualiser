@@ -1,164 +1,189 @@
 .subject {
-  background-color: var(--subject-background);
-  border: 3px solid transparent;
-  border-radius: 14px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  box-shadow: var(--subject-shadow) 0px 3px 5px;
-  background-size: 110% 110%; /* Fixes white lines on the edges when scaled */
-  flex-shrink: 0;
-  filter: blur(0px);
+    background-color: var(--subject-background);
+    border: 3px solid transparent;
+    border-radius: 14px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: var(--subject-shadow) 0px 3px 5px;
+    background-size: 110% 110%; /* Fixes white lines on the edges when scaled */
+    flex-shrink: 0;
+    filter: blur(0px);
 }
 
 .subjectTypeIN {
-  border-color: var(--informatics);
-  --shadow-color: var(--informatics);
-  --icon-color: var(--informatics);
-  background-image: linear-gradient(160deg, var(--subject-background) 60%, var(--informatics-background) 100%);
+    border-color: var(--informatics);
+    --shadow-color: var(--informatics);
+    --icon-color: var(--informatics);
+    background-image: linear-gradient(
+        160deg,
+        var(--subject-background) 60%,
+        var(--informatics-background) 100%
+    );
 }
 
 .subjectTypeBI {
-  border-color: var(--biology);
-  --shadow-color: var(--biology);
-  --icon-color: var(--biology);
-  background-image: linear-gradient(160deg, var(--subject-background) 60%, var(--biology-background) 100%);
+    border-color: var(--biology);
+    --shadow-color: var(--biology);
+    --icon-color: var(--biology);
+    background-image: linear-gradient(
+        160deg,
+        var(--subject-background) 60%,
+        var(--biology-background) 100%
+    );
 }
 
 .subjectTypeMA {
-  border-color: var(--math);
-  --shadow-color: var(--math);
-  --icon-color: var(--math);
-  background-image: linear-gradient(160deg, var(--subject-background) 60%, var(--math-background) 100%);
+    border-color: var(--math);
+    --shadow-color: var(--math);
+    --icon-color: var(--math);
+    background-image: linear-gradient(
+        160deg,
+        var(--subject-background) 60%,
+        var(--math-background) 100%
+    );
 }
 
 .subjectTypeOT {
-  border-color: var(--other);
-  --shadow-color: var(--other);
-  --icon-color: var(--other);
-  background-image: linear-gradient(160deg, var(--subject-background) 60%, var(--other-background) 100%);
+    border-color: var(--other);
+    --shadow-color: var(--other);
+    --icon-color: var(--other);
+    background-image: linear-gradient(
+        160deg,
+        var(--subject-background) 60%,
+        var(--other-background) 100%
+    );
 }
 
 .subjectTypechoice {
-  position: relative;
-  border-color: var(--choice);
-  --shadow-color: var(--choice);
-  --icon-color: var(--choice);
-  background-image: linear-gradient(160deg, var(--subject-background) 60%, var(--choice-background) 100%);
-  cursor: pointer;
+    position: relative;
+    border-color: var(--choice);
+    --shadow-color: var(--choice);
+    --icon-color: var(--choice);
+    background-image: linear-gradient(
+        160deg,
+        var(--subject-background) 60%,
+        var(--choice-background) 100%
+    );
+    cursor: pointer;
 }
 
 .subjectTypechoice::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image: linear-gradient(160deg, var(--subject-background) 40%, var(--choice-background-hover) 100%);
-  opacity: 0;
-  transition: opacity 0.5s ease;
-  z-index: 0;
-  border-radius: 11px;
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: linear-gradient(
+        160deg,
+        var(--subject-background) 40%,
+        var(--choice-background-hover) 100%
+    );
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    z-index: 0;
+    border-radius: 11px;
 }
 
 .subjectTypechoice:hover::after {
-  opacity: 1;
-  size: 110% 109%;
+    opacity: 1;
+    size: 110% 109%;
 }
 
 .subjectTypechoice > * {
-  z-index: 1;
+    z-index: 1;
 }
 
 .subjectCode {
-  font-family: "Inter", sans-serif;
-  font-weight: 300;
-  color: var(--text-secondary);
-  font-size: 11px;
-  margin: 0;
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+    color: var(--text-secondary);
+    font-size: 11px;
+    margin: 0;
 }
 
 .subjectName {
-  font-family: "Inter", sans-serif;
-  font-weight: 600;
-  font-size: 11px;
-  color: var(--text-primary);
-  text-decoration: none;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 11px;
+    color: var(--text-primary);
+    text-decoration: none;
 }
 
 .subjectCredits {
-  font-family: "Inter", sans-serif;
-  font-weight: 600;
-  font-size: 21px;
-  margin: 0;
-  color: var(--text-primary);
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 21px;
+    margin: 0;
+    color: var(--text-primary);
 }
 
 .subjectInfo {
-  font-family: "Inter", sans-serif;
-  font-weight: 300;
-  font-size: 13px;
-  margin: 0;
-  padding: 3px 0;
-  color: var(--text-primary);
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+    font-size: 13px;
+    margin: 0;
+    padding: 3px 0;
+    color: var(--text-primary);
 }
 
 .iconContainer {
-  display: flex;
-  justify-content: left;
-  align-items: center;
+    display: flex;
+    justify-content: left;
+    align-items: center;
 }
 
 .circle {
-  width: 38px;
-  height: 38px;
-  margin-right: 10px;
-  border-radius: 50%;
-  background-color: var(--icon-color);
+    width: 38px;
+    height: 38px;
+    margin-right: 10px;
+    border-radius: 50%;
+    background-color: var(--icon-color);
 }
 
 .bottomSubjectContainer {
-  display: flex;
-  justify-content: space-between;
-  align-items: end;
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
 }
 
 .smallSubjectCode {
-  font-family: "Inter", sans-serif;
-  font-weight: 300;
-  font-size: 36px;
-  margin: 0;
-  text-decoration: none;
-  margin-top: 100px;
-  color: var(--subject-title);
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+    font-size: 36px;
+    margin: 0;
+    text-decoration: none;
+    margin-top: 100px;
+    color: var(--subject-title);
 }
 
 .smallSubjectCredits {
-  font-family: "Inter", sans-serif;
-  font-weight: 300;
-  font-size: 24px;
-  margin: 0;
-  color: var(--text-secondary);
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+    font-size: 24px;
+    margin: 0;
+    color: var(--text-secondary);
 }
 
 .smallTopSubjectContainer {
-  margin-top: 5%;
-  text-align: center;
+    margin-top: 5%;
+    text-align: center;
 }
 
 .smallBottomSubjectContainer {
-  margin-bottom: 5%;
-  text-align: center;
+    margin-bottom: 5%;
+    text-align: center;
 }
 
 .warningContainer {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 5px;
-  height: 29px;
-  width: 29px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    height: 29px;
+    width: 29px;
 }
 
-.outsideWarningContainer, .predsWarningContainer {
+.outsideWarningContainer,
+.predsWarningContainer {
     animation: pulseBackground 2s ease-out infinite;
 }
 
@@ -171,32 +196,34 @@
 }
 
 @keyframes pulseBackground {
-  0% {
-    filter: opacity(1);
-  }
-  20% {
-    filter: opacity(1);
-  }
-  50% {
-    filter: opacity(0);
-  }
-  80% {
-    filter: opacity(1);
-  }
-  100% {
-    filter: opacity(1);
-  }
+    0% {
+        filter: opacity(1);
+    }
+    20% {
+        filter: opacity(1);
+    }
+    50% {
+        filter: opacity(0);
+    }
+    80% {
+        filter: opacity(1);
+    }
+    100% {
+        filter: opacity(1);
+    }
 }
 
 .warningSymbol {
-  font-family: "Inter", sans-serif;
-  font-weight: 600;
-  font-size: 24px;
-  color: var(--warning-text);
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 24px;
+    color: var(--warning-text);
 }
 
 .subject {
-  transition: box-shadow 0.2s ease, filter 0.5s ease;
+    transition:
+        box-shadow 0.2s ease,
+        filter 0.5s ease;
 }
 
 .subjectHighlighted {
@@ -204,7 +231,7 @@
 }
 
 .subjectDimmed {
-  filter: blur(4px) grayscale(1);
+    filter: blur(4px) grayscale(1);
 }
 
 .subjectSelectedLabels {
@@ -218,7 +245,7 @@
 .subjectSelectedLabel {
     font-size: 10px;
     font-weight: 500;
-    font-family: "Inter", sans-serif;
+    font-family: 'Inter', sans-serif;
     border: solid;
     border-width: 3px;
     padding: 2px 8px;
