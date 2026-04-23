@@ -12,7 +12,8 @@ import { typeCodeToName } from '@utils/textHelpers';
 import {
     useData,
     useHighlightedSubjects,
-    useSelectedChoices
+    useSelectedChoices,
+    useSetHighlightedSubjects
 } from '@components/providers/dataProvider';
 import Tippy from '@tippyjs/react';
 
@@ -20,6 +21,7 @@ export type SubjectProps = {
     code: string;
     course: Course;
     isAlsoOutside: boolean;
+    dim?: boolean;
     style: React.CSSProperties;
     setDragEnabled: (b: boolean) => void;
 };
@@ -31,14 +33,22 @@ const typeToColor: Record<string, string> = {
     choice: 'var(--choice)'
 };
 
-function Subject({ code, course, isAlsoOutside = false, style, setDragEnabled }: SubjectProps) {
+function Subject({
+    code,
+    course,
+    isAlsoOutside = false,
+    dim = true,
+    style,
+    setDragEnabled
+}: SubjectProps) {
     const [isOpen, setIsOpen] = useState(false);
     const highlightedSubjects = useHighlightedSubjects();
+    const setHighlightedSubjects = useSetHighlightedSubjects();
     const selectedChoices = useSelectedChoices();
     const subjectInfoData = useData();
 
     const isHighlighted = highlightedSubjects.size > 0 && highlightedSubjects.has(code);
-    const isDimmed = highlightedSubjects.size > 0 && !highlightedSubjects.has(code);
+    const isDimmed = dim && highlightedSubjects.size > 0 && !highlightedSubjects.has(code);
 
     const link = 'https://is.muni.cz' + course.link;
     const displayCode = code.replace(/-DUP-\d+$/, '');
@@ -92,7 +102,6 @@ function Subject({ code, course, isAlsoOutside = false, style, setDragEnabled }:
     let hasSubjectLimit = false;
     if (course.type === 'choice') {
         const choiceLimit = subjectInfoData.choices[code.replace(/-\d+$/, '')]?.type;
-        console.log(code, choiceLimit);
         if (choiceLimit) {
             const [subjectsLimit, _] = choiceLimit.split(':').map(Number);
             if (subjectsLimit != 0) {
@@ -111,7 +120,7 @@ function Subject({ code, course, isAlsoOutside = false, style, setDragEnabled }:
                     {Info}
                     {course.type === 'choice' && selectedCodes.length > 0 && (
                         <div className="subjectSelectedLabels">
-                            {selectedCodes.map((selectedCode, i) => {
+                            {selectedCodes.map((selectedCode) => {
                                 const type = subjectInfoData.details[selectedCode]?.type;
                                 return (
                                     <p
@@ -168,6 +177,7 @@ function Subject({ code, course, isAlsoOutside = false, style, setDragEnabled }:
                 onClose={() => {
                     setIsOpen(false);
                     setDragEnabled(true);
+                    setHighlightedSubjects(new Set());
                 }}
                 source={detailMenuSourceName}
                 setIsOpen={setIsOpen}

@@ -44,28 +44,27 @@ function SubjectListItem({ code, course, choiceCode }: SubjectListItemProps) {
         )
     );
     return (
-        <div className="choiceMenuSelectionBox"
-            onClick={() => toggle(choiceCode, code)}
-            style={{
-                outline: isSelected ? "2px solid var(--connection-primary)" : "2px solid transparent",
-                boxShadow: isSelected ? "0px 0px 12px var(--choice)" : "0px 0px 12px transparent"
-            }}>
+        <div
+            className="choiceMenuSelectionBox"
+            onClick={isAlsoOutside ? () => {} : () => toggle(choiceCode, code)}
+        >
             <ChoiceConnections
                 course={course}
                 subjectWidth={Layout.detailMenuSubjectWidth}
                 isPredecessor={true}
             />
-                <Subject
-                    key={code}
-                    code={code}
-                    course={course}
-                    isAlsoOutside={isAlsoOutside}
-                    style={{
-                        width: Layout.detailMenuSubjectWidth,
-                        height: Layout.detailMenuSubjectHeight,
-                        padding: Layout.detailMenuSubjectPadding
-                    }}
-                    setDragEnabled={() => {}}
+            <Subject
+                key={code}
+                code={code}
+                course={course}
+                isAlsoOutside={isAlsoOutside}
+                dim={false}
+                style={{
+                    width: Layout.detailMenuSubjectWidth,
+                    height: Layout.detailMenuSubjectHeight,
+                    padding: Layout.detailMenuSubjectPadding
+                }}
+                setDragEnabled={() => {}}
             />
             <ChoiceConnections
                 course={course}
