@@ -22,22 +22,21 @@ function SubjectList({ source, currentCode }: SubjectListProps) {
                     )
                 }
                 text="Zobrazit aktuální nabídku tělocviků!"
-            ></BigButton>
+            />
         );
     }
-    if (source == 'CORE') {
+    if (source == 'core') {
         return (
-            <button
+            <BigButton
+                color={'#b400d8'}
                 onClick={() =>
                     window.open(
                         'https://www.muni.cz/studenti/kazdodenni-studium/spolecny-univerzitni-zaklad/co-jsou-core-predmety',
                         '_blank'
                     )
                 }
-                className="zoomButton"
-            >
-                Zobrazit aktuální nabídku CORE předmětů 🎓
-            </button>
+                text="Zobrazit aktuální nabídku CORE předmětů!"
+            />
         );
     }
     return (
