@@ -1,34 +1,40 @@
 .subjectDetailMenuBox {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 1000;
-  background-color: var(--choice-menu-background);
-  padding: 15px;
-  border: 3px solid var(--choice);
-  border-radius: 14px;
-  height: 70dvh;
-  width: 70dvw;
-  opacity: 0;
-  transition: opacity 0.2s ease, transform 0.3s ease;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  align-items: center;
-  overflow: scroll;
-  background-image: linear-gradient(150deg, var(--subject-background) 40%, var(--choice-menu-background-gradient) 100%);
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    background-color: var(--choice-menu-background);
+    padding: 15px;
+    border: 3px solid var(--choice);
+    border-radius: 14px;
+    height: 70dvh;
+    width: 70dvw;
+    opacity: 0;
+    transition:
+        opacity 0.2s ease,
+        transform 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    overflow: scroll;
+    background-image: linear-gradient(
+        150deg,
+        var(--subject-background) 40%,
+        var(--choice-menu-background-gradient) 100%
+    );
 }
 
 .choiceMenuSelectionBox {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  padding: 20px 20px;
-  margin: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    padding: 20px 20px;
+    margin: 10px;
 }
 
 .menuBoxSubjectsContainer {
@@ -43,97 +49,94 @@
     overflow-y: hidden;
     overflow-x: auto;
     position: relative;
-  }
-
-.choiceConnectionsWrapper {
-  display: flex;
-  flex-direction: row;
-  user-select: none;
-  pointer-events: none;
 }
 
-  @media (max-width: 768px) {
-  .subjectDetailMenuBox {
-    width: 85dvw;
-    height: 90dvh;
-    padding: 10px;
-  }
+.choiceConnectionsWrapper {
+    display: flex;
+    flex-direction: row;
+    user-select: none;
+    pointer-events: none;
+}
 
-  .choiceMenuSelectionBox {
-    zoom: 0.53;
-    transform: none;
-    padding: 5px 10px;
-  }
+@media (max-width: 768px) {
+    .subjectDetailMenuBox {
+        width: 85dvw;
+        height: 90dvh;
+        padding: 10px;
+    }
+
+    .choiceMenuSelectionBox {
+        zoom: 0.53;
+        transform: none;
+        padding: 5px 10px;
+    }
 }
 
 @media (max-width: 768px) and (orientation: portrait) {
-  .menuBoxSubjectsContainer {
-    flex-direction: column;
-    overflow-y: auto;
-    overflow-x: hidden;
-    height: 70%;
-  }
+    .menuBoxSubjectsContainer {
+        flex-direction: column;
+        overflow-y: auto;
+        overflow-x: hidden;
+        height: 70%;
+    }
 
-  .choiceMenuSelectionBox {
-    flex-direction: row;
-    justify-content: center;
-  }
+    .choiceMenuSelectionBox {
+        flex-direction: row;
+        justify-content: center;
+    }
 
-  .choiceConnectionsWrapper {
-    display: flex;
-    flex-direction: column;
-  }
+    .choiceConnectionsWrapper {
+        display: flex;
+        flex-direction: column;
+    }
 }
 
 .overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  opacity: 0;
-  background-color: var(--menu-background-overlay);
-  z-index: 1000;
-  transition: opacity 0.3s ease;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0;
+    background-color: var(--menu-background-overlay);
+    z-index: 1000;
+    transition: opacity 0.3s ease;
 }
 
-
 .openingBox {
-  opacity: 1;
-  transform: translate(-50%, -50%);
+    opacity: 1;
+    transform: translate(-50%, -50%);
 }
 
 .closingBox {
-  opacity: 0;
-  transform: translate(-50%, -40%);
+    opacity: 0;
+    transform: translate(-50%, -40%);
 }
 
 .openingOverlay {
-  opacity: 1;
+    opacity: 1;
 }
 
 .closingOverlay {
-  opacity: 0;
+    opacity: 0;
 }
-
 
 .choiceConnection circle,
 .choiceConnection line {
-  transition: stroke 0.2s ease-in-out;
+    transition: stroke 0.2s ease-in-out;
 }
 
 .choiceConnection polygon,
 .choiceConnection text {
-  transition: fill 0.2s ease-in-out;
+    transition: fill 0.2s ease-in-out;
 }
 
 .choiceConnection:hover circle,
-.choiceConnection:hover line
-{
-  stroke: var(--choice);
+.choiceConnection:hover line {
+    stroke: var(--choice);
 }
 
 .choiceConnection:hover polygon,
 .choiceConnection:hover text {
-  fill: var(--choice);
+    fill: var(--choice);
 }
