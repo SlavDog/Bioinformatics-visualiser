@@ -52,7 +52,7 @@ export function SubjectDataProvider({ children }: SubjectDataProvider) {
     };
 
     return (
-        <SubjectDataContext
+        <SubjectDataContext.Provider
             value={{
                 data,
                 setData,
@@ -67,7 +67,7 @@ export function SubjectDataProvider({ children }: SubjectDataProvider) {
             }}
         >
             {children}
-        </SubjectDataContext>
+        </SubjectDataContext.Provider>
     );
 }
 
