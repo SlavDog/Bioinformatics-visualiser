@@ -1,11 +1,12 @@
 .visualisationBackgroundWithPadding {
-  background-color: rgb(201, 201, 201);
+  background-color: var(--visualisation-background);
 }
 
 .visualisationBackground {
   position: relative;
   transform-origin: 0 0;
-  transition: transform 0.1s ease-in;
+  transition: width 0.2s cubic-bezier(0.25, 0.1, 0.25, 1),
+            height 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
 .visualisationForeground {
@@ -15,13 +16,13 @@
 .scrollableBox {
   height: 100%;
   overflow: scroll;
-  background-color: rgb(201, 201, 201);
+  background-color: var(--visualisation-background);
 }
 
 .visualisationBox {
-  width: 90vw;
-  height: 90vh;
-  margin: 20px auto;
+  width: 100dvw;
+  height: 100dvh;
+  transition: width 0.3 ease, height 0.3 ease;
   user-select: none;
   position: relative;
 }
@@ -39,6 +40,7 @@
   font-size: 32px;
   padding-top: 100px;
   margin-bottom: 0;
+  color: var(--text-primary);
 }
 
 .semesterSubtitles {
@@ -46,6 +48,7 @@
   font-weight: 300;
   font-size: 18px;
   margin-top: 10px;
+  color: var(--text-primary);
 }
 
 .semesterColumn {
@@ -60,6 +63,7 @@
   font-weight: 600;
   font-size: 28px;
   text-align: center;
+  color: var(--text-primary);
 }
 
 .bigSubTitle {
@@ -68,11 +72,35 @@
   font-size: 20px;
   margin-top: 0;
   text-align: center;
+  color: var(--text-primary);
+}
+
+@media (max-width: 768px) {
+  .bigTitle {
+    font-size: 18px;
+  }
+
+  .bigSubTitle {
+    font-size: 12px;
+  }
 }
 
 .zoomButton {
    font-family: "Inter", sans-serif;
    font-weight: 500;
-   border: 2px solid rgb(192, 192, 192);
+   border: 2px solid var(--background-secondary);
    border-radius: 5px;
+}
+
+.tippy-box {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  line-height: 1.4;
+  box-shadow: 0 0 15px -3px rgba(0, 0, 0, 0.5);
+  background-color: var(--tippy-background) !important;
+  color: var(--tippy-text) !important;
+}
+
+.tippy-box .tippy-arrow {
+  color: var(--tippy-arrow) !important;
 }
