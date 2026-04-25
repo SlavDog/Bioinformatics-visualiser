@@ -2,7 +2,7 @@ name: Deploy React to GitHub Pages
 
 on:
     push:
-        branches: ['move-to-typescript']
+        branches: ['main']
 
 permissions:
     contents: read
