@@ -1,5 +1,5 @@
 export const Layout = {
-    columnWidth: 400,
+    columnWidth: 500,
     rowHeight: 185,
     subjectHeight: 125,
     subjectWidth: 200,
@@ -21,5 +21,5 @@ export const ZoomScale = {
     max: 1.5,
     default: 0.7,
     logMin: Math.log(0.3),
-    logMax: Math.log(1.5),
+    logMax: Math.log(1.5)
 };
