@@ -1,5 +1,7 @@
 *.json
 !final_tree.json
+!package.json
+!package-lock.json
 
 # Logs
 logs
