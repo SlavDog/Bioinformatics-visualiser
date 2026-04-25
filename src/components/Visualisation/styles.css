@@ -1,0 +1,106 @@
+.visualisationBackgroundWithPadding {
+  background-color: var(--visualisation-background);
+}
+
+.visualisationBackground {
+  position: relative;
+  transform-origin: 0 0;
+  transition: width 0.2s cubic-bezier(0.25, 0.1, 0.25, 1),
+            height 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+.visualisationForeground {
+  position: absolute;
+}
+
+.scrollableBox {
+  height: 100%;
+  overflow: scroll;
+  background-color: var(--visualisation-background);
+}
+
+.visualisationBox {
+  width: 100dvw;
+  height: 100dvh;
+  transition: width 0.3 ease, height 0.3 ease;
+  user-select: none;
+  position: relative;
+}
+
+.connections {
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: visible;
+}
+
+.semesterTitles {
+  font-family: "Inter", sans-serif;
+  font-weight: 600;
+  font-size: 32px;
+  padding-top: 100px;
+  margin-bottom: 0;
+  color: var(--text-primary);
+}
+
+.semesterSubtitles {
+  font-family: "Inter", sans-serif;
+  font-weight: 300;
+  font-size: 18px;
+  margin-top: 10px;
+  color: var(--text-primary);
+}
+
+.semesterColumn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: absolute;
+}
+
+.bigTitle {
+  font-family: "Inter", sans-serif;
+  font-weight: 600;
+  font-size: 28px;
+  text-align: center;
+  color: var(--text-primary);
+}
+
+.bigSubTitle {
+  font-family: "Inter", sans-serif;
+  font-weight: 300;
+  font-size: 20px;
+  margin-top: 0;
+  text-align: center;
+  color: var(--text-primary);
+}
+
+@media (max-width: 768px) {
+  .bigTitle {
+    font-size: 18px;
+  }
+
+  .bigSubTitle {
+    font-size: 12px;
+  }
+}
+
+.zoomButton {
+   font-family: "Inter", sans-serif;
+   font-weight: 500;
+   border: 2px solid var(--background-secondary);
+   border-radius: 5px;
+}
+
+.tippy-box {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  line-height: 1.4;
+  box-shadow: 0 0 15px -3px rgba(0, 0, 0, 0.5);
+  background-color: var(--tippy-background) !important;
+  color: var(--tippy-text) !important;
+}
+
+.tippy-box .tippy-arrow {
+  color: var(--tippy-arrow) !important;
+}

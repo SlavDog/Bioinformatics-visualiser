@@ -1,60 +1,79 @@
-.subject {
-  background-color: rgb(73, 73, 73);
-  padding: 16px;
-  width: 300px;
-  border: 3px solid transparent;
-  border-radius: 16px; /* funguje správně */
-  background: 
-    linear-gradient(white, white) padding-box,              /* vnitřek */
-    linear-gradient(0deg, #00DCF5, #009CFD) border-box; /* gradient border */
+body {
+    margin: 0;
+    background-color: var(--background);
 }
 
-.subjectCode {
-  font-family: "Inter", sans-serif;
-  font-weight: 300;
-  color: #817F7F;
-  font-size: 20px;
-  margin: 0;
+:root {
+    --visualisation-background: rgb(230, 230, 230);
+    --background: white;
+    --background-secondary: rgb(192, 192, 192);
+    --column-odd: rgb(245, 245, 245);
+    --column-even: white;
+    --text-primary: black;
+    --text-secondary: #262626;
+    --button: #d4d4d4;
+    --button-hover: #b8b8b8;
+    --subject-menu-background: white;
+    --menu-background-overlay: rgba(0, 0, 0, 0.7);
+    --subject-background: white;
+    --subject-shadow: rgba(0, 0, 0, 0.2);
+    --subjects-outside-warning-background: orange;
+    --unshown-preds-warning-background: red;
+    --warning-text: white;
+    --divider-color: #929292;
+    --choice: #a000a0;
+    --choice-background: #fdd1ff;
+    --choice-menu-background-gradient: #fdd1ff;
+    --choice-background-hover: #fba9ff;
+    --informatics: orange;
+    --informatics-background: #ffee8d;
+    --biology: #108a00;
+    --biology-background: #bdffcd;
+    --math: #009cfd;
+    --math-background: #87fffd;
+    --other: #333333;
+    --other-background: #bdbdbd;
+    --connection-primary: #000000;
+    --connection-secondary: gray;
+    --tippy-background: #ffffff;
+    --tippy-text: #111;
+    --tippy-arrow: #ffffff;
 }
 
-.subjectName {
-  font-family: "Inter", sans-serif;
-  font-weight: 600;
-  font-size: 20px;
-  margin: 10px 0px;
-}
-
-.subjectCredits {
-  font-family: "Inter", sans-serif;
-  font-weight: 600;
-  font-size: 36px;
-  margin: 10px 0px;
-}
-
-.subjectInfo {
-  font-family: "Inter", sans-serif;
-  font-weight: 300;
-  font-size: 20px;
-  margin: 0;
-}
-
-.iconContainer {
-  display: flex;
-  justify-content: left;
-  align-items: center;
-}
-
-.circle {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background-color: gray;
-  margin-right: 10px;
-}
-
-.bottomSubjectLine {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 10px;
+[data-theme='dark'] {
+    --visualisation-background: #0a0a0a;
+    --background: #181818;
+    --background-secondary: rgb(46, 46, 46);
+    --column-odd: #141414;
+    --column-even: var(--background);
+    --text-primary: #dedede;
+    --text-secondary: #a8a8a8;
+    --button: #424242;
+    --button-hover: #686868;
+    --subject-title: #f0f0f0;
+    --menu-background-overlay: rgba(12, 12, 12, 0.8);
+    --subject-background: #2a2a2a;
+    --subject-shadow: rgba(0, 0, 0, 0.4);
+    --divider-color: #2d3748;
+    --subjects-outside-warning-background: orange;
+    --unshown-preds-warning-background: red;
+    --warning-text: white;
+    --choice: #a000a0;
+    --choice-background: #5c325c;
+    --choice-menu-background: var(--background);
+    --choice-menu-background-gradient: var(--background);
+    --choice-background-hover: #684168;
+    --informatics: rgb(255, 236, 113);
+    --informatics-background: #7f704a;
+    --biology: #108a00;
+    --biology-background: #3d764b;
+    --math: #009cfd;
+    --math-background: #395d7b;
+    --other: #6d6d6d;
+    --other-background: #5a5a5a;
+    --connection-primary: #ffffff;
+    --connection-secondary: #aaaaaa;
+    --tippy-background: #525252;
+    --tippy-text: #fff;
+    --tippy-arrow: #525252;
 }
