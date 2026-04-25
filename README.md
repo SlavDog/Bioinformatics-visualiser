@@ -1,12 +1,24 @@
-# React + Vite
+# Bioinformatics Visualiser
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Aplikace pro vizualizaci doporučeného průchodu studiem vytvořená v Reactu.
 
-Currently, two official plugins are available:
+**[Vyzkoušej si aplikaci online](https://slavdog.github.io/bioinformatics-visualiser/)**
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 O projektu
 
-## Expanding the ESLint configuration
+Tento projekt vznikl jako bakalářská práce na Masarykově univerzitě v Brně. Cílem bylo vytvořit nástroj pro vizualizaci doporučených průchodů studiem, který by pomohl studentům lépe porozumět svým možnostem a usnadnil plánování studia.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 📦 Instalace
+
+Jak projekt spustit lokálně:
+
+```bash
+# Naklonuj repozitář
+git clone [github.com/SlavDog/Bioinformatics-visualiser](github.com/SlavDog/Bioinformatics-visualiser)
+
+# Nainstaluj závislosti
+npm install
+
+# Spusť vývojový server
+npm run dev
+```
