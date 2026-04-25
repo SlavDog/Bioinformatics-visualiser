@@ -1,4 +1,4 @@
-# Bioinformatics Visualiser
+# Vizualizace doporučeného průchodu studiem Bioinformatiky
 
 Aplikace pro vizualizaci doporučeného průchodu studiem vytvořená v Reactu.
 
