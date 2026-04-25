@@ -1,9 +1,9 @@
-import { Details, EdgeOffsets, Positions } from '@/types';
+import { CodeToPosition, Details, EdgeOffsets } from '@/types';
 import { getPath } from '@utils/Graph/connectionHelpers';
 
 type ConnectionsProps = {
     processedSubjects: Details;
-    positions: RealPositions;
+    positions: CodeToPosition;
     xOffsets: EdgeOffsets;
     yOffsets: EdgeOffsets;
 };

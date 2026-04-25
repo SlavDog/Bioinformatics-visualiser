@@ -2,14 +2,14 @@ import Connections from '@components/Visualisation/Connections';
 import { getOrGatesYOffsetsForSubject } from '@utils/Graph';
 import { Layout } from '@/consts/VisualisationParameters';
 import OrGates from '@components/Visualisation/OrGates';
-import { Choices, Details, EdgeOffsets, RealPositions, Spec, Specialization } from '@/types';
+import { Choices, Details, EdgeOffsets, CodeToPosition, Specialization } from '@/types';
 import { Dispatch, SetStateAction } from 'react';
 import { SubjectProps } from '@components/Subject/Subject';
 
 type VisualisationForegroundProps = {
     edgeXOffsets: EdgeOffsets;
     edgeYOffsets: EdgeOffsets;
-    positions: RealPositions;
+    positions: CodeToPosition;
     processedSubjects: Details;
     specialization: Specialization;
     choices: Choices;
