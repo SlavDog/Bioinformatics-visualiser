@@ -1,0 +1,2089 @@
+{
+    "details": {
+        "IB000ext": {
+            "name": "Matematické základy informatiky",
+            "faculty": "FI",
+            "successors": [],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 6,
+            "link": "/predmet/fi/IB000ext",
+            "type": "IN"
+        },
+        "IB113": {
+            "name": "Úvod do programování a algoritmizace",
+            "faculty": "FI",
+            "successors": [
+                {
+                    "code": "IB114",
+                    "groups": [["IB111", "IB113"]],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "PB176",
+                    "groups": [["PB071", "PB006", "IB113", "IB111", "PB111"]],
+                    "by_prerequisites": true
+                }
+            ],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 6,
+            "link": "/predmet/fi/IB113",
+            "type": "IN"
+        },
+        "IV107": {
+            "name": "Bioinformatika sekvencí a genomů",
+            "faculty": "FI",
+            "successors": [
+                {
+                    "code": "IV105",
+                    "groups": [],
+                    "by_prerequisites": false
+                },
+                {
+                    "code": "IV106",
+                    "groups": [],
+                    "by_prerequisites": false
+                },
+                {
+                    "code": "IV108",
+                    "groups": [],
+                    "by_prerequisites": false
+                },
+                {
+                    "code": "IV110",
+                    "groups": [],
+                    "by_prerequisites": false
+                }
+            ],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 4,
+            "link": "/predmet/fi/IV107",
+            "type": "IN"
+        },
+        "IV109": {
+            "name": "Modelování a simulace",
+            "faculty": "FI",
+            "successors": [],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 5,
+            "link": "/predmet/fi/IV109",
+            "type": "IN"
+        },
+        "IV114": {
+            "name": "Bioinformatické praktikum",
+            "faculty": "FI",
+            "successors": [],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "k",
+            "credits": 3,
+            "link": "/predmet/fi/IV114",
+            "type": "IN"
+        },
+        "MB141": {
+            "name": "Lineární algebra a diskrétní matematika",
+            "faculty": "FI",
+            "successors": [
+                {
+                    "code": "MB143",
+                    "groups": [["MB151", "MB152", "MB141", "MB142"]],
+                    "by_prerequisites": true
+                }
+            ],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 5,
+            "link": "/predmet/fi/MB141",
+            "type": "MA"
+        },
+        "MB142": {
+            "name": "Aplikovaná matematická analýza",
+            "faculty": "FI",
+            "successors": [
+                {
+                    "code": "MB143",
+                    "groups": [["MB151", "MB152", "MB141", "MB142"]],
+                    "by_prerequisites": true
+                }
+            ],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 5,
+            "link": "/predmet/fi/MB142",
+            "type": "MA"
+        },
+        "MB143": {
+            "name": "Návrh a analýza statistických experimentů",
+            "faculty": "FI",
+            "successors": [
+                {
+                    "code": "MA012",
+                    "groups": [],
+                    "by_prerequisites": false
+                }
+            ],
+            "language": "CZE",
+            "predecessors": [
+                {
+                    "code": "MB141",
+                    "groups": [["MB151", "MB152", "MB141", "MB142"]],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "MB142",
+                    "groups": [["MB151", "MB152", "MB141", "MB142"]],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "MB151",
+                    "groups": [["MB151", "MB152", "MB141", "MB142"]],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "MB152",
+                    "groups": [["MB151", "MB152", "MB141", "MB142"]],
+                    "by_prerequisites": true
+                }
+            ],
+            "completion": "zk",
+            "credits": 5,
+            "link": "/predmet/fi/MB143",
+            "type": "MA"
+        },
+        "PA052": {
+            "name": "Úvod do systémové biologie",
+            "faculty": "FI",
+            "successors": [
+                {
+                    "code": "PB050",
+                    "groups": [],
+                    "by_prerequisites": false
+                },
+                {
+                    "code": "PB051",
+                    "groups": [],
+                    "by_prerequisites": false
+                },
+                {
+                    "code": "PV225",
+                    "groups": [],
+                    "by_prerequisites": false
+                }
+            ],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 4,
+            "link": "/predmet/fi/PA052",
+            "type": "IN"
+        },
+        "PA055": {
+            "name": "Vizualizace komplexních dat",
+            "faculty": "FI",
+            "successors": [],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 4,
+            "link": "/predmet/fi/PA055",
+            "type": "IN"
+        },
+        "PB001": {
+            "name": "Úvod do informačních technologií",
+            "faculty": "FI",
+            "successors": [
+                {
+                    "code": "PB150",
+                    "groups": [],
+                    "by_prerequisites": false
+                },
+                {
+                    "code": "PB151",
+                    "groups": [],
+                    "by_prerequisites": false
+                },
+                {
+                    "code": "PB152",
+                    "groups": [],
+                    "by_prerequisites": false
+                },
+                {
+                    "code": "PB153",
+                    "groups": [],
+                    "by_prerequisites": false
+                },
+                {
+                    "code": "PB156",
+                    "groups": [],
+                    "by_prerequisites": false
+                },
+                {
+                    "code": "PB157",
+                    "groups": [],
+                    "by_prerequisites": false
+                }
+            ],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 4,
+            "link": "/predmet/fi/PB001",
+            "type": "IN"
+        },
+        "PB007": {
+            "name": "Software Engineering I",
+            "faculty": "FI",
+            "successors": [],
+            "language": "ENG",
+            "predecessors": [
+                {
+                    "code": "PB112",
+                    "groups": [["PB112", "PB162", "PV178", "PB161", "PB160", "PB174", "PB178"]],
+                    "by_prerequisites": true
+                }
+            ],
+            "completion": "zk",
+            "credits": 5,
+            "link": "/predmet/fi/PB007",
+            "type": "IN"
+        },
+        "PB050": {
+            "name": "Modelování a predikce v systémové biologii",
+            "faculty": "FI",
+            "successors": [
+                {
+                    "code": "PA054",
+                    "groups": [],
+                    "by_prerequisites": false
+                },
+                {
+                    "code": "PA183",
+                    "groups": [],
+                    "by_prerequisites": false
+                },
+                {
+                    "code": "PB051",
+                    "groups": [],
+                    "by_prerequisites": false
+                }
+            ],
+            "language": "CZE",
+            "predecessors": [
+                {
+                    "code": "PA052",
+                    "groups": [],
+                    "by_prerequisites": false
+                }
+            ],
+            "completion": "zk",
+            "credits": 4,
+            "link": "/predmet/fi/PB050",
+            "type": "IN"
+        },
+        "PB051": {
+            "name": "Výpočetní metody v bioinformatice a systémové biologii",
+            "faculty": "FI",
+            "successors": [],
+            "language": "CZE",
+            "predecessors": [
+                {
+                    "code": "PA052",
+                    "groups": [],
+                    "by_prerequisites": false
+                },
+                {
+                    "code": "PB050",
+                    "groups": [],
+                    "by_prerequisites": false
+                }
+            ],
+            "completion": "zk",
+            "credits": 4,
+            "link": "/predmet/fi/PB051",
+            "type": "IN"
+        },
+        "PB153": {
+            "name": "Operační systémy a jejich rozhraní",
+            "faculty": "FI",
+            "successors": [
+                {
+                    "code": "PB152cv",
+                    "groups": [],
+                    "by_prerequisites": true
+                }
+            ],
+            "language": "CZE",
+            "predecessors": [
+                {
+                    "code": "PB001",
+                    "groups": [],
+                    "by_prerequisites": false
+                }
+            ],
+            "completion": "zk",
+            "credits": 4,
+            "link": "/predmet/fi/PB153",
+            "type": "IN"
+        },
+        "PB168": {
+            "name": "Základy databázových a informačních systémů",
+            "faculty": "FI",
+            "successors": [
+                {
+                    "code": "PA195",
+                    "groups": [["PB168", "PB154"]],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "PA128",
+                    "groups": [],
+                    "by_prerequisites": false
+                },
+                {
+                    "code": "PA152",
+                    "groups": [],
+                    "by_prerequisites": false
+                },
+                {
+                    "code": "PA220",
+                    "groups": [],
+                    "by_prerequisites": false
+                },
+                {
+                    "code": "PV003",
+                    "groups": [],
+                    "by_prerequisites": false
+                }
+            ],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 5,
+            "link": "/predmet/fi/PB168",
+            "type": "IN"
+        },
+        "PB176": {
+            "name": "Základy kvality a správy kódu",
+            "faculty": "FI",
+            "successors": [],
+            "language": "CZE",
+            "predecessors": [
+                {
+                    "code": "IB113",
+                    "groups": [["PB071", "PB006", "IB113", "IB111", "PB111"]],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "IB111",
+                    "groups": [["PB071", "PB006", "IB113", "IB111", "PB111"]],
+                    "by_prerequisites": true
+                }
+            ],
+            "completion": "k",
+            "credits": 4,
+            "link": "/predmet/fi/PB176",
+            "type": "IN"
+        },
+        "PV225": {
+            "name": "Exkurze do biologických laboratoří",
+            "faculty": "FI",
+            "successors": [
+                {
+                    "code": "PA183",
+                    "groups": [],
+                    "by_prerequisites": false
+                }
+            ],
+            "language": "CZE",
+            "predecessors": [
+                {
+                    "code": "PA052",
+                    "groups": [],
+                    "by_prerequisites": false
+                }
+            ],
+            "completion": "k",
+            "credits": 4,
+            "link": "/predmet/fi/PV225",
+            "type": "IN"
+        },
+        "VB001": {
+            "name": "English Exam",
+            "faculty": "FI",
+            "successors": [
+                {
+                    "code": "VV064",
+                    "groups": [["PROG", "VB001"]],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "VV070",
+                    "groups": [],
+                    "by_prerequisites": true
+                }
+            ],
+            "language": "ENG",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 1,
+            "link": "/predmet/fi/VB001",
+            "type": "OT"
+        },
+        "PřF:Bi4020": {
+            "name": "Molekulární biologie",
+            "faculty": "PřF",
+            "successors": [
+                {
+                    "code": "Bi0580",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "Bi1100",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "Bi3001",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "Bi4010c",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "Bi4020c",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "Bi4030c",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "Bi5000",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "Bi5137",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "Bi5420",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "Bi5490",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "Bi5599",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "Bi6129",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "Bi6270",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "Bi6270c",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "Bi6336",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "Bi6400",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "Bi6400c",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "Bi6700",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "Bi6710",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "Bi7001",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "Bi7005",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "Bi7036",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "Bi7037",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "Bi7055",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "Bi7056",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "Bi7090",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "Bi7120",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "Bi7140",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "Bi7240",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "Bi7250",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "Bi7420",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "Bi7575",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "Bi7665c",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "Bi8005",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "Bi8080",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "Bi8120",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "Bi8240",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "Bi8280",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "Bi8350",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "Bi8360",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "Bi8790",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "Bi9007",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "Bi9017",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "Bi9260",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "Bi9350",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "C7187",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "C7875",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "C8004",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "C8545",
+                    "groups": [],
+                    "by_prerequisites": true
+                }
+            ],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 3,
+            "link": "/predmet/sci/Bi4020",
+            "type": "BI"
+        },
+        "PřF:C2131": {
+            "name": "Úvod do bioinformatiky",
+            "faculty": "PřF",
+            "successors": [],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 2,
+            "link": "/predmet/sci/C2131",
+            "type": "BI"
+        },
+        "PřF:C2132": {
+            "name": "Úvod do bioinformatiky - seminář",
+            "faculty": "PřF",
+            "successors": [],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "z",
+            "credits": 1,
+            "link": "/predmet/sci/C2132",
+            "type": "BI"
+        },
+        "PřF:C2133": {
+            "name": "Úvod do chemoinformatiky",
+            "faculty": "PřF",
+            "successors": [],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 2,
+            "link": "/predmet/sci/C2133",
+            "type": "BI"
+        },
+        "PřF:C2144": {
+            "name": "Python pro bioinformatiky",
+            "faculty": "PřF",
+            "successors": [],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 6,
+            "link": "/predmet/sci/C2144",
+            "type": "BI"
+        },
+        "PřF:C3180": {
+            "name": "Biochemie I - seminář",
+            "faculty": "PřF",
+            "successors": [
+                {
+                    "code": "C4182",
+                    "groups": [],
+                    "by_prerequisites": false
+                },
+                {
+                    "code": "C4200",
+                    "groups": [],
+                    "by_prerequisites": false
+                }
+            ],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "z",
+            "credits": 2,
+            "link": "/predmet/sci/C3180",
+            "type": "BI"
+        },
+        "PřF:C3181": {
+            "name": "Biochemie I",
+            "faculty": "PřF",
+            "successors": [
+                {
+                    "code": "C1220",
+                    "groups": [["C3580", "C3181", "C5720"]],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "C1230",
+                    "groups": [["C3580", "C3181", "C5720"]],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "C4182",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "C4200",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "C4200en",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "C4220",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "C4230",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "C4830",
+                    "groups": [["C3580", "C3181"]],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "C6200",
+                    "groups": [["C3580", "C3181"]],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "C6560",
+                    "groups": [["C5700", "C3580", "C3181", "C5720"]],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "C7810",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "C7860",
+                    "groups": [["C3580", "C3181", "C5720"]],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "C8116",
+                    "groups": [["C3580", "C3181", "C7105", "C9530"]],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "C8117",
+                    "groups": [["C3580", "C3181", "C9530"]],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "C6220",
+                    "groups": [],
+                    "by_prerequisites": false
+                }
+            ],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 2,
+            "link": "/predmet/sci/C3181",
+            "type": "BI"
+        },
+        "PřF:C3210": {
+            "name": "Strukturní bioinformatika",
+            "faculty": "PřF",
+            "successors": [],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 3,
+            "link": "/predmet/sci/C3210",
+            "type": "BI"
+        },
+        "SBPrip": {
+            "name": "Opakování před SBZZ",
+            "faculty": "FI",
+            "successors": [],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "z",
+            "credits": 1,
+            "link": "/predmet/fi/SBPrip",
+            "type": "OT"
+        },
+        "SBAPR": {
+            "name": "Bakalářská práce",
+            "faculty": "FI",
+            "successors": [],
+            "language": "CZE",
+            "predecessors": [
+                {
+                    "code": "PB029",
+                    "groups": [],
+                    "by_prerequisites": false
+                }
+            ],
+            "completion": "z",
+            "credits": 10,
+            "link": "/predmet/fi/SBAPR",
+            "type": "OT"
+        },
+        "SOBHA": {
+            "name": "Obhajoba závěrečné práce",
+            "faculty": "FI",
+            "successors": [],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "SZk",
+            "credits": 0,
+            "link": "/predmet/fi/SOBHA",
+            "type": "OT"
+        },
+        "SZB": {
+            "name": "Státní zkouška (bakalářský studijní program)",
+            "faculty": "FI",
+            "successors": [],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "SZk",
+            "credits": 0,
+            "link": "/predmet/fi/SZB",
+            "type": "OT"
+        },
+        "PřF:C9530": {
+            "name": "Strukturní biochemie",
+            "faculty": "PřF",
+            "successors": [
+                {
+                    "code": "C8116",
+                    "groups": [["C3580", "C3181", "C7105", "C9530"]],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "C8117",
+                    "groups": [["C3580", "C3181", "C9530"]],
+                    "by_prerequisites": true
+                }
+            ],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 6,
+            "link": "/predmet/sci/C9530",
+            "type": "BI"
+        },
+        "PřF:C9531": {
+            "name": "Strukturní biochemie - seminář",
+            "faculty": "PřF",
+            "successors": [],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "z",
+            "credits": 2,
+            "link": "/predmet/sci/C9531",
+            "type": "BI"
+        },
+        "PřF:C2135": {
+            "name": "Bioinformatika v praxi",
+            "faculty": "PřF",
+            "successors": [
+                {
+                    "code": "C2138",
+                    "groups": [],
+                    "by_prerequisites": true
+                }
+            ],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "k",
+            "credits": 3,
+            "link": "/predmet/sci/C2135",
+            "type": "BI"
+        },
+        "PřF:C2150": {
+            "name": "Zpracování informací a  vizualizace v chemii a biochemii",
+            "faculty": "PřF",
+            "successors": [],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "k",
+            "credits": 3,
+            "link": "/predmet/sci/C2150",
+            "type": "BI"
+        },
+        "PřF:C2145": {
+            "name": "Strukturní bioinformatika v praxi",
+            "faculty": "PřF",
+            "successors": [],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "k",
+            "credits": 3,
+            "link": "/predmet/sci/C2145",
+            "type": "BI"
+        },
+        "PřF:C7170": {
+            "name": "Struktura a funkce buňky",
+            "faculty": "PřF",
+            "successors": [
+                {
+                    "code": "C6211",
+                    "groups": [],
+                    "by_prerequisites": true
+                }
+            ],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 2,
+            "link": "/predmet/sci/C7170",
+            "type": "BI"
+        },
+        "PřF:C9088": {
+            "name": "RNA a DNA sekvenční analýza",
+            "faculty": "PřF",
+            "successors": [],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 4,
+            "link": "/predmet/sci/C9088",
+            "type": "BI"
+        },
+        "PB112": {
+            "name": "Základy objektově orientovaného programování v jazyce Java",
+            "faculty": "FI",
+            "successors": [
+                {
+                    "code": "PB007",
+                    "groups": [["PB112", "PB162", "PV178", "PB161", "PB160", "PB174", "PB178"]],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "PB138",
+                    "groups": [],
+                    "by_prerequisites": false
+                },
+                {
+                    "code": "PV168",
+                    "groups": [],
+                    "by_prerequisites": false
+                }
+            ],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 5,
+            "link": "/predmet/fi/PB112",
+            "type": "IN"
+        },
+        "PB138": {
+            "name": "Základy webového vývoje a značkovacích jazyků",
+            "faculty": "FI",
+            "successors": [
+                {
+                    "code": "PV292",
+                    "groups": [
+                        ["PB162", "PV178", "SOUHLAS", "PA165", "PV168", "PV256", "PB178", "PB138"]
+                    ],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "PA165",
+                    "groups": [],
+                    "by_prerequisites": false
+                },
+                {
+                    "code": "PV030",
+                    "groups": [],
+                    "by_prerequisites": false
+                },
+                {
+                    "code": "PV113",
+                    "groups": [],
+                    "by_prerequisites": false
+                },
+                {
+                    "code": "PV226",
+                    "groups": [],
+                    "by_prerequisites": false
+                },
+                {
+                    "code": "PV247",
+                    "groups": [],
+                    "by_prerequisites": false
+                }
+            ],
+            "language": "CZE",
+            "predecessors": [
+                {
+                    "code": "PB112",
+                    "groups": [],
+                    "by_prerequisites": false
+                }
+            ],
+            "completion": "zk",
+            "credits": 5,
+            "link": "/predmet/fi/PB138",
+            "type": "IN"
+        },
+        "VB035": {
+            "name": "English Skills for IT I",
+            "faculty": "FI",
+            "successors": [
+                {
+                    "code": "VB036",
+                    "groups": [["VB035", "SOUHLAS"]],
+                    "by_prerequisites": true
+                }
+            ],
+            "language": "ENG",
+            "predecessors": [],
+            "completion": "z",
+            "credits": 1,
+            "link": "/predmet/fi/VB035",
+            "type": "OT"
+        },
+        "VB036": {
+            "name": "English Skills for IT II",
+            "faculty": "FI",
+            "successors": [],
+            "language": "ENG",
+            "predecessors": [
+                {
+                    "code": "VB035",
+                    "groups": [["VB035", "SOUHLAS"]],
+                    "by_prerequisites": true
+                }
+            ],
+            "completion": "z",
+            "credits": 2,
+            "link": "/predmet/fi/VB036",
+            "type": "OT"
+        },
+        "VV064": {
+            "name": "Academic and Professional Skills in English for IT",
+            "faculty": "FI",
+            "successors": [],
+            "language": "ENG",
+            "predecessors": [
+                {
+                    "code": "VB001",
+                    "groups": [["PROG", "VB001"]],
+                    "by_prerequisites": true
+                }
+            ],
+            "completion": "k",
+            "credits": 3,
+            "link": "/predmet/fi/VV064",
+            "type": "OT"
+        },
+        "VB000": {
+            "name": "Základy odborného stylu",
+            "faculty": "FI",
+            "successors": [],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "k",
+            "credits": 3,
+            "link": "/predmet/fi/VB000",
+            "type": "OT"
+        },
+        "VB000Eng": {
+            "name": "Introduction to Academic Writing",
+            "faculty": "FI",
+            "successors": [],
+            "language": "ENG",
+            "predecessors": [],
+            "completion": "k",
+            "credits": 3,
+            "link": "/predmet/fi/VB000Eng",
+            "type": "OT"
+        },
+        "PB029": {
+            "name": "Elektronická příprava dokumentů",
+            "faculty": "FI",
+            "successors": [
+                {
+                    "code": "SBAPR",
+                    "groups": [],
+                    "by_prerequisites": false
+                }
+            ],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 5,
+            "link": "/predmet/fi/PB029",
+            "type": "IN"
+        },
+        "IB114": {
+            "name": "Úvod do programování a algoritmizace II",
+            "faculty": "FI",
+            "successors": [],
+            "language": "CZE",
+            "predecessors": [
+                {
+                    "code": "IB113",
+                    "groups": [["IB111", "IB113"]],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "IB111",
+                    "groups": [["IB111", "IB113"]],
+                    "by_prerequisites": true
+                }
+            ],
+            "completion": "zk",
+            "credits": 5,
+            "link": "/predmet/fi/IB114",
+            "type": "IN"
+        },
+        "PřF:C2142": {
+            "name": "Návrh algoritmů pro přírodovědce",
+            "faculty": "PřF",
+            "successors": [
+                {
+                    "code": "C2143",
+                    "groups": [["C2142", "NOW"]],
+                    "by_prerequisites": true
+                }
+            ],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 5,
+            "link": "/predmet/sci/C2142",
+            "type": "BI"
+        },
+        "PV004": {
+            "name": "UNIX",
+            "faculty": "FI",
+            "successors": [
+                {
+                    "code": "PB177",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "PV280",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "PV297",
+                    "groups": [["PV004", "PB177"]],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "P065",
+                    "groups": [],
+                    "by_prerequisites": false
+                },
+                {
+                    "code": "P077",
+                    "groups": [],
+                    "by_prerequisites": false
+                },
+                {
+                    "code": "P090",
+                    "groups": [],
+                    "by_prerequisites": false
+                }
+            ],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 4,
+            "link": "/predmet/fi/PV004",
+            "type": "IN"
+        },
+        "PřF:C2110": {
+            "name": "Operační systém UNIX a základy programování",
+            "faculty": "PřF",
+            "successors": [
+                {
+                    "code": "C8862",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "C9540",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "C2115",
+                    "groups": [],
+                    "by_prerequisites": false
+                },
+                {
+                    "code": "C2150",
+                    "groups": [],
+                    "by_prerequisites": false
+                },
+                {
+                    "code": "C2160",
+                    "groups": [],
+                    "by_prerequisites": false
+                },
+                {
+                    "code": "C3220",
+                    "groups": [],
+                    "by_prerequisites": false
+                },
+                {
+                    "code": "C7800",
+                    "groups": [],
+                    "by_prerequisites": false
+                },
+                {
+                    "code": "C8856",
+                    "groups": [],
+                    "by_prerequisites": false
+                }
+            ],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "k",
+            "credits": 3,
+            "link": "/predmet/sci/C2110",
+            "type": "BI"
+        },
+        "PV119": {
+            "name": "Základy práva pro informatiky",
+            "faculty": "FI",
+            "successors": [],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 4,
+            "link": "/predmet/fi/PV119",
+            "type": "IN"
+        },
+        "VV076": {
+            "name": "Etika a informační technologie",
+            "faculty": "FI",
+            "successors": [],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "k",
+            "credits": 3,
+            "link": "/predmet/fi/VV076",
+            "type": "OT"
+        },
+        "IB031": {
+            "name": "Úvod do strojového učení",
+            "faculty": "FI",
+            "successors": [
+                {
+                    "code": "PA164",
+                    "groups": [],
+                    "by_prerequisites": false
+                },
+                {
+                    "code": "PV056",
+                    "groups": [],
+                    "by_prerequisites": false
+                }
+            ],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 5,
+            "link": "/predmet/fi/IB031",
+            "type": "IN"
+        },
+        "PB016": {
+            "name": "Úvod do umělé inteligence",
+            "faculty": "FI",
+            "successors": [
+                {
+                    "code": "PA026",
+                    "groups": [["PV021", "PV056", "IV126", "PB016"]],
+                    "by_prerequisites": true
+                }
+            ],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 5,
+            "link": "/predmet/fi/PB016",
+            "type": "IN"
+        },
+        "MA018": {
+            "name": "Numerical Methods",
+            "faculty": "FI",
+            "successors": [],
+            "language": "ENG",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 5,
+            "link": "/predmet/fi/MA018",
+            "type": "MA"
+        },
+        "PV003": {
+            "name": "Architektura relačních databázových systémů",
+            "faculty": "FI",
+            "successors": [],
+            "language": "CZE",
+            "predecessors": [
+                {
+                    "code": "PB168",
+                    "groups": [],
+                    "by_prerequisites": false
+                }
+            ],
+            "completion": "zk",
+            "credits": 5,
+            "link": "/predmet/fi/PV003",
+            "type": "IN"
+        },
+        "PV005": {
+            "name": "Služby počítačových sítí",
+            "faculty": "FI",
+            "successors": [
+                {
+                    "code": "PV219",
+                    "groups": [],
+                    "by_prerequisites": true
+                }
+            ],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "z",
+            "credits": 2,
+            "link": "/predmet/fi/PV005",
+            "type": "IN"
+        },
+        "PA039": {
+            "name": "Supercomputer Architecture and Intensive Computations",
+            "faculty": "FI",
+            "successors": [],
+            "language": "ENG",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 4,
+            "link": "/predmet/fi/PA039",
+            "type": "IN"
+        },
+        "MB151": {
+            "name": "Lineární modely",
+            "faculty": "FI",
+            "successors": [
+                {
+                    "code": "MB143",
+                    "groups": [["MB151", "MB152", "MB141", "MB142"]],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "MB153",
+                    "groups": [["MB151", "MB152", "PŘF:M1110", "PŘF:M1100"]],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "MB154",
+                    "groups": [["MB152", "PŘF:M1100", "MB151", "PŘF:M1110"]],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "MV008",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "PV291",
+                    "groups": [],
+                    "by_prerequisites": true
+                }
+            ],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 5,
+            "link": "/predmet/fi/MB151",
+            "type": "MA"
+        },
+        "MB152": {
+            "name": "Diferenciální a integrální počet",
+            "faculty": "FI",
+            "successors": [
+                {
+                    "code": "MB143",
+                    "groups": [["MB151", "MB152", "MB141", "MB142"]],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "MB153",
+                    "groups": [["MB151", "MB152", "PŘF:M1110", "PŘF:M1100"]],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "MB154",
+                    "groups": [["MB152", "PŘF:M1100", "MB151", "PŘF:M1110"]],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "PV291",
+                    "groups": [],
+                    "by_prerequisites": true
+                }
+            ],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 5,
+            "link": "/predmet/fi/MB152",
+            "type": "MA"
+        },
+        "MB153": {
+            "name": "Statistika I",
+            "faculty": "FI",
+            "successors": [
+                {
+                    "code": "MA012",
+                    "groups": [],
+                    "by_prerequisites": false
+                }
+            ],
+            "language": "CZE",
+            "predecessors": [
+                {
+                    "code": "MB151",
+                    "groups": [["MB151", "MB152", "PŘF:M1110", "PŘF:M1100"]],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "MB152",
+                    "groups": [["MB151", "MB152", "PŘF:M1110", "PŘF:M1100"]],
+                    "by_prerequisites": true
+                }
+            ],
+            "completion": "zk",
+            "credits": 5,
+            "link": "/predmet/fi/MB153",
+            "type": "MA"
+        },
+        "MB154": {
+            "name": "Diskrétní matematika",
+            "faculty": "FI",
+            "successors": [],
+            "language": "CZE",
+            "predecessors": [
+                {
+                    "code": "MB151",
+                    "groups": [["MB152", "PŘF:M1100", "MB151", "PŘF:M1110"]],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "MB152",
+                    "groups": [["MB152", "PŘF:M1100", "MB151", "PŘF:M1110"]],
+                    "by_prerequisites": true
+                }
+            ],
+            "completion": "zk",
+            "credits": 5,
+            "link": "/predmet/fi/MB154",
+            "type": "MA"
+        },
+        "IB000": {
+            "name": "Matematické základy informatiky",
+            "faculty": "FI",
+            "successors": [
+                {
+                    "code": "IB005",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "MA007",
+                    "groups": [["IB000", "PŘF:M1125", "PŘF:M1120"]],
+                    "by_prerequisites": true
+                }
+            ],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 6,
+            "link": "/predmet/fi/IB000",
+            "type": "IN"
+        },
+        "IB111": {
+            "name": "Základy programování",
+            "faculty": "FI",
+            "successors": [
+                {
+                    "code": "IB002",
+                    "groups": [["IB111", "IB015"]],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "IB114",
+                    "groups": [["IB111", "IB113"]],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "PB006",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "PB111",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "PB176",
+                    "groups": [["PB071", "PB006", "IB113", "IB111", "PB111"]],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "PV248",
+                    "groups": [],
+                    "by_prerequisites": false
+                }
+            ],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 7,
+            "link": "/predmet/fi/IB111",
+            "type": "IN"
+        },
+        "IB002": {
+            "name": "Algoritmy a datové struktury I",
+            "faculty": "FI",
+            "successors": [
+                {
+                    "code": "IV003",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "IA101",
+                    "groups": [],
+                    "by_prerequisites": false
+                }
+            ],
+            "language": "CZE",
+            "predecessors": [
+                {
+                    "code": "IB111",
+                    "groups": [["IB111", "IB015"]],
+                    "by_prerequisites": true
+                }
+            ],
+            "completion": "zk",
+            "credits": 6,
+            "link": "/predmet/fi/IB002",
+            "type": "IN"
+        }
+    },
+    "spec": {
+        "apl": {
+            "nameCZ": "Aplikovaná bioinformatika",
+            "nameEN": "Applied Bioinformatics",
+            "descCZ": "Zaměření umožňuje získat orientaci v informacích o struktuře, aktivitě a reaktivitě biomolekul a porozumění organizaci chemických a biologických dat.",
+            "descEN": "",
+            "base": [
+                {
+                    "code": "PřF:C9530"
+                },
+                {
+                    "code": "PřF:C9531"
+                },
+                {
+                    "code": "PřF:C2135"
+                },
+                {
+                    "code": "PřF:C2150"
+                },
+                {
+                    "code": "PřF:C2145"
+                },
+                {
+                    "code": "PřF:C7170"
+                },
+                {
+                    "code": "PřF:C9088"
+                }
+            ],
+            "plan": {
+                "1": [
+                    {
+                        "code": "IB000ext"
+                    },
+                    {
+                        "code": "IB113"
+                    },
+                    {
+                        "code": "PA052"
+                    },
+                    {
+                        "code": "PB001"
+                    },
+                    {
+                        "code": "VB035"
+                    },
+                    {
+                        "code": "PřF:C3180"
+                    },
+                    {
+                        "code": "PřF:C3181"
+                    },
+                    {
+                        "choice": "tv",
+                        "credits": 1
+                    },
+                    { "choice": "core", "credits": 3 }
+                ],
+                "2": [
+                    {
+                        "code": "MB141"
+                    },
+                    {
+                        "code": "PřF:C2142"
+                    },
+                    {
+                        "code": "PřF:C2143"
+                    },
+                    {
+                        "code": "PB051"
+                    },
+                    {
+                        "code": "PřF:C2131"
+                    },
+                    {
+                        "code": "PřF:C2132"
+                    },
+                    {
+                        "code": "PřF:C2144"
+                    },
+                    {
+                        "code": "VB036"
+                    },
+                    {
+                        "code": "VB001"
+                    }
+                ],
+                "3": [
+                    {
+                        "code": "IV107"
+                    },
+                    {
+                        "code": "MB142"
+                    },
+                    {
+                        "code": "PA055"
+                    },
+                    {
+                        "code": "PB168"
+                    },
+                    {
+                        "code": "PřF:C2110"
+                    },
+                    {
+                        "code": "PV225"
+                    },
+                    {
+                        "code": "PřF:C2133"
+                    },
+                    {
+                        "code": "PřF:C7170"
+                    },
+                    {
+                        "choice": "styl",
+                        "credits": 1
+                    }
+                ],
+                "4": [
+                    {
+                        "code": "IV109"
+                    },
+                    {
+                        "code": "IV114"
+                    },
+                    {
+                        "code": "MB143"
+                    },
+                    {
+                        "code": "PB112"
+                    },
+                    {
+                        "code": "PB153"
+                    },
+                    {
+                        "code": "PV003"
+                    },
+                    {
+                        "code": "PřF:Bi4020"
+                    }
+                ],
+                "5": [
+                    {
+                        "code": "PB007"
+                    },
+                    {
+                        "code": "PB050"
+                    },
+                    {
+                        "code": "PřF:C2145"
+                    },
+                    {
+                        "code": "PřF:C3210"
+                    },
+                    {
+                        "code": "PřF:C9530"
+                    },
+                    {
+                        "code": "PřF:C9531"
+                    }
+                ],
+                "6": [
+                    {
+                        "code": "PB176"
+                    },
+                    {
+                        "code": "PřF:C2135"
+                    },
+                    {
+                        "code": "PřF:C2150"
+                    },
+                    {
+                        "code": "PřF:C9088"
+                    }
+                ]
+            }
+        },
+        "vyvoj": {
+            "nameCZ": "Vývoj bioinformatického software",
+            "nameEN": "Development off bioinformatics software",
+            "descCZ": "Zaměření poskytuje dovednosti nutné pro práci s technologiemi potřebnými pro návrh a vývoj bioinformatických softwarových nástrojů včetně metod strojového učení a umělé inteligence.",
+            "descEN": "",
+            "base": [
+                {
+                    "code": "PB112"
+                },
+                {
+                    "code": "PB138"
+                },
+                {
+                    "choice": "vypmet"
+                },
+                {
+                    "choice": "poctech"
+                }
+            ],
+            "plan": {
+                "1": [
+                    {
+                        "code": "IB000ext"
+                    },
+                    {
+                        "code": "IB113"
+                    },
+                    {
+                        "code": "PA052"
+                    },
+                    {
+                        "code": "PB001"
+                    },
+                    {
+                        "code": "VB035"
+                    },
+                    {
+                        "code": "PřF:C3180"
+                    },
+                    {
+                        "code": "PřF:C3181"
+                    },
+                    {
+                        "choice": "tv",
+                        "credits": 1
+                    }
+                ],
+                "2": [
+                    {
+                        "code": "IB114"
+                    },
+                    {
+                        "code": "MB141"
+                    },
+                    {
+                        "code": "PV004"
+                    },
+                    {
+                        "code": "PB051"
+                    },
+                    {
+                        "code": "PřF:C2131"
+                    },
+                    {
+                        "code": "PřF:C2132"
+                    },
+                    {
+                        "code": "PřF:C2144"
+                    },
+                    {
+                        "code": "VB036"
+                    },
+                    {
+                        "code": "VB001"
+                    }
+                ],
+                "3": [
+                    {
+                        "code": "IV107"
+                    },
+                    {
+                        "code": "MB142"
+                    },
+                    {
+                        "code": "PA055"
+                    },
+                    {
+                        "code": "PB168"
+                    },
+                    {
+                        "code": "PV225"
+                    },
+                    {
+                        "code": "PřF:C2133"
+                    },
+                    {
+                        "choice": "styl"
+                    }
+                ],
+                "4": [
+                    {
+                        "code": "IV109"
+                    },
+                    {
+                        "code": "MB143"
+                    },
+                    {
+                        "code": "PřF:Bi4020"
+                    },
+                    {
+                        "code": "IV114"
+                    },
+                    {
+                        "code": "PB112"
+                    },
+                    {
+                        "code": "PB153"
+                    },
+                    {
+                        "code": "PA039"
+                    }
+                ],
+                "5": [
+                    {
+                        "code": "PB007"
+                    },
+                    {
+                        "code": "PB016"
+                    },
+                    {
+                        "code": "PB050"
+                    },
+                    {
+                        "code": "PV005"
+                    },
+                    {
+                        "code": "PřF:C3210"
+                    }
+                ],
+                "6": [
+                    {
+                        "code": "IB031"
+                    },
+                    {
+                        "code": "PB138"
+                    },
+                    {
+                        "code": "PB176"
+                    },
+                    {
+                        "code": "PřF:C2150"
+                    }
+                ]
+            }
+        }
+    },
+    "choices": {
+        "lang": {
+            "type": "0:3",
+            "list": ["VB035", "VB036", "VV064"],
+            "refnCZ": "Angličtina",
+            "refnEN": "English"
+        },
+        "styl": {
+            "type": "1:0",
+            "list": ["VB000", "VB000Eng", "PB029"],
+            "refnCZ": "Sazba a akademické psaní",
+            "refnEN": "Typesetting and academic writing"
+        },
+        "core": {
+            "type": "0:9",
+            "list": [
+                {
+                    "code": "*:CORE*",
+                    "nazevCZ": "Předměty s prefixem CORE",
+                    "nazevEN": "Courses with prefix CORE",
+                    "credits": 3
+                }
+            ],
+            "refnCZ": "Společenskovědní a přírodovědní rozhled",
+            "refnEN": "Social science, natural sciences, and humanities background",
+            "credits": 9
+        },
+        "tv": {
+            "type": "0:2",
+            "list": [
+                {
+                    "code": "FSpS:p9*",
+                    "nazevCZ": "Předměty povinné tělesné výchovy",
+                    "nazevEN": "Courses for compulsory physical education",
+                    "credits": 1
+                }
+            ],
+            "refnCZ": "Tělesná výchova",
+            "refnEN": "Physical education",
+            "credits": 2
+        },
+        "naval": {
+            "type": "1:0",
+            "list": ["IB114", "PřF:C2142"],
+            "refnCZ": "Návrh algoritmů",
+            "refnEN": "Design of algorithms"
+        },
+        "unix": {
+            "type": "1:0",
+            "list": ["PV004", "PřF:C2110"],
+            "refnCZ": "Práce s operačním systémem UNIX",
+            "refnEN": "Work with unix-based systems"
+        },
+        "legal": {
+            "type": "1:0",
+            "list": ["PV119", "VV076"],
+            "refnCZ": "Právní a etické aspekty",
+            "refnEN": "Legal and ethical aspects"
+        },
+        "vypmet": {
+            "type": "2:0",
+            "list": ["IB031", "PB016", "MA018"],
+            "refnCZ": "Výpočetní metody",
+            "refnEN": "Computational methods"
+        },
+        "poctech": {
+            "type": "0:3",
+            "list": ["PV003", "PV005", "PA039"],
+            "refnCZ": "Počítačové technologie",
+            "refnEN": "Computational technologies"
+        }
+    },
+    "substitutions": {
+        "advanced_math": {
+            "nameCZ": "Pokročilá matematika",
+            "removes": ["MB141", "MB142", "MB143"],
+            "type": "MA",
+            "adds": [
+                {
+                    "code": "MB151",
+                    "semester": 2
+                },
+                {
+                    "code": "MB152",
+                    "semester": 3
+                },
+                {
+                    "code": "MB153",
+                    "semester": 4
+                },
+                {
+                    "code": "MB154",
+                    "semester": 3
+                }
+            ]
+        },
+        "advanced_inf": {
+            "nameCZ": "Pokročilá informatika",
+            "removes": ["IB000ext", "IB113", "IB114"],
+            "type": "IN",
+            "adds": [
+                {
+                    "code": "IB000",
+                    "semester": 1
+                },
+                {
+                    "code": "IB111",
+                    "semester": 1
+                },
+                {
+                    "code": "IB002",
+                    "semester": 2
+                }
+            ]
+        }
+    }
+}
