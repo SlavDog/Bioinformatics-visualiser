@@ -1,5 +1,6 @@
 import { Layout } from '@/consts/VisualisationParameters';
 import { Details, OrderSubject } from '@/types';
+import { useSelectedChoices } from '@components/providers/dataProvider';
 
 type SemesterColumnProps = {
     index: number;
@@ -16,13 +17,19 @@ function SemesterColumn({
     maxY,
     semesterCount
 }: SemesterColumnProps) {
+    const selectedChoices = useSelectedChoices();
     const semesterCredits = semesterSubjects
         .map((subject) => {
             if (!('code' in subject)) {
-                return subject.credits ?? 0;
+                // Choice subject – sečti kredity zvolených předmětů
+                const selected = selectedChoices[subject.choice] ?? new Set();
+                return [...selected].reduce((sum, subjectCode) => {
+                    const course = processedSubjects[subjectCode];
+                    return sum + (course?.credits ? Number(course.credits) : 0);
+                }, 0);
             }
             const course = processedSubjects[subject.code];
-            return course && course.credits ? Number(course.credits) : 0;
+            return course?.credits ? Number(course.credits) : 0;
         })
         .reduce((acc, c) => acc + c, 0);
 

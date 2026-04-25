@@ -139,6 +139,14 @@
     background-color: var(--icon-color);
 }
 
+.divider {
+    background-color: #a5a5a5;
+    height: 3px;
+    min-height: 3px;
+    width: 50%;
+    align-self: center;
+}
+
 .bottomSubjectContainer {
     display: flex;
     justify-content: space-between;

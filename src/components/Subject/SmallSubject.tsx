@@ -2,8 +2,10 @@ import { Course } from '@/types';
 import './styles.css';
 import SubjectDetailMenu from '@components/SubjectDetailMenu/SubjectDetailMenu';
 import { useState } from 'react';
-import { useHighlightedSubjects } from '@components/providers/dataProvider';
-import Warning from './Warning';
+import { useSetHighlightedSubjects } from '@components/providers/dataProvider';
+import Warning from '@components/Subject/Warning';
+import { useSubjectData } from '@/hooks/useSubjectData';
+import SubjectCredits from './SubjectCredits';
 
 type SmallSubjectProps = {
     code: string;
@@ -14,39 +16,30 @@ type SmallSubjectProps = {
 
 function SmallSubject({ code, course, style, setDragEnabled }: SmallSubjectProps) {
     const [isOpen, setIsOpen] = useState(false);
+    const setHighlightedSubjects = useSetHighlightedSubjects();
 
-    const highlightedSubjects = useHighlightedSubjects();
+    const {
+        displayCode,
+        link,
+        semLimit,
+        isChoice,
+        warnings,
+        isChoiceWithLimit,
+        creditsLabel,
+        actualAmount,
+        tooltipContent,
+        highlightedSubjects
+    } = useSubjectData(code, course);
 
     const isHighlighted = highlightedSubjects.size > 0 && highlightedSubjects.has(code);
     const isDimmed = highlightedSubjects.size > 0 && !highlightedSubjects.has(code);
 
-    const link = 'https://is.muni.cz' + course.link;
-    const displayCode = code.replace(/-DUP-\d+$/, '');
-    let Info = (
-        <a className="smallSubjectCode" draggable="false" href={link}>
-            {displayCode}
-        </a>
-    );
-    let onClick = () => {};
-    let detailMenuSourceName = '';
-    if (course.type == 'choice') {
-        onClick = () => {
-            setIsOpen(true);
-            setDragEnabled(false);
-        };
-        detailMenuSourceName = code;
-        Info = <a className="smallSubjectCode">{code}</a>;
-    }
-
-    let warnings: Set<string> = new Set();
-    if (
-        course.unshownNeededPredecessors != undefined &&
-        course.unshownNeededPredecessors.length != 0
-    ) {
-        warnings.add('unshownPredecessors');
-    }
-    const WarningComponent = <Warning warnings={warnings} course={course} />;
-    let limit = course.credits;
+    const onClick = isChoice
+        ? () => {
+              setIsOpen(true);
+              setDragEnabled(false);
+          }
+        : () => {};
 
     return (
         <>
@@ -55,21 +48,26 @@ function SmallSubject({ code, course, style, setDragEnabled }: SmallSubjectProps
                 className={`subject subjectType${course.type} ${isHighlighted ? 'subjectHighlighted' : ''} ${isDimmed ? 'subjectDimmed' : ''}`}
                 style={{ ...style, borderRadius: '0px', borderWidth: '4px' }}
             >
-                <div className="smallTopSubjectContainer">{Info}</div>
-                <div
-                    style={{
-                        backgroundColor: '#a5a5a5',
-                        height: '3px',
-                        minHeight: '3px',
-                        width: '50%',
-                        alignSelf: 'center'
-                    }}
-                ></div>
+                <div className="smallTopSubjectContainer">
+                    {isChoice ? (
+                        <a className="smallSubjectCode">{code}</a>
+                    ) : (
+                        <a className="smallSubjectCode" draggable="false" href={link}>
+                            {displayCode}
+                        </a>
+                    )}
+                </div>
+                <div className="divider" />
                 <div className="smallBottomSubjectContainer">
-                    <p className="smallSubjectCredits">
-                        {limit} {course.credits ? 'kr.' : 'předm.'}
-                    </p>
-                    {WarningComponent}
+                    <SubjectCredits
+                        isChoiceWithLimit={isChoiceWithLimit}
+                        actualAmount={actualAmount}
+                        semLimit={semLimit}
+                        creditsLabel={creditsLabel}
+                        tooltipContent={tooltipContent}
+                        className="smallSubjectCredits"
+                    />
+                    <Warning warnings={warnings} course={course} />
                 </div>
             </div>
             <SubjectDetailMenu
@@ -77,10 +75,11 @@ function SmallSubject({ code, course, style, setDragEnabled }: SmallSubjectProps
                 onClose={() => {
                     setIsOpen(false);
                     setDragEnabled(true);
+                    setHighlightedSubjects(new Set());
                 }}
-                source={detailMenuSourceName}
+                source={isChoice ? code : ''}
                 setIsOpen={setIsOpen}
-                credits={limit}
+                credits={semLimit}
             />
         </>
     );

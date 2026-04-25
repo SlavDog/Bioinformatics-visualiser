@@ -9,28 +9,33 @@ import MathIcon from '@/assets/math.svg';
 import ChoiceIcon from '@/assets/choice.svg';
 import OtherIcon from '@/assets/other.svg';
 import { typeCodeToName } from '@utils/textHelpers';
-import {
-    useData,
-    useHighlightedSubjects,
-    useSelectedChoices,
-    useSetHighlightedSubjects
-} from '@components/providers/dataProvider';
+import { useSetHighlightedSubjects } from '@components/providers/dataProvider';
 import Tippy from '@tippyjs/react';
-
-export type SubjectProps = {
-    code: string;
-    course: Course;
-    isAlsoOutside: boolean;
-    dim?: boolean;
-    style: React.CSSProperties;
-    setDragEnabled: (b: boolean) => void;
-};
+import { useSubjectData } from '@/hooks/useSubjectData';
+import SubjectCredits from './SubjectCredits';
+import SubjectInfo from './SubjectInfo';
 
 const typeToColor: Record<string, string> = {
     IN: 'var(--informatics)',
     BI: 'var(--biology)',
     MA: 'var(--math)',
     choice: 'var(--choice)'
+};
+
+const typeToIcon: Record<string, string> = {
+    IN: InfIcon,
+    BI: BioIcon,
+    MA: MathIcon,
+    choice: ChoiceIcon
+};
+
+export type SubjectProps = {
+    code: string;
+    course: Course;
+    isAlsoOutside?: boolean;
+    dim?: boolean;
+    style: React.CSSProperties;
+    setDragEnabled: (b: boolean) => void;
 };
 
 function Subject({
@@ -42,73 +47,36 @@ function Subject({
     setDragEnabled
 }: SubjectProps) {
     const [isOpen, setIsOpen] = useState(false);
-    const highlightedSubjects = useHighlightedSubjects();
     const setHighlightedSubjects = useSetHighlightedSubjects();
-    const selectedChoices = useSelectedChoices();
-    const subjectInfoData = useData();
+
+    const {
+        displayCode,
+        link,
+        semLimit,
+        isChoice,
+        actualAmount,
+        warnings,
+        subjectInfoData,
+        selectedChoices,
+        highlightedSubjects,
+        isChoiceWithLimit,
+        creditsLabel,
+        tooltipContent
+    } = useSubjectData(code, course);
+
+    if (isAlsoOutside) warnings.add('isAlsoOutside');
 
     const isHighlighted = highlightedSubjects.size > 0 && highlightedSubjects.has(code);
     const isDimmed = dim && highlightedSubjects.size > 0 && !highlightedSubjects.has(code);
+    const onClick = isChoice
+        ? () => {
+              setIsOpen(true);
+              setDragEnabled(false);
+          }
+        : () => {};
 
-    const link = 'https://is.muni.cz' + course.link;
-    const displayCode = code.replace(/-DUP-\d+$/, '');
+    const selectedCodes = isChoice ? [...(selectedChoices[code] ?? [])].slice(0, 2) : [];
 
-    let Info = (
-        <>
-            <p className="subjectCode">{displayCode}</p>
-            <a className="subjectName" draggable="false" href={link} target="_blank">
-                {course.name}
-            </a>
-            <p className="subjectInfo">
-                {course.faculty} / {course.language} / {course.completion}
-            </p>
-        </>
-    );
-    let onClick = () => {};
-    let detailMenuSourceName = '';
-    if (course.type == 'choice') {
-        Info = (
-            <>
-                <p className="subjectCode">Předměty ze sekce:</p>
-                <p className="subjectName">{course.name}</p>
-            </>
-        );
-        onClick = () => {
-            setIsOpen(true);
-            setDragEnabled(false);
-        };
-        detailMenuSourceName = code;
-    }
-
-    let warnings: Set<string> = new Set();
-    if (isAlsoOutside) {
-        warnings.add('isAlsoOutside');
-        console.warn(
-            `This subject ${code} is also present outside of choices, which may cause issues with layout and connections.`
-        );
-    }
-    if (
-        course.unshownNeededPredecessors != undefined &&
-        course.unshownNeededPredecessors.length != 0
-    ) {
-        warnings.add('unshownPredecessors');
-    }
-
-    const WarningComponent = <Warning warnings={warnings} course={course} />;
-
-    const selectedCodes =
-        course.type === 'choice' ? [...(selectedChoices[code] ?? [])].slice(0, 2) : [];
-    let limit = course.credits;
-    let hasSubjectLimit = false;
-    if (course.type === 'choice') {
-        const choiceLimit = subjectInfoData.choices[code.replace(/-\d+$/, '')]?.type;
-        if (choiceLimit) {
-            const [subjectsLimit, _] = choiceLimit.split(':').map(Number);
-            if (subjectsLimit != 0) {
-                hasSubjectLimit = true;
-            }
-        }
-    }
     return (
         <>
             <div
@@ -116,60 +84,35 @@ function Subject({
                 className={`subject subjectType${course.type} ${isHighlighted ? 'subjectHighlighted' : ''} ${isDimmed ? 'subjectDimmed' : ''}`}
                 style={style}
             >
-                <div className="topSubjectContainer">
-                    {Info}
-                    {course.type === 'choice' && selectedCodes.length > 0 && (
-                        <div className="subjectSelectedLabels">
-                            {selectedCodes.map((selectedCode) => {
-                                const type = subjectInfoData.details[selectedCode]?.type;
-                                return (
-                                    <p
-                                        key={selectedCode}
-                                        className={`subjectSelectedLabel`}
-                                        style={{
-                                            color: typeToColor[type] ?? 'var(--text-secondary)'
-                                        }}
-                                    >
-                                        {selectedCode}
-                                    </p>
-                                );
-                            })}
-                            {selectedChoices[code].size > 2 && (
-                                <p
-                                    className={`subjectSelectedLabel`}
-                                    style={{ color: 'var(--text-secondary)' }}
-                                >
-                                    +{selectedChoices[code].size - 2}
-                                </p>
-                            )}
-                        </div>
-                    )}
-                </div>
+                <SubjectInfo
+                    course={course}
+                    displayCode={displayCode}
+                    link={link}
+                    isChoice={isChoice}
+                    selectedCodes={selectedCodes}
+                    totalSelected={selectedChoices[code]?.size ?? 0}
+                    typeToColor={typeToColor}
+                    getType={(c) => subjectInfoData.details[c]?.type}
+                />
                 <div className="bottomSubjectContainer">
                     <div className="iconContainer">
                         <Tippy placement="bottom" content={typeCodeToName(course.type)}>
                             <img
-                                src={
-                                    course.type === 'IN'
-                                        ? InfIcon
-                                        : course.type === 'BI'
-                                          ? BioIcon
-                                          : course.type === 'MA'
-                                            ? MathIcon
-                                            : course.type === 'choice'
-                                              ? ChoiceIcon
-                                              : OtherIcon
-                                }
+                                src={typeToIcon[course.type] ?? OtherIcon}
                                 draggable="false"
                                 className="circle"
                             />
                         </Tippy>
-                        {WarningComponent}
+                        <Warning warnings={warnings} course={course} />
                     </div>
-
-                    <p className="subjectCredits">
-                        {limit} {!hasSubjectLimit ? 'kr.' : 'předm.'}
-                    </p>
+                    <SubjectCredits
+                        isChoiceWithLimit={isChoiceWithLimit}
+                        actualAmount={actualAmount}
+                        semLimit={semLimit}
+                        creditsLabel={creditsLabel}
+                        tooltipContent={tooltipContent}
+                        className="subjectCredits"
+                    />
                 </div>
             </div>
             <SubjectDetailMenu
@@ -179,9 +122,9 @@ function Subject({
                     setDragEnabled(true);
                     setHighlightedSubjects(new Set());
                 }}
-                source={detailMenuSourceName}
+                source={isChoice ? code : ''}
                 setIsOpen={setIsOpen}
-                credits={limit}
+                credits={semLimit}
             />
         </>
     );
