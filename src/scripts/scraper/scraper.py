@@ -481,11 +481,11 @@ def build_final_json(data: ResultData, successors: SubjectSuccessors, path: str)
 
 def main() -> None:
     print("Extracting names from input JSON file...")
-    data = extract_codes("../src/data/bc_bio_cz.json")
+    data = extract_codes("./bc_bio_cz.json")
     subject_dict = build_subject_dict(data)
 
     print("Almost finished. Building the final JSON file...")
-    build_final_json(data, subject_dict, "../src/data/final_tree.json")
+    build_final_json(data, subject_dict, "../../data/processed_data.json")
     print("Done.")
 
 if __name__ == "__main__":

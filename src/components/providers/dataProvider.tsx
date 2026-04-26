@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from 'react';
-import subjectInfoData from '@/data/final_tree.json';
+import subjectInfoData from '@/data/processed_data.json';
 import { SubjectData } from '@/types';
 
 type SubjectDataContextType = {
