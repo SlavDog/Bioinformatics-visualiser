@@ -1,5 +1,5 @@
 import { ZoomScale } from '@/consts/visualisationParameters';
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 
 function useWheelZoom(setScale: React.Dispatch<React.SetStateAction<number>>) {
     useEffect(() => {
