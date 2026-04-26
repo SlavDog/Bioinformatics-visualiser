@@ -28,13 +28,15 @@ export type OrderSubject =
           credits?: number;
       };
 
+export type Plan = Record<string, OrderSubject[]>;
+
 export type Specialization = {
     nameCZ: string;
     nameEN: string;
     descCZ: string;
     descEN: string;
     base: OrderSubject[];
-    plan: Record<string, OrderSubject[]>;
+    plan: Plan;
 };
 
 export type Spec = Record<string, Specialization>;

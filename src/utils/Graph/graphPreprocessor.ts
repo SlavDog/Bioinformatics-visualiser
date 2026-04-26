@@ -6,6 +6,7 @@ import {
     Details,
     Edge,
     OrderSubject,
+    Plan,
     Spec,
     SubjectData,
     Substitutions
@@ -429,7 +430,7 @@ function removeTransitiveEdges(details: Details): void {
  */
 export function createDuplicateSubjectDetails(
     subjectInfoData: SubjectData,
-    dedupedPlan: Record<string, OrderSubject[]>,
+    dedupedPlan: Plan,
     selectedSpecialization: string
 ): SubjectData {
     const patchedData = structuredClone(subjectInfoData);
@@ -460,12 +461,12 @@ export function createDuplicateSubjectDetails(
  */
 export function getCodesToSem(
     choices: Choices,
-    plan: Record<string, OrderSubject[]>,
+    plan: Plan,
     substitutions: Substitutions
-): [Record<string, number>, Record<string, OrderSubject[]>] {
+): [Record<string, number>, Plan] {
     const result: Record<string, number> = {};
     const seen = new Set<string>();
-    const newPlan: Record<string, OrderSubject[]> = {};
+    const newPlan: Plan = {};
 
     Object.entries(plan).forEach(([semesterNumber, semester]) => {
         newPlan[semesterNumber] = [];

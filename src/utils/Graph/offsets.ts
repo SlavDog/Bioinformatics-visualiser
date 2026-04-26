@@ -1,4 +1,4 @@
-import { EdgeOffsets, Details, Edge, OrderSubject, CodeToPosition } from '@/types';
+import { EdgeOffsets, Details, Edge, OrderSubject, CodeToPosition, Plan } from '@/types';
 import { Layout } from '@/consts/visualisationParameters';
 
 // ─── Public API ──────────────────────────────────────────────────────────────
@@ -14,7 +14,7 @@ import { Layout } from '@/consts/visualisationParameters';
 export function getOffsets(
     details: Details,
     pos: CodeToPosition,
-    plan: Record<string, OrderSubject[]>,
+    plan: Plan,
     codesToSem: Record<string, number>
 ): [EdgeOffsets, EdgeOffsets] {
     const edgeXOffsets = {};
@@ -37,7 +37,7 @@ export function getOffsets(
 export function fillEdgeXOffsets(
     edgeXOffsets: EdgeOffsets,
     details: Details,
-    plan: Record<string, OrderSubject[]>,
+    plan: Plan,
     pos: CodeToPosition,
     codesToSem: Record<string, number>
 ): void {
@@ -167,7 +167,7 @@ function getNumberOfSuccsBySemester(
 export function fillEdgeYOffsets(
     edgeYOffsets: EdgeOffsets,
     details: Details,
-    plan: Record<string, OrderSubject[]>,
+    plan: Plan,
     pos: CodeToPosition
 ) {
     const orGroupEndOffsets: Record<string, number> = {};

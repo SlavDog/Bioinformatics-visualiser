@@ -1,4 +1,4 @@
-import { Details, OrderSubject, Choices, Edge } from '@/types';
+import { Details, OrderSubject, Choices, Edge, Plan } from '@/types';
 import { deleteCodeFromOrGroups } from '@utils/Graph/orGroups.js';
 import { isInSomeChoice } from '@utils/Graph/choiceNodes';
 import { emptyNode } from '@/consts/visualisationParameters';
@@ -26,7 +26,7 @@ export function createSuccessingHelperNodes(
     successorCode: string,
     succSemester: number | null,
     details: Details,
-    plan: Record<string, OrderSubject[]>,
+    plan: Plan,
     choices: Choices,
     groups: string[][],
     codesToSem: Record<string, number>
@@ -103,7 +103,7 @@ function buildHelperChain(
     succSemester: number,
     byPrerequisites: boolean,
     details: Details,
-    plan: Record<string, OrderSubject[]>,
+    plan: Plan,
     codesToSem: Record<string, number>
 ): string {
     let prevNode = parentCode;
@@ -150,7 +150,7 @@ function updateGroupsInEdges(edges: Edge[], oldCode: string, newCode: string) {
  */
 export function createHelperNode(
     details: Details,
-    plan: Record<string, OrderSubject[]>,
+    plan: Plan,
     prevNodeCode: string,
     currentNodeCode: string,
     semester: number,
