@@ -9,7 +9,7 @@ import {
     useSetHighlightedSubjects,
     useToggleChoice
 } from '@components/providers/dataProvider';
-import { Layout } from '@/consts/visualisationParameters';
+import { Layout } from '@/consts/VisualisationParameters';
 import { OrderSubject } from '@/types';
 import { useEffect } from 'react';
 

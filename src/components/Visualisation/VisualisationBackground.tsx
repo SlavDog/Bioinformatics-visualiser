@@ -1,5 +1,5 @@
 import SemesterColumn from '@components/Visualisation/SemesterColumn';
-import { Layout } from '@/consts/visualisationParameters';
+import { Layout } from '@/consts/VisualisationParameters';
 import { Details, Spec } from '@/types';
 import { useSelectedSpecialization } from '@components/providers/dataProvider';
 

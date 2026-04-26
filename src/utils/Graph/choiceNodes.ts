@@ -1,5 +1,5 @@
 import { Choice, Choices, OrderSubject, Details, Edge, Spec } from '@/types';
-import { emptyNode } from '@/consts/visualisationParameters';
+import { emptyNode } from '@/consts/VisualisationParameters';
 
 /**
  * Adds virtual choice nodes to the subject graph for a given specialization.

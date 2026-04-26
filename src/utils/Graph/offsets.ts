@@ -1,5 +1,5 @@
 import { EdgeOffsets, Details, Edge, OrderSubject, CodeToPosition } from '@/types';
-import { Layout } from '@/consts/visualisationParameters';
+import { Layout } from '@/consts/VisualisationParameters';
 
 // ─── Public API ──────────────────────────────────────────────────────────────
 

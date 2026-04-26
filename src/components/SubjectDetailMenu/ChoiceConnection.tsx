@@ -1,4 +1,4 @@
-import { Layout } from '@/consts/visualisationParameters';
+import { Layout } from '@/consts/VisualisationParameters';
 import Tippy from '@tippyjs/react';
 
 type ChoiceConnectionProps = {

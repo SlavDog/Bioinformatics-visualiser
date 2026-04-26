@@ -10,7 +10,7 @@ import {
 } from '@utils/Graph';
 import VisualisationForeground from '@components/Visualisation/VisualisationForeground';
 import VisualisationBackground from '@components/Visualisation/VisualisationBackground';
-import { Layout } from '@/consts/visualisationParameters';
+import { Layout } from '@/consts/VisualisationParameters';
 import {
     useData,
     useSelectedSpecialization,

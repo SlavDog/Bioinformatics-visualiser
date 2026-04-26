@@ -1,6 +1,6 @@
 import Connections from '@components/Visualisation/Connections';
 import { getOrGatesYOffsetsForSubject } from '@utils/Graph';
-import { Layout } from '@/consts/visualisationParameters';
+import { Layout } from '@/consts/VisualisationParameters';
 import OrGates from '@components/Visualisation/OrGates';
 import { Choices, Details, EdgeOffsets, CodeToPosition, Specialization } from '@/types';
 import { Dispatch, SetStateAction } from 'react';

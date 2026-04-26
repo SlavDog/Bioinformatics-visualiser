@@ -1,6 +1,6 @@
 import Tippy from '@tippyjs/react';
 import './styles.css';
-import { ZoomScale } from '@/consts/visualisationParameters';
+import { ZoomScale } from '@/consts/VisualisationParameters';
 
 type RangeScalerProps = {
     scale: number;

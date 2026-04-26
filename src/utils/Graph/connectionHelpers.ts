@@ -1,4 +1,4 @@
-import { Layout } from '@/consts/visualisationParameters';
+import { Layout } from '@/consts/VisualisationParameters';
 import { EdgeOffsets, CodeToPosition } from '@/types';
 
 const CENTER_X = Layout.subjectWidth / 2 + Layout.subjectPadding;

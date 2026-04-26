@@ -1,4 +1,4 @@
-import { Layout } from '@/consts/visualisationParameters';
+import { Layout } from '@/consts/VisualisationParameters';
 import { getUniquePredGroups } from '@utils/Graph/orGroups';
 import { getYOffsetForOrGroup } from '@utils/Graph/offsets';
 import {

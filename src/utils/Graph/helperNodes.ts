@@ -1,7 +1,7 @@
 import { Details, OrderSubject, Choices, Edge } from '@/types';
 import { deleteCodeFromOrGroups } from '@utils/Graph/orGroups.js';
 import { isInSomeChoice } from '@utils/Graph/choiceNodes';
-import { emptyNode } from '@/consts/visualisationParameters';
+import { emptyNode } from '@/consts/VisualisationParameters';
 
 /**
  * Creates a chain of helper nodes between a parent and its successor
