@@ -1,4 +1,3 @@
-import { ensureOffset } from '@utils/Graph/dataUtils.js';
 import { EdgeOffsets, Details, Edge, OrderSubject, CodeToPosition } from '@/types';
 import { Layout } from '@/consts/VisualisationParameters';
 
@@ -505,4 +504,20 @@ function getSubjectCode(subject: { code: string } | { choice: string }): string 
 /** Returns the code of the real parent subject, accounting for HELPER subjects. */
 function resolveHelperCode(code: string): string {
     return code.startsWith('HELPER') ? code.replace(/^HELPER_/, '').split('__')[0] : code;
+}
+
+/** Ensures that an offset is set for a given key, and logs a warning if it is trying to be overwritten. */
+export function ensureOffset(
+    allOffsets: Record<string, number>,
+    key: string,
+    offsetToAdd: number
+): number {
+    if (key in allOffsets) {
+        if (allOffsets[key] !== offsetToAdd) {
+            console.warn(`Overwriting key ${key}: ${allOffsets[key]} → ${offsetToAdd}`);
+        }
+    } else {
+        allOffsets[key] = offsetToAdd;
+    }
+    return allOffsets[key];
 }
