@@ -1,5 +1,5 @@
-import { Layout } from "@/consts/VisualisationParameters";
-import Tippy from "@tippyjs/react";
+import { Layout } from '@/consts/visualisationParameters';
+import Tippy from '@tippyjs/react';
 
 type ChoiceConnectionProps = {
     color: string,

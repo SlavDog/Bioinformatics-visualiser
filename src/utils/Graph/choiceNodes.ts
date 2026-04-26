@@ -1,5 +1,5 @@
 import { Choice, Choices, OrderSubject, Details, Edge, Spec } from '@/types';
-import { emptyNode } from '@utils/Graph/dataUtils';
+import { emptyNode } from '@/consts/visualisationParameters';
 
 export function addChoiceNodes(
     details: Details,

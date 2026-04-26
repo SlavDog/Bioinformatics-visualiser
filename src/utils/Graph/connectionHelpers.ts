@@ -1,5 +1,6 @@
 import { Layout } from '@/consts/VisualisationParameters';
 import { EdgeOffsets, RealPositions } from '@/types';
+import { Layout } from '@/consts/visualisationParameters';
 
 export function getPath(
     positions: RealPositions,
