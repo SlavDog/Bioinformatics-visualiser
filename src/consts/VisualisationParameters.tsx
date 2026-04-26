@@ -13,7 +13,8 @@ export const Layout = {
     detailMenuSubjectHeight: 140,
     detailMenuSubjectWidth: 250,
     detailMenuSubjectPadding: 16,
-    offsetStep: 12
+    offsetStep: 12,
+    edgeCurveMinRadius: 20
 };
 
 export const ZoomScale = {
