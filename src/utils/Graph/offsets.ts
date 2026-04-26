@@ -15,7 +15,7 @@ import { Layout } from '@/consts/VisualisationParameters';
 export function getOffsets(
     details: Details,
     pos: CodeToPosition,
-    plan: Record<string, Array<OrderSubject>>,
+    plan: Record<string, OrderSubject[]>,
     codesToSem: Record<string, number>
 ): [EdgeOffsets, EdgeOffsets] {
     const edgeXOffsets = {};
@@ -38,7 +38,7 @@ export function getOffsets(
 export function fillEdgeXOffsets(
     edgeXOffsets: EdgeOffsets,
     details: Details,
-    plan: Record<string, Array<OrderSubject>>,
+    plan: Record<string, OrderSubject[]>,
     pos: CodeToPosition,
     codesToSem: Record<string, number>
 ): void {
@@ -90,7 +90,7 @@ export function fillEdgeXOffsets(
  * @returns True if the subjects should be processed in reverse order, false otherwise.
  */
 function shouldReverseSemesterSubjects(
-    subjects: Array<OrderSubject>,
+    subjects: OrderSubject[],
     details: Details,
     pos: CodeToPosition
 ): boolean {
@@ -140,10 +140,10 @@ function shouldReverseSuccs(pos: CodeToPosition, parentCode: string, successors:
 
 /** Calculates the number of successors for each semester. */
 function getNumberOfSuccsBySemester(
-    orderData: Record<string, Array<OrderSubject>>,
+    orderData: Record<string, OrderSubject[]>,
     infoData: Details,
     codesToSem: Record<string, number>
-): Array<number> {
+): number[] {
     const numberOfSuccsBySemester = Array(Object.keys(orderData).length).fill(0);
     Object.entries(infoData).forEach(([code, course]) => {
         course.successors.forEach((successor) => {
@@ -168,7 +168,7 @@ function getNumberOfSuccsBySemester(
 export function fillEdgeYOffsets(
     edgeYOffsets: EdgeOffsets,
     details: Details,
-    plan: Record<string, Array<OrderSubject>>,
+    plan: Record<string, OrderSubject[]>,
     pos: CodeToPosition
 ) {
     const orGroupEndOffsets: Record<string, number> = {};
@@ -457,7 +457,7 @@ export function fillOrGroupOffsets(
 /** Retrieves the Y offset for an edge that belongs to an OR group, if it exists. */
 export function getYOffsetForOrGroup(
     edgeYOffsets: EdgeOffsets,
-    group: Array<string>,
+    group: string[],
     succCode: string
 ): number | undefined {
     let i = 0;
@@ -485,9 +485,9 @@ function findRealSuccessor(currentCode: string, details: Details): string {
 
 //** Sorts an array of subjects (or choices) based on their Y coordinate in the layout. */
 function sortByPositions<T extends { code: string } | { choice: string }>(
-    array: Array<T>,
+    array: T[],
     pos: CodeToPosition
-): Array<T> {
+): T[] {
     return [...array].sort((a, b) => {
         const codeA = getSubjectCode(a);
         const codeB = getSubjectCode(b);
