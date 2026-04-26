@@ -1,4 +1,4 @@
-import { useRef, useState} from 'react';
+import { useRef, useState } from 'react';
 import Visualisation from '@components/Visualisation/Visualisation';
 import SideBar from '@components/SideBar/SideBar';
 import { Layout, ZoomScale } from '@/consts/visualisationParameters';
@@ -15,19 +15,14 @@ function DragScrollBox() {
 
     return (
         <>
-            <div
-                className="visualisationBox"
-            >
-                <SideBar scale={scale} setScale={setScale}/>
-                <div className="scrollableBox"
-                    ref={boxRef}
-                    onMouseDown={onMouseDown}
-                >
-                    <Visualisation scale={scale} setDragEnabled={setDragEnabled}/>
+            <div className="visualisationBox">
+                <SideBar scale={scale} setScale={setScale} />
+                <div className="scrollableBox" ref={boxRef} onMouseDown={onMouseDown}>
+                    <Visualisation scale={scale} setDragEnabled={setDragEnabled} />
                 </div>
             </div>
         </>
-  );
+    );
 }
 
-export default DragScrollBox
+export default DragScrollBox;
