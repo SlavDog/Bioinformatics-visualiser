@@ -1,4 +1,4 @@
-export * from './addAuxNodes';
+export * from './graphPreprocessor';
 export * from './choiceNodes';
 export * from './helperNodes';
 export * from './layout';

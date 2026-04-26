@@ -1,5 +1,5 @@
 import { addChoiceNodes, isInSomeChoice } from '@utils/Graph/choiceNodes';
-import { ensureOffset } from '@utils/Graph/dataUtils';
+import { ensureOffset } from '@utils/Graph/offsets';
 import { fillOrGroupOffsets, fillEdgeXOffsets, fillEdgeYOffsets } from '@utils/Graph/offsets';
 import { createSuccessingHelperNodes } from '@utils/Graph/helperNodes';
 import {
@@ -15,7 +15,7 @@ import {
 } from '@/types';
 import { getReachableCodes } from './layout';
 
-export function addAuxNodes(
+export function buildProcessedGraph(
     subjectData: SubjectData,
     selectedSpecialization: string,
     activeSubstitutions: Set<string>,

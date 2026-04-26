@@ -1,7 +1,7 @@
 import Subject from '@components/Subject/Subject';
 import SmallSubject from '@components/Subject/SmallSubject';
 import {
-    addAuxNodes,
+    buildProcessedGraph,
     createDuplicateSubjectDetails,
     getAllOrGatesPositions,
     getCodesToSem,
@@ -77,7 +77,7 @@ function Visualisation({ scale, setDragEnabled }: VisualisationProps) {
                 dedupedPlan,
                 selectedSpecialization
             );
-            const [newDetails, newSpec] = addAuxNodes(
+            const [newDetails, newSpec] = buildProcessedGraph(
                 patchedData,
                 selectedSpecialization,
                 activeSubstitutions,
