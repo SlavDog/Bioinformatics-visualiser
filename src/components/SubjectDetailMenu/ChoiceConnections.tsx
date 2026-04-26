@@ -22,7 +22,7 @@ function ChoiceConnections({ course, subjectWidth, isPredecessor }: ChoiceConnec
     let voluntarySubjectsText = `${isPredecessor ? 'Je následníkem' : 'Je předchůdcem'} některých předmětů,\nkteré nejsou povinné: ${voluntarySubjectsArray.join(', ')}`;
     let compulsorySubjectsText = `${isPredecessor ? 'Je následníkem' : 'Je předchůdcem'} některých předmětů,\nkteré jsou povinné: ${compulsorySubjectsArray.join(', ')}`;
 
-    let allSoft = subjectsList.every((edge) => edge.by_prerequisites == false);
+    let allSoft = subjectsList.every((edge) => !edge.by_prerequisites);
 
     let yStart = isPredecessor ? 25 : 5;
     let yEnd = isPredecessor ? 55 : 30;

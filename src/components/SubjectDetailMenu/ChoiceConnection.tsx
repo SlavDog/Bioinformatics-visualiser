@@ -89,7 +89,6 @@ function ChoiceConnection({
                     }}
                 >
                     <line
-                        key="vertline"
                         x1={x}
                         y1={yStart}
                         x2={x}

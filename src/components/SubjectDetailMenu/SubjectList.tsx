@@ -11,7 +11,7 @@ function SubjectList({ source, currentCode }: SubjectListProps) {
     const subjectInfoData = useData();
     const choice = subjectInfoData.choices[source];
 
-    if (source == 'tv') {
+    if (source === 'tv') {
         return (
             <BigButton
                 color={'#b400d8'}
@@ -25,7 +25,7 @@ function SubjectList({ source, currentCode }: SubjectListProps) {
             />
         );
     }
-    if (source == 'core') {
+    if (source === 'core') {
         return (
             <BigButton
                 color={'#b400d8'}
@@ -41,8 +41,8 @@ function SubjectList({ source, currentCode }: SubjectListProps) {
     }
     return (
         <div className="menuBoxSubjectsContainer">
-            {Object.values(choice['list']).map((code) => {
-                if (typeof code != 'string') {
+            {Object.values(choice.list).map((code) => {
+                if (typeof code !== 'string') {
                     return null;
                 }
                 let course = subjectInfoData.details[code];

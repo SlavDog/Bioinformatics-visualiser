@@ -187,3 +187,12 @@
         background-position: 200%;
     }
 }
+
+.closeButton {
+    position: absolute;
+    right: 14px;
+    top: 14px;
+    width: 30px;
+    height: 30px;
+    font-size: 16px;
+}

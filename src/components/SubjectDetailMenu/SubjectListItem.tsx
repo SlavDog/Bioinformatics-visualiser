@@ -3,14 +3,11 @@ import Subject from '@components/Subject/Subject';
 import ChoiceConnections from '@components/SubjectDetailMenu/ChoiceConnections';
 import {
     useData,
-    useHighlightedSubjects,
     useSelectedChoices,
-    useSelectedSpecialization,
     useSetHighlightedSubjects,
     useToggleChoice
 } from '@components/providers/dataProvider';
 import { Layout } from '@/consts/visualisationParameters';
-import { OrderSubject } from '@/types';
 import { useEffect } from 'react';
 
 type SubjectListItemProps = {
@@ -40,13 +37,13 @@ function SubjectListItem({ code, course, choiceCode }: SubjectListItemProps) {
 
     let isAlsoOutside = Object.values(subjectInfoData.spec).some((specializationObj) =>
         Object.values(specializationObj.plan).some((semester) =>
-            semester.some((subject) => 'code' in subject && subject.code == code)
+            semester.some((subject) => 'code' in subject && subject.code === code)
         )
     );
     return (
         <div
             className="choiceMenuSelectionBox"
-            onClick={isAlsoOutside ? () => {} : () => toggle(choiceCode, code)}
+            onClick={isAlsoOutside ? undefined : () => toggle(choiceCode, code)}
         >
             <ChoiceConnections
                 course={course}
