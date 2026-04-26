@@ -54,18 +54,11 @@ function Visualisation({ scale, setDragEnabled }: VisualisationProps) {
     const selectedSpecialization = useSelectedSpecialization();
     const activeSubstitutions = useActiveSubstitutions();
     const [visible, setVisible] = useState(true);
-    const [pendingUpdate, setPendingUpdate] = useState(false);
-    const [displayedSpecialization, setDisplayedSpecialization] = useState(selectedSpecialization);
     const SubjectComponent = scale < 0.7 ? SmallSubject : Subject;
-
-    useEffect(() => {
-        setVisible(false);
-        setPendingUpdate(true);
-    }, [subjectInfoData, selectedSpecialization, activeSubstitutions]);
 
     // Calculate positions when new data is loaded
     useEffect(() => {
-        if (!pendingUpdate) return;
+        setVisible(false);
         const timeout = setTimeout(() => {
             const [codesToSem, dedupedPlan] = getCodesToSem(
                 subjectInfoData.choices,
@@ -113,12 +106,10 @@ function Visualisation({ scale, setDragEnabled }: VisualisationProps) {
                 maxY: maxY,
                 orGatesPositions: orGatesPositions
             });
-            setDisplayedSpecialization(selectedSpecialization);
-            setPendingUpdate(false);
             setVisible(true);
         }, 150);
         return () => clearTimeout(timeout);
-    }, [pendingUpdate]);
+    }, [subjectInfoData, selectedSpecialization, activeSubstitutions]);
 
     const width = (visState.maxX + 2 * Layout.paddingHorizontal) * scale;
     const height =
@@ -134,14 +125,13 @@ function Visualisation({ scale, setDragEnabled }: VisualisationProps) {
             style={{
                 width: width,
                 height: height,
-                opacity: visible ? 1 : 0,
-                transition: 'opacity 0.3s ease'
+                opacity: visible ? 1 : 0
             }}
         >
             <VisualisationBackground
                 maxX={visState.maxX}
                 maxY={visState.maxY}
-                semesterCount={Object.keys(visState.spec[displayedSpecialization] ?? []).length}
+                semesterCount={Object.keys(visState.spec[selectedSpecialization] ?? []).length}
                 processedSpec={visState.spec}
                 processedSubjects={visState.subjects}
                 scale={scale}
@@ -151,8 +141,7 @@ function Visualisation({ scale, setDragEnabled }: VisualisationProps) {
                     edgeYOffsets={visState.yOffsets}
                     positions={visState.positions}
                     processedSubjects={visState.subjects}
-                    specialization={visState.spec[displayedSpecialization] ?? { plan: {} }}
-                    choices={subjectInfoData.choices}
+                    specialization={visState.spec[selectedSpecialization] ?? { plan: {} }}
                     SubjectComponent={SubjectComponent}
                     setDragEnabled={setDragEnabled}
                     orGatesPositions={visState.orGatesPositions}

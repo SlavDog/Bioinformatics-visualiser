@@ -1,14 +1,14 @@
-import { RefObject, useEffect, useState } from 'react';
+import { MouseEventHandler, RefObject, useEffect, useState } from 'react';
 
 function useDragScroll(
     boxRef: RefObject<HTMLElement>,
     dragEnabled: boolean
-): (e: MouseEvent) => void {
+): MouseEventHandler<HTMLDivElement> {
     const [isDragging, setIsDragging] = useState(false);
     const [startX, setStartX] = useState(0);
     const [startY, setStartY] = useState(0);
 
-    const onMouseDown = (e: MouseEvent) => {
+    const onMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
         if (!dragEnabled) return;
         setIsDragging(true);
         setStartX(e.screenX);

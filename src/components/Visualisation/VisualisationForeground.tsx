@@ -1,8 +1,7 @@
 import Connections from '@components/Visualisation/Connections';
-import { getOrGatesYOffsetsForSubject } from '@utils/Graph';
 import { Layout } from '@/consts/visualisationParameters';
 import OrGates from '@components/Visualisation/OrGates';
-import { Choices, Details, EdgeOffsets, CodeToPosition, Specialization } from '@/types';
+import { Details, EdgeOffsets, CodeToPosition, Specialization } from '@/types';
 import { Dispatch, SetStateAction } from 'react';
 import { SubjectProps } from '@components/Subject/Subject';
 
@@ -12,7 +11,6 @@ type VisualisationForegroundProps = {
     positions: CodeToPosition;
     processedSubjects: Details;
     specialization: Specialization;
-    choices: Choices;
     SubjectComponent: React.ComponentType<SubjectProps>;
     setDragEnabled: Dispatch<SetStateAction<boolean>>;
     orGatesPositions: Array<{ x: number; y: number }>;
@@ -24,7 +22,6 @@ function VisualisationForeground({
     positions,
     processedSubjects,
     specialization,
-    choices,
     SubjectComponent,
     setDragEnabled,
     orGatesPositions
@@ -52,8 +49,6 @@ function VisualisationForeground({
                         return null;
                     }
                     const course = processedSubjects[code];
-                    // if (course.name == "") { return <p key={code} style={{position: "absolute", color: "red", left: positions[code].x,
-                    //                 top: positions[code].y}}>{code}</p>; }
                     if (course.name == '') {
                         return null;
                     }

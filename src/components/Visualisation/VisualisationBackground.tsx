@@ -33,9 +33,7 @@ function VisualisationBackground({
                 height:
                     (maxY + Layout.semesterTitleInset + Layout.semesterColumnBottomPadding) * scale,
                 top: Layout.paddingVertical * scale,
-                left: Layout.paddingHorizontal * scale,
-                transition:
-                    'transform 0.2s cubic-bezier(0.25, 0.1, 0.25, 1), width 0.2s cubic-bezier(0.25, 0.1, 0.25, 1), height 0.2s cubic-bezier(0.25, 0.1, 0.25, 1)'
+                left: Layout.paddingHorizontal * scale
             }}
         >
             {Array.from({ length: semesterCount }).map((_, i) => {
