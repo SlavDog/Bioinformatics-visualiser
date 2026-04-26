@@ -24,7 +24,6 @@ function CheckBoxField({
         >
             <label className="preferenceFieldLabel">{children}</label>
             <input
-                id="check"
                 type="checkbox"
                 checked={checked}
                 readOnly

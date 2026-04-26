@@ -10,7 +10,7 @@ type SubjectDataContextType = {
     highlightedSubjects: Set<string>;
     setHighlightedSubjects: React.Dispatch<React.SetStateAction<Set<string>>>;
     selectedChoices: Record<string, Set<string>>;
-    toggleChoice: (choiceCode: string, subjectCode: string, multi?: boolean) => void;
+    toggleChoice: (choiceCode: string, subjectCode: string) => void;
     activeSubstitutions: Set<string>;
     toggleSubstitution: (key: string) => void;
 };

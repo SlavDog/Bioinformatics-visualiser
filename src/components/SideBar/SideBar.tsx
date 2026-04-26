@@ -1,17 +1,16 @@
 import RadioField from '@components/SideBar/RadioField';
 import RangeScaler from '@components/SideBar/RangeScaler';
-import { Layout, ZoomScale } from '@/consts/visualisationParameters';
+import { ZoomScale } from '@/consts/visualisationParameters';
 import './styles.css';
 import {
     useData,
-    useSetData,
     useSelectedSpecialization,
     useSetSelectedSpecialization,
     useSetHighlightedSubjects,
     useToggleSubstitution,
     useActiveSubstitutions
 } from '@components/providers/dataProvider';
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import DarkModeToggle from '@components/SideBar/DarkModeToggle';
 import SideBarTitle from './SideBarTitle';
 import CheckBoxField from './CheckboxField';
@@ -51,13 +50,7 @@ function SideBar({ scale, setScale }: SidebarProps) {
                 value={Math.log(scale)}
                 onChange={(e) => setScale(Math.exp(Number(e.target.value)))}
             ></input>
-            <div
-                className={`sideBar ${isOpen ? 'open' : ''}`}
-                style={{
-                    display: 'flex',
-                    justifyContent: 'space-between'
-                }}
-            >
+            <div className={`sideBar ${isOpen ? 'open' : ''}`}>
                 <div>
                     <RangeScaler scale={scale} setScale={setScale} />
                     <div style={{ height: '20px' }} className="phoneOnly" />

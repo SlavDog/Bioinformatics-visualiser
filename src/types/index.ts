@@ -51,7 +51,7 @@ export type ChoiceSubject =
     | string;
 
 export type Choice = {
-    type: `${number}:${number}`;
+    type: string;
     list: ChoiceSubject[];
     refnCZ: string;
     refnEN: string;
