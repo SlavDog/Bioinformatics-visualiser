@@ -1,13 +1,10 @@
 import { addChoiceNodes, isInSomeChoice } from '@utils/Graph/choiceNodes';
-import { ensureOffset } from '@utils/Graph/offsets';
-import { fillOrGroupOffsets, fillEdgeXOffsets, fillEdgeYOffsets } from '@utils/Graph/offsets';
 import { createSuccessingHelperNodes } from '@utils/Graph/helperNodes';
 import {
     Choices,
     Course,
     Details,
     Edge,
-    EdgeOffsets,
     OrderSubject,
     Spec,
     SubjectData,
@@ -15,14 +12,30 @@ import {
 } from '@/types';
 import { getReachableCodes } from './layout';
 
+/**
+ * Main entry point for graph preprocessing.
+ * Preprocesses the raw subject data by applying substitutions, removing edges to non-existing nodes,
+ * removing illogical edges, adding choice nodes, and removing transitive edges.
+ * Adds helper nodes for edges spanning multiple semesters,
+ * sorts subjects within each semester by successor count,
+ * and returns the updated details and spec.
+ *
+ * @warn Mutates `codesToSem` in place when helper nodes are added.
+ *
+ * @param data - Raw subject data.
+ * @param selectedSpecialization - Key of the active specialization.
+ * @param activeSubstitutions - Set of active substitution keys.
+ * @param codesToSem - Mutable mapping of subject codes to semesters.
+ * @returns Tuple of updated details and spec.
+ */
 export function buildProcessedGraph(
-    subjectData: SubjectData,
+    data: SubjectData,
     selectedSpecialization: string,
     activeSubstitutions: Set<string>,
     codesToSem: Record<string, number>
 ): [Details, Spec] {
     const [newDetails, newOrder, currentSpecializationCodes] = preprocessGraph(
-        subjectData,
+        data,
         selectedSpecialization,
         activeSubstitutions,
         codesToSem
@@ -32,7 +45,8 @@ export function buildProcessedGraph(
 
     subjectsToProcess.forEach((subject) => {
         const parentCode = 'code' in subject ? subject.code : subject.choice;
-        if (isInSomeChoice(parentCode, currentPlan, subjectData.choices)) {
+
+        if (isInSomeChoice(parentCode, currentPlan, data.choices)) {
             return;
         }
 
@@ -44,6 +58,7 @@ export function buildProcessedGraph(
         const currentSuccessors = [...parent.successors];
         currentSuccessors.forEach((successorInfo, i) => {
             const successor = newDetails[successorInfo.code];
+
             if (
                 isInvalidEdge(
                     parentCode,
@@ -55,6 +70,7 @@ export function buildProcessedGraph(
             ) {
                 return;
             }
+
             if (shouldCreateHelperNodes(codesToSem[parentCode], codesToSem[successorInfo.code])) {
                 createSuccessingHelperNodes(
                     parentCode,
@@ -63,7 +79,7 @@ export function buildProcessedGraph(
                     codesToSem[successorInfo.code],
                     newDetails,
                     currentPlan,
-                    subjectData.choices,
+                    data.choices,
                     successorInfo.groups,
                     codesToSem
                 );
@@ -71,6 +87,7 @@ export function buildProcessedGraph(
         });
     });
 
+    // Sort subjects in each semester by number of successors (descending)
     Object.keys(newOrder[selectedSpecialization].plan).forEach((sem) => {
         newOrder[selectedSpecialization].plan[Number(sem)].sort((a, b) => {
             const codeA = 'code' in a ? a.code : a.choice;
@@ -84,6 +101,11 @@ export function buildProcessedGraph(
     return [newDetails, newOrder];
 }
 
+/**
+ * Returns true if an edge should not be processed —
+ * i.e. the successor is missing, has no semester, is in an earlier semester,
+ * or is not part of the current specialization.
+ */
 function isInvalidEdge(
     parentCode: string,
     successor: Course,
@@ -99,16 +121,22 @@ function isInvalidEdge(
     );
 }
 
+/**
+ * Preprocesses the graph by applying substitutions, removing invalid edges,
+ * adding choice nodes, and removing transitive edges.
+ *
+ * @returns Tuple of [details, updated spec, set of codes in current specialization].
+ */
 function preprocessGraph(
-    subjectData: SubjectData,
+    data: SubjectData,
     selectedSpecialization: string,
     activeSubstitutions: Set<string>,
     codesToSem: Record<string, number>
 ): [Details, Spec, Set<string>] {
-    const data = structuredClone(subjectData);
+    const dataCopy = structuredClone(data);
 
     const updatedData = replaceWithAdvancedCourses(
-        data,
+        dataCopy,
         activeSubstitutions,
         selectedSpecialization
     );
@@ -133,30 +161,32 @@ function preprocessGraph(
     return [updatedData.details, newOrder, currentSpecializationCodes];
 }
 
+/**
+ * Applies active substitutions to the subject data —
+ * removes substituted subjects and adds replacement subjects to details, choices, and plan.
+ */
 function replaceWithAdvancedCourses(
-    subjectData: SubjectData,
+    data: SubjectData,
     activeSubstitutions: Set<string>,
     selectedSpecialization: string
 ): SubjectData {
     const substitutionCodes = Array.from(activeSubstitutions);
 
-    const codesToBeRemoved = substitutionCodes.flatMap(
-        (code) => subjectData.substitutions[code].removes
-    );
+    const codesToBeRemoved = substitutionCodes.flatMap((code) => data.substitutions[code].removes);
 
     const codesToBeAdded = substitutionCodes.flatMap((code) =>
-        subjectData.substitutions[code].adds.map((subj) => subj.code)
+        data.substitutions[code].adds.map((subj) => subj.code)
     );
 
-    const updatedCodes = new Set(Object.keys(subjectData.details));
+    const updatedCodes = new Set(Object.keys(data.details));
     codesToBeRemoved.forEach((c) => updatedCodes.delete(c));
     codesToBeAdded.forEach((c) => updatedCodes.add(c));
 
     const filteredDetails = Object.fromEntries(
-        Object.entries(subjectData.details).filter(([code]) => updatedCodes.has(code))
+        Object.entries(data.details).filter(([code]) => updatedCodes.has(code))
     );
 
-    const filteredChoices = structuredClone(subjectData.choices);
+    const filteredChoices = structuredClone(data.choices);
     Object.values(filteredChoices).forEach((choiceGroup) => {
         choiceGroup.list = choiceGroup.list.filter((choiceSubj) => {
             const subjectCode = typeof choiceSubj === 'string' ? choiceSubj : choiceSubj.code;
@@ -164,10 +194,8 @@ function replaceWithAdvancedCourses(
         });
     });
 
-    const addedSubjectsWithSem = substitutionCodes.flatMap(
-        (key) => subjectData.substitutions[key].adds
-    );
-    const filteredSpec = structuredClone(subjectData.spec);
+    const addedSubjectsWithSem = substitutionCodes.flatMap((key) => data.substitutions[key].adds);
+    const filteredSpec = structuredClone(data.spec);
     const specialization = filteredSpec[selectedSpecialization];
     Object.entries(specialization.plan).forEach(([semKey, subjects]) => {
         let updatedSubjects = subjects.filter((item) => {
@@ -182,13 +210,19 @@ function replaceWithAdvancedCourses(
     });
 
     return {
-        ...subjectData,
+        ...data,
         details: filteredDetails,
         choices: filteredChoices,
         spec: filteredSpec
     };
 }
 
+/**
+ * Removes edges pointing to nodes outside the current specialization.
+ * Also populates `unshownNeededPredecessors` for nodes with hidden required predecessors.
+ *
+ * Modifies `data.details` in place.
+ */
 function removeEdgesToNonExistingNodes(
     data: SubjectData,
     currentSpecializationCodes: Set<string>,
@@ -264,6 +298,13 @@ function cleanNodeFromNonExistingNodes(
     });
 }
 
+/**
+ * Removes edges where the neighbour is in an earlier semester than expected
+ * (successors in earlier semesters, predecessors in later semesters).
+ * Logs warnings/errors for removed edges.
+ *
+ * Modifies `details` in place.
+ */
 function removeIllogicalEdges(details: Details, codesToSem: Record<string, number>): void {
     Object.entries(details).forEach(([code, course]) => {
         cleanNodeFromIllogicalEdges(true, code, course, codesToSem);
@@ -313,13 +354,23 @@ function cleanNodeFromIllogicalEdges(
     });
 }
 
+/**
+ * Removes transitive edges — edges where a shorter path already exists
+ * through intermediate nodes.
+ * Also cleans OR-groups to remove codes no longer connected by direct edges.
+ *
+ * Modifies `details` in place.
+ * ensure semester values are consistently typed as numbers.
+ */
 function removeTransitiveEdges(details: Details): void {
     Object.keys(details).forEach((code) => {
         const successors = details[code].successors;
         if (!successors || successors.length == 0) {
             return;
         }
+
         const redundantCodes = new Set<string>();
+
         successors.forEach((succ) => {
             const reachable = getReachableCodes(succ.code, details, false);
             reachable
@@ -338,6 +389,7 @@ function removeTransitiveEdges(details: Details): void {
         });
     });
 
+    // Clean OR-groups to remove codes no longer connected by direct edges
     Object.keys(details).forEach((code) => {
         const node = details[code];
 
@@ -371,12 +423,17 @@ function removeTransitiveEdges(details: Details): void {
     });
 }
 
+/**
+ * Creates duplicate entries in `details` for subjects appearing multiple times
+ * in the plan (suffixed with `-DUP-{semester}`).
+ */
 export function createDuplicateSubjectDetails(
     subjectInfoData: SubjectData,
-    dedupedPlan: Record<string, Array<OrderSubject>>,
+    dedupedPlan: Record<string, OrderSubject[]>,
     selectedSpecialization: string
 ): SubjectData {
     const patchedData = structuredClone(subjectInfoData);
+
     Object.keys(dedupedPlan).forEach((sem) => {
         dedupedPlan[sem].forEach((subject) => {
             if ('code' in subject && subject.code.includes('-DUP-')) {
@@ -387,18 +444,28 @@ export function createDuplicateSubjectDetails(
             }
         });
     });
+
     patchedData.spec[selectedSpecialization].plan = dedupedPlan;
     return patchedData;
 }
 
+/**
+ * Builds a mapping of subject codes to their semester numbers,
+ * and returns a deduplicated plan where duplicate subjects are suffixed with `-DUP-{semester}`.
+ *
+ * Also maps all subjects within a choice block to the same semester as the choice.
+ * Substitution subjects are mapped to their explicitly defined semesters.
+ *
+ * @returns Tuple of [codesToSem map, deduplicated plan].
+ */
 export function getCodesToSem(
     choices: Choices,
-    plan: Record<string, Array<OrderSubject>>,
+    plan: Record<string, OrderSubject[]>,
     substitutions: Substitutions
-): [Record<string, number>, Record<string, Array<OrderSubject>>] {
+): [Record<string, number>, Record<string, OrderSubject[]>] {
     const result: Record<string, number> = {};
     const seen = new Set<string>();
-    const newPlan: Record<string, Array<OrderSubject>> = {};
+    const newPlan: Record<string, OrderSubject[]> = {};
 
     Object.entries(plan).forEach(([semesterNumber, semester]) => {
         newPlan[semesterNumber] = [];
@@ -430,18 +497,14 @@ export function getCodesToSem(
     return [result, newPlan];
 }
 
+/**
+ * Returns true if helper nodes should be created between two semesters —
+ * i.e. they are more than one semester apart.
+ */
 function shouldCreateHelperNodes(
     parentSemester: number | null,
     succSemester: number | null
 ): boolean {
-    return (
-        parentSemester != null &&
-        succSemester != null &&
-        !(
-            parentSemester == null ||
-            succSemester == null ||
-            parentSemester + 1 == succSemester ||
-            parentSemester > succSemester
-        )
-    );
+    if (parentSemester == null || succSemester == null) return false;
+    return succSemester - parentSemester > 1;
 }
