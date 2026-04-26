@@ -1,9 +1,9 @@
 export type Course = {
     name: string;
     faculty: string;
-    successors: Array<Edge>;
+    successors: Edge[];
     language: string;
-    predecessors: Array<Edge>;
+    predecessors: Edge[];
     completion: string;
     credits: number;
     link: string;
@@ -13,7 +13,7 @@ export type Course = {
 
 export type Edge = {
     code: string;
-    groups: Array<Array<string>>;
+    groups: string[][];
     by_prerequisites: boolean;
 };
 
@@ -33,8 +33,8 @@ export type Specialization = {
     nameEN: string;
     descCZ: string;
     descEN: string;
-    base: Array<OrderSubject>;
-    plan: Record<string, Array<OrderSubject>>;
+    base: OrderSubject[];
+    plan: Record<string, OrderSubject[]>;
 };
 
 export type Spec = Record<string, Specialization>;
@@ -49,8 +49,8 @@ export type ChoiceSubject =
     | string;
 
 export type Choice = {
-    type: string;
-    list: Array<ChoiceSubject>;
+    type: `${number}:${number}`;
+    list: ChoiceSubject[];
     refnCZ: string;
     refnEN: string;
     credits?: number;
@@ -67,8 +67,8 @@ export type SubjectData = {
 export type Substitutions = Record<string, Substitution>;
 type Substitution = {
     nameCZ: string;
-    removes: Array<string>;
-    adds: Array<{ code: string; semester: number }>;
+    removes: string[];
+    adds: { code: string; semester: number }[];
     type: string;
 };
 
@@ -76,4 +76,4 @@ export type EdgeOffsets = Record<string, number>;
 
 export type Coordinates = { x: number; y: number };
 export type CodeToPosition = Record<string, Coordinates>;
-export type PositionToCode = Array<Array<string>>;
+export type PositionToCode = string[][];
