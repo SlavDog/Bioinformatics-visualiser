@@ -1,4 +1,4 @@
-import { Layout } from '@/consts/VisualisationParameters';
+import { Layout } from '@/consts/visualisationParameters';
 import { getUniquePredGroups } from '@utils/Graph/orGroups';
 import { getYOffsetForOrGroup } from '@utils/Graph/offsets';
 import {
@@ -21,11 +21,11 @@ const MAX_POSITION_ATTEMPTS = 20;
 /**
  * Main entry point for the layout calculation.
  * Converts a study plan structure into specific pixel coordinates for rendering.
- * @param {Details} details - Catalog of all subjects and their metadata.
- * @param {Spec} spec - Specification of study specializations.
- * @param {string} selectedSpecialization - ID of the currently active specialization.
- * @param {Record<string, number>} codesToSem - Mapping of subject codes to their recommended semesters.
- * @returns {[CodeToPosition, number, number]} A tuple containing [coordinate map, total width, total height].
+ * @param details - Catalog of all subjects and their metadata.
+ * @param spec - Specification of study specializations.
+ * @param selectedSpecialization - ID of the currently active specialization.
+ * @param codesToSem - Mapping of subject codes to their recommended semesters.
+ * @returns A tuple containing [coordinate map, total width, total height].
  */
 export function getPositions(
     details: Details,
@@ -72,17 +72,17 @@ export function getPositions(
 
 /**
  * Recursively places a subject node and its entire subtree of successors into the grid.
- * @param {Details} details - Catalog of subjects.
- * @param {number} semesterIndex - The horizontal index (X-axis).
- * @param {number} positionIndex - The vertical index (Y-axis).
- * @param {string} code - Code of the subject currently being placed.
- * @param {CodeToPosition} codeToPosition - Global map of already confirmed positions.
- * @param {PositionToCode} positionToCode - Global grid of occupied slots.
- * @param {CodeToPosition} tempCodeToCoordinates - Temporary coordinate map for the current placement transaction.
- * @param {PositionToCode} tempPositionsToCode - Temporary occupancy grid for the current transaction.
- * @param {Set<string>} currentSpecializationCodes - Set of codes valid for the current plan.
- * @param {Record<string, number>} codesToSem - Recommended semesters mapping.
- * @returns {false | number} Returns the number of vertical slots consumed by the subtree, or false if placement is blocked.
+ * @param details - Catalog of subjects.
+ * @param semesterIndex - The horizontal index (X-axis).
+ * @param positionIndex - The vertical index (Y-axis).
+ * @param code - Code of the subject currently being placed.
+ * @param codeToPosition - Global map of already confirmed positions.
+ * @param positionToCode - Global grid of occupied slots.
+ * @param tempCodeToCoordinates - Temporary coordinate map for the current placement transaction.
+ * @param tempPositionsToCode - Temporary occupancy grid for the current transaction.
+ * @param currentSpecializationCodes - Set of codes valid for the current plan.
+ * @param codesToSem - Recommended semesters mapping.
+ * @returns Returns the number of vertical slots consumed by the subtree, or false if placement is blocked.
  */
 export function getTreePositions(
     details: Details,
@@ -139,10 +139,10 @@ export function getTreePositions(
 
 /**
  * Performs a Breadth-First Search (BFS) to find all nodes reachable from a starting point.
- * @param {string} startCode - The starting subject code.
- * @param {Details} details - Subject catalog containing graph edges.
- * @param {boolean} [searchPredecessorEdges=true] - If true, the search also traverses towards prerequisites.
- * @returns {string[]} An array of unique reachable subject codes.
+ * @param startCode - The starting subject code.
+ * @param details - Subject catalog containing graph edges.
+ * @param searchPredecessorEdges - If true, the search also traverses towards prerequisites.
+ * @returns An array of unique reachable subject codes.
  */
 export function getReachableCodes(
     startCode: string,
@@ -177,12 +177,12 @@ export function getReachableCodes(
 
 /**
  * Calculates Y-axis offsets for visualizing "OR gates" (logical prerequisite groups).
- * @param {string} code - The subject code.
- * @param {Course} course - The course object.
- * @param {Details} details - Map of already processed subjects.
- * @param {EdgeOffsets} edgeYOffsets - Existing edge offsets.
- * @param {Record<string, number>} codesToSem - Recommended semesters mapping.
- * @returns {Array<number>} An array of Y-offsets for the gate connection points.
+ * @param code - The subject code.
+ * @param course - The course object.
+ * @param details - Map of already processed subjects.
+ * @param edgeYOffsets - Existing edge offsets.
+ * @param codesToSem - Recommended semesters mapping.
+ * @returns An array of Y-offsets for the gate connection points.
  */
 export function getOrGatesYOffsetsForSubject(
     code: string,
@@ -190,7 +190,7 @@ export function getOrGatesYOffsetsForSubject(
     details: Details,
     edgeYOffsets: EdgeOffsets,
     codesToSem: Record<string, number>
-): Array<number> {
+): number[] {
     if (!hasOrGate(code, course, details, codesToSem)) {
         return [];
     }
@@ -208,12 +208,12 @@ export function getOrGatesYOffsetsForSubject(
 
 /**
  * Scans the specialization plan and collects coordinates for all OR gates in the graph.
- * @param {Details} details - Catalog of subjects.
- * @param {Specialization} specialization - Current specialization object.
- * @param {CodeToPosition} positions - Calculated pixel positions of subjects.
- * @param {EdgeOffsets} edgeYOffsets - Offsets used for edge rendering.
- * @param {Record<string, number>} codesToSem - Recommended semesters mapping.
- * @returns {Coordinates[]} An array of {x, y} coordinates for all found gates.
+ * @param details - Catalog of subjects.
+ * @param specialization - Current specialization object.
+ * @param positions - Calculated pixel positions of subjects.
+ * @param edgeYOffsets - Offsets used for edge rendering.
+ * @param codesToSem - Recommended semesters mapping.
+ * @returns An array of {x, y} coordinates for all found gates.
  */
 export function getAllOrGatesPositions(
     details: Details,
@@ -248,7 +248,7 @@ export function getAllOrGatesPositions(
 /**
  * Search strategy to find a valid coordinate. It attempts different Y indices
  * until the node and its subtree can be placed without overlapping existing elements.
- * @returns {[CodeToPosition, PositionToCode] | null} A tuple of placement maps, or null if no valid position was found.
+ * @returns A tuple of placement maps, or null if no valid position was found.
  */
 function findValidPlacement(
     code: string,
@@ -297,7 +297,7 @@ function findValidPlacement(
 
 /**
  * Helper function for getTreePositions recursion. Handles iteration over successor nodes.
- * @returns {number | false} The next available Y position or false on collision.
+ * @returns The next available Y position or false on collision.
  */
 function placeSuccessors(
     code: string,
@@ -357,7 +357,7 @@ function mergePlacements(
 /**
  * Ensures that subjects not reached by tree recursion (e.g., secondary predecessors)
  * are assigned a valid position in the grid.
- * * @returns {boolean} True if all missed predecessors were successfully placed.
+ * * @returns True if all missed predecessors were successfully placed.
  */
 function addMissedPredecessorsPositions(
     details: Details,
@@ -408,9 +408,9 @@ function addMissedPredecessorsPositions(
 }
 
 /**
- * Converts abstract grid indices (0, 1, 2...) into real pixel coordinates for the canvas.
- * Also calculates the total bounding box for SVG/Canvas sizing.
- * @returns {[CodeToPosition, number, number]} A tuple of [real coordinate map, total width, total height].
+ * Converts abstract grid indices (0, 1, 2...) into real pixel coordinates for the visualisation.
+ * Also calculates the total bounding box for visualisation sizing.
+ * @returns A tuple of [real coordinate map, total width, total height].
  */
 function getRealPositionsAndBoundaries(
     codeToPosition: CodeToPosition
@@ -494,19 +494,19 @@ function hasOrGate(
     details: Details,
     codesToSem: Record<string, number>
 ): boolean {
-    return (
-        course.predecessors.some((pred) => pred.groups.length > 0) &&
-        course.predecessors.some((pred) =>
-            pred.groups.some(
-                (g) =>
-                    g
-                        .filter(
-                            (s) => codesToSem[s] != null && codesToSem[s] < (codesToSem[code] ?? 0)
-                        )
-                        .filter((s) => details[s]).length > 1
-            )
-        )
+    const hasGroups = course.predecessors.some((pred) => pred.groups.length > 0);
+
+    const hasMultipleVisiblePredsInGroup = course.predecessors.some((pred) =>
+        pred.groups.some((group) => {
+            const currentSem = codesToSem[code] ?? 0;
+            const visiblePreds = group.filter(
+                (s) => codesToSem[s] != null && codesToSem[s] < currentSem && details[s]
+            );
+            return visiblePreds.length > 1;
+        })
     );
+
+    return hasGroups && hasMultipleVisiblePredsInGroup;
 }
 
 // ─── Utilities ───────────────────────────────────────────────────────────
