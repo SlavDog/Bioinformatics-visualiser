@@ -1,4 +1,4 @@
-import { Layout } from '@/consts/VisualisationParameters';
+import { Layout } from '@/consts/visualisationParameters';
 import { Details, OrderSubject } from '@/types';
 import { useSelectedChoices } from '@components/providers/dataProvider';
 

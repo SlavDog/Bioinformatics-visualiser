@@ -1,6 +1,6 @@
 import RadioField from '@components/SideBar/RadioField';
 import RangeScaler from '@components/SideBar/RangeScaler';
-import { Layout, ZoomScale } from '@/consts/VisualisationParameters';
+import { Layout, ZoomScale } from '@/consts/visualisationParameters';
 import './styles.css';
 import {
     useData,
