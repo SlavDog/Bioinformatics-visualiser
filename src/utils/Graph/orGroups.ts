@@ -1,8 +1,16 @@
 import { Course } from '@/types';
 
-export function getUniquePredGroups(course: Course): Array<Array<string>> {
+/**
+ * Returns unique predecessor groups for a given course.
+ * Predecessor groups define OR-relationships between prerequisites —
+ * a group is satisfied if at least one course in it is completed.
+ *
+ * @param course - The course whose predecessor groups to extract.
+ * @returns Array of unique predecessor groups.
+ */
+export function getUniquePredGroups(course: Course): string[][] {
     let seen = new Set();
-    let result: Array<Array<string>> = [];
+    let result: string[][] = [];
     course.predecessors.forEach((pred) => {
         pred.groups.forEach((group) => {
             let groupKey = group.slice().sort().join(',');
@@ -15,9 +23,15 @@ export function getUniquePredGroups(course: Course): Array<Array<string>> {
     return result;
 }
 
-export function deleteCodeFromOrGroups(
-    groups: Array<Array<string>>,
-    codeToDelete: string
-): Array<Array<string>> {
-    return groups.map((group) => group.filter((element) => element != codeToDelete));
+/**
+ * Removes a specific course code from all OR-groups.
+ *
+ * @param groups - The OR-groups to filter.
+ * @param codeToDelete - The course code to remove from all groups.
+ * @returns New array of groups with the specified code removed.
+ */
+export function deleteCodeFromOrGroups(groups: string[][], codeToDelete: string): string[][] {
+    return groups
+        .map((group) => group.filter((element) => element != codeToDelete))
+        .filter((group) => group.length > 0);
 }
