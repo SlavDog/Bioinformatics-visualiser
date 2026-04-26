@@ -2,7 +2,7 @@ import re
 import json
 import requests
 import time
-from sympy import Not, Symbol, simplify_logic, Or, And
+from sympy import Not, Symbol, simplify_logic, Or, And # type: ignore
 from bs4 import BeautifulSoup
 from typing import Any, TypedDict
 
@@ -36,6 +36,7 @@ class FinalJson(TypedDict):
     details: SubjectSuccessors
     spec: dict[str, dict[int, list[str]]]
     choices: dict[str, Any]
+    substitutions: dict[str, Any]
 
 
 MANUAL_SUBSTITUTIONS = {
@@ -60,16 +61,18 @@ MANUAL_SUBSTITUTIONS = {
     }
 }
 
+REQUEST_DELAY_SECONDS = 1
 
 def extract_codes(filename: str) -> ResultData:
     """
-    Extract all subject codes from MUNI-style JSON file.
+    Extract all subject codes, choice groups, and specialization
+    subjects from the input MUNI catalogue format JSON file.
 
     Parameters:
         filename (str): Name of the input file.
 
     Returns:
-        list[str]: A list containing all subject codes.
+        ResultData: A dictionary containing all subject codes, choice groups, and specialization subjects.
     """
     result_data: ResultData = {"codes": [],
                                "choices": {},
@@ -120,12 +123,14 @@ def find_successor_codes(html: str, code: str, by_prerequisites: bool = True) ->
         html (str): The HTML content of the MUNI catalogue page.
         code (str): The parent subject code.
         by_prerequisites (bool, optional): Defaults to True. Determines whether
-            successors are taken from the "Nachází se v prerekvizitách" 
+            successors are taken from the "Nachází se v prerekvizitách"
             section (True) or the "Navazující předměty" section (False).
-    
+
     Returns:
-        list[str]:
-            All successor subject codes.
+        SuccessorCodes: A dictionary mapping successor subject codes to a tuple
+            containing the OR groups the subject appears in, and a boolean
+            indicating whether the edge is a prerequisite (True) or a soft
+            follow-up (False).
     """
     result = []
     section_title = 'Nachází se v prerekvizitách jiných předmětů'
@@ -220,7 +225,17 @@ def parse_and_evaluate_formula(code: str, formula: str) -> tuple[bool, list[list
 
 
 def extract_or_groups(expr: Symbol, reverse_dict: dict[Symbol, str]) -> list[list[str]]:
-    """Rekurzivně najdi všechny OR skupiny."""
+    """
+    Recursively extract all OR groups from a symbolic logic expression.
+
+    Parameters:
+        expr (Symbol): The symbolic logic expression to analyze.
+        reverse_dict (dict[Symbol, str]): Mapping from sympy symbols back to subject codes.
+
+    Returns:
+        list[list[str]]: A list of OR groups, where each group is a list of subject codes
+            that appear together in an OR clause.
+    """
     groups = []
     if isinstance(expr, Or):
         syms = [a for a in expr.args if isinstance(a, Symbol)]
@@ -237,6 +252,16 @@ def extract_or_groups(expr: Symbol, reverse_dict: dict[Symbol, str]) -> list[lis
 
 
 def replace_any(match: re.Match[str]) -> str:
+    """
+    Replace ANY(...) or NOWANY(...) expressions with equivalent OR syntax.
+    Intended to be used as a re.sub callback.
+
+    Parameters:
+        match (re.Match[str]): The regex match object containing the ANY/NOWANY expression.
+
+    Returns:
+        str: The equivalent OR expression, e.g. '(A | B | C)'.
+    """
     args = match.group(1).split(",")
     args = [arg.strip() for arg in args]
     return "(" + " | ".join(args) + ")"
@@ -248,6 +273,7 @@ def transform_code_to_link(code: str, faculty: str = "") -> str:
 
     Parameters:
         code (str): The subject code to transform.
+        faculty (str): The full faculty name.
 
     Returns:
         str: The URL path corresponding to the subject code.
@@ -284,8 +310,21 @@ def transform_link_to_code(link: str) -> str:
         raise ValueError("Incorrect link format!")
 
 
-def build_successor_dict(data: ResultData) \
+def build_subject_dict(data: ResultData) \
         -> SubjectSuccessors:
+    """
+    Fetch and build a dictionary of subject data by scraping the MUNI catalogue.
+
+    For each subject code in data, fetches the corresponding MUNI IS page,
+    extracts subject details and successor relationships, and populates
+    predecessor lists accordingly.
+
+    Parameters:
+        data (ResultData): Extracted subject codes and metadata from the input JSON.
+
+    Returns:
+        SubjectSuccessors: A dictionary mapping subject codes to their full subject data.
+    """
     subject_codes = data["codes"]
     subject_data = {}
     predecessors: dict[str, list[SubjectLink]] = {}
@@ -300,7 +339,7 @@ def build_successor_dict(data: ResultData) \
         else:
             printRed(f"Failed to fetch page: {response.status_code}")
 
-        time.sleep(1)
+        time.sleep(REQUEST_DELAY_SECONDS)
 
     for subject in predecessors:
         if subject in subject_data:
@@ -310,6 +349,22 @@ def build_successor_dict(data: ResultData) \
 
 def get_subject(html: str, code: str, predecessors: dict[str, list[SubjectLink]]) \
         -> SubjectDict:
+    """
+    Parse a MUNI IS subject page and extract all relevant subject information.
+
+    Extracts name, faculty, language, completion type, credits, and successor
+    relationships. Also updates the shared predecessors dictionary so that
+    predecessor links can be assigned after all subjects are processed.
+
+    Parameters:
+        html (str): The HTML content of the subject's MUNI IS page.
+        code (str): The subject code being processed.
+        predecessors (dict[str, list[SubjectLink]]): Shared dictionary that accumulates
+            predecessor links across all processed subjects. Modified in place.
+
+    Returns:
+        SubjectDict: A dictionary containing all extracted subject data.
+    """
     code = re.sub(r"^[^:]*:(.*)", r"\1", code)
 
     name = ""
@@ -409,9 +464,9 @@ def code_to_subj_type(code: str) -> str:
         return "MA"
     return "OT"
 
-def printYellow(s, end="\n"): print("\033[93m {}\033[00m".format(s), end=end)
-def printCyan(s, end="\n"): print("\033[96m {}\033[00m".format(s), end=end)
-def printRed(s, end="\n"): print("\033[91m {}\033[00m".format(s), end=end)
+def printYellow(s: str, end: str="\n") -> None: print("\033[93m {}\033[00m".format(s), end=end)
+def printCyan(s: str, end: str ="\n") -> None: print("\033[96m {}\033[00m".format(s), end=end)
+def printRed(s: Exception | str, end: str="\n") -> None: print("\033[91m {}\033[00m".format(s), end=end)
 
 def build_final_json(data: ResultData, successors: SubjectSuccessors, path: str) -> None:
     final_json: FinalJson = {
@@ -427,10 +482,10 @@ def build_final_json(data: ResultData, successors: SubjectSuccessors, path: str)
 def main() -> None:
     print("Extracting names from input JSON file...")
     data = extract_codes("../src/data/bc_bio_cz.json")
-    successors = build_successor_dict(data)
+    subject_dict = build_subject_dict(data)
 
     print("Almost finished. Building the final JSON file...")
-    build_final_json(data, successors, "../src/data/final_tree.json")
+    build_final_json(data, subject_dict, "../src/data/final_tree.json")
     print("Done.")
 
 if __name__ == "__main__":
