@@ -54,7 +54,7 @@ function Visualisation({ scale, setDragEnabled }: VisualisationProps) {
     const selectedSpecialization = useSelectedSpecialization();
     const activeSubstitutions = useActiveSubstitutions();
     const [visible, setVisible] = useState(true);
-    const SubjectComponent = scale < 0.7 ? SmallSubject : Subject;
+    const SubjectComponent = scale < 0.5 ? SmallSubject : Subject;
 
     // Calculate positions when new data is loaded
     useEffect(() => {
