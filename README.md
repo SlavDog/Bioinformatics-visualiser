@@ -2,7 +2,7 @@
 
 Aplikace pro vizualizaci doporučeného průchodu studiem vytvořená v Reactu.
 
-**[Vyzkoušej si aplikaci online](https://slavdog.github.io/bioinformatics-visualiser/)**
+**[Vyzkoušej si aplikaci online](https://slavdog.github.io/Bioinformatics-visualiser/)**
 
 ## 🚀 O projektu
 
