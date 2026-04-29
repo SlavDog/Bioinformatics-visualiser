@@ -14,7 +14,7 @@ Jak projekt spustit lokálně:
 
 ```bash
 # Naklonuj repozitář
-git clone [github.com/SlavDog/Bioinformatics-visualiser](github.com/SlavDog/Bioinformatics-visualiser)
+git clone https://github.com/SlavDog/Bioinformatics-visualiser
 
 # Nainstaluj závislosti
 npm install
