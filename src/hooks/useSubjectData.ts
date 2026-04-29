@@ -42,8 +42,9 @@ export function useSubjectData(code: string, course: Course) {
 
     const isChoiceWithLimit = isChoice && !code.includes('core') && !code.includes('tv');
     const creditsLabel = !hasSubjectLimit ? 'kr.' : 'předm.';
+    const creditsLabelLong = !hasSubjectLimit ? 'kreditů' : 'předmětů';
     const totalLimit = !hasSubjectLimit ? creditsTotalLimit : subjectsTotalLimit;
-    const tooltipContent = `V tomto semestru vybráno: ${actualAmount} z doporučených ${semLimit} ${!hasSubjectLimit ? 'kreditů' : 'předmětů'}. Celkem za studium je nutné splnit ${totalLimit} ${creditsLabel}`;
+    const tooltipContent = `V tomto semestru vybráno: ${actualAmount} z doporučených ${semLimit} ${creditsLabelLong}. Celkem za studium je nutné splnit ${totalLimit} ${creditsLabelLong}.`;
 
     return {
         displayCode,
