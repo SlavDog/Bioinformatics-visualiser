@@ -9,7 +9,7 @@
             "completion": "zk",
             "credits": 6,
             "link": "/predmet/fi/IB000ext",
-            "type": "IN"
+            "type": "MA"
         },
         "IB113": {
             "name": "Úvod do programování a algoritmizace",
@@ -17,25 +17,12 @@
             "successors": [
                 {
                     "code": "IB114",
-                    "groups": [
-                        [
-                            "IB113",
-                            "IB111"
-                        ]
-                    ],
+                    "groups": [["IB113", "IB111"]],
                     "by_prerequisites": true
                 },
                 {
                     "code": "PB176",
-                    "groups": [
-                        [
-                            "PB111",
-                            "PB071",
-                            "IB113",
-                            "IB111",
-                            "PB006"
-                        ]
-                    ],
+                    "groups": [["PB111", "PB071", "IB113", "IB111", "PB006"]],
                     "by_prerequisites": true
                 }
             ],
@@ -106,14 +93,7 @@
             "successors": [
                 {
                     "code": "MB143",
-                    "groups": [
-                        [
-                            "MB142",
-                            "MB141",
-                            "MB152",
-                            "MB151"
-                        ]
-                    ],
+                    "groups": [["MB142", "MB141", "MB152", "MB151"]],
                     "by_prerequisites": true
                 }
             ],
@@ -130,14 +110,7 @@
             "successors": [
                 {
                     "code": "MB143",
-                    "groups": [
-                        [
-                            "MB142",
-                            "MB141",
-                            "MB152",
-                            "MB151"
-                        ]
-                    ],
+                    "groups": [["MB142", "MB141", "MB152", "MB151"]],
                     "by_prerequisites": true
                 }
             ],
@@ -162,50 +135,22 @@
             "predecessors": [
                 {
                     "code": "MB141",
-                    "groups": [
-                        [
-                            "MB142",
-                            "MB141",
-                            "MB152",
-                            "MB151"
-                        ]
-                    ],
+                    "groups": [["MB142", "MB141", "MB152", "MB151"]],
                     "by_prerequisites": true
                 },
                 {
                     "code": "MB142",
-                    "groups": [
-                        [
-                            "MB142",
-                            "MB141",
-                            "MB152",
-                            "MB151"
-                        ]
-                    ],
+                    "groups": [["MB142", "MB141", "MB152", "MB151"]],
                     "by_prerequisites": true
                 },
                 {
                     "code": "MB151",
-                    "groups": [
-                        [
-                            "MB142",
-                            "MB141",
-                            "MB152",
-                            "MB151"
-                        ]
-                    ],
+                    "groups": [["MB142", "MB141", "MB152", "MB151"]],
                     "by_prerequisites": true
                 },
                 {
                     "code": "MB152",
-                    "groups": [
-                        [
-                            "MB142",
-                            "MB141",
-                            "MB152",
-                            "MB151"
-                        ]
-                    ],
+                    "groups": [["MB142", "MB141", "MB152", "MB151"]],
                     "by_prerequisites": true
                 }
             ],
@@ -302,17 +247,7 @@
             "predecessors": [
                 {
                     "code": "PB112",
-                    "groups": [
-                        [
-                            "PB160",
-                            "PB174",
-                            "PB161",
-                            "PB178",
-                            "PB162",
-                            "PB112",
-                            "PV178"
-                        ]
-                    ],
+                    "groups": [["PB160", "PB174", "PB161", "PB178", "PB162", "PB112", "PV178"]],
                     "by_prerequisites": true
                 }
             ],
@@ -405,12 +340,7 @@
             "successors": [
                 {
                     "code": "PA195",
-                    "groups": [
-                        [
-                            "PB154",
-                            "PB168"
-                        ]
-                    ],
+                    "groups": [["PB154", "PB168"]],
                     "by_prerequisites": true
                 },
                 {
@@ -449,28 +379,12 @@
             "predecessors": [
                 {
                     "code": "IB113",
-                    "groups": [
-                        [
-                            "PB111",
-                            "PB071",
-                            "IB113",
-                            "IB111",
-                            "PB006"
-                        ]
-                    ],
+                    "groups": [["PB111", "PB071", "IB113", "IB111", "PB006"]],
                     "by_prerequisites": true
                 },
                 {
                     "code": "IB111",
-                    "groups": [
-                        [
-                            "PB111",
-                            "PB071",
-                            "IB113",
-                            "IB111",
-                            "PB006"
-                        ]
-                    ],
+                    "groups": [["PB111", "PB071", "IB113", "IB111", "PB006"]],
                     "by_prerequisites": true
                 }
             ],
@@ -508,12 +422,7 @@
             "successors": [
                 {
                     "code": "VV064",
-                    "groups": [
-                        [
-                            "VB001",
-                            "PROG"
-                        ]
-                    ],
+                    "groups": [["VB001", "PROG"]],
                     "by_prerequisites": true
                 },
                 {
@@ -858,24 +767,12 @@
             "successors": [
                 {
                     "code": "C1220",
-                    "groups": [
-                        [
-                            "C5720",
-                            "C3580",
-                            "C3181"
-                        ]
-                    ],
+                    "groups": [["C5720", "C3580", "C3181"]],
                     "by_prerequisites": true
                 },
                 {
                     "code": "C1230",
-                    "groups": [
-                        [
-                            "C5720",
-                            "C3580",
-                            "C3181"
-                        ]
-                    ],
+                    "groups": [["C5720", "C3580", "C3181"]],
                     "by_prerequisites": true
                 },
                 {
@@ -905,34 +802,17 @@
                 },
                 {
                     "code": "C4830",
-                    "groups": [
-                        [
-                            "C3580",
-                            "C3181"
-                        ]
-                    ],
+                    "groups": [["C3580", "C3181"]],
                     "by_prerequisites": true
                 },
                 {
                     "code": "C6200",
-                    "groups": [
-                        [
-                            "C3580",
-                            "C3181"
-                        ]
-                    ],
+                    "groups": [["C3580", "C3181"]],
                     "by_prerequisites": true
                 },
                 {
                     "code": "C6560",
-                    "groups": [
-                        [
-                            "C5700",
-                            "C5720",
-                            "C3580",
-                            "C3181"
-                        ]
-                    ],
+                    "groups": [["C5700", "C5720", "C3580", "C3181"]],
                     "by_prerequisites": true
                 },
                 {
@@ -942,36 +822,17 @@
                 },
                 {
                     "code": "C7860",
-                    "groups": [
-                        [
-                            "C5720",
-                            "C3580",
-                            "C3181"
-                        ]
-                    ],
+                    "groups": [["C5720", "C3580", "C3181"]],
                     "by_prerequisites": true
                 },
                 {
                     "code": "C8116",
-                    "groups": [
-                        [
-                            "C7105",
-                            "C3580",
-                            "C9530",
-                            "C3181"
-                        ]
-                    ],
+                    "groups": [["C7105", "C3580", "C9530", "C3181"]],
                     "by_prerequisites": true
                 },
                 {
                     "code": "C8117",
-                    "groups": [
-                        [
-                            "C3580",
-                            "C9530",
-                            "C3181"
-                        ]
-                    ],
+                    "groups": [["C3580", "C9530", "C3181"]],
                     "by_prerequisites": true
                 },
                 {
@@ -1054,25 +915,12 @@
             "successors": [
                 {
                     "code": "C8116",
-                    "groups": [
-                        [
-                            "C7105",
-                            "C3580",
-                            "C9530",
-                            "C3181"
-                        ]
-                    ],
+                    "groups": [["C7105", "C3580", "C9530", "C3181"]],
                     "by_prerequisites": true
                 },
                 {
                     "code": "C8117",
-                    "groups": [
-                        [
-                            "C3580",
-                            "C9530",
-                            "C3181"
-                        ]
-                    ],
+                    "groups": [["C3580", "C9530", "C3181"]],
                     "by_prerequisites": true
                 }
             ],
@@ -1167,17 +1015,7 @@
             "successors": [
                 {
                     "code": "PB007",
-                    "groups": [
-                        [
-                            "PB160",
-                            "PB174",
-                            "PB161",
-                            "PB178",
-                            "PB162",
-                            "PB112",
-                            "PV178"
-                        ]
-                    ],
+                    "groups": [["PB160", "PB174", "PB161", "PB178", "PB162", "PB112", "PV178"]],
                     "by_prerequisites": true
                 },
                 {
@@ -1205,16 +1043,7 @@
                 {
                     "code": "PV292",
                     "groups": [
-                        [
-                            "PV168",
-                            "PA165",
-                            "PB138",
-                            "PB178",
-                            "PB162",
-                            "PV256",
-                            "SOUHLAS",
-                            "PV178"
-                        ]
+                        ["PV168", "PA165", "PB138", "PB178", "PB162", "PV256", "SOUHLAS", "PV178"]
                     ],
                     "by_prerequisites": true
                 },
@@ -1263,12 +1092,7 @@
             "successors": [
                 {
                     "code": "VB036",
-                    "groups": [
-                        [
-                            "VB035",
-                            "SOUHLAS"
-                        ]
-                    ],
+                    "groups": [["VB035", "SOUHLAS"]],
                     "by_prerequisites": true
                 }
             ],
@@ -1287,12 +1111,7 @@
             "predecessors": [
                 {
                     "code": "VB035",
-                    "groups": [
-                        [
-                            "VB035",
-                            "SOUHLAS"
-                        ]
-                    ],
+                    "groups": [["VB035", "SOUHLAS"]],
                     "by_prerequisites": true
                 }
             ],
@@ -1309,12 +1128,7 @@
             "predecessors": [
                 {
                     "code": "VB001",
-                    "groups": [
-                        [
-                            "VB001",
-                            "PROG"
-                        ]
-                    ],
+                    "groups": [["VB001", "PROG"]],
                     "by_prerequisites": true
                 }
             ],
@@ -1370,22 +1184,12 @@
             "predecessors": [
                 {
                     "code": "IB113",
-                    "groups": [
-                        [
-                            "IB113",
-                            "IB111"
-                        ]
-                    ],
+                    "groups": [["IB113", "IB111"]],
                     "by_prerequisites": true
                 },
                 {
                     "code": "IB111",
-                    "groups": [
-                        [
-                            "IB113",
-                            "IB111"
-                        ]
-                    ],
+                    "groups": [["IB113", "IB111"]],
                     "by_prerequisites": true
                 }
             ],
@@ -1400,12 +1204,7 @@
             "successors": [
                 {
                     "code": "C2143",
-                    "groups": [
-                        [
-                            "NOW",
-                            "C2142"
-                        ]
-                    ],
+                    "groups": [["NOW", "C2142"]],
                     "by_prerequisites": true
                 }
             ],
@@ -1432,12 +1231,7 @@
                 },
                 {
                     "code": "PV297",
-                    "groups": [
-                        [
-                            "PV004",
-                            "PB177"
-                        ]
-                    ],
+                    "groups": [["PV004", "PB177"]],
                     "by_prerequisites": true
                 },
                 {
@@ -1565,14 +1359,7 @@
             "successors": [
                 {
                     "code": "PA026",
-                    "groups": [
-                        [
-                            "PV021",
-                            "PB016",
-                            "PV056",
-                            "IV126"
-                        ]
-                    ],
+                    "groups": [["PV021", "PB016", "PV056", "IV126"]],
                     "by_prerequisites": true
                 }
             ],
@@ -1645,38 +1432,17 @@
             "successors": [
                 {
                     "code": "MB143",
-                    "groups": [
-                        [
-                            "MB142",
-                            "MB141",
-                            "MB152",
-                            "MB151"
-                        ]
-                    ],
+                    "groups": [["MB142", "MB141", "MB152", "MB151"]],
                     "by_prerequisites": true
                 },
                 {
                     "code": "MB153",
-                    "groups": [
-                        [
-                            "PŘF:M1100",
-                            "PŘF:M1110",
-                            "MB152",
-                            "MB151"
-                        ]
-                    ],
+                    "groups": [["PŘF:M1100", "PŘF:M1110", "MB152", "MB151"]],
                     "by_prerequisites": true
                 },
                 {
                     "code": "MB154",
-                    "groups": [
-                        [
-                            "PŘF:M1100",
-                            "PŘF:M1110",
-                            "MB152",
-                            "MB151"
-                        ]
-                    ],
+                    "groups": [["PŘF:M1100", "PŘF:M1110", "MB152", "MB151"]],
                     "by_prerequisites": true
                 },
                 {
@@ -1703,38 +1469,17 @@
             "successors": [
                 {
                     "code": "MB143",
-                    "groups": [
-                        [
-                            "MB142",
-                            "MB141",
-                            "MB152",
-                            "MB151"
-                        ]
-                    ],
+                    "groups": [["MB142", "MB141", "MB152", "MB151"]],
                     "by_prerequisites": true
                 },
                 {
                     "code": "MB153",
-                    "groups": [
-                        [
-                            "PŘF:M1100",
-                            "PŘF:M1110",
-                            "MB152",
-                            "MB151"
-                        ]
-                    ],
+                    "groups": [["PŘF:M1100", "PŘF:M1110", "MB152", "MB151"]],
                     "by_prerequisites": true
                 },
                 {
                     "code": "MB154",
-                    "groups": [
-                        [
-                            "PŘF:M1100",
-                            "PŘF:M1110",
-                            "MB152",
-                            "MB151"
-                        ]
-                    ],
+                    "groups": [["PŘF:M1100", "PŘF:M1110", "MB152", "MB151"]],
                     "by_prerequisites": true
                 },
                 {
@@ -1764,26 +1509,12 @@
             "predecessors": [
                 {
                     "code": "MB151",
-                    "groups": [
-                        [
-                            "PŘF:M1100",
-                            "PŘF:M1110",
-                            "MB152",
-                            "MB151"
-                        ]
-                    ],
+                    "groups": [["PŘF:M1100", "PŘF:M1110", "MB152", "MB151"]],
                     "by_prerequisites": true
                 },
                 {
                     "code": "MB152",
-                    "groups": [
-                        [
-                            "PŘF:M1100",
-                            "PŘF:M1110",
-                            "MB152",
-                            "MB151"
-                        ]
-                    ],
+                    "groups": [["PŘF:M1100", "PŘF:M1110", "MB152", "MB151"]],
                     "by_prerequisites": true
                 }
             ],
@@ -1800,26 +1531,12 @@
             "predecessors": [
                 {
                     "code": "MB151",
-                    "groups": [
-                        [
-                            "PŘF:M1100",
-                            "PŘF:M1110",
-                            "MB152",
-                            "MB151"
-                        ]
-                    ],
+                    "groups": [["PŘF:M1100", "PŘF:M1110", "MB152", "MB151"]],
                     "by_prerequisites": true
                 },
                 {
                     "code": "MB152",
-                    "groups": [
-                        [
-                            "PŘF:M1100",
-                            "PŘF:M1110",
-                            "MB152",
-                            "MB151"
-                        ]
-                    ],
+                    "groups": [["PŘF:M1100", "PŘF:M1110", "MB152", "MB151"]],
                     "by_prerequisites": true
                 }
             ],
@@ -1839,13 +1556,7 @@
                 },
                 {
                     "code": "MA007",
-                    "groups": [
-                        [
-                            "PŘF:M1125",
-                            "PŘF:M1120",
-                            "IB000"
-                        ]
-                    ],
+                    "groups": [["PŘF:M1125", "PŘF:M1120", "IB000"]],
                     "by_prerequisites": true
                 }
             ],
@@ -1862,22 +1573,12 @@
             "successors": [
                 {
                     "code": "IB002",
-                    "groups": [
-                        [
-                            "IB015",
-                            "IB111"
-                        ]
-                    ],
+                    "groups": [["IB015", "IB111"]],
                     "by_prerequisites": true
                 },
                 {
                     "code": "IB114",
-                    "groups": [
-                        [
-                            "IB113",
-                            "IB111"
-                        ]
-                    ],
+                    "groups": [["IB113", "IB111"]],
                     "by_prerequisites": true
                 },
                 {
@@ -1892,15 +1593,7 @@
                 },
                 {
                     "code": "PB176",
-                    "groups": [
-                        [
-                            "PB111",
-                            "PB071",
-                            "IB113",
-                            "IB111",
-                            "PB006"
-                        ]
-                    ],
+                    "groups": [["PB111", "PB071", "IB113", "IB111", "PB006"]],
                     "by_prerequisites": true
                 },
                 {
@@ -1940,12 +1633,7 @@
             "predecessors": [
                 {
                     "code": "IB111",
-                    "groups": [
-                        [
-                            "IB015",
-                            "IB111"
-                        ]
-                    ],
+                    "groups": [["IB015", "IB111"]],
                     "by_prerequisites": true
                 }
             ],
@@ -2126,6 +1814,9 @@
                     },
                     {
                         "code": "PřF:C9088"
+                    },
+                    {
+                        "code": "SBAPR"
                     }
                 ]
             }
@@ -2281,6 +1972,9 @@
                     },
                     {
                         "code": "PřF:C2150"
+                    },
+                    {
+                        "code": "SBAPR"
                     }
                 ]
             }
@@ -2289,21 +1983,13 @@
     "choices": {
         "lang": {
             "type": "0:3",
-            "list": [
-                "VB035",
-                "VB036",
-                "VV064"
-            ],
+            "list": ["VB035", "VB036", "VV064"],
             "refnCZ": "Angličtina",
             "refnEN": "English"
         },
         "styl": {
             "type": "1:0",
-            "list": [
-                "VB000",
-                "VB000Eng",
-                "PB029"
-            ],
+            "list": ["VB000", "VB000Eng", "PB029"],
             "refnCZ": "Sazba a akademické psaní",
             "refnEN": "Typesetting and academic writing"
         },
@@ -2337,48 +2023,31 @@
         },
         "naval": {
             "type": "1:0",
-            "list": [
-                "IB114",
-                "PřF:C2142"
-            ],
+            "list": ["IB114", "PřF:C2142"],
             "refnCZ": "Návrh algoritmů",
             "refnEN": "Design of algorithms"
         },
         "unix": {
             "type": "1:0",
-            "list": [
-                "PV004",
-                "PřF:C2110"
-            ],
+            "list": ["PV004", "PřF:C2110"],
             "refnCZ": "Práce s operačním systémem UNIX",
             "refnEN": "Work with unix-based systems"
         },
         "legal": {
             "type": "1:0",
-            "list": [
-                "PV119",
-                "VV076"
-            ],
+            "list": ["PV119", "VV076"],
             "refnCZ": "Právní a etické aspekty",
             "refnEN": "Legal and ethical aspects"
         },
         "vypmet": {
             "type": "2:0",
-            "list": [
-                "IB031",
-                "PB016",
-                "MA018"
-            ],
+            "list": ["IB031", "PB016", "MA018"],
             "refnCZ": "Výpočetní metody",
             "refnEN": "Computational methods"
         },
         "poctech": {
             "type": "0:3",
-            "list": [
-                "PV003",
-                "PV005",
-                "PA039"
-            ],
+            "list": ["PV003", "PV005", "PA039"],
             "refnCZ": "Počítačové technologie",
             "refnEN": "Computational technologies"
         }
@@ -2386,11 +2055,7 @@
     "substitutions": {
         "advanced_math": {
             "nameCZ": "Pokročilá matematika",
-            "removes": [
-                "MB141",
-                "MB142",
-                "MB143"
-            ],
+            "removes": ["MB141", "MB142", "MB143"],
             "type": "MA",
             "adds": [
                 {
@@ -2413,11 +2078,7 @@
         },
         "advanced_inf": {
             "nameCZ": "Pokročilá informatika",
-            "removes": [
-                "IB000ext",
-                "IB113",
-                "IB114"
-            ],
+            "removes": ["IB000ext", "IB113", "IB114"],
             "type": "IN",
             "adds": [
                 {
