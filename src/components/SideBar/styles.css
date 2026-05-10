@@ -184,9 +184,14 @@ select,
     width: 100%;
 }
 
+@media (max-width: 767px) and (orientation: landscape) {
+    .sideBar {
+        width: 30vw;
+    }
+}
+
 @media (max-width: 767px) {
     .sideBar {
-        width: 60vw;
         transform: translateX(-100%);
         transition: transform 0.3s ease;
         padding-top: 45px;
