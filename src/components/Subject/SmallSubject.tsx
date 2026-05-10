@@ -6,6 +6,7 @@ import { useSetHighlightedSubjects } from '@components/providers/dataProvider';
 import Warning from '@components/Subject/Warning';
 import { useSubjectData } from '@/hooks/useSubjectData';
 import SubjectCredits from './SubjectCredits';
+import Tippy from '@tippyjs/react';
 
 type SmallSubjectProps = {
     code: string;
@@ -49,13 +50,20 @@ function SmallSubject({ code, course, style, setDragEnabled }: SmallSubjectProps
                 style={{ ...style, borderRadius: '0px', borderWidth: '4px' }}
             >
                 <div className="smallTopSubjectContainer">
-                    {isChoice ? (
-                        <a className="smallSubjectCode">{code}</a>
-                    ) : (
-                        <a className="smallSubjectCode" draggable="false" href={link}>
-                            {displayCode}
-                        </a>
-                    )}
+                    <Tippy content={course.name} placement="top">
+                        {isChoice ? (
+                            <a className="smallSubjectCode">{code}</a>
+                        ) : (
+                            <a
+                                className="smallSubjectCode"
+                                draggable="false"
+                                href={link}
+                                target="_blank"
+                            >
+                                {displayCode}
+                            </a>
+                        )}
+                    </Tippy>
                 </div>
                 <div className="divider" />
                 <div className="smallBottomSubjectContainer">
