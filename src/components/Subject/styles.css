@@ -108,6 +108,10 @@
     text-decoration: none;
 }
 
+.subjectName:hover {
+    text-decoration: underline;
+}
+
 .subjectCredits {
     font-family: 'Inter', sans-serif;
     font-weight: 600;
@@ -161,6 +165,10 @@
     text-decoration: none;
     margin-top: 100px;
     color: var(--subject-title);
+}
+
+.smallSubjectCode:hover {
+    text-decoration: underline;
 }
 
 .smallSubjectCredits {
