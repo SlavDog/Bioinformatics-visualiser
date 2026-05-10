@@ -14,7 +14,7 @@ const LEGEND_SUBJECT_ITEMS = [
     { label: 'Informatika', color: 'var(--informatics)', icon: InfIcon },
     { label: 'Biologie', color: 'var(--biology)', icon: BioIcon },
     { label: 'Matematika', color: 'var(--math)', icon: MathIcon },
-    { label: 'Volba', color: 'var(--choice)', icon: ChoiceIcon },
+    { label: 'Povinně volitelný blok', color: 'var(--choice)', icon: ChoiceIcon },
     { label: 'Ostatní', color: 'var(--other)', icon: OtherIcon }
 ];
 
@@ -58,7 +58,22 @@ function HintBox() {
                     </React.Fragment>
                 ))}
                 <div className="field">
-                    <p className="preferenceFieldLabel">Povinná prerekvizita</p>
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <p className="preferenceFieldLabel">Povinná prerekvizita</p>
+                        <Tippy content="Plná čára představuje povinnou prerekvizitu, tedy vazbu, kdy je potřeba absolvovat jeden předmět před zapsáním jiného.">
+                            <div
+                                className="helpIcon"
+                                style={{
+                                    width: '12px',
+                                    height: '12px',
+                                    fontSize: '10px',
+                                    marginLeft: '5px'
+                                }}
+                            >
+                                ?
+                            </div>
+                        </Tippy>
+                    </div>
                     <svg style={{ width: '70px', height: '20px' }}>
                         <path
                             d="M 10 10 h 50"
@@ -70,7 +85,7 @@ function HintBox() {
                 </div>
                 <div className="hintSeparator"></div>
                 <div className="field">
-                    <div style={{ display: 'flex', alignContent: 'center' }}>
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
                         <p className="preferenceFieldLabel">Soft prerekvizita</p>
                         <Tippy content="Soft prerekvizity slouží pouze jako doporučení. Není nutné absolvovat předměty v jimi daném pořadí.">
                             <div
@@ -98,7 +113,7 @@ function HintBox() {
                 </div>
                 <div className="hintSeparator"></div>
                 <div className="field">
-                    <div style={{ display: 'flex', alignContent: 'center' }}>
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
                         <p className="preferenceFieldLabel">OR brána</p>
                         <Tippy content="OR brána znamená, že je potřeba splnit některé z prerekvizit, které do ní vstupují, nemusí však být nutně splněny všechny z nich.">
                             <div
