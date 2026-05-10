@@ -1,5 +1,7 @@
 import { Course } from '@/types';
 import SubjectSelectedLabels from './SubjectSelectedLabels';
+import Tippy from '@tippyjs/react';
+import { courseEndingToText, facultyCodeToName, languageCodeToName } from '@utils/textHelpers';
 
 type SubjectInfoProps = {
     course: Course;
@@ -35,9 +37,14 @@ function SubjectInfo({
                     <a className="subjectName" draggable="false" href={link} target="_blank">
                         {course.name}
                     </a>
-                    <p className="subjectInfo">
-                        {course.faculty} / {course.language} / {course.completion}
-                    </p>
+                    <Tippy
+                        placement="bottom"
+                        content={`${facultyCodeToName(course.faculty)} / ${languageCodeToName(course.language)} / ${courseEndingToText(course.completion)}`}
+                    >
+                        <p className="subjectInfo" style={{ width: 'fit-content' }}>
+                            {course.faculty} / {course.language} / {course.completion}
+                        </p>
+                    </Tippy>
                 </>
             )}
             <SubjectSelectedLabels
