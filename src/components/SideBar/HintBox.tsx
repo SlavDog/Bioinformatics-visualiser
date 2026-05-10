@@ -87,7 +87,7 @@ function HintBox() {
                 <div className="field">
                     <div style={{ display: 'flex', alignItems: 'center' }}>
                         <p className="preferenceFieldLabel">Soft prerekvizita</p>
-                        <Tippy content="Soft prerekvizity slouží pouze jako doporučení. Není nutné absolvovat předměty v jimi daném pořadí.">
+                        <Tippy content="Přerušované čáry představují soft prerekvizity, které slouží pouze jako doporučení. Není nutné absolvovat předměty v jimi daném pořadí.">
                             <div
                                 className="helpIcon"
                                 style={{
