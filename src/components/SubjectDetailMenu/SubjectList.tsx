@@ -21,7 +21,7 @@ function SubjectList({ source, currentCode }: SubjectListProps) {
                         '_blank'
                     )
                 }
-                text="Zobrazit aktuální nabídku tělocviků!"
+                text="Zobrazit aktuální nabídku tělocviků na webu fsps.muni.cz!"
             />
         );
     }
@@ -35,7 +35,7 @@ function SubjectList({ source, currentCode }: SubjectListProps) {
                         '_blank'
                     )
                 }
-                text="Zobrazit aktuální nabídku CORE předmětů!"
+                text="Zobrazit aktuální nabídku CORE předmětů na webu muni.cz!"
             />
         );
     }
