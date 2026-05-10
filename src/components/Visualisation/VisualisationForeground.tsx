@@ -3,7 +3,8 @@ import { Layout } from '@/consts/visualisationParameters';
 import OrGates from '@components/Visualisation/OrGates';
 import { Details, EdgeOffsets, CodeToPosition, Specialization } from '@/types';
 import { Dispatch, SetStateAction } from 'react';
-import { SubjectProps } from '@components/Subject/Subject';
+import Subject, { SubjectProps } from '@components/Subject/Subject';
+import SmallSubject from '@components/Subject/SmallSubject';
 
 type VisualisationForegroundProps = {
     edgeXOffsets: EdgeOffsets;
@@ -11,7 +12,7 @@ type VisualisationForegroundProps = {
     positions: CodeToPosition;
     processedSubjects: Details;
     specialization: Specialization;
-    SubjectComponent: React.ComponentType<SubjectProps>;
+    scale: number;
     setDragEnabled: Dispatch<SetStateAction<boolean>>;
     orGatesPositions: Array<{ x: number; y: number }>;
 };
@@ -22,10 +23,11 @@ function VisualisationForeground({
     positions,
     processedSubjects,
     specialization,
-    SubjectComponent,
+    scale,
     setDragEnabled,
     orGatesPositions
 }: VisualisationForegroundProps) {
+    const SubjectComponent = scale < 0.5 ? SmallSubject : Subject;
     return (
         <div
             className="visualisationForeground"
@@ -39,7 +41,7 @@ function VisualisationForeground({
                 xOffsets={edgeXOffsets}
                 yOffsets={edgeYOffsets}
             />
-            <OrGates orGatesPositions={orGatesPositions} />
+            <OrGates orGatesPositions={orGatesPositions} scale={scale} />
             {Object.values(specialization.plan)
                 .flat()
                 .map((orderSubject) => {

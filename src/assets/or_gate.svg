@@ -3,5 +3,5 @@
            C 70 14, 106 36, 118 50
            C 106 64, 70 86, 28 86
            C 44 66, 44 34, 28 14 Z"
-        fill="#ffffffff" stroke="#000000" stroke-width="10" stroke-linejoin="round"/>
+        fill="#ffffffff" stroke="#000000" stroke-width="6" stroke-linejoin="round"/>
 </svg>

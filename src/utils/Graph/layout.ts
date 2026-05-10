@@ -239,7 +239,7 @@ export function getAllOrGatesPositions(
                 details,
                 edgeYOffsets,
                 codesToSem
-            ).map((yOffset) => ({ x, y: yOffset + positions[code].y - 15 }));
+            ).map((yOffset) => ({ x, y: yOffset + positions[code].y }));
         });
 }
 

@@ -54,7 +54,6 @@ function Visualisation({ scale, setDragEnabled }: VisualisationProps) {
     const selectedSpecialization = useSelectedSpecialization();
     const activeSubstitutions = useActiveSubstitutions();
     const [visible, setVisible] = useState(true);
-    const SubjectComponent = scale < 0.5 ? SmallSubject : Subject;
 
     // Calculate positions when new data is loaded
     useEffect(() => {
@@ -142,7 +141,7 @@ function Visualisation({ scale, setDragEnabled }: VisualisationProps) {
                     positions={visState.positions}
                     processedSubjects={visState.subjects}
                     specialization={visState.spec[selectedSpecialization] ?? { plan: {} }}
-                    SubjectComponent={SubjectComponent}
+                    scale={scale}
                     setDragEnabled={setDragEnabled}
                     orGatesPositions={visState.orGatesPositions}
                 />
