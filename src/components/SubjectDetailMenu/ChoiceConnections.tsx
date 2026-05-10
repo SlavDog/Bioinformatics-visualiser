@@ -19,8 +19,8 @@ function ChoiceConnections({ course, subjectWidth, isPredecessor }: ChoiceConnec
     let compulsorySubjectsArray = subjectsList
         .map((subject) => subject.code)
         .filter((code) => Object.keys(subjectInfoData['details']).includes(code));
-    let voluntarySubjectsText = `${isPredecessor ? 'Je následníkem' : 'Je předchůdcem'} některých předmětů,\nkteré nejsou povinné: ${voluntarySubjectsArray.join(', ')}`;
-    let compulsorySubjectsText = `${isPredecessor ? 'Je následníkem' : 'Je předchůdcem'} některých předmětů,\nkteré jsou povinné: ${compulsorySubjectsArray.join(', ')}`;
+    let voluntarySubjectsText = `${isPredecessor ? 'Předměty, na které tento kurz navazuje' : 'Předměty navazující na tento kurz'} (nepovinné):\n${voluntarySubjectsArray.join(', ')}`;
+    let compulsorySubjectsText = `${isPredecessor ? 'Předměty, na které tento kurz navazuje' : 'Předměty navazující na tento kurz'} (povinné):\n${compulsorySubjectsArray.join(', ')}`;
 
     let allSoft = subjectsList.every((edge) => !edge.by_prerequisites);
 

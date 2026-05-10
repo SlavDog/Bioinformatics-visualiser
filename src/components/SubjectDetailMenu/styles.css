@@ -148,6 +148,7 @@
     color: white;
     cursor: pointer;
     padding: 20px;
+    text-align: center;
     background:
         linear-gradient(
             120deg,

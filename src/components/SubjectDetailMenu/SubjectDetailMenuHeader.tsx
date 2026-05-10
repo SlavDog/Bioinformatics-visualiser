@@ -8,7 +8,7 @@ function SubjectDetailMenuHeader({ choiceName, limitText, onClose }: SubjectDeta
     return (
         <header>
             <p className="bigTitle">
-                Předměty volby <u>{choiceName}</u>
+                Předměty volby <i>{choiceName}</i>
             </p>
             <p className="bigSubTitle">{limitText}</p>
             <button onClick={onClose} className="submitButton closeButton">
