@@ -40,7 +40,8 @@ function SideBar({ scale, setScale }: SidebarProps) {
             </button>
             <input
                 style={{
-                    opacity: isOpen ? '0' : '0.5'
+                    opacity: isOpen ? '0' : '0.5',
+                    touchAction: 'none'
                 }}
                 className="mobileZoomSlider phoneOnly"
                 type="range"
