@@ -21,6 +21,9 @@ function SemesterColumn({
     const semesterCredits = semesterSubjects
         .map((subject) => {
             if (!('code' in subject)) {
+                if (subject.choice.includes('tv') || subject.choice.includes('core')) {
+                    return subject.credits ? Number(subject.credits) : 0;
+                }
                 const selected = selectedChoices[subject.choice] ?? new Set();
                 return [...selected].reduce((sum, subjectCode) => {
                     const course = processedSubjects[subjectCode];
