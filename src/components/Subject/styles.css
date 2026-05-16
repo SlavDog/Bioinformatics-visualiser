@@ -108,7 +108,7 @@
     text-decoration: none;
 }
 
-.subjectName:hover {
+.subject:not(.subjectTypechoice) .subjectName:hover {
     text-decoration: underline;
 }
 
