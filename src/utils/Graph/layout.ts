@@ -16,8 +16,6 @@ import {
 /** Maximum number of attempts to find a valid position for a subject */
 const MAX_POSITION_ATTEMPTS = 20;
 
-// ─── Public API ──────────────────────────────────────────────────────────────
-
 /**
  * Main entry point for the layout calculation.
  * Converts a study plan structure into specific pixel coordinates for rendering.
@@ -243,8 +241,6 @@ export function getAllOrGatesPositions(
         });
 }
 
-// ─── Layout helpers ───────────────────────────────────────────────────────────
-
 /**
  * Search strategy to find a valid coordinate. It attempts different Y indices
  * until the node and its subtree can be placed without overlapping existing elements.
@@ -438,8 +434,6 @@ function getRealPositionsAndBoundaries(
     return [realPositions, maxX, maxY];
 }
 
-// ─── Predicates ───────────────────────────────────────────────────────────────
-
 /** Checks if a subject is already placed in the grid. */
 function isAlreadyPlaced(
     code: string,
@@ -508,8 +502,6 @@ function hasOrGate(
 
     return hasGroups && hasMultipleVisiblePredsInGroup;
 }
-
-// ─── Utilities ───────────────────────────────────────────────────────────
 
 /** Normalizes the subject code, handling both direct codes and choice/elective blocks. */
 function getSubjectCode(s: OrderSubject): string {
