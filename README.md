@@ -1,24 +1,36 @@
-# Vizualizace doporučeného průchodu studiem Bioinformatiky
+# Recommended Study Path Visualization for Bioinformatics
 
-Aplikace pro vizualizaci doporučeného průchodu studiem vytvořená v Reactu.
+A React-based web application designed to visualize recommended study paths.
 
-**[Vyzkoušej si aplikaci online](https://slavdog.github.io/Bioinformatics-visualiser/)**
+This project was developed by Leoš Hampl as a Bachelor's thesis at Masaryk University in Brno. The primary goal was to create an interactive tool for visualizing recommended study paths, helping students better understand their academic options and simplifying curriculum planning.
 
-## 🚀 O projektu
+**[Try the application online](https://slavdog.github.io/Bioinformatics-visualiser/)**
 
-Tento projekt vznikl jako bakalářská práce na Masarykově univerzitě v Brně. Cílem bylo vytvořit nástroj pro vizualizaci doporučených průchodů studiem, který by pomohl studentům lépe porozumět svým možnostem a usnadnil plánování studia.
+## ✅ Requirements
 
-## 📦 Instalace
+### Hardware & Software Requirements
 
-Jak projekt spustit lokálně:
+- **For Users (Web Browser):** Any modern web browser.
+- **For Developers (Local Build):**
+    - **Node.js** (v18.0.0 or higher recommended)
+    - **npm**
+
+### Internet Connection
+
+- **Required** for the initial installation of dependencies (`npm install`).
+- **Required** for browsing the online deployment on GitHub Pages.
+
+## 📦 Installation
+
+How to run the project locally:
 
 ```bash
-# Naklonuj repozitář
+# Clone the repository
 git clone https://github.com/SlavDog/Bioinformatics-visualiser
 
-# Nainstaluj závislosti
+# Install dependencies
 npm install
 
-# Spusť vývojový server
+# Start the development server
 npm run dev
 ```
