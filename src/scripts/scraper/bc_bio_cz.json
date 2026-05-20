@@ -1,0 +1,266 @@
+{
+    "nameCZ": "Bioinformatika",
+    "nameEN": "Bioinformatics",
+    "type": "bc",
+    "garantuco": "3159",
+    "garant": "doc. RNDr. David Šafránek, Ph.D.",
+    "lang": "CZ",
+    "descCZ": "Program je určen pro studenty, kteří chtějí získat základní aplikované znalosti v  mezioborové oblasti bioinformatiky, tj. seznámit se s podstatou a povahou biologických a biochemických informací a naučit se efektivně vytvářet a používat vhodné informační technologie pro řešení problémů souvisejících se zpracováním a analýzou biologických hypotéz a souvisejících experimentálních dat. Vyjma základní orientace v mezioborové problematice získají posluchači znalosti a praktické dovednosti, které mohou použít bezprostředně po nástupu do praxe. V rámci povinně volitelných předmětů nabízí studijní program možnost zaměření studia na vybrané specializované oblasti bioinformatiky a výpočetní systémové biologie, jako jsou například modely komplexních biologických procesů, zpracování a analýza biologických sekvencí nebo počítačové modelování molekulárních struktur.",
+    "gradCZ": "Absolventi mohou po ukončení studijního programu nastoupit do praxe jako absolventi bakalářského programu s možností zvyšování kvalifikace a prohloubení konkrétních profesních znalostí realizované podle potřeb zaměstnavatele. Očekávanou možností je pokračování v navazujícím magisterském programu Bioinformatika, který je organizován Přírodovědeckou fakultou ve spolupráci s Fakultou informatiky a tím získat hlubší znalosti a dovednosti v některé z mezioborových specializací programu. Další možností je pokračování ve studiu v některém z vhodných magisterských programů jiného zaměření  vyučovaných na Přírodovědecké fakultě nebo Fakultě informatiky.",
+    "descEN": "English description paragraph",
+    "gradEN": "English graduate paragraph",
+    "reqs": ["TXT_180KR", "TXT_BACHELOR", "TXT_ALLCOURSESZAM"],
+    "base": [
+        { "code": "IB000ext" },
+        { "code": "IB113" },
+        { "code": "IV107" },
+        { "code": "IV109" },
+        { "code": "IV114" },
+        { "code": "MB141" },
+        { "code": "MB142" },
+        { "code": "MB143" },
+        { "code": "PA052" },
+        { "code": "PA055" },
+        { "code": "PB001" },
+        { "code": "PB007" },
+        { "code": "PB050" },
+        { "code": "PB051" },
+        { "code": "PB153" },
+        { "code": "PB168" },
+        { "code": "PB176" },
+        { "code": "PV225" },
+        { "code": "VB001" },
+        { "code": "PřF:Bi4020" },
+        { "code": "PřF:C2131" },
+        { "code": "PřF:C2132" },
+        { "code": "PřF:C2133" },
+        { "code": "PřF:C2144" },
+        { "code": "PřF:C3180" },
+        { "code": "PřF:C3181" },
+        { "code": "PřF:C3210" },
+        { "choice": "naval" },
+        { "choice": "unix" },
+        { "choice": "legal" },
+        { "choice": "styl" },
+        { "choice": "lang" },
+        { "choice": "core" },
+        { "choice": "tv" },
+        { "code": "SBPrip" },
+        { "code": "SBAPR", "credits": 10 },
+        { "code": "SOBHA" },
+        { "code": "SZB" }
+    ],
+    "choices": {
+        "lang": {
+            "type": "0:3",
+            "list": ["VB035", "VB036", "VV064"],
+            "refnCZ": "Angličtina",
+            "refnEN": "English"
+        },
+        "styl": {
+            "type": "1:0",
+            "list": ["VB000", "VB000Eng", "PB029"],
+            "refnCZ": "Sazba a akademické psaní",
+            "refnEN": "Typesetting and academic writing"
+        },
+        "core": {
+            "type": "0:9",
+            "list": [
+                {
+                    "code": "*:CORE*",
+                    "nazevCZ": "Předměty s prefixem CORE",
+                    "nazevEN": "Courses with prefix CORE",
+                    "credits": 3
+                }
+            ],
+            "refnCZ": "Společenskovědní a přírodovědní rozhled",
+            "refnEN": "Social science, natural sciences, and humanities background",
+            "credits": 9
+        },
+        "tv": {
+            "type": "0:2",
+            "list": [
+                {
+                    "code": "FSpS:p9*",
+                    "nazevCZ": "Předměty povinné tělesné výchovy",
+                    "nazevEN": "Courses for compulsory physical education",
+                    "credits": 1
+                }
+            ],
+            "refnCZ": "Tělesná výchova",
+            "refnEN": "Physical education",
+            "credits": 2
+        },
+        "naval": {
+            "type": "1:0",
+            "list": ["IB114", "PřF:C2142"],
+            "refnCZ": "Návrh algoritmů",
+            "refnEN": "Design of algorithms"
+        },
+        "unix": {
+            "type": "1:0",
+            "list": ["PV004", "PřF:C2110"],
+            "refnCZ": "Práce s operačním systémem UNIX",
+            "refnEN": "Work with unix-based systems"
+        },
+        "legal": {
+            "type": "1:0",
+            "list": ["PV119", "VV076"],
+            "refnCZ": "Právní a etické aspekty",
+            "refnEN": "Legal and ethical aspects"
+        },
+        "vypmet": {
+            "type": "2:0",
+            "list": ["IB031", "PB016", "MA018"],
+            "refnCZ": "Výpočetní metody",
+            "refnEN": "Computational methods"
+        },
+        "poctech": {
+            "type": "0:3",
+            "list": ["PV003", "PV005", "PA039"],
+            "refnCZ": "Počítačové technologie",
+            "refnEN": "Computational technologies"
+        }
+    },
+    "focs": ["apl", "vyvoj"],
+    "spec": {
+        "apl": {
+            "nameCZ": "Aplikovaná bioinformatika",
+            "nameEN": "Applied Bioinformatics",
+            "descCZ": "Zaměření umožňuje získat orientaci v informacích o struktuře, aktivitě a reaktivitě biomolekul a porozumění organizaci chemických a biologických dat.",
+            "descEN": "",
+            "base": [
+                { "code": "PřF:C9530" },
+                { "code": "PřF:C9531" },
+                { "code": "PřF:C2135" },
+                { "code": "PřF:C2150" },
+                { "code": "PřF:C2145" },
+                { "code": "PřF:C7170" },
+                { "code": "PřF:C9088" }
+            ],
+            "plan": {
+                "1": [
+                    { "code": "IB000ext" },
+                    { "code": "IB113" },
+                    { "code": "PA052" },
+                    { "code": "PB001" },
+                    { "code": "VB035" },
+                    { "code": "PřF:C3180" },
+                    { "code": "PřF:C3181" },
+                    { "choice": "tv", "credits": 1 }
+                ],
+                "2": [
+                    { "code": "MB141" },
+                    { "code": "PřF:C2142" },
+                    { "code": "PřF:C2143" },
+                    { "code": "PB051" },
+                    { "code": "PřF:C2131" },
+                    { "code": "PřF:C2132" },
+                    { "code": "PřF:C2144" },
+                    { "code": "VB036" },
+                    { "code": "VB001" }
+                ],
+                "3": [
+                    { "code": "IV107" },
+                    { "code": "MB142" },
+                    { "code": "PA055" },
+                    { "code": "PB168" },
+                    { "code": "PřF:C2110" },
+                    { "code": "PV225" },
+                    { "code": "PřF:C2133" },
+                    { "code": "PřF:C7170" },
+                    { "choice": "styl", "credits": 1 }
+                ],
+                "4": [
+                    { "code": "IV109" },
+                    { "code": "IV114" },
+                    { "code": "MB143" },
+                    { "code": "PB112" },
+                    { "code": "PB153" },
+                    { "code": "PV003" },
+                    { "code": "PřF:Bi4020" }
+                ],
+                "5": [
+                    { "code": "PB007" },
+                    { "code": "PB050" },
+                    { "code": "PřF:C2145" },
+                    { "code": "PřF:C3210" },
+                    { "code": "PřF:C9530" },
+                    { "code": "PřF:C9531" }
+                ],
+                "6": [
+                    { "code": "PB176" },
+                    { "code": "PřF:C2135" },
+                    { "code": "PřF:C2150" },
+                    { "code": "PřF:C9088" }
+                ]
+            }
+        },
+        "vyvoj": {
+            "nameCZ": "Vývoj bioinformatického software",
+            "nameEN": "Development off bioinformatics software",
+            "descCZ": "Zaměření poskytuje dovednosti nutné pro práci s technologiemi potřebnými pro návrh a vývoj bioinformatických softwarových nástrojů včetně metod strojového učení a umělé inteligence.",
+            "descEN": "",
+            "base": [
+                { "code": "PB112" },
+                { "code": "PB138" },
+                { "choice": "vypmet" },
+                { "choice": "poctech" }
+            ],
+            "plan": {
+                "1": [
+                    { "code": "IB000ext" },
+                    { "code": "IB113" },
+                    { "code": "PA052" },
+                    { "code": "PB001" },
+                    { "code": "VB035" },
+                    { "code": "PřF:C3180" },
+                    { "code": "PřF:C3181" },
+                    { "choice": "tv", "credits": 1 }
+                ],
+                "2": [
+                    { "code": "IB114" },
+                    { "code": "MB141" },
+                    { "code": "PV004" },
+                    { "code": "PB051" },
+                    { "code": "PřF:C2131" },
+                    { "code": "PřF:C2132" },
+                    { "code": "PřF:C2144" },
+                    { "code": "VB036" },
+                    { "code": "VB001" }
+                ],
+                "3": [
+                    { "code": "IV107" },
+                    { "code": "MB142" },
+                    { "code": "PA055" },
+                    { "code": "PB168" },
+                    { "code": "PV225" },
+                    { "code": "PřF:C2133" },
+                    { "choice": "styl" }
+                ],
+                "4": [
+                    { "code": "IV109" },
+                    { "code": "MB143" },
+                    { "code": "PřF:Bi4020" },
+                    { "code": "IV114" },
+                    { "code": "PB112" },
+                    { "code": "PB153" },
+                    { "code": "PA039" }
+                ],
+                "5": [
+                    { "code": "PB007" },
+                    { "code": "PB016" },
+                    { "code": "PB050" },
+                    { "code": "PV005" },
+                    { "code": "PřF:C3210" }
+                ],
+                "6": [
+                    { "code": "IB031" },
+                    { "code": "PB138" },
+                    { "code": "PB176" },
+                    { "code": "PřF:C2150" }
+                ]
+            }
+        }
+    }
+}
