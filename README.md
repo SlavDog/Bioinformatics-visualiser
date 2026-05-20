@@ -34,3 +34,7 @@ npm install
 # Start the development server
 npm run dev
 ```
+
+## Dataset & Testing Files
+
+The data directory includes processed_data.json, which serves as the primary source for the live visualization. Additionally, it contains smaller JSON files that were utilized as simplified configurations for testing of the visualization algorithm and user interface components during development.
