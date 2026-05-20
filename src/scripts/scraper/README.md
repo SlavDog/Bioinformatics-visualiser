@@ -1,19 +1,30 @@
 # Scraper
 
-Stahuje data o předmětech z IS MUNI a generuje `processed_data.json`.
+This script downloads course data from IS MUNI and generates `processed_data.json` based on the provided input.
 
-## Instalace
+## Installation
 
+```bash
 pip install -r requirements.txt
+```
 
-## Použití
+## Usage
 
+```bash
 python scraper.py
+```
 
-## Vstup
+## Configuration
 
-`bc_bio_cz.json` — seznam předmětů a specializací
+If needed, you can modify the input and output file paths directly in the main function of scraper.py:
 
-## Výstup
+- Input file: Change the filename variable that currently points to bc_bio_cz.json.
+- Output file: Change the destination path for the generated JSON file (defaults to ../src/data/processed_data.json).
 
-`../src/data/final_tree.json`
+## Input
+
+bc_bio_cz.json — A file containing the list of courses and specializations.
+
+## Output
+
+../src/data/processed_data.json — The structured output data used by the visualization.
