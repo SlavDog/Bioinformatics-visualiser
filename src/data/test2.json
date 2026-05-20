@@ -1,0 +1,409 @@
+{
+    "details": {
+        "CS101": {
+            "name": "Úvod do programování",
+            "faculty": "FI",
+            "successors": [
+                { "code": "CS102", "groups": [], "by_prerequisites": true },
+                { "code": "CS103", "groups": [], "by_prerequisites": true },
+                { "code": "MATH101", "groups": [], "by_prerequisites": true }
+            ],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 5,
+            "link": "/predmet/fi/CS101",
+            "type": "MA"
+        },
+        "CS102": {
+            "name": "Objektově orientované programování",
+            "faculty": "FI",
+            "successors": [
+                { "code": "CS201", "groups": [], "by_prerequisites": true },
+                { "code": "CS202", "groups": [], "by_prerequisites": true }
+            ],
+            "language": "CZE",
+            "predecessors": [
+                { "code": "CS101", "groups": [], "by_prerequisites": true },
+                { "code": "MATH101", "groups": [], "by_prerequisites": true }
+            ],
+            "completion": "zk",
+            "credits": 6,
+            "link": "/predmet/fi/CS102",
+            "type": "MA"
+        },
+        "CS103": {
+            "name": "Algoritmizace I",
+            "faculty": "FI",
+            "successors": [
+                { "code": "CS201", "groups": [], "by_prerequisites": true },
+                { "code": "CS203", "groups": [], "by_prerequisites": true }
+            ],
+            "language": "CZE",
+            "predecessors": [{ "code": "CS101", "groups": [], "by_prerequisites": true }],
+            "completion": "zk",
+            "credits": 5,
+            "link": "/predmet/fi/CS103",
+            "type": "MA"
+        },
+        "CS201": {
+            "name": "Algoritmizace II",
+            "faculty": "FI",
+            "successors": [
+                { "code": "CS301", "groups": [], "by_prerequisites": true },
+                { "code": "CS302", "groups": [], "by_prerequisites": true },
+                {
+                    "code": "CS303",
+                    "groups": [["CS301", "CS302", "CS303"]],
+                    "by_prerequisites": true
+                }
+            ],
+            "language": "CZE",
+            "predecessors": [
+                { "code": "CS102", "groups": [], "by_prerequisites": true },
+                { "code": "CS103", "groups": [], "by_prerequisites": true }
+            ],
+            "completion": "zk",
+            "credits": 7,
+            "link": "/predmet/fi/CS201",
+            "type": "MA"
+        },
+        "CS202": {
+            "name": "Databázové systémy",
+            "faculty": "FI",
+            "successors": [
+                { "code": "CS304", "groups": [], "by_prerequisites": true },
+                { "code": "CS305", "groups": [], "by_prerequisites": true }
+            ],
+            "language": "CZE",
+            "predecessors": [{ "code": "CS102", "groups": [], "by_prerequisites": true }],
+            "completion": "zk",
+            "credits": 6,
+            "link": "/predmet/fi/CS202",
+            "type": "MA"
+        },
+        "CS203": {
+            "name": "Počítačové sítě I",
+            "faculty": "FI",
+            "successors": [
+                { "code": "CS306", "groups": [], "by_prerequisites": true },
+                { "code": "CS307", "groups": [], "by_prerequisites": true }
+            ],
+            "language": "CZE",
+            "predecessors": [{ "code": "CS103", "groups": [], "by_prerequisites": true }],
+            "completion": "zk",
+            "credits": 5,
+            "link": "/predmet/fi/CS203",
+            "type": "MA"
+        },
+        "CS301": {
+            "name": "Kompilátory",
+            "faculty": "FI",
+            "successors": [{ "code": "CS401", "groups": [], "by_prerequisites": true }],
+            "language": "CZE",
+            "predecessors": [
+                { "code": "CS201", "groups": [], "by_prerequisites": true },
+                { "code": "CS203", "groups": [], "by_prerequisites": true }
+            ],
+            "completion": "zk",
+            "credits": 6,
+            "link": "/predmet/fi/CS301",
+            "type": "MA"
+        },
+        "CS302": {
+            "name": "Umělá inteligence",
+            "faculty": "FI",
+            "successors": [
+                { "code": "CS402", "groups": [], "by_prerequisites": true },
+                { "code": "CS403", "groups": [], "by_prerequisites": true }
+            ],
+            "language": "CZE",
+            "predecessors": [
+                { "code": "CS201", "groups": [], "by_prerequisites": true },
+                { "code": "MATH201", "groups": [], "by_prerequisites": true }
+            ],
+            "completion": "zk",
+            "credits": 7,
+            "link": "/predmet/fi/CS302",
+            "type": "MA"
+        },
+        "CS303": {
+            "name": "Počítačová grafika",
+            "faculty": "FI",
+            "successors": [{ "code": "CS404", "groups": [], "by_prerequisites": true }],
+            "language": "CZE",
+            "predecessors": [
+                {
+                    "code": "CS201",
+                    "groups": [["CS301", "CS302", "CS303"]],
+                    "by_prerequisites": true
+                }
+            ],
+            "completion": "zk",
+            "credits": 6,
+            "link": "/predmet/fi/CS303",
+            "type": "MA"
+        },
+        "CS304": {
+            "name": "Pokročilé databáze",
+            "faculty": "FI",
+            "successors": [{ "code": "CS405", "groups": [], "by_prerequisites": true }],
+            "language": "CZE",
+            "predecessors": [{ "code": "CS202", "groups": [], "by_prerequisites": true }],
+            "completion": "zk",
+            "credits": 5,
+            "link": "/predmet/fi/CS304",
+            "type": "MA"
+        },
+        "CS305": {
+            "name": "Webové technologie",
+            "faculty": "FI",
+            "successors": [{ "code": "CS405", "groups": [], "by_prerequisites": true }],
+            "language": "CZE",
+            "predecessors": [{ "code": "CS202", "groups": [], "by_prerequisites": true }],
+            "completion": "z",
+            "credits": 4,
+            "link": "/predmet/fi/CS305",
+            "type": "MA"
+        },
+        "CS306": {
+            "name": "Počítačové sítě II",
+            "faculty": "FI",
+            "successors": [{ "code": "CS406", "groups": [], "by_prerequisites": true }],
+            "language": "CZE",
+            "predecessors": [{ "code": "CS203", "groups": [], "by_prerequisites": true }],
+            "completion": "zk",
+            "credits": 6,
+            "link": "/predmet/fi/CS306",
+            "type": "MA"
+        },
+        "CS307": {
+            "name": "Kybernetická bezpečnost",
+            "faculty": "FI",
+            "successors": [{ "code": "CS406", "groups": [], "by_prerequisites": true }],
+            "language": "CZE",
+            "predecessors": [{ "code": "CS203", "groups": [], "by_prerequisites": true }],
+            "completion": "zk",
+            "credits": 6,
+            "link": "/predmet/fi/CS307",
+            "type": "MA"
+        },
+        "CS401": {
+            "name": "Semestrální projekt I",
+            "faculty": "FI",
+            "successors": [{ "code": "CS499", "groups": [], "by_prerequisites": true }],
+            "language": "CZE",
+            "predecessors": [{ "code": "CS301", "groups": [], "by_prerequisites": true }],
+            "completion": "z",
+            "credits": 8,
+            "link": "/predmet/fi/CS401",
+            "type": "OT"
+        },
+        "CS402": {
+            "name": "Strojové učení",
+            "faculty": "FI",
+            "successors": [{ "code": "CS499", "groups": [], "by_prerequisites": true }],
+            "language": "CZE",
+            "predecessors": [{ "code": "CS302", "groups": [], "by_prerequisites": true }],
+            "completion": "zk",
+            "credits": 7,
+            "link": "/predmet/fi/CS402",
+            "type": "MA"
+        },
+        "CS403": {
+            "name": "Zpracování přirozeného jazyka",
+            "faculty": "FI",
+            "successors": [{ "code": "CS499", "groups": [], "by_prerequisites": true }],
+            "language": "CZE",
+            "predecessors": [{ "code": "CS302", "groups": [], "by_prerequisites": true }],
+            "completion": "zk",
+            "credits": 6,
+            "link": "/predmet/fi/CS403",
+            "type": "MA"
+        },
+        "CS404": {
+            "name": "Pokročilá grafika",
+            "faculty": "FI",
+            "successors": [{ "code": "CS499", "groups": [], "by_prerequisites": true }],
+            "language": "CZE",
+            "predecessors": [{ "code": "CS303", "groups": [], "by_prerequisites": true }],
+            "completion": "zk",
+            "credits": 6,
+            "link": "/predmet/fi/CS404",
+            "type": "MA"
+        },
+        "CS405": {
+            "name": "Full-stack vývoj",
+            "faculty": "FI",
+            "successors": [{ "code": "CS499", "groups": [], "by_prerequisites": true }],
+            "language": "CZE",
+            "predecessors": [
+                { "code": "CS304", "groups": [], "by_prerequisites": true },
+                { "code": "CS305", "groups": [], "by_prerequisites": true }
+            ],
+            "completion": "z",
+            "credits": 8,
+            "link": "/predmet/fi/CS405",
+            "type": "OT"
+        },
+        "CS406": {
+            "name": "Síťová bezpečnost",
+            "faculty": "FI",
+            "successors": [{ "code": "CS499", "groups": [], "by_prerequisites": true }],
+            "language": "CZE",
+            "predecessors": [
+                { "code": "CS306", "groups": [], "by_prerequisites": true },
+                { "code": "CS307", "groups": [], "by_prerequisites": true }
+            ],
+            "completion": "zk",
+            "credits": 7,
+            "link": "/predmet/fi/CS406",
+            "type": "MA"
+        },
+        "CS499": {
+            "name": "Bakalářská práce",
+            "faculty": "FI",
+            "successors": [],
+            "language": "CZE",
+            "predecessors": [
+                { "code": "CS401", "groups": [], "by_prerequisites": true },
+                { "code": "CS402", "groups": [], "by_prerequisites": true },
+                { "code": "CS403", "groups": [], "by_prerequisites": true },
+                { "code": "CS404", "groups": [], "by_prerequisites": true },
+                { "code": "CS405", "groups": [], "by_prerequisites": true },
+                { "code": "CS406", "groups": [], "by_prerequisites": true }
+            ],
+            "completion": "z",
+            "credits": 15,
+            "link": "/predmet/fi/CS499",
+            "type": "TH"
+        },
+        "MATH101": {
+            "name": "Lineární algebra",
+            "faculty": "FI",
+            "successors": [
+                { "code": "CS102", "groups": [], "by_prerequisites": true },
+                { "code": "MATH201", "groups": [], "by_prerequisites": true }
+            ],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 5,
+            "link": "/predmet/fi/MATH101",
+            "type": "MA"
+        },
+        "MATH201": {
+            "name": "Pravděpodobnost a statistika",
+            "faculty": "FI",
+            "successors": [
+                { "code": "CS302", "groups": [], "by_prerequisites": true },
+                { "code": "MATH301", "groups": [], "by_prerequisites": true }
+            ],
+            "language": "CZE",
+            "predecessors": [
+                { "code": "CS101", "groups": [], "by_prerequisites": true },
+                { "code": "MATH101", "groups": [], "by_prerequisites": true }
+            ],
+            "completion": "zk",
+            "credits": 6,
+            "link": "/predmet/fi/MATH201",
+            "type": "MA"
+        },
+        "MATH301": {
+            "name": "Numerické metody",
+            "faculty": "FI",
+            "successors": [{ "code": "CS402", "groups": [], "by_prerequisites": true }],
+            "language": "CZE",
+            "predecessors": [{ "code": "MATH201", "groups": [], "by_prerequisites": true }],
+            "completion": "zk",
+            "credits": 5,
+            "link": "/predmet/fi/MATH301",
+            "type": "MA"
+        },
+        "ELEC101": {
+            "name": "Digitální elektronika",
+            "faculty": "FEKT",
+            "successors": [
+                { "code": "CS203", "groups": [], "by_prerequisites": true },
+                { "code": "CS306", "groups": [], "by_prerequisites": true }
+            ],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 5,
+            "link": "/predmet/fekt/ELEC101",
+            "type": "MA"
+        }
+    },
+    "spec": {
+        "cs_study_plan": {
+            "nameCZ": "Studijní plán - Computer Science",
+            "nameEN": "Study Plan - Computer Science",
+            "descCZ": "Komplexní studijní plán s větvením a specializacemi",
+            "descEN": "Complex study plan with branching and specializations",
+            "base": [],
+            "plan": {
+                "1": [{ "code": "CS101" }, { "code": "MATH101" }, { "code": "ELEC101" }],
+                "2": [{ "code": "CS102" }, { "code": "CS103" }, { "code": "MATH201" }],
+                "3": [
+                    { "code": "CS201" },
+                    { "code": "CS202" },
+                    { "code": "CS203" },
+                    { "code": "MATH301" }
+                ],
+                "4": [
+                    { "choice": "specialization-choice", "credits": "6" },
+                    { "code": "CS304" },
+                    { "code": "CS305" },
+                    { "code": "CS306" },
+                    { "code": "CS307" }
+                ],
+                "5": [
+                    { "code": "CS401" },
+                    { "code": "CS402" },
+                    { "code": "CS403" },
+                    { "code": "CS404" },
+                    { "code": "CS405" },
+                    { "code": "CS406" }
+                ],
+                "6": [{ "code": "CS499" }]
+            }
+        }
+    },
+    "choices": {
+        "track-choice": {
+            "type": "0:1",
+            "list": ["CS301", "CS302", "CS303", "CS304"],
+            "refnCZ": "Volba směru studia",
+            "refnEN": "Study Track Choice"
+        },
+        "specialization-choice": {
+            "type": "1:2",
+            "list": ["CS301", "CS302", "CS303"],
+            "refnCZ": "Volba specializace (1-2 předměty)",
+            "refnEN": "Specialization Choice (1-2 subjects)"
+        }
+    },
+    "substitutions": {
+        "advanced_math": {
+            "nameCZ": "Pokročilá matematika",
+            "removes": ["MB141", "MB142", "MB143"],
+            "adds": [
+                { "code": "MB151", "semester": 2 },
+                { "code": "MB152", "semester": 3 },
+                { "code": "MB153", "semester": 4 },
+                { "code": "MB154", "semester": 3 }
+            ]
+        },
+        "advanced_inf": {
+            "nameCZ": "Pokročilá informatika",
+            "removes": ["MB141", "MB142", "MB143"],
+            "adds": [
+                { "code": "MB151", "semester": 2 },
+                { "code": "MB152", "semester": 3 },
+                { "code": "MB153", "semester": 4 },
+                { "code": "MB154", "semester": 3 }
+            ]
+        }
+    }
+}

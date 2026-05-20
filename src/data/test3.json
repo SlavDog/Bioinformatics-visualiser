@@ -1,0 +1,188 @@
+{
+    "details": {
+        "CS101": {
+            "name": "Předmět 1",
+            "faculty": "FI",
+            "successors": [{ "code": "CS106", "groups": [], "by_prerequisites": true }],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 5,
+            "link": "/predmet/fi/CS101",
+            "type": "MA"
+        },
+        "CS111": {
+            "name": "Předmět 11",
+            "faculty": "FI",
+            "successors": [{ "code": "CS106", "groups": [], "by_prerequisites": true }],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 5,
+            "link": "/predmet/fi/CS101",
+            "type": "MA"
+        },
+        "CS112": {
+            "name": "Předmět 12",
+            "faculty": "FI",
+            "successors": [{ "code": "CS106", "groups": [], "by_prerequisites": true }],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 5,
+            "link": "/predmet/fi/CS101",
+            "type": "MA"
+        },
+        "CS113": {
+            "name": "Předmět 13",
+            "faculty": "FI",
+            "successors": [{ "code": "CS106", "groups": [], "by_prerequisites": true }],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 5,
+            "link": "/predmet/fi/CS101",
+            "type": "MA"
+        },
+        "CS114": {
+            "name": "Předmět 14",
+            "faculty": "FI",
+            "successors": [{ "code": "CS106", "groups": [], "by_prerequisites": true }],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 5,
+            "link": "/predmet/fi/CS101",
+            "type": "MA"
+        },
+        "CS115": {
+            "name": "Předmět 15",
+            "faculty": "FI",
+            "successors": [{ "code": "CS106", "groups": [], "by_prerequisites": true }],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 5,
+            "link": "/predmet/fi/CS101",
+            "type": "MA"
+        },
+        "CS102": {
+            "name": "Předmět 1",
+            "faculty": "FI",
+            "successors": [{ "code": "CS107", "groups": [], "by_prerequisites": true }],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 5,
+            "link": "/predmet/fi/CS102",
+            "type": "MA"
+        },
+        "CS103": {
+            "name": "Předmět 3",
+            "faculty": "FI",
+            "successors": [{ "code": "CS107", "groups": [], "by_prerequisites": true }],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 5,
+            "link": "/predmet/fi/CS103",
+            "type": "MA"
+        },
+        "CS104": {
+            "name": "Předmět 4",
+            "faculty": "FI",
+            "successors": [{ "code": "CS107", "groups": [], "by_prerequisites": true }],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 5,
+            "link": "/predmet/fi/CS104",
+            "type": "MA"
+        },
+        "CS105": {
+            "name": "Předmět 5",
+            "faculty": "FI",
+            "successors": [{ "code": "CS107", "groups": [], "by_prerequisites": true }],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 5,
+            "link": "/predmet/fi/CS105",
+            "type": "MA"
+        },
+        "CS106": {
+            "name": "Předmět 6",
+            "faculty": "FI",
+            "successors": [{ "code": "CS107", "groups": [], "by_prerequisites": true }],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 5,
+            "link": "/predmet/fi/CS106",
+            "type": "MA"
+        },
+        "CS107": {
+            "name": "Předmět 7",
+            "faculty": "FI",
+            "successors": [],
+            "language": "CZE",
+            "predecessors": [
+                { "code": "CS102", "groups": [], "by_prerequisites": true },
+                { "code": "CS103", "groups": [], "by_prerequisites": true },
+                { "code": "CS104", "groups": [], "by_prerequisites": true },
+                { "code": "CS105", "groups": [], "by_prerequisites": true },
+                { "code": "CS106", "groups": [], "by_prerequisites": true }
+            ],
+            "completion": "zk",
+            "credits": 5,
+            "link": "/predmet/fi/CS107",
+            "type": "MA"
+        }
+    },
+    "spec": {
+        "cs_study_plan": {
+            "nameCZ": "Studijní plán - Computer Science",
+            "nameEN": "Study Plan - Computer Science",
+            "descCZ": "Komplexní studijní plán s větvením a specializacemi",
+            "descEN": "Complex study plan with branching and specializations",
+            "base": [],
+            "plan": {
+                "1": [
+                    { "code": "CS102" },
+                    { "code": "CS103" },
+                    { "code": "CS104" },
+                    { "code": "CS105" },
+                    { "code": "CS106" }
+                ],
+                "2": [{ "code": "CS107" }],
+                "3": [],
+                "4": [],
+                "5": [],
+                "6": []
+            }
+        }
+    },
+    "choices": {},
+    "substitutions": {
+        "advanced_math": {
+            "nameCZ": "Pokročilá matematika",
+            "removes": ["MB141", "MB142", "MB143"],
+            "adds": [
+                { "code": "MB151", "semester": 2 },
+                { "code": "MB152", "semester": 3 },
+                { "code": "MB153", "semester": 4 },
+                { "code": "MB154", "semester": 3 }
+            ]
+        },
+        "advanced_inf": {
+            "nameCZ": "Pokročilá informatika",
+            "removes": ["MB141", "MB142", "MB143"],
+            "adds": [
+                { "code": "MB151", "semester": 2 },
+                { "code": "MB152", "semester": 3 },
+                { "code": "MB153", "semester": 4 },
+                { "code": "MB154", "semester": 3 }
+            ]
+        }
+    }
+}

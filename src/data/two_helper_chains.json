@@ -1,0 +1,114 @@
+{
+    "details": {
+        "START1": {
+            "name": "První startovní předmět",
+            "faculty": "FI",
+            "successors": [
+                {
+                    "code": "CIL_SPOLECNA",
+                    "groups": [["START1", "START2"]],
+                    "by_prerequisites": true
+                }
+            ],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 4,
+            "link": "/predmet/fi/START1",
+            "semester": 1,
+            "type": "IN"
+        },
+        "START2": {
+            "name": "Druhý startovní předmět",
+            "faculty": "FI",
+            "successors": [
+                {
+                    "code": "CIL_SPOLECNA",
+                    "groups": [["START1", "START2"]],
+                    "by_prerequisites": true
+                }
+            ],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 4,
+            "link": "/predmet/fi/START2",
+            "semester": 2,
+            "type": "IN"
+        },
+        "CIL_SPOLECNA": {
+            "name": "Společný cíl",
+            "faculty": "FI",
+            "successors": [],
+            "language": "CZE",
+            "predecessors": [
+                {
+                    "code": "START1",
+                    "groups": [["START1", "START2"]],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "START2",
+                    "groups": [["START1", "START2"]],
+                    "by_prerequisites": true
+                }
+            ],
+            "completion": "zk",
+            "credits": 6,
+            "link": "/predmet/fi/CIL_SPOLECNA",
+            "semester": 5,
+            "type": "IN"
+        }
+    },
+    "spec": {
+        "test_obor": {
+            "nameCZ": "Testovací zaměření",
+            "nameEN": "Test specialization",
+            "descCZ": "Testování zarovnání offsetů pro více cest do stejného cíle.",
+            "descEN": "Testing offset alignment for multiple paths to the same target.",
+            "base": [],
+            "plan": {
+                "1": [
+                    { "code": "START1" }
+                ],
+                "2": [
+                    { "code": "START2" }
+                ],
+                "3": [],
+                "4": [],
+                "5": [
+                    { "code": "CIL_SPOLECNA" }
+                ]
+            }
+        }
+    },
+    "choices": {},
+    "substitutions": {
+        "advanced_math": {
+            "nameCZ": "Pokročilá matematika",
+            "removes": [
+                "MB141",
+                "MB142",
+                "MB143"
+            ],
+            "adds": [
+                {
+                    "code": "MB151",
+                    "semester": 2
+                },
+                {
+                    "code": "MB152",
+                    "semester": 3
+                },
+                {
+                    "code": "MB153",
+                    "semester": 4
+                },
+                {
+                    "code": "MB154",
+                    "semester": 3
+                }
+            ]
+        }
+    }
+}

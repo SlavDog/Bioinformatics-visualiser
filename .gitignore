@@ -1,7 +1,4 @@
-*.json
-!processed_data.json
-!package.json
-!package-lock.json
+tsconfig.json
 
 # Logs
 logs

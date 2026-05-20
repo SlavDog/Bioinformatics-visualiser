@@ -1,0 +1,2163 @@
+{
+    "details": {
+        "IB002": {
+            "name": "Algoritmy a datové struktury I",
+            "faculty": "FI",
+            "successors": [
+                {
+                    "code": "IV003",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "MA015",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "IA101",
+                    "groups": [],
+                    "by_prerequisites": false
+                }
+            ],
+            "language": "CZE",
+            "predecessors": [
+                {
+                    "code": "IB015",
+                    "groups": [["IB111", "IB015"]],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "IB111",
+                    "groups": [["IB111", "IB015"]],
+                    "by_prerequisites": true
+                }
+            ],
+            "completion": "zk",
+            "credits": 6,
+            "link": "/predmet/fi/IB002",
+
+            "type": "IN"
+        },
+        "IB000": {
+            "name": "Matematické základy informatiky",
+            "faculty": "FI",
+            "successors": [
+                {
+                    "code": "IB005",
+                    "groups": [],
+                    "by_prerequisites": true
+                }
+            ],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 6,
+            "link": "/predmet/fi/IB000",
+
+            "type": "IN"
+        },
+        "IB005": {
+            "name": "Formální jazyky a automaty",
+            "faculty": "FI",
+            "successors": [
+                {
+                    "code": "IB107",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "IA006",
+                    "groups": [],
+                    "by_prerequisites": false
+                }
+            ],
+            "language": "CZE",
+            "predecessors": [
+                {
+                    "code": "IB000",
+                    "groups": [],
+                    "by_prerequisites": true
+                }
+            ],
+            "completion": "zk",
+            "credits": 6,
+            "link": "/predmet/fi/IB005",
+
+            "type": "IN"
+        },
+        "IB015": {
+            "name": "Neimperativní programování",
+            "faculty": "FI",
+            "successors": [
+                {
+                    "code": "IB002",
+                    "groups": [["IB111", "IB015"]],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "IB016",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "IA014",
+                    "groups": [],
+                    "by_prerequisites": false
+                }
+            ],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 6,
+            "link": "/predmet/fi/IB015",
+
+            "type": "IN"
+        },
+        "IB111": {
+            "name": "Základy programování",
+            "faculty": "FI",
+            "successors": [
+                {
+                    "code": "IB002",
+                    "groups": [["IB111", "IB015"]],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "IB114",
+                    "groups": [["IB111", "IB113"]],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "PB006",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "PB111",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "PB176",
+                    "groups": [["PB071", "PB006", "IB111", "PB111", "IB113"]],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "PV248",
+                    "groups": [],
+                    "by_prerequisites": false
+                }
+            ],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 7,
+            "link": "/predmet/fi/IB111",
+
+            "type": "IN"
+        },
+        "MB151": {
+            "name": "Lineární modely",
+            "faculty": "FI",
+            "successors": [
+                {
+                    "code": "MB143",
+                    "groups": [["MB142", "MB151", "MB152", "MB141"]],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "MB153",
+                    "groups": [["PŘF:M1100", "PŘF:M1110", "MB151", "MB152"]],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "MB154",
+                    "groups": [["PŘF:M1110", "PŘF:M1100", "MB151", "MB152"]],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "MV008",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "PV291",
+                    "groups": [],
+                    "by_prerequisites": true
+                }
+            ],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 5,
+            "link": "/predmet/fi/MB151",
+
+            "type": "MA"
+        },
+        "MB152": {
+            "name": "Diferenciální a integrální počet",
+            "faculty": "FI",
+            "successors": [
+                {
+                    "code": "MB143",
+                    "groups": [["MB142", "MB151", "MB152", "MB141"]],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "MB153",
+                    "groups": [["PŘF:M1100", "PŘF:M1110", "MB151", "MB152"]],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "MB154",
+                    "groups": [["PŘF:M1110", "PŘF:M1100", "MB151", "MB152"]],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "PV291",
+                    "groups": [],
+                    "by_prerequisites": true
+                }
+            ],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 5,
+            "link": "/predmet/fi/MB152",
+
+            "type": "MA"
+        },
+        "MB153": {
+            "name": "Statistika I",
+            "faculty": "FI",
+            "successors": [
+                {
+                    "code": "MA012",
+                    "groups": [],
+                    "by_prerequisites": false
+                }
+            ],
+            "language": "CZE",
+            "predecessors": [
+                {
+                    "code": "MB151",
+                    "groups": [["PŘF:M1100", "PŘF:M1110", "MB151", "MB152"]],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "MB152",
+                    "groups": [["PŘF:M1100", "PŘF:M1110", "MB151", "MB152"]],
+                    "by_prerequisites": true
+                }
+            ],
+            "completion": "zk",
+            "credits": 5,
+            "link": "/predmet/fi/MB153",
+
+            "type": "MA"
+        },
+        "MB154": {
+            "name": "Diskrétní matematika",
+            "faculty": "FI",
+            "successors": [],
+            "language": "CZE",
+            "predecessors": [
+                {
+                    "code": "MB151",
+                    "groups": [["PŘF:M1110", "PŘF:M1100", "MB151", "MB152"]],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "MB152",
+                    "groups": [["PŘF:M1110", "PŘF:M1100", "MB151", "MB152"]],
+                    "by_prerequisites": true
+                }
+            ],
+            "completion": "zk",
+            "credits": 5,
+            "link": "/predmet/fi/MB154",
+
+            "type": "MA"
+        },
+        "PB006": {
+            "name": "Principy programovacích jazyků a OOP",
+            "faculty": "FI",
+            "successors": [
+                {
+                    "code": "PB160",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "PB161",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "PB162",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "PB175",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "PB176",
+                    "groups": [["PB071", "PB006", "IB111", "PB111", "IB113"]],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "PB178",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "PV281",
+                    "groups": [],
+                    "by_prerequisites": true
+                }
+            ],
+            "language": "CZE",
+            "predecessors": [
+                {
+                    "code": "IB111",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "PB111",
+                    "groups": [],
+                    "by_prerequisites": true
+                }
+            ],
+            "completion": "zk",
+            "credits": 4,
+            "link": "/predmet/fi/PB006",
+
+            "type": "IN"
+        },
+        "PB016": {
+            "name": "Úvod do umělé inteligence",
+            "faculty": "FI",
+            "successors": [
+                {
+                    "code": "PA026",
+                    "groups": [["IV126", "PV021", "PB016", "PV056"]],
+                    "by_prerequisites": true
+                }
+            ],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 5,
+            "link": "/predmet/fi/PB016",
+
+            "type": "IN"
+        },
+        "PB111": {
+            "name": "Principy nízkoúrovňového programování",
+            "faculty": "FI",
+            "successors": [
+                {
+                    "code": "PB006",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "PB152cv",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "PB173",
+                    "groups": [["PB071", "PB111"]],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "PB176",
+                    "groups": [["PB071", "PB006", "IB111", "PB111", "IB113"]],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "PB161",
+                    "groups": [],
+                    "by_prerequisites": false
+                }
+            ],
+            "language": "CZE",
+            "predecessors": [
+                {
+                    "code": "IB111",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "PB151",
+                    "groups": [],
+                    "by_prerequisites": true
+                }
+            ],
+            "completion": "zk",
+            "credits": 6,
+            "link": "/predmet/fi/PB111",
+
+            "type": "IN"
+        },
+        "PB151": {
+            "name": "Výpočetní systémy",
+            "faculty": "FI",
+            "successors": [
+                {
+                    "code": "PB111",
+                    "groups": [],
+                    "by_prerequisites": true
+                }
+            ],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 5,
+            "link": "/predmet/fi/PB151",
+
+            "type": "IN"
+        },
+        "PB152": {
+            "name": "Operační systémy",
+            "faculty": "FI",
+            "successors": [
+                {
+                    "code": "PB152cv",
+                    "groups": [],
+                    "by_prerequisites": true
+                }
+            ],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "z",
+            "credits": 2,
+            "link": "/predmet/fi/PB152",
+
+            "type": "IN"
+        },
+        "PB152zk": {
+            "name": "Operační systémy - zkouška",
+            "faculty": "FI",
+            "successors": [],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 2,
+            "link": "/predmet/fi/PB152zk",
+
+            "type": "IN"
+        },
+        "PB154": {
+            "name": "Základy databázových systémů",
+            "faculty": "FI",
+            "successors": [
+                {
+                    "code": "PA195",
+                    "groups": [["PB154", "PB168"]],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "PA128",
+                    "groups": [],
+                    "by_prerequisites": false
+                },
+                {
+                    "code": "PA152",
+                    "groups": [],
+                    "by_prerequisites": false
+                },
+                {
+                    "code": "PV003",
+                    "groups": [],
+                    "by_prerequisites": false
+                }
+            ],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 5,
+            "link": "/predmet/fi/PB154",
+
+            "type": "IN"
+        },
+        "PB156": {
+            "name": "Počítačové sítě",
+            "faculty": "FI",
+            "successors": [
+                {
+                    "code": "PB177",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "PV233",
+                    "groups": [["PB156", "PV183"]],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "PV280",
+                    "groups": [["PB156", "PA159"]],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "PV297",
+                    "groups": [["PB156", "PB177"]],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "PA159",
+                    "groups": [],
+                    "by_prerequisites": false
+                }
+            ],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 4,
+            "link": "/predmet/fi/PB156",
+
+            "type": "IN"
+        },
+        "PV004": {
+            "name": "UNIX",
+            "faculty": "FI",
+            "successors": [
+                {
+                    "code": "PB177",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "PV280",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "PV297",
+                    "groups": [["PV004", "PB177"]],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "P065",
+                    "groups": [],
+                    "by_prerequisites": false
+                },
+                {
+                    "code": "P077",
+                    "groups": [],
+                    "by_prerequisites": false
+                },
+                {
+                    "code": "P090",
+                    "groups": [],
+                    "by_prerequisites": false
+                }
+            ],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 4,
+            "link": "/predmet/fi/PV004",
+
+            "type": "IN"
+        },
+        "PV080": {
+            "name": "Information Security and Cryptography",
+            "faculty": "FI",
+            "successors": [
+                {
+                    "code": "PV210",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "IA174",
+                    "groups": [],
+                    "by_prerequisites": false
+                },
+                {
+                    "code": "PV017",
+                    "groups": [],
+                    "by_prerequisites": false
+                },
+                {
+                    "code": "PV157",
+                    "groups": [],
+                    "by_prerequisites": false
+                },
+                {
+                    "code": "PV181",
+                    "groups": [],
+                    "by_prerequisites": false
+                }
+            ],
+            "language": "ENG",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 5,
+            "link": "/predmet/fi/PV080",
+
+            "type": "IN"
+        },
+        "VB001": {
+            "name": "English Exam",
+            "faculty": "FI",
+            "successors": [
+                {
+                    "code": "VV064",
+                    "groups": [["VB001", "PROG"]],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "VV070",
+                    "groups": [],
+                    "by_prerequisites": true
+                }
+            ],
+            "language": "ENG",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 1,
+            "link": "/predmet/fi/VB001",
+
+            "type": "OT"
+        },
+        "SBPrip": {
+            "name": "Opakování před SBZZ",
+            "faculty": "FI",
+            "successors": [],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "z",
+            "credits": 1,
+            "link": "/predmet/fi/SBPrip",
+
+            "type": "OT"
+        },
+        "SBAPR": {
+            "name": "Bakalářská práce",
+            "faculty": "FI",
+            "successors": [],
+            "language": "CZE",
+            "predecessors": [
+                {
+                    "code": "PB029",
+                    "groups": [],
+                    "by_prerequisites": false
+                }
+            ],
+            "completion": "z",
+            "credits": 10,
+            "link": "/predmet/fi/SBAPR",
+
+            "type": "OT"
+        },
+        "SOBHA": {
+            "name": "Obhajoba závěrečné práce",
+            "faculty": "FI",
+            "successors": [],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "SZk",
+            "credits": 0,
+            "link": "/predmet/fi/SOBHA",
+
+            "type": "OT"
+        },
+        "SZB": {
+            "name": "Státní zkouška (bakalářský studijní program)",
+            "faculty": "FI",
+            "successors": [],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "SZk",
+            "credits": 0,
+            "link": "/predmet/fi/SZB",
+
+            "type": "OT"
+        },
+        "IB107": {
+            "name": "Vyčíslitelnost a složitost",
+            "faculty": "FI",
+            "successors": [
+                {
+                    "code": "IA012",
+                    "groups": [],
+                    "by_prerequisites": false
+                }
+            ],
+            "language": "CZE",
+            "predecessors": [
+                {
+                    "code": "IB005",
+                    "groups": [],
+                    "by_prerequisites": true
+                }
+            ],
+            "completion": "zk",
+            "credits": 5,
+            "link": "/predmet/fi/IB107",
+
+            "type": "IN"
+        },
+        "IB031": {
+            "name": "Úvod do strojového učení",
+            "faculty": "FI",
+            "successors": [
+                {
+                    "code": "PA164",
+                    "groups": [],
+                    "by_prerequisites": false
+                },
+                {
+                    "code": "PV056",
+                    "groups": [],
+                    "by_prerequisites": false
+                }
+            ],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 5,
+            "link": "/predmet/fi/IB031",
+
+            "type": "IN"
+        },
+        "PB007": {
+            "name": "Software Engineering I",
+            "faculty": "FI",
+            "successors": [],
+            "language": "ENG",
+            "predecessors": [
+                {
+                    "code": "PB160",
+                    "groups": [["PB174", "PB160", "PB162", "PB161", "PV178", "PB112", "PB178"]],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "PB161",
+                    "groups": [["PB174", "PB160", "PB162", "PB161", "PV178", "PB112", "PB178"]],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "PB162",
+                    "groups": [["PB174", "PB160", "PB162", "PB161", "PV178", "PB112", "PB178"]],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "PB174",
+                    "groups": [["PB174", "PB160", "PB162", "PB161", "PV178", "PB112", "PB178"]],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "PB178",
+                    "groups": [["PB174", "PB160", "PB162", "PB161", "PV178", "PB112", "PB178"]],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "PB112",
+                    "groups": [["PB174", "PB160", "PB162", "PB161", "PV178", "PB112", "PB178"]],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "PB178",
+                    "groups": [["PB174", "PB160", "PB162", "PB161", "PV178", "PB112", "PB178"]],
+                    "by_prerequisites": true
+                }
+            ],
+            "completion": "zk",
+            "credits": 5,
+            "link": "/predmet/fi/PB007",
+
+            "type": "IN"
+        },
+        "PV170": {
+            "name": "Konstrukce digitálních systémů",
+            "faculty": "FI",
+            "successors": [
+                {
+                    "code": "PV171",
+                    "groups": [],
+                    "by_prerequisites": false
+                },
+                {
+                    "code": "PV172",
+                    "groups": [],
+                    "by_prerequisites": false
+                },
+                {
+                    "code": "PV191",
+                    "groups": [],
+                    "by_prerequisites": false
+                },
+                {
+                    "code": "PV198",
+                    "groups": [],
+                    "by_prerequisites": false
+                },
+                {
+                    "code": "PV200",
+                    "groups": [],
+                    "by_prerequisites": false
+                }
+            ],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 5,
+            "link": "/predmet/fi/PV170",
+
+            "type": "IN"
+        },
+        "PV065": {
+            "name": "UNIX -- programování a správa systému I",
+            "faculty": "FI",
+            "successors": [],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 4,
+            "link": "/predmet/fi/PV065",
+
+            "type": "IN"
+        },
+        "PB138": {
+            "name": "Základy webového vývoje a značkovacích jazyků",
+            "faculty": "FI",
+            "successors": [
+                {
+                    "code": "PV292",
+                    "groups": [
+                        ["SOUHLAS", "PB138", "PV168", "PV178", "PB162", "PA165", "PV256", "PB178"]
+                    ],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "PA165",
+                    "groups": [],
+                    "by_prerequisites": false
+                },
+                {
+                    "code": "PV030",
+                    "groups": [],
+                    "by_prerequisites": false
+                },
+                {
+                    "code": "PV113",
+                    "groups": [],
+                    "by_prerequisites": false
+                },
+                {
+                    "code": "PV226",
+                    "groups": [],
+                    "by_prerequisites": false
+                },
+                {
+                    "code": "PV247",
+                    "groups": [],
+                    "by_prerequisites": false
+                }
+            ],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 5,
+            "link": "/predmet/fi/PB138",
+
+            "type": "IN"
+        },
+        "PV077": {
+            "name": "UNIX -- programování a správa systému II",
+            "faculty": "FI",
+            "successors": [],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 4,
+            "link": "/predmet/fi/PV077",
+
+            "type": "IN"
+        },
+        "PV005": {
+            "name": "Služby počítačových sítí",
+            "faculty": "FI",
+            "successors": [
+                {
+                    "code": "PV219",
+                    "groups": [],
+                    "by_prerequisites": true
+                }
+            ],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "z",
+            "credits": 2,
+            "link": "/predmet/fi/PV005",
+
+            "type": "IN"
+        },
+        "IB109": {
+            "name": "Návrh a implementace paralelních systémů",
+            "faculty": "FI",
+            "successors": [],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 4,
+            "link": "/predmet/fi/IB109",
+
+            "type": "IN"
+        },
+        "PB120": {
+            "name": "Robotics",
+            "faculty": "FI",
+            "successors": [],
+            "language": "ENG",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 5,
+            "link": "/predmet/fi/PB120",
+
+            "type": "IN"
+        },
+        "PV194": {
+            "name": "Vnější prostředí digitálních systémů",
+            "faculty": "FI",
+            "successors": [
+                {
+                    "code": "IA162",
+                    "groups": [],
+                    "by_prerequisites": false
+                },
+                {
+                    "code": "PV191",
+                    "groups": [],
+                    "by_prerequisites": false
+                }
+            ],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 4,
+            "link": "/predmet/fi/PV194",
+
+            "type": "IN"
+        },
+        "PV198": {
+            "name": "Onechip Controllers",
+            "faculty": "FI",
+            "successors": [
+                {
+                    "code": "PB171",
+                    "groups": [],
+                    "by_prerequisites": false
+                },
+                {
+                    "code": "PV191",
+                    "groups": [],
+                    "by_prerequisites": false
+                }
+            ],
+            "language": "ENG",
+            "predecessors": [
+                {
+                    "code": "PV170",
+                    "groups": [],
+                    "by_prerequisites": false
+                },
+                {
+                    "code": "PV170",
+                    "groups": [],
+                    "by_prerequisites": false
+                },
+                {
+                    "code": "PV170",
+                    "groups": [],
+                    "by_prerequisites": false
+                },
+                {
+                    "code": "PV170",
+                    "groups": [],
+                    "by_prerequisites": false
+                }
+            ],
+            "completion": "zk",
+            "credits": 5,
+            "link": "/predmet/fi/PV198",
+
+            "type": "IN"
+        },
+        "PB130": {
+            "name": "Úvod do digitálního zpracování obrazu",
+            "faculty": "FI",
+            "successors": [
+                {
+                    "code": "PA166",
+                    "groups": [["PB130DIST", "PB130"]],
+                    "by_prerequisites": true
+                }
+            ],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 5,
+            "link": "/predmet/fi/PB130",
+
+            "type": "IN"
+        },
+        "PB009": {
+            "name": "Principles of Computer Graphics",
+            "faculty": "FI",
+            "successors": [
+                {
+                    "code": "PV255",
+                    "groups": [],
+                    "by_prerequisites": true
+                }
+            ],
+            "language": "ENG",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 5,
+            "link": "/predmet/fi/PB009",
+
+            "type": "IN"
+        },
+        "PV112": {
+            "name": "Computer Graphics API",
+            "faculty": "FI",
+            "successors": [
+                {
+                    "code": "PV227",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "PV255",
+                    "groups": [],
+                    "by_prerequisites": true
+                }
+            ],
+            "language": "ENG",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 5,
+            "link": "/predmet/fi/PV112",
+
+            "type": "IN"
+        },
+        "PV291": {
+            "name": "Introduction to Digital Signal Processing",
+            "faculty": "FI",
+            "successors": [
+                {
+                    "code": "PA229",
+                    "groups": [],
+                    "by_prerequisites": true
+                }
+            ],
+            "language": "ENG",
+            "predecessors": [
+                {
+                    "code": "MB151",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "MB152",
+                    "groups": [],
+                    "by_prerequisites": true
+                }
+            ],
+            "completion": "zk",
+            "credits": 5,
+            "link": "/predmet/fi/PV291",
+
+            "type": "IN"
+        },
+        "VB035": {
+            "name": "English Skills for IT I",
+            "faculty": "FI",
+            "successors": [
+                {
+                    "code": "VB036",
+                    "groups": [["SOUHLAS", "VB035"]],
+                    "by_prerequisites": true
+                }
+            ],
+            "language": "ENG",
+            "predecessors": [],
+            "completion": "z",
+            "credits": 1,
+            "link": "/predmet/fi/VB035",
+
+            "type": "OT"
+        },
+        "VB036": {
+            "name": "English Skills for IT II",
+            "faculty": "FI",
+            "successors": [],
+            "language": "ENG",
+            "predecessors": [
+                {
+                    "code": "VB035",
+                    "groups": [["SOUHLAS", "VB035"]],
+                    "by_prerequisites": true
+                }
+            ],
+            "completion": "z",
+            "credits": 2,
+            "link": "/predmet/fi/VB036",
+
+            "type": "OT"
+        },
+        "VV064": {
+            "name": "Academic and Professional Skills in English for IT",
+            "faculty": "FI",
+            "successors": [],
+            "language": "ENG",
+            "predecessors": [
+                {
+                    "code": "VB001",
+                    "groups": [["VB001", "PROG"]],
+                    "by_prerequisites": true
+                }
+            ],
+            "completion": "k",
+            "credits": 3,
+            "link": "/predmet/fi/VV064",
+
+            "type": "OT"
+        },
+        "VB000": {
+            "name": "Základy odborného stylu",
+            "faculty": "FI",
+            "successors": [],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "k",
+            "credits": 3,
+            "link": "/predmet/fi/VB000",
+
+            "type": "OT"
+        },
+        "VB000Eng": {
+            "name": "Introduction to Academic Writing",
+            "faculty": "FI",
+            "successors": [],
+            "language": "ENG",
+            "predecessors": [],
+            "completion": "k",
+            "credits": 3,
+            "link": "/predmet/fi/VB000Eng",
+
+            "type": "OT"
+        },
+        "PB029": {
+            "name": "Elektronická příprava dokumentů",
+            "faculty": "FI",
+            "successors": [
+                {
+                    "code": "SBAPR",
+                    "groups": [],
+                    "by_prerequisites": false
+                }
+            ],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 5,
+            "link": "/predmet/fi/PB029",
+
+            "type": "IN"
+        },
+        "PB160": {
+            "name": "Programování v jazyce C",
+            "faculty": "FI",
+            "successors": [
+                {
+                    "code": "PB007",
+                    "groups": [["PB174", "PB160", "PB162", "PB161", "PV178", "PB112", "PB178"]],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "PB161",
+                    "groups": [],
+                    "by_prerequisites": false
+                }
+            ],
+            "language": "CZE",
+            "predecessors": [
+                {
+                    "code": "PB006",
+                    "groups": [],
+                    "by_prerequisites": true
+                }
+            ],
+            "completion": "zk",
+            "credits": 5,
+            "link": "/predmet/fi/PB160",
+
+            "type": "IN"
+        },
+        "PB161": {
+            "name": "Programování v jazyce C++",
+            "faculty": "FI",
+            "successors": [
+                {
+                    "code": "PB007",
+                    "groups": [["PB174", "PB160", "PB162", "PB161", "PV178", "PB112", "PB178"]],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "PV255",
+                    "groups": [["PB162", "PB161", "PV178", "PB178"]],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "PV264",
+                    "groups": [],
+                    "by_prerequisites": false
+                },
+                {
+                    "code": "PV294",
+                    "groups": [],
+                    "by_prerequisites": false
+                }
+            ],
+            "language": "CZE",
+            "predecessors": [
+                {
+                    "code": "PB006",
+                    "groups": [],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "PB111",
+                    "groups": [],
+                    "by_prerequisites": false
+                },
+                {
+                    "code": "PB160",
+                    "groups": [],
+                    "by_prerequisites": false
+                }
+            ],
+            "completion": "zk",
+            "credits": 5,
+            "link": "/predmet/fi/PB161",
+
+            "type": "IN"
+        },
+        "PB162": {
+            "name": "Programování v jazyce Java",
+            "faculty": "FI",
+            "successors": [
+                {
+                    "code": "PB007",
+                    "groups": [["PB174", "PB160", "PB162", "PB161", "PV178", "PB112", "PB178"]],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "PV168",
+                    "groups": [["SOUHLAS", "PB162"]],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "PV255",
+                    "groups": [["PB162", "PB161", "PV178", "PB178"]],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "PV292",
+                    "groups": [
+                        ["SOUHLAS", "PB138", "PV168", "PV178", "PB162", "PA165", "PV256", "PB178"]
+                    ],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "PA165",
+                    "groups": [],
+                    "by_prerequisites": false
+                },
+                {
+                    "code": "PB138",
+                    "groups": [],
+                    "by_prerequisites": false
+                }
+            ],
+            "language": "CZE",
+            "predecessors": [
+                {
+                    "code": "PB006",
+                    "groups": [],
+                    "by_prerequisites": true
+                }
+            ],
+            "completion": "zk",
+            "credits": 5,
+            "link": "/predmet/fi/PB162",
+
+            "type": "IN"
+        },
+        "PB174": {
+            "name": "Programování v jazyce Python",
+            "faculty": "FI",
+            "successors": [
+                {
+                    "code": "PB007",
+                    "groups": [["PB174", "PB160", "PB162", "PB161", "PV178", "PB112", "PB178"]],
+                    "by_prerequisites": true
+                }
+            ],
+            "language": "CZE",
+            "predecessors": [
+                {
+                    "code": "PB006",
+                    "groups": [],
+                    "by_prerequisites": true
+                }
+            ],
+            "completion": "zk",
+            "credits": 5,
+            "link": "/predmet/fi/PB174",
+
+            "type": "IN"
+        },
+        "PB178": {
+            "name": "Úvod do vývoje v C#/.NET",
+            "faculty": "FI",
+            "successors": [
+                {
+                    "code": "PB007",
+                    "groups": [["PB174", "PB160", "PB162", "PB161", "PV178", "PB112", "PB178"]],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "PV239",
+                    "groups": [["SOUHLAS", "PV168", "PV178", "PA165", "PV256", "PB178"]],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "PV255",
+                    "groups": [["PB162", "PB161", "PV178", "PB178"]],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "PV260",
+                    "groups": [["PV179", "SOUHLAS", "PV168", "PV178", "PA165", "PB178"]],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "PV292",
+                    "groups": [
+                        ["SOUHLAS", "PB138", "PV168", "PV178", "PB162", "PA165", "PV256", "PB178"]
+                    ],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "PV179",
+                    "groups": [],
+                    "by_prerequisites": false
+                }
+            ],
+            "language": "CZE",
+            "predecessors": [
+                {
+                    "code": "PB006",
+                    "groups": [],
+                    "by_prerequisites": true
+                }
+            ],
+            "completion": "zk",
+            "credits": 5,
+            "link": "/predmet/fi/PB178",
+
+            "type": "IN"
+        },
+        "PB176": {
+            "name": "Základy kvality a správy kódu",
+            "faculty": "FI",
+            "successors": [],
+            "language": "CZE",
+            "predecessors": [
+                {
+                    "code": "IB111",
+                    "groups": [["PB071", "PB006", "IB111", "PB111", "IB113"]],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "PB006",
+                    "groups": [["PB071", "PB006", "IB111", "PB111", "IB113"]],
+                    "by_prerequisites": true
+                },
+                {
+                    "code": "PB111",
+                    "groups": [["PB071", "PB006", "IB111", "PB111", "IB113"]],
+                    "by_prerequisites": true
+                }
+            ],
+            "completion": "k",
+            "credits": 4,
+            "link": "/predmet/fi/PB176",
+
+            "type": "IN"
+        },
+        "PB173": {
+            "name": "Tematicky zaměřený vývoj aplikací",
+            "faculty": "FI",
+            "successors": [],
+            "language": "CZE",
+            "predecessors": [
+                {
+                    "code": "PB111",
+                    "groups": [["PB071", "PB111"]],
+                    "by_prerequisites": true
+                }
+            ],
+            "completion": "k",
+            "credits": 3,
+            "link": "/predmet/fi/PB173",
+
+            "type": "IN"
+        },
+        "PV191": {
+            "name": "Lab Seminar – EmLab",
+            "faculty": "FI",
+            "successors": [],
+            "language": "ENG",
+            "predecessors": [
+                {
+                    "code": "PV170",
+                    "groups": [],
+                    "by_prerequisites": false
+                },
+                {
+                    "code": "PV170",
+                    "groups": [],
+                    "by_prerequisites": false
+                },
+                {
+                    "code": "PV194",
+                    "groups": [],
+                    "by_prerequisites": false
+                },
+                {
+                    "code": "PV198",
+                    "groups": [],
+                    "by_prerequisites": false
+                },
+                {
+                    "code": "PV170",
+                    "groups": [],
+                    "by_prerequisites": false
+                },
+                {
+                    "code": "PV170",
+                    "groups": [],
+                    "by_prerequisites": false
+                },
+                {
+                    "code": "PV194",
+                    "groups": [],
+                    "by_prerequisites": false
+                },
+                {
+                    "code": "PV198",
+                    "groups": [],
+                    "by_prerequisites": false
+                }
+            ],
+            "completion": "k",
+            "credits": 3,
+            "link": "/predmet/fi/PV191",
+
+            "type": "IN"
+        },
+        "MA018": {
+            "name": "Numerical Methods",
+            "faculty": "FI",
+            "successors": [],
+            "language": "ENG",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 5,
+            "link": "/predmet/fi/MA018",
+
+            "type": "MA"
+        },
+        "IV109": {
+            "name": "Modelování a simulace",
+            "faculty": "FI",
+            "successors": [],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 5,
+            "link": "/predmet/fi/IV109",
+
+            "type": "IN"
+        },
+        "PV160": {
+            "name": "Lab Project – HCI & Visitlab",
+            "faculty": "FI",
+            "successors": [
+                {
+                    "code": "PA157",
+                    "groups": [],
+                    "by_prerequisites": false
+                }
+            ],
+            "language": "ENG",
+            "predecessors": [],
+            "completion": "k",
+            "credits": 3,
+            "link": "/predmet/fi/PV160",
+
+            "type": "IN"
+        },
+        "PV162": {
+            "name": "Projekt z digitálního zpracování obrazů",
+            "faculty": "FI",
+            "successors": [
+                {
+                    "code": "PV187",
+                    "groups": [],
+                    "by_prerequisites": false
+                }
+            ],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "k",
+            "credits": 3,
+            "link": "/predmet/fi/PV162",
+
+            "type": "IN"
+        }
+    },
+    "spec": {
+        "pssb": {
+            "nameCZ": "Počítačové systémy, komunikace a bezpečnost",
+            "nameEN": "Computer Systems, Communication and Security",
+            "descCZ": "Obor Počítačové systémy, komunikace a bezpečnost se zaměřuje na návrh, implementaci a správu počítačových systémů, sítí a bezpečnostních mechanismů. Studenti se naučí programovat v různých jazycích, spravovat operační systémy, navrhovat a zabezpečovat počítačové sítě a analyzovat bezpečnostní hrozby. Absolventi tohoto oboru budou schopni navrhovat a implementovat komplexní IT řešení, která jsou bezpečná, efektivní a spolehlivá.",
+            "descEN": "The Computer Systems, Communication and Security specialization focuses on the design, implementation, and management of computer systems, networks, and security mechanisms. Students will learn to program in various languages, manage operating systems, design and secure computer networks, and analyze security threats. Graduates of this specialization will be able to design and implement complex IT solutions that are secure, efficient, and reliable.",
+            "base": [
+                {
+                    "code": "IB107"
+                },
+                {
+                    "code": "IB031"
+                },
+                {
+                    "code": "PB007"
+                },
+                {
+                    "code": "PV170"
+                },
+                {
+                    "code": "PV065"
+                },
+                {
+                    "code": "PB138"
+                },
+                {
+                    "code": "PV077"
+                },
+                {
+                    "code": "PV005"
+                },
+                {
+                    "code": "IB109"
+                }
+            ],
+            "plan": {
+                "1": [
+                    {
+                        "code": "IB111"
+                    },
+                    {
+                        "code": "IB015"
+                    },
+                    {
+                        "code": "PB151"
+                    },
+                    {
+                        "code": "PB154"
+                    },
+                    {
+                        "code": "VB035"
+                    },
+                    {
+                        "choice": "tv",
+                        "credits": 1
+                    }
+                ],
+                "2": [
+                    {
+                        "code": "MB151"
+                    },
+                    {
+                        "code": "PB111"
+                    },
+                    {
+                        "code": "PB152"
+                    },
+                    {
+                        "code": "PB152zk"
+                    },
+                    {
+                        "code": "PB156"
+                    },
+                    {
+                        "code": "IB002"
+                    },
+                    {
+                        "code": "PV004"
+                    },
+                    {
+                        "code": "VB036"
+                    },
+                    {
+                        "code": "VB001"
+                    },
+                    {
+                        "choice": "tv",
+                        "credits": 1
+                    }
+                ],
+                "3": [
+                    {
+                        "code": "MB152"
+                    },
+                    {
+                        "code": "MB154"
+                    },
+                    {
+                        "code": "PB006"
+                    },
+                    {
+                        "code": "PV170"
+                    },
+                    {
+                        "code": "PV065"
+                    }
+                ],
+                "4": [
+                    {
+                        "code": "MB153"
+                    },
+                    {
+                        "code": "IB005"
+                    },
+                    {
+                        "code": "PV080"
+                    },
+                    {
+                        "code": "PB138"
+                    },
+                    {
+                        "code": "PV077"
+                    },
+                    {
+                        "choice": "prog",
+                        "credits": 1
+                    }
+                ],
+                "5": [
+                    {
+                        "code": "PB007"
+                    },
+                    {
+                        "code": "IB107"
+                    },
+                    {
+                        "code": "PB016"
+                    },
+                    {
+                        "code": "PV005"
+                    },
+                    {
+                        "code": "SBAPR"
+                    },
+                    {
+                        "choice": "volba_pssb",
+                        "credits": 1
+                    }
+                ],
+                "6": [
+                    {
+                        "code": "IB031"
+                    },
+                    {
+                        "code": "IB109"
+                    },
+                    {
+                        "choice": "styl",
+                        "credits": 1
+                    },
+                    {
+                        "code": "SBPrip"
+                    },
+                    {
+                        "code": "SOBHA"
+                    },
+                    {
+                        "code": "SZB"
+                    }
+                ]
+            }
+        },
+        "robo": {
+            "nameCZ": "Robotika",
+            "nameEN": "Robotics",
+            "descCZ": "Obor Robotika se zaměřuje na návrh, vývoj a implementaci robotických systémů. Studenti se naučí programovat roboty, navrhovat jejich hardware a software, a řešit problémy spojené s robotikou, jako je navigace, manipulace a interakce s prostředím. Absolventi tohoto oboru budou schopni navrhovat a implementovat komplexní robotické systémy pro různé aplikace, od průmyslových robotů po autonomní vozidla.",
+            "descEN": "The Robotics specialization focuses on the design, development, and implementation of robotic systems. Students will learn to program robots, design their hardware and software, and solve problems related to robotics such as navigation, manipulation, and interaction with the environment. Graduates of this specialization will be able to design and implement complex robotic systems for various applications, from industrial robots to autonomous vehicles.",
+            "base": [
+                {
+                    "code": "IB107"
+                },
+                {
+                    "code": "IB031"
+                },
+                {
+                    "code": "PB007"
+                },
+                {
+                    "code": "PB120"
+                },
+                {
+                    "code": "PV170"
+                },
+                {
+                    "code": "PV194"
+                },
+                {
+                    "code": "PV198"
+                },
+                {
+                    "choice": "volba_robo",
+                    "credits": 1
+                }
+            ],
+            "plan": {
+                "1": [
+                    {
+                        "code": "IB000"
+                    },
+                    {
+                        "code": "IB111"
+                    },
+                    {
+                        "code": "IB015"
+                    },
+                    {
+                        "code": "PB151"
+                    },
+                    {
+                        "code": "PB154"
+                    },
+                    {
+                        "code": "VB035"
+                    },
+                    {
+                        "choice": "tv",
+                        "credits": 1
+                    }
+                ],
+                "2": [
+                    {
+                        "code": "MB151"
+                    },
+                    {
+                        "code": "PB111"
+                    },
+                    {
+                        "code": "PB152"
+                    },
+                    {
+                        "code": "PB152zk"
+                    },
+                    {
+                        "code": "PB156"
+                    },
+                    {
+                        "code": "IB002"
+                    },
+                    {
+                        "code": "PV004"
+                    },
+                    {
+                        "code": "VB036"
+                    },
+                    {
+                        "code": "VB001"
+                    },
+                    {
+                        "code": "PB120"
+                    }
+                ],
+                "3": [
+                    {
+                        "code": "MB152"
+                    },
+                    {
+                        "code": "MB154"
+                    },
+                    {
+                        "code": "PB006"
+                    },
+                    {
+                        "code": "PV170"
+                    }
+                ],
+                "4": [
+                    {
+                        "code": "MB153"
+                    },
+                    {
+                        "code": "IB005"
+                    },
+                    {
+                        "code": "PV080"
+                    },
+                    {
+                        "code": "PV194"
+                    },
+                    {
+                        "choice": "prog",
+                        "credits": 1
+                    }
+                ],
+                "5": [
+                    {
+                        "code": "PB007"
+                    },
+                    {
+                        "code": "IB107"
+                    },
+                    {
+                        "code": "PB016"
+                    },
+                    {
+                        "code": "PV198"
+                    },
+                    {
+                        "code": "SBAPR"
+                    },
+                    {
+                        "choice": "volba_robo",
+                        "credits": 1
+                    }
+                ],
+                "6": [
+                    {
+                        "code": "IB031"
+                    },
+                    {
+                        "choice": "styl",
+                        "credits": 1
+                    },
+                    {
+                        "code": "SBPrip"
+                    },
+                    {
+                        "code": "SOBHA"
+                    },
+                    {
+                        "code": "SZB"
+                    }
+                ]
+            }
+        },
+        "vizi": {
+            "nameCZ": "Vizuální informatika",
+            "nameEN": "Visual Informatics",
+            "descCZ": "Obor Vizuální informatika se zaměřuje na zpracování a analýzu vizuálních dat, jako jsou obrazy a videa. Studenti se naučí techniky pro zpracování obrazu, počítačové vidění, strojové učení a umělou inteligenci. Absolventi tohoto oboru budou schopni navrhovat a implementovat systémy pro rozpoznávání obrazů, analýzu videa a další aplikace vizuální informatiky.",
+            "descEN": "The Visual Informatics specialization focuses on the processing and analysis of visual data such as images and videos. Students will learn techniques for image processing, computer vision, machine learning, and artificial intelligence. Graduates of this specialization will be able to design and implement systems for image recognition, video analysis, and other applications of visual informatics.",
+            "base": [
+                {
+                    "code": "IB107"
+                },
+                {
+                    "code": "IB031"
+                },
+                {
+                    "code": "PB007"
+                },
+                {
+                    "code": "PB130"
+                },
+                {
+                    "code": "PB009"
+                },
+                {
+                    "code": "PV112"
+                },
+                {
+                    "code": "PV291"
+                }
+            ],
+            "plan": {
+                "1": [
+                    {
+                        "code": "IB000"
+                    },
+                    {
+                        "code": "IB111"
+                    },
+                    {
+                        "code": "IB015"
+                    },
+                    {
+                        "code": "PB151"
+                    },
+                    {
+                        "code": "PB154"
+                    },
+                    {
+                        "code": "VB035"
+                    },
+                    {
+                        "choice": "tv",
+                        "credits": 1
+                    }
+                ],
+                "2": [
+                    {
+                        "code": "MB151"
+                    },
+                    {
+                        "code": "PB111"
+                    },
+                    {
+                        "code": "PB152"
+                    },
+                    {
+                        "code": "PB152zk"
+                    },
+                    {
+                        "code": "PB156"
+                    },
+                    {
+                        "code": "IB002"
+                    },
+                    {
+                        "code": "PV004"
+                    },
+                    {
+                        "code": "VB036"
+                    },
+                    {
+                        "code": "VB001"
+                    },
+                    {
+                        "choice": "tv",
+                        "credits": 1
+                    }
+                ],
+                "3": [
+                    {
+                        "code": "MB152"
+                    },
+                    {
+                        "code": "MB154"
+                    },
+                    {
+                        "code": "PB006"
+                    },
+                    {
+                        "code": "PB130"
+                    }
+                ],
+                "4": [
+                    {
+                        "code": "MB153"
+                    },
+                    {
+                        "code": "IB005"
+                    },
+                    {
+                        "code": "PV080"
+                    },
+                    {
+                        "code": "PB009"
+                    },
+                    {
+                        "code": "PV291"
+                    },
+                    {
+                        "choice": "prog",
+                        "credits": 1
+                    },
+                    {
+                        "choice": "core",
+                        "credits": 3
+                    }
+                ],
+                "5": [
+                    {
+                        "code": "PB007"
+                    },
+                    {
+                        "code": "IB107"
+                    },
+                    {
+                        "code": "PB016"
+                    },
+                    {
+                        "code": "PV112"
+                    },
+                    {
+                        "code": "SBAPR"
+                    },
+                    {
+                        "choice": "volba_vizi",
+                        "credits": 1
+                    },
+                    {
+                        "choice": "core",
+                        "credits": 3
+                    }
+                ],
+                "6": [
+                    {
+                        "code": "IB031"
+                    },
+                    {
+                        "code": "VB000"
+                    },
+                    {
+                        "code": "SBPrip"
+                    },
+                    {
+                        "code": "SOBHA"
+                    },
+                    {
+                        "code": "SZB"
+                    },
+                    {
+                        "choice": "core",
+                        "credits": 3
+                    }
+                ]
+            }
+        }
+    },
+    "choices": {
+        "lang": {
+            "type": "0:3",
+            "list": ["VB035", "VB036", "VV064"],
+            "refnCZ": "Angličtina",
+            "refnEN": "English"
+        },
+        "styl": {
+            "type": "1:0",
+            "list": ["VB000", "VB000Eng", "PB029"],
+            "refnCZ": "Sazba a akademické psaní",
+            "refnEN": "Typesetting"
+        },
+        "prog": {
+            "type": "1:0",
+            "list": ["PB160", "PB161", "PB162", "PB174", "PB178"],
+            "refnCZ": "Programování",
+            "refnEN": "Programming"
+        },
+        "core": {
+            "type": "0:9",
+            "list": [
+                {
+                    "code": "*:CORE*",
+                    "nazevCZ": "Předměty s prefixem CORE",
+                    "nazevEN": "Subjects with CORE prefix",
+                    "credits": 3
+                }
+            ],
+            "refnCZ": "Přírodovědní rozhled",
+            "refnEN": "Core subjects"
+        },
+        "tv": {
+            "type": "0:2",
+            "list": [
+                {
+                    "code": "FSpS:p9*",
+                    "nazevCZ": "Tělesná výchova",
+                    "nazevEN": "Physical Education",
+                    "credits": 1
+                }
+            ],
+            "refnCZ": "Tělesná výchova",
+            "refnEN": "Physical Education"
+        },
+        "volba_pssb": {
+            "type": "1:0",
+            "list": ["PB176", "PB173"],
+            "refnCZ": "Volba v počítačových systémech",
+            "refnEN": "Computer Systems Elective"
+        },
+        "volba_robo": {
+            "type": "1:1",
+            "list": ["PV191", "MA018", "IV109"],
+            "refnCZ": "Volba v robotice",
+            "refnEN": "Robotics Elective"
+        },
+        "volba_vizi": {
+            "type": "1:0",
+            "list": ["PV160", "PV162"],
+            "refnCZ": "Volba ve vizuální informatice",
+            "refnEN": "Visual Informatics Elective"
+        }
+    },
+    "substitutions": {
+        "advanced_math": {
+            "nameCZ": "Pokročilá matematika",
+            "removes": ["MB141", "MB142", "MB143"],
+            "adds": [
+                {
+                    "code": "MB151",
+                    "semester": 2
+                },
+                {
+                    "code": "MB152",
+                    "semester": 3
+                },
+                {
+                    "code": "MB153",
+                    "semester": 4
+                },
+                {
+                    "code": "MB154",
+                    "semester": 3
+                }
+            ]
+        },
+        "advanced_inf": {
+            "nameCZ": "Pokročilá matematika",
+            "removes": ["MB141", "MB142", "MB143"],
+            "adds": [
+                {
+                    "code": "MB151",
+                    "semester": 2
+                },
+                {
+                    "code": "MB152",
+                    "semester": 3
+                },
+                {
+                    "code": "MB153",
+                    "semester": 4
+                },
+                {
+                    "code": "MB154",
+                    "semester": 3
+                }
+            ]
+        }
+    }
+}

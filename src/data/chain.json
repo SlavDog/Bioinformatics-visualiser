@@ -1,0 +1,95 @@
+{
+    "details": {
+        "BB001": {
+            "name": "Základy matematiky",
+            "faculty": "FI",
+            "successors": [{ "code": "BB002", "groups": [], "by_prerequisites": true }],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 4,
+            "link": "/predmet/fi/BB001",
+            "type": "MA"
+        },
+        "BB002": {
+            "name": "Úvod do informatiky",
+            "faculty": "FI",
+            "successors": [{ "code": "BB003", "groups": [], "by_prerequisites": true }],
+            "language": "CZE",
+            "predecessors": [{ "code": "BB001", "groups": [], "by_prerequisites": true }],
+            "completion": "zk",
+            "credits": 5,
+            "link": "/predmet/fi/BB002",
+            "type": "IN"
+        },
+        "BB003": {
+            "name": "Bioinformatika",
+            "faculty": "FI",
+            "successors": [{ "code": "BB004", "groups": [], "by_prerequisites": true }],
+            "language": "CZE",
+            "predecessors": [{ "code": "BB002", "groups": [], "by_prerequisites": true }],
+            "completion": "zk",
+            "credits": 6,
+            "link": "/predmet/fi/BB003",
+            "type": "BI"
+        },
+        "BB004": {
+            "name": "Ostatní vědy",
+            "faculty": "FI",
+            "successors": [{ "code": "BB005", "groups": [], "by_prerequisites": true }],
+            "language": "CZE",
+            "predecessors": [{ "code": "BB003", "groups": [], "by_prerequisites": true }],
+            "completion": "z",
+            "credits": 4,
+            "link": "/predmet/fi/BB004",
+            "type": "OT"
+        },
+        "BB005": {
+            "name": "Pokročilá analýza",
+            "faculty": "FI",
+            "successors": [],
+            "language": "CZE",
+            "predecessors": [{ "code": "BB004", "groups": [], "by_prerequisites": true }],
+            "completion": "zk",
+            "credits": 6,
+            "link": "/predmet/fi/BB005",
+            "type": "MA"
+        },
+        "BB006": {
+            "name": "Pokročilá informatika",
+            "faculty": "FI",
+            "successors": [],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 5,
+            "link": "/predmet/fi/BB006",
+            "type": "IN"
+        }
+    },
+    "spec": {
+        "chain_spec": {
+            "nameCZ": "Řetězová specializace",
+            "nameEN": "Chain Specialization",
+            "descCZ": "Ukázka řetězce předmětů",
+            "descEN": "Example of a subject chain",
+            "base": [],
+            "plan": {
+                "1": [{ "code": "BB001" }],
+                "2": [{ "code": "BB002" }],
+                "3": [{ "code": "BB003" }],
+                "4": [{ "code": "BB004" }],
+                "5": [{ "choice": "choice", "credits": "6" }]
+            }
+        }
+    },
+    "choices": {
+        "choice": {
+            "type": "0:6",
+            "list": ["BB005", "BB006"],
+            "refnCZ": "Volba závěrečného předmětu",
+            "refnEN": "Final Subject Choice"
+        }
+    },
+    "substitutions": {}
+}

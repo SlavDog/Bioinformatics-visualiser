@@ -1,0 +1,180 @@
+{
+    "details": {
+        "A001": {
+            "name": "Předmět A001",
+            "faculty": "FI",
+            "successors": [
+                { "code": "B001", "groups": [], "by_prerequisites": false },
+                { "code": "B002", "groups": [], "by_prerequisites": false }
+            ],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 4,
+            "link": "/predmet/fi/A001",
+            "type": "IN"
+        },
+        "A002": {
+            "name": "Předmět A002",
+            "faculty": "FI",
+            "successors": [
+                { "code": "B001", "groups": [], "by_prerequisites": false }
+            ],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 4,
+            "link": "/predmet/fi/A002",
+            "type": "IN"
+        },
+        "A003": {
+            "name": "Předmět A003",
+            "faculty": "FI",
+            "successors": [
+                { "code": "B001", "groups": [], "by_prerequisites": false }
+            ],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 4,
+            "link": "/predmet/fi/A003",
+            "type": "IN"
+        },
+        "B001": {
+            "name": "Předmět B001",
+            "faculty": "FI",
+            "successors": [
+                { "code": "C001", "groups": [], "by_prerequisites": false }
+            ],
+            "language": "CZE",
+            "predecessors": [
+                { "code": "A001", "groups": [], "by_prerequisites": false },
+                { "code": "A002", "groups": [], "by_prerequisites": false },
+                { "code": "A003", "groups": [], "by_prerequisites": false }
+            ],
+            "completion": "zk",
+            "credits": 4,
+            "link": "/predmet/fi/B001",
+            "type": "IN"
+        },
+        "B002": {
+            "name": "Předmět B002",
+            "faculty": "FI",
+            "successors": [
+                { "code": "C001", "groups": [], "by_prerequisites": false },
+                { "code": "C002", "groups": [], "by_prerequisites": false }
+            ],
+            "language": "CZE",
+            "predecessors": [
+                { "code": "A001", "groups": [], "by_prerequisites": false }
+            ],
+            "completion": "zk",
+            "credits": 4,
+            "link": "/predmet/fi/B002",
+            "type": "IN"
+        },
+        "B003": {
+            "name": "Předmět B003",
+            "faculty": "FI",
+            "successors": [
+                { "code": "C002", "groups": [], "by_prerequisites": false }
+            ],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 4,
+            "link": "/predmet/fi/B003",
+            "type": "IN"
+        },
+        "C001": {
+            "name": "Předmět C001",
+            "faculty": "FI",
+            "successors": [],
+            "language": "CZE",
+            "predecessors": [
+                { "code": "B001", "groups": [], "by_prerequisites": false },
+                { "code": "B002", "groups": [], "by_prerequisites": false }
+            ],
+            "completion": "zk",
+            "credits": 4,
+            "link": "/predmet/fi/C001",
+            "type": "IN"
+        },
+        "C002": {
+            "name": "Předmět C002",
+            "faculty": "FI",
+            "successors": [],
+            "language": "CZE",
+            "predecessors": [
+                { "code": "B002", "groups": [], "by_prerequisites": false },
+                { "code": "B003", "groups": [], "by_prerequisites": false }
+            ],
+            "completion": "zk",
+            "credits": 4,
+            "link": "/predmet/fi/C002",
+            "type": "IN"
+        },
+        "ISO1": {
+            "name": "Izolovaný předmět 1",
+            "faculty": "FI",
+            "successors": [],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 3,
+            "link": "/predmet/fi/ISO1",
+            "type": "OT"
+        },
+        "ISO2": {
+            "name": "Izolovaný předmět 2",
+            "faculty": "FI",
+            "successors": [],
+            "language": "CZE",
+            "predecessors": [],
+            "completion": "zk",
+            "credits": 3,
+            "link": "/predmet/fi/ISO2",
+            "type": "OT"
+        }
+    },
+    "spec": {
+        "test": {
+            "nameCZ": "Testovací zaměření",
+            "nameEN": "Test specialization",
+            "descCZ": "",
+            "descEN": "",
+            "base": [],
+            "plan": {
+                "1": [
+                    { "code": "A003" },
+                    { "code": "A001" },
+                    { "code": "A002" },
+                    { "code": "ISO1" }
+                ],
+                "2": [
+                    { "code": "B001" },
+                    { "code": "B002" },
+                    { "code": "B003" },
+                    { "code": "ISO2" }
+                ],
+                "3": [
+                    { "code": "C001" },
+                    { "code": "C002" }
+                ]
+            }
+        }
+    },
+    "choices": {},
+    "substitutions": {
+        "advanced_inf": {
+            "nameCZ": "Pokročilá informatika",
+            "removes": [],
+            "adds": []
+        },
+        "advanced_math": {
+            "nameCZ": "Pokročilá informatika",
+            "removes": [],
+            "adds": []
+        }
+    }
+}
